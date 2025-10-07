@@ -1,0 +1,101 @@
+Symbol,Company,City,Country,Employees,CompanyType,FoundingYear,Revenue(USD),Rating,CEOApprovalPercentage
+AAPL,Apple Inc,Cupertino,United States,10000+ Employees,Public Company (AAPL),1976,$10+ billion,4.1,86% approve of CEO
+ABNB,Airbnb Inc,San Francisco,United States,5001 to 10000 Employees,Public Company (ABNB),2008,Unknown / Non-Applicable,4.2,90% approve of CEO
+ADBE,Adobe Inc.,San Jose,United States,10000+ Employees,Public Company (ADBE),1982,$5 to $10 billion,4.1,90% approve of CEO
+ADI,Analog Devices Inc,Wilmington,United States,10000+ Employees,Public Company (ADI),1965,$5 to $10 billion,3.8,82% approve of CEO
+ADP,Automatic Data Processing Inc,Roseland,United States,10000+ Employees,Public Company (ADP),1949,$10+ billion,3.8,83% approve of CEO
+ADSK,Autodesk Inc,San Francisco,United States,10000+ Employees,Public Company (ADSK ),1982,$5 to $10 billion,4.1,84% approve of CEO
+AEP,American Electric Power Company Inc,Columbus,United States,10000+ Employees,Public Company (AEP),1906,Unknown / Non-Applicable,3.0,28% approve of CEO
+AMAT,Applied Materials Inc,Santa Clara,United States,10000+ Employees,Public Company (AMAT),1967,$10+ billion,4.0,84% approve of CEO
+AMD,Advanced Micro Devices Inc,Santa Clara,United States,10000+ Employees,Public Company (AMD),1969,$10+ billion,3.9,94% approve of CEO
+AMGN,Amgen Inc,Thousand Oaks,United States,10000+ Employees,Public Company (AMGN),1980,$10+ billion,3.9,84% approve of CEO
+AMZN,Amazon.com Inc,Seattle,United States,10000+ Employees,Public Company (AMZN),1994,$10+ billion,3.6,58% approve of CEO
+APP,Applovin Corp,Palo Alto,United States,1001 to 5000 Employees,Public Company (APP),2012,Unknown / Non-Applicable,3.7,60% approve of CEO
+ARM,Arm Holdings PLC,Kent,United States,1 to 50 Employees,Private Company,0,Unknown / Non-Applicable,4.6,X% approve of CEO
+ASML,ASML Holding NV,Veldhoven,Netherlands,10000+ Employees,Public Company (ASML),1984,$10+ billion,4.1,92% approve of CEO
+AVGO,Broadcom Inc,Palo Alto,United States,10000+ Employees,Public Company (BRCM),1991,$10+ billion,3.3,55% approve of CEO
+AXON,Axon Enterprise Inc,Scottsdale,United States,1001 to 5000 Employees,Public Company (AXON),1993,$500 million to $1 billion,4.0,92% approve of CEO
+AZN,AstraZeneca PLC,Cambridge,United Kingdom,10000+ Employees,Public Company (AZN),1913,$10+ billion,4.0,87% approve of CEO
+BIIB,Biogen Inc,Cambridge,United States,5001 to 10000 Employees,Public Company (BIIB),1978,$10+ billion,3.7,58% approve of CEO
+BKNG,Booking Holdings Inc,Norwalk,United States,10000+ Employees,Public Company (BKNG),1997,$10+ billion,3.9,85% approve of CEO
+BKR,Baker Hughes Co,Houston,United States,10000+ Employees,Public Company (BKR),1907,$10+ billion,3.9,82% approve of CEO
+CCEP,Coca-Cola Europacific Partners PLC,Uxbridge,United Kingdom,10000+ Employees,Public Company,1929,Unknown / Non-Applicable,3.7,80% approve of CEO
+CDNS,Cadence Design Systems Inc,San Jose,United States,10000+ Employees,Public Company (CDNS),1988,Unknown / Non-Applicable,4.2,86% approve of CEO
+CDW,CDW Corp,Etobicoke,Canada,10000+ Employees,Public Company (CDW),1984,$10+ billion,3.6,69% approve of CEO
+CEG,Constellation Energy Corp,Baltimore,United States,10000+ Employees,Public Company,1999,$10+ billion,4.0,87% approve of CEO
+CHTR,Charter Communications Inc,Stamford,United States,10000+ Employees,Public Company,0,Unknown / Non-Applicable,3.3,X% approve of CEO
+CMCSA,Comcast Corp,Philadelphia,United States,10000+ Employees,Public Company (CMCSA),1963,$10+ billion,3.8,76% approve of CEO
+COST,Costco Wholesale Corp,Issaquah,United States,10000+ Employees,Public Company (COST),1976,$10+ billion,3.9,77% approve of CEO
+CPRT,Copart Inc,Dallas,United States,5001 to 10000 Employees,Public Company (CPRT),1982,$2 to $5 billion,3.4,68% approve of CEO
+CRWD,CrowdStrike Holdings Inc,Austin,United States,5001 to 10000 Employees,Public Company (CRWD),2011,$500 million to $1 billion,4.0,88% approve of CEO
+CSCO,Cisco Systems Inc,San Jose,United States,10000+ Employees,Public Company (CSCO),1984,$10+ billion,4.1,80% approve of CEO
+CSGP,CoStar Group Inc,Washington,United States,1001 to 5000 Employees,Public Company (CSGP),1987,$2 to $5 billion,2.6,32% approve of CEO
+CSX,CSX Corp,Jacksonville,United States,10000+ Employees,Public Company (CSX),1978,Unknown / Non-Applicable,3.7,82% approve of CEO
+CTAS,Cintas Corp,Cincinnati,United States,10000+ Employees,Public Company (CTAS),1968,$5 to $10 billion,3.7,80% approve of CEO
+CTSH,Cognizant Technology Solutions Corp,Teaneck,United States,10000+ Employees,Public Company (CTSH),1994,$10+ billion,3.6,62% approve of CEO
+DASH,DoorDash Inc,San Francisco,United States,10000+ Employees,Public Company (DASH),2013,Unknown / Non-Applicable,3.6,71% approve of CEO
+DDOG,Datadog Inc,New York,United States,5001 to 10000 Employees,Public Company (DDOG),2010,$2 to $5 billion,4.0,92% approve of CEO
+DXCM,Dexcom Inc,São Paulo,Brazil,10000+ Employees,Private Company,1951,$2 to $5 billion,3.9,49% approve of CEO
+EA,Electronic Arts,Redwood City,United States,10000+ Employees,Public Company (EA),1982,$5 to $10 billion,4.0,73% approve of CEO
+EXC,Exelon Corp,Chicago,United States,10000+ Employees,Public Company (EXC),2000,$10+ billion,4.0,75% approve of CEO
+FANG,Diamondback Energy Inc,Midland,United States,51 to 200 Employees,Public Company (FANG),0,$500 million to $1 billion,3.7,99% approve of CEO
+FAST,Fastenal Co,Winona,United States,10000+ Employees,Public Company (FAST),1967,$5 to $10 billion,3.4,80% approve of CEO
+FTNT,Fortinet Inc,Sunnyvale,United States,1001 to 5000 Employees,Public Company (FTNT),2000,$2 to $5 billion,3.8,68% approve of CEO
+GEHC,GE Healthcare Technologies Inc,Chicago,United States,10000+ Employees,Public Company,1892,$10+ billion,4.2,90% approve of CEO
+GFS,GlobalFoundries Inc,Malta,United States,10000+ Employees,Public Company (GFS),2009,$5 to $10 billion,3.7,78% approve of CEO
+GILD,Gilead Sciences Inc,Foster City,United States,10000+ Employees,Public Company (GILD),1987,$10+ billion,3.6,74% approve of CEO
+GOOG,Alphabet Class C,Mountain View,United States,10000+ Employees,Public Company (GOOG),1998,$10+ billion,4.4,78% approve of CEO
+HON,Honeywell International Inc,Charlotte,United States,10000+ Employees,Public Company (HON),1885,$10+ billion,4.1,89% approve of CEO
+IDXX,IDEXX Laboratories Inc,Westbrook,United States,10000+ Employees,Public Company (IDXX),1983,$2 to $5 billion,3.5,52% approve of CEO
+INTC,Intel Corp,Santa Clara,United States,10000+ Employees,Public Company (INTC),1968,$10+ billion,3.8,48% approve of CEO
+INTU,Intuit Inc,Mountain View,United States,10000+ Employees,Public Company (INTU),1983,$5 to $25 million,4.3,84% approve of CEO
+ISRG,Intuitive Surgical Inc,Sunnyvale,United States,10000+ Employees,Public Company (ISRG),1995,$2 to $5 billion,4.2,95% approve of CEO
+KDP,Keurig Dr Pepper Inc,Burlington,United States,10000+ Employees,Public Company (KDP),2018,$10+ billion,3.4,61% approve of CEO
+KHC,Kraft Heinz Co,Chicago,United States,10000+ Employees,Public Company (KHC),2015,$10+ billion,3.8,91% approve of CEO
+KLAC,KLA Corp,Milpitas,United States,5001 to 10000 Employees,Public Company (KLAC),1976,$2 to $5 billion,4.0,92% approve of CEO
+LIN,Linde PLC,Mississauga,Canada,10000+ Employees,Public Company (LIN),1879,$10+ billion,3.6,82% approve of CEO
+LRCX,Lam Research Corp,Fremont,United States,10000+ Employees,Public Company (LRCX),1980,$10+ billion,4.1,92% approve of CEO
+LULU,Lululemon Athletica Inc,Vancouver,Canada,10000+ Employees,Public Company (LULU),1998,$5 to $25 million,4.1,82% approve of CEO
+MAR,Marriott International Inc,Bethesda,United States,10000+ Employees,Public Company (MAR),1927,$10+ billion,3.9,83% approve of CEO
+MCHP,Microchip Technology Inc,Chandler,United States,10000+ Employees,Public Company (MCHP),1989,$5 to $10 billion,3.7,82% approve of CEO
+MDLZ,Mondelez International Inc,Chicago,United States,5001 to 10000 Employees,Public Company (MDLZ),2012,$10+ billion,3.9,81% approve of CEO
+MELI,MercadoLibre Inc,Buenos Aires,Argentina,1 to 50 Employees,Private Company,0,Unknown / Non-Applicable,4.1,X% approve of CEO
+META,Meta Platforms Inc,Menlo Park,United States,10000+ Employees,Public Company (META),2004,$10+ billion,3.8,57% approve of CEO
+MNST,Monster Beverage Corp,Corona,United States,5001 to 10000 Employees,Public Company (MNST),2002,$5 to $10 billion,3.9,88% approve of CEO
+MRVL,Marvell Technology Inc,Santa Clara,United States,5001 to 10000 Employees,Public Company (MRVL),0,$2 to $5 billion,4.2,92% approve of CEO
+MSFT,Microsoft Corp,Redmond,United States,10000+ Employees,Public Company (MSFT),1975,$10+ billion,4.1,81% approve of CEO
+MSTR,Strategy Inc,New York,United States,1001 to 5000 Employees,Subsidiary or Business Segment,1914,Unknown / Non-Applicable,3.8,63% approve of CEO
+MU,Micron Technology Inc,Boise,United States,10000+ Employees,Public Company (MU),1978,$10+ billion,3.9,82% approve of CEO
+NFLX,Netflix Inc,Los Gatos,United States,5001 to 10000 Employees,Public Company (NFLX),1997,$5 to $10 billion,4.2,93% approve of CEO
+NVDA,NVIDIA Corp,Santa Clara,United States,10000+ Employees,Public Company (NVDA),1993,$5 to $10 billion,4.5,97% approve of CEO
+NXPI,NXP Semiconductors NV,Eindhoven,Netherlands,10000+ Employees,Public Company (NXPI),2006,$5 to $10 billion,4.0,85% approve of CEO
+ODFL,Old Dominion Freight Line Inc,Thomasville,United States,10000+ Employees,Public Company (ODFL),1934,$5 to $10 billion,3.9,84% approve of CEO
+ON,ON Semiconductor Corp,Allen,United States,51 to 200 Employees,Public Company,0,Unknown / Non-Applicable,3.2,X% approve of CEO
+ORLY,O'Reilly Automotive Inc,Springfield,United States,10000+ Employees,Public Company (ORLY),1957,$10+ billion,3.2,57% approve of CEO
+PANW,Palo Alto Networks Inc,Santa Clara,United States,10000+ Employees,Public Company (PANW),2005,$5 to $10 billion,3.9,89% approve of CEO
+PAYX,Paychex Inc,Rochester,United States,10000+ Employees,Public Company (PAYX),1971,$2 to $5 billion,3.2,51% approve of CEO
+PCAR,Paccar Inc,Bellevue,United States,10000+ Employees,Public Company (PCAR),1905,$10+ billion,3.8,79% approve of CEO
+PDD,PDD Holdings Inc,Shanghai,China,1001 to 5000 Employees,Public Company (PDD),0,Unknown / Non-Applicable,3.3,X% approve of CEO
+PEP,PepsiCo Inc,Mississauga,Canada,10000+ Employees,Public Company (PEP),1965,$10+ billion,3.8,80% approve of CEO
+PLTR,Palantir Technologies Inc,Denver,United States,Unknown,Public Company (PLTR),2004,$2 to $5 billion,3.6,60% approve of CEO
+PYPL,PayPal Holdings Inc,San Jose,United States,10000+ Employees,Public Company (PYPL),1998,$10+ billion,3.6,56% approve of CEO
+QCOM,Qualcomm Inc,San Diego,United States,10000+ Employees,Public Company (QCOM),1985,$10+ billion,3.9,72% approve of CEO
+REGN,Regeneron Pharmaceuticals Inc,Tarrytown,United States,10000+ Employees,Public Company (REGN),1988,$5 to $10 billion,3.8,78% approve of CEO
+ROP,Roper Technologies Inc,Sarasota,United States,51 to 200 Employees,Public Company (ROP),1860,$5 to $10 billion,4.0,90% approve of CEO
+ROST,Ross Stores Inc,Dublin,United States,10000+ Employees,Public Company (ROST),1982,$10+ billion,3.4,81% approve of CEO
+SBUX,Starbucks Corp,Seattle,United States,10000+ Employees,Public Company (SBUX),1971,$10+ billion,3.5,41% approve of CEO
+SHOP,Shopify Inc,Ottawa,Canada,5001 to 10000 Employees,Public Company (SHOP),2006,$2 to $5 billion,3.3,47% approve of CEO
+SNPS,Synopsys Inc,Sunnyvale,United States,10000+ Employees,Public Company (SNPS),1986,Unknown / Non-Applicable,4.0,79% approve of CEO
+TEAM,Atlassian Corp,Sydney,Australia,10000+ Employees,Public Company (TEAM),2002,$2 to $5 billion,3.2,50% approve of CEO
+TMUS,T-Mobile US Inc,Bellevue,United States,10000+ Employees,Public Company (TMUS),2001,$10+ billion,3.7,60% approve of CEO
+TRI,Thomson Reuters Corp,Toronto,Canada,10000+ Employees,Public Company (TRI),2008,$5 to $10 billion,4.1,89% approve of CEO
+TSLA,Tesla Inc,Austin,United States,10000+ Employees,Public Company (TSLA),2003,$2 to $5 billion,3.5,55% approve of CEO
+TTD,Trade Desk Inc,Ventura,United States,1001 to 5000 Employees,Public Company (TTD),2009,$2 to $5 billion,4.2,88% approve of CEO
+TTWO,Take-Two Interactive Software Inc,New York,United States,1001 to 5000 Employees,Public Company (TTWO),1993,$2 to $5 billion,3.9,71% approve of CEO
+TXN,Texas Instruments Inc,Dallas,United States,10000+ Employees,Public Company (TXN),1930,$10+ billion,3.9,69% approve of CEO
+VRSK,Verisk Analytics Inc,Jersey City,United States,5001 to 10000 Employees,Public Company (VRSK),1971,$2 to $5 billion,3.9,85% approve of CEO
+VRTX,Vertex Pharmaceuticals Inc,Boston,United States,5001 to 10000 Employees,Public Company (VRTX),1989,$5 to $10 billion,4.1,89% approve of CEO
+WBD,Warner Bros Discovery Inc,New York,United States,10000+ Employees,Public Company (WBD),2022,$10+ billion,3.6,40% approve of CEO
+WDAY,Workday Inc,Pleasanton,United States,10000+ Employees,Public Company (WDAY),2005,$5 to $10 billion,3.7,52% approve of CEO
+XEL,Xcel Energy Inc,Minneapolis,United States,10000+ Employees,Public Company (XEL),1909,$10+ billion,3.2,29% approve of CEO
+ZS,Zscaler Inc,San Jose,United States,5001 to 10000 Employees,Public Company (ZS),2008,Unknown / Non-Applicable,3.5,82% approve of CEO
