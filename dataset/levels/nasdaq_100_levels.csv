@@ -1,0 +1,101 @@
+Company Name,Stock Ticker,exists-on-levels,country,scraped,skip
+nvidia,NVDA,true,United States,true,false
+microsoft,MSFT,true,United States,true,false
+apple,AAPL,true,United States,true,false
+google,GOOGL,true,United States,true,false
+amazon,AMZN,true,United States,true,false
+facebook,META,true,United States,true,false
+broadcom,AVGO,true,United States,true,false
+tesla,TSLA,true,United States,true,false
+netflix,NFLX,true,United States,true,false
+palantir,PLTR,true,United States,true,false
+costco-wholesale,COST,true,United States,true,false
+asml,ASML,true,Netherlands,true,false
+cisco,CSCO,true,United States,true,false
+amd,AMD,true,United States,true,false
+astrazeneca,AZN,true,United Kingdom,true,false
+t-mobile,TMUS,true,United States,true,false
+applovin,APP,true,United States,true,false
+linde,LIN,true,United Kingdom,true,false
+micron-technology,MU,true,United States,true,false
+shopify,SHOP,true,Canada,true,false
+pepsico,PEP,true,United States,true,false
+pdd,PDD,false,Ireland,false,false
+intuit,INTU,true,United States,true,false
+lam research,LRCX,true,United States,true,false
+qualcomm,QCOM,true,United States,true,false
+bookingcom,BKNG,true,United States,true,false
+applied materials,AMAT,true,United States,true,false
+intel,INTC,true,United States,true,false
+texas instruments,TXN,true,United States,true,false
+intuitive,ISRG,true,United States,true,false
+arm,ARM,true,United Kingdom,true,false
+amgen,AMGN,true,United States,true,false
+adobe,ADBE,true,United States,true,false
+kla,KLAC,true,United States,true,false
+gilead-sciences,GILD,true,United States,true,false
+palo alto networks,PANW,true,United States,true,false
+honeywell,HON,true,United States,true,false
+crowdstrike,CRWD,true,United States,true,false
+analog devices,ADI,true,United States,true,false
+adp,ADP,true,United States,true,false
+doordash,DASH,true,United States,true,false
+comcast,CMCSA,true,United States,true,false
+constellation energy,CEG,false,United States,false,false
+mercado-libre,MELI,true,Uruguay,true,false
+vertex,VRTX,true,United States,true,false
+microstrategy,MSTR,true,United States,true,false
+starbucks,SBUX,true,United States,true,false
+cadence,CDNS,true,United States,true,false
+oreilly-auto-parts,ORLY,true,United States,true,false
+synopsys,SNPS,true,United States,true,false
+cintas,CTAS,true,United States,true,false
+mondelez-international,MDLZ,true,United States,true,false
+marvell,MRVL,true,United States,true,false
+airbnb,ABNB,true,United States,true,false
+marriott,MAR,true,United States,true,false
+thomson reuters,TRI,true,Canada,true,false
+autodesk,ADSK,true,United States,true,false
+csx,CSX,true,United States,true,false
+paypal,PYPL,true,United States,true,false
+fortinet,FTNT,true,United States,true,false
+monster beverage,MNST,false,United States,false,false
+workday,WDAY,true,United States,true,false
+regeneron,REGN,true,United States,true,false
+american-electric-power,AEP,true,United States,true,false
+nxp-semiconductors,NXPI,true,Netherlands,true,false
+axon,AXON,true,United States,true,false
+fastenal,FAST,true,United States,true,false
+roper-technologies,ROP,true,United States,true,false
+datadog,DDOG,true,United States,true,false
+paccar,PCAR,true,United States,true,false
+idexx,IDXX,true,United States,true,false
+electronic-arts,EA,true,United States,true,false
+ross stores,ROST,false,United States,false,false
+zscaler,ZS,true,United States,true,false
+baker hughes,BKR,true,United States,true,false
+take-two-interactive-software,TTWO,true,United States,true,false
+xcel energy,XEL,true,United States,true,false
+warner bros discovery,WBD,true,United States,true,false
+exelon,EXC,true,United States,true,false
+paychex,PAYX,true,United States,true,false
+copart,CPRT,true,United States,true,false
+charter,CHTR,true,United States,true,false
+diamondback-energy,FANG,true,United States,true,false
+coca-cola europacific,CCEP,false,United Kingdom,false,false
+atlassian,TEAM,true,Australia,true,false
+costar-group,CSGP,true,United States,true,false
+microchip-technology,MCHP,true,United States,true,false
+keurig dr pepper,KDP,true,United States,true,false
+ge healthcare,GEHC,true,United States,true,false
+verisk,VRSK,true,United States,true,false
+cognizant,CTSH,true,United States,true,false
+the-kraft-heinz-company,KHC,true,United States,true,false
+old dominion,ODFL,false,United States,false,false
+dexcom,DXCM,true,United States,true,false
+the-trade-desk,TTD,true,United States,true,false
+biogen,BIIB,true,United States,true,false
+cdw,CDW,true,United States,true,false
+lululemon,LULU,true,Canada,true,false
+onsemi,ON,true,United States,true,false
+globalfoundries,GFS,true,United States,true,false
