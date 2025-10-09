@@ -6,7 +6,7 @@ import json
 import os
 
 # ===================== CONFIG =====================
-API_TOKEN = "MaN2IQhfGv4XOIFuUyO6F14kUK6A9t7KGK7uOQI0"
+API_TOKEN = "YOUR API HERE"
 # Replace with the full list of NASDAQ-100 tickers
 TICKERS = [
     "AAPL","MSFT","GOOG","AMZN","TSLA","META","NVDA","NFLX","PEP","ADBE",
