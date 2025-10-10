@@ -195,6 +195,93 @@ rect_fig.update_layout(
     yaxis=dict(range=[0, None])
 )
 
+# --- Viz 3: Scatterplot of company rating vs CEO approval, dot size = employee count ---
+glassdoor = pd.read_csv("../glassdoorData.csv")
+nasdaq = pd.read_csv("../nasdaq100_snapshot.csv")
+levels_map = pd.read_csv("../levels/nasdaq_100_levels.csv")
+
+# Parse CEO approval as number
+import re
+def extract_ceo_approval(val):
+    if isinstance(val, str):
+        match = re.search(r"(\d+)", val)
+        if match:
+            return int(match.group(1))
+    return None
+
+glassdoor['CEOApproval'] = glassdoor['CEOApprovalPercentage'].apply(extract_ceo_approval)
+# Ensure rating is numeric
+glassdoor['Rating'] = pd.to_numeric(glassdoor['Rating'], errors='coerce')
+
+# Join on ticker (Symbol <-> Ticker)
+glassdoor['Symbol'] = glassdoor['Symbol'].str.strip()
+nasdaq['Ticker'] = nasdaq['Ticker'].str.strip()
+levels_map['Stock Ticker'] = levels_map['Stock Ticker'].astype(str).str.strip()
+
+glassdoor_nasdaq = glassdoor.merge(
+    nasdaq[['Ticker', 'Company', 'Full-Time Employees']],
+    left_on='Symbol', right_on='Ticker', how='inner'
+)
+# Third join to bring in short slug company names from levels
+joined = glassdoor_nasdaq.merge(
+    levels_map[['Stock Ticker', 'Company Name']],
+    left_on='Ticker', right_on='Stock Ticker', how='left'
+)
+
+# Decide which company label to use (prefer levels slug)
+company_col = 'Company_x' if 'Company_x' in joined.columns else ('Company_y' if 'Company_y' in joined.columns else 'Company')
+joined['label_name'] = joined['Company Name'].where(joined['Company Name'].notna() & (joined['Company Name'] != ''), joined[company_col])
+
+# Prepare data for scatterplot: coerce employees to numeric and filter valid rows
+scatter_df = joined.copy()
+scatter_df['Full-Time Employees'] = pd.to_numeric(scatter_df['Full-Time Employees'], errors='coerce')
+scatter_df = scatter_df.dropna(subset=['Rating', 'CEOApproval', 'Full-Time Employees'])
+scatter_df = scatter_df[scatter_df['Full-Time Employees'] > 0]
+
+viz3_fig = go.Figure()
+if not scatter_df.empty and scatter_df['Full-Time Employees'].max() > 0:
+    max_emp = scatter_df['Full-Time Employees'].max()
+    viz3_fig.add_trace(go.Scatter(
+        x=scatter_df['Rating'],
+        y=scatter_df['CEOApproval'],
+        mode='markers+text',
+        text=scatter_df['label_name'],
+        textposition='top center',
+        textfont=dict(size=8, color='black'),
+        marker=dict(
+            size=(scatter_df['Full-Time Employees'] / max_emp) * 60 + 6,  # scaled size
+            sizemode='diameter',
+            sizemin=6,
+            color='mediumturquoise',
+            opacity=0.7,
+            line=dict(width=1, color='black')
+        ),
+        customdata=scatter_df['Full-Time Employees'],
+        hovertemplate='<b>%{text}</b><br>Rating: %{x}<br>CEO Approval: %{y}%<br>Employees: %{customdata:,.0f}<extra></extra>'
+    ))
+    viz3_fig.update_layout(
+        title='Company Rating vs CEO Approval (Dot Size = Employee Count)',
+        xaxis_title='Glassdoor Company Rating',
+        yaxis_title='CEO Approval Percentage',
+        template='plotly_white',
+        margin=dict(l=0, r=0, t=80, b=60),
+        autosize=True,
+        height=700,
+    )
+else:
+    viz3_fig.add_annotation(
+        text='No data available for scatterplot.',
+        xref='paper', yref='paper',
+        x=0.5, y=0.5, showarrow=False,
+        font=dict(size=20, color='red')
+    )
+    viz3_fig.update_layout(
+        title='Company Rating vs CEO Approval (Dot Size = Employee Count)',
+        template='plotly_white',
+        autosize=True,
+        height=300,
+    )
+
 # Dash app
 app = Dash(__name__)
 
@@ -235,8 +322,8 @@ app.layout = html.Div([
     ),
     html.Br(),
     dcc.Graph(figure=fig, style={"width": "100vw", "height": "700px"}),
-    dcc.Graph(figure=rect_fig, style={"width": "100vw", "height": "600px"}),
-    html.Div("[Placeholder for Graph 3]", style={"height": "400px"}),
+    dcc.Graph(figure=rect_fig, style={"width": "100vw", "height": "800px"}),
+    dcc.Graph(figure=viz3_fig, style={"width": "100vw", "height": "700px"}),
 ], style={"padding": 0, "margin": 0, "width": "100vw", "background": "#18191A"})
 
 @app.callback(
