@@ -1,102 +1,102 @@
-Ticker,Company,City,State,Address,Market Cap,Total Revenue,Net Profit (TTM),Dividend Yield,Dividend Rate,Full-Time Employees,Sector,Industry
-NVDA,NVIDIA Corporation,Santa Clara,CA,2788 San Tomas Expressway,4517342478336,165217992704,86597001216,0.02,0.04,36000,Technology,Semiconductors
-MSFT,Microsoft Corporation,Redmond,WA,One Microsoft Way,3928948473856,281723994112,101831999488,0.69,3.64,228000,Technology,Software - Infrastructure
-AAPL,Apple Inc.,Cupertino,CA,One Apple Park Way,3809379876864,408624988160,99280003072,0.41,1.04,150000,Technology,Consumer Electronics
-AMZN,"Amazon.com, Inc.",Seattle,WA,410 Terry Avenue North,2365264232448,670038032384,70623002624,0.0,0.0,1546000,Consumer Cyclical,Internet Retail
-META,"Meta Platforms, Inc.",Menlo Park,CA,1 Meta Way,1797839126528,178803998720,71507001344,0.29,2.1,75945,Communication Services,Internet Content & Information
-AVGO,Broadcom Inc.,Palo Alto,CA,3421 Hillview Ave,1588650835968,59925999616,18812999680,0.7,2.36,37000,Technology,Semiconductors
-GOOGL,Alphabet Inc.,Mountain View,CA,1600 Amphitheatre Parkway,3034564788224,371399000064,115572998144,0.34,0.84,187103,Communication Services,Internet Content & Information
-GOOG,Alphabet Inc.,Mountain View,CA,1600 Amphitheatre Parkway,3034564788224,371399000064,115572998144,0.34,0.84,187103,Communication Services,Internet Content & Information
-TSLA,"Tesla, Inc.",Austin,TX,1 Tesla Road,1507124576256,92719996928,5879000064,0.0,0.0,125665,Consumer Cyclical,Auto Manufacturers
-NFLX,"Netflix, Inc.",Los Gatos,CA,121 Albright Way,506112802816,41693184000,10247879680,0.0,0.0,14000,Communication Services,Entertainment
-PLTR,Palantir Technologies Inc.,Denver,CO,1200 17th Street,425906634752,3440587008,763292032,0.0,0.0,4164,Technology,Software - Infrastructure
-COST,Costco Wholesale Corporation,Issaquah,WA,999 Lake Drive,405473198080,275235012608,8098999808,0.57,5.2,,Consumer Defensive,Discount Stores
-ASML,ASML Holding N.V.,Veldhoven,,De Run 6501,400535552000,32163299328,9415199744,0.74,7.39,43193,Technology,Semiconductor Equipment & Materials
-AMD,"Advanced Micro Devices, Inc.",Santa Clara,CA,2485 Augustine Drive,343247650816,29600000000,2729999872,0.0,0.0,28000,Technology,Semiconductors
-CSCO,"Cisco Systems, Inc.",San Jose,CA,170 West Tasman Drive,272711303168,56654000128,10179999744,2.38,1.64,86200,Technology,Communication Equipment
-AZN,AstraZeneca PLC,Cambridge,,1 Francis Crick Avenue,266241589248,56500998144,8295000064,1.82,1.57,94300,Healthcare,Drug Manufacturers - General
-TMUS,"T-Mobile US, Inc.",Bellevue,WA,12920 SE 38th Street,256235388928,84052000768,12215000064,1.79,4.08,70000,Communication Services,Telecom Services
-LIN,Linde plc,Woking,,"Forge, 43 Church Street West",220560982016,33244999680,6713999872,1.28,6.0,64842,Basic Materials,Specialty Chemicals
-APP,AppLovin Corporation,Palo Alto,CA,1100 Page Mill Road,198552698880,5737590784,2513516032,0.0,0.0,1533,Communication Services,Advertising Agencies
-SHOP,Shopify Inc.,Ottawa,ON,151 O'Connor Street,213581168640,10014000128,2344999936,0.0,0.0,8100,Technology,Software - Application
-MU,"Micron Technology, Inc.",Boise,ID,8000 South Federal Way,214346104832,37377998848,8538999808,0.25,0.46,53000,Technology,Semiconductors
-PEP,"PepsiCo, Inc.",Purchase,NY,700 Anderson Hill Road,192752369664,91747999744,7550000128,4.04,5.69,319000,Consumer Defensive,Beverages - Non-Alcoholic
-PDD,PDD Holdings Inc.,Dublin,,25 St Stephen’s Green,190701092864,409621528576,97922613248,0.0,0.0,23465,Consumer Cyclical,Internet Retail
-INTU,Intuit Inc.,Mountain View,CA,2700 Coast Avenue,186824441856,18830999552,3868999936,0.66,4.32,18200,Technology,Software - Application
-QCOM,QUALCOMM Incorporated,San Diego,CA,5775 Morehouse Drive,181940994048,43256999936,11573000192,2.15,3.56,49000,Technology,Semiconductors
-LRCX,Lam Research Corporation,Fremont,CA,4650 Cushing Parkway,188082962432,18435590144,5358217216,0.74,1.04,19000,Technology,Semiconductor Equipment & Materials
-INTC,Intel Corporation,Santa Clara,CA,2200 Mission College Boulevard,176825778176,53070000128,-20504000512,0.0,0.0,108900,Technology,Semiconductors
-BKNG,Booking Holdings Inc.,Norwalk,CT,800 Connecticut Avenue,175657369600,25024999424,4813000192,0.73,38.4,24800,Consumer Cyclical,Travel Services
-ARM,Arm Holdings plc,Cambridge,,110 Fulbourn Road,168788426752,4120999936,699000000,0.0,0.0,8330,Technology,Semiconductors
-AMAT,"Applied Materials, Inc.",Santa Clara,CA,3050 Bowers Avenue,178376212480,28612999168,6832000000,0.87,1.84,36100,Technology,Semiconductor Equipment & Materials
-TXN,Texas Instruments Incorporated,Dallas,TX,12500 TI Boulevard,165290229760,16675000320,5015000064,3.21,5.68,34000,Technology,Semiconductors
-AMGN,Amgen Inc.,Thousand Oaks,CA,One Amgen Center Drive,159107465216,34916999168,6618999808,3.22,9.52,28000,Healthcare,Drug Manufacturers - General
-ISRG,"Intuitive Surgical, Inc.",Sunnyvale,CA,1020 Kifer Road,161203306496,9144999936,2607600128,0.0,0.0,15638,Healthcare,Medical Instruments & Supplies
-ADBE,Adobe Inc.,San Jose,CA,345 Park Avenue,146568609792,23181000704,6957000192,0.0,0.0,30709,Technology,Software - Application
-GILD,"Gilead Sciences, Inc.",Foster City,CA,333 Lakeside Drive,144901423104,28863000576,6311000064,2.71,3.16,17600,Healthcare,Drug Manufacturers - General
-PANW,"Palo Alto Networks, Inc.",Santa Clara,CA,3000 Tannery Way,143889219584,9221499904,1133900032,0.0,0.0,16068,Technology,Software - Infrastructure
-KLAC,KLA Corporation,Milpitas,CA,One Technology Drive,150082174976,12156162048,4061643008,0.7,7.6,15000,Technology,Semiconductor Equipment & Materials
-HON,Honeywell International Inc.,Charlotte,NC,855 South Mint Street,132680687616,39990001664,5717000192,2.19,4.58,102000,Industrials,Conglomerates
-CRWD,"CrowdStrike Holdings, Inc.",Austin,TX,206 East 9th Street,124461203456,4341102080,-296985984,0.0,0.0,10047,Technology,Software - Infrastructure
-ADP,"Automatic Data Processing, Inc.",Roseland,NJ,One ADP Boulevard,118666919936,20560900096,4079699968,2.1,6.16,67000,Technology,Software - Application
-DASH,"DoorDash, Inc.",San Francisco,CA,South Tower,118238978048,11895000064,781000000,0.0,0.0,23700,Consumer Cyclical,Internet Retail
-ADI,"Analog Devices, Inc.",Wilmington,MA,One Analog Way,119299194880,10386794496,1957676032,1.69,3.96,24000,Technology,Semiconductors
-CMCSA,Comcast Corporation,Philadelphia,PA,One Comcast Center,114790703104,124184002560,22904999936,4.31,1.32,182000,Communication Services,Telecom Services
-CEG,Constellation Energy Corporation,Baltimore,MD,1310 Point Street,111891177472,24820000768,3008999936,0.43,1.55,14215,Utilities,Utilities - Renewable
-MELI,"MercadoLibre, Inc.",Montevideo,,WTC Free Zone,110904066048,24096000000,2052999936,0.0,0.0,84207,Consumer Cyclical,Internet Retail
-VRTX,Vertex Pharmaceuticals Incorporated,Boston,MA,50 Northern Avenue,105191956480,11418800128,3637600000,0.0,0.0,6100,Healthcare,Biotechnology
-CDNS,"Cadence Design Systems, Inc.",San Jose,CA,Building 5,96287072256,5089287168,1011950976,0.0,0.0,13152,Technology,Software - Application
-MSTR,Strategy Inc,Tysons Corner,VA,1850 Towers Crescent Plaza,103270121472,462321984,4734145024,0.0,0.0,1512,Technology,Software - Application
-SBUX,Starbucks Corporation,Seattle,WA,2401 Utah Avenue South,93334437888,36689301504,2632399872,3.05,2.48,361000,Consumer Cyclical,Restaurants
-SNPS,"Synopsys, Inc.",Sunnyvale,CA,675 Almanor Avenue,88828723200,6435303936,1166705024,0.0,0.0,20000,Technology,Software - Infrastructure
-ORLY,"O'Reilly Automotive, Inc.",Springfield,MO,233 South Patterson Avenue,87649705984,17122020352,2423674112,0.0,0.0,92810,Consumer Cyclical,Auto Parts
-MDLZ,"Mondelez International, Inc.",Chicago,IL,905 West Fulton Market,81000980480,37105000448,3640999936,3.19,2.0,90000,Consumer Defensive,Confectioners
-CTAS,Cintas Corporation,Cincinnati,OH,6800 Cintas Boulevard,80255655936,10556716032,1845037056,0.9,1.8,48300,Industrials,Specialty Business Services
-MRVL,"Marvell Technology, Inc.",Wilmington,DE,1000 North West Street,76657934336,7234899968,-103400000,0.28,0.24,7042,Technology,Semiconductors
-ABNB,"Airbnb, Inc.",San Francisco,CA,888 Brannan Street,73682558976,11580000256,2624999936,0.0,0.0,7300,Consumer Cyclical,Travel Services
-MAR,"Marriott International, Inc.",Bethesda,MD,7750 Wisconsin Avenue,73820250112,6783000064,2467000064,1.0,2.68,418000,Consumer Cyclical,Lodging
-PYPL,"PayPal Holdings, Inc.",San Jose,CA,2211 North First Street,71280787456,32291999744,4679000064,0.0,0.0,24400,Financial Services,Credit Services
-TRI,Thomson Reuters Corporation,Toronto,ON,19 Duncan Street,68481683456,7318000128,1602000000,1.57,2.38,26400,Industrials,Specialty Business Services
-CSX,CSX Corporation,Jacksonville,FL,500 Water Street,67580047360,14154999808,3102000128,1.44,0.52,23500,Industrials,Railroads
-ADSK,"Autodesk, Inc.",San Francisco,CA,One Market Street,68890591232,6605000192,1043000000,0.0,0.0,15300,Technology,Software - Application
-MNST,Monster Beverage Corporation,Corona,CA,1 Monster Way,66543579136,7659164160,1573416960,0.0,0.0,5527,Consumer Defensive,Beverages - Non-Alcoholic
-FTNT,"Fortinet, Inc.",Sunnyvale,CA,909 Kifer Road,66190061568,6337900032,1939600000,0.0,0.0,14898,Technology,Software - Infrastructure
-AEP,"American Electric Power Company, Inc.",Columbus,OH,1 Riverside Plaza,63191351296,20666699776,3649700096,3.15,3.72,16330,Utilities,Utilities - Regulated Electric
-WDAY,"Workday, Inc.",Pleasanton,CA,6110 Stoneridge Mall Road,63642120192,8958999552,583000000,0.0,0.0,19517,Technology,Software - Application
-REGN,"Regeneron Pharmaceuticals, Inc.",Tarrytown,NY,777 Old Saw Mill River Road,62053523456,14214200320,4458599936,0.6,3.52,15182,Healthcare,Biotechnology
-AXON,"Axon Enterprise, Inc.",Scottsdale,AZ,17800 North 85th Street,56648015872,2391589888,326305984,0.0,0.0,4100,Industrials,Aerospace & Defense
-NXPI,NXP Semiconductors N.V.,Eindhoven,,60 High Tech Campus,58344357888,12122000384,2148000000,1.85,4.06,33100,Technology,Semiconductors
-ROP,"Roper Technologies, Inc.",Sarasota,FL,6496 University Parkway,54944391168,7468100096,1539600000,0.65,3.3,18200,Technology,Software - Application
-FAST,Fastenal Company,Winona,MN,2001 Theurer Boulevard,54834077696,7774400000,1189100032,1.85,0.88,21807,Industrials,Industrial Distribution
-DDOG,"Datadog, Inc.",New York,NY,620 8th Avenue,54878531584,3016056064,124580000,0.0,0.0,6500,Technology,Software - Application
-PCAR,PACCAR Inc,Bellevue,WA,777 - 106th Avenue N.E.,51733188608,31099600896,3072999936,1.37,1.32,30100,Industrials,Farm & Heavy Construction Machinery
-IDXX,"IDEXX Laboratories, Inc.",Westbrook,ME,One IDEXX Drive,50225348608,4037714944,985656000,0.0,0.0,11000,Healthcare,Diagnostics & Research
-EA,Electronic Arts Inc.,Redwood City,CA,209 Redwood Shores Parkway,49983475712,7473999872,1042000000,0.38,0.76,14500,Communication Services,Electronic Gaming & Multimedia
-ROST,"Ross Stores, Inc.",Dublin,CA,5130 Hacienda Drive,49518948352,21497755648,2062835968,1.08,1.62,107000,Consumer Cyclical,Apparel Retail
-XEL,Xcel Energy Inc.,Minneapolis,MN,414 Nicollet Mall,48408231936,13957000192,2072999936,2.79,2.28,11380,Utilities,Utilities - Regulated Electric
-TTWO,"Take-Two Interactive Software, Inc.",New York,NY,110 West 44th Street,48054489088,5799199744,-4228800000,0.0,0.0,12928,Communication Services,Electronic Gaming & Multimedia
-BKR,Baker Hughes Company,Houston,TX,575 North Dairy Ashford Road,48386949120,27608999936,3048000000,1.89,0.92,57000,Energy,Oil & Gas Equipment & Services
-EXC,Exelon Corporation,Chicago,IL,10 South Dearborn Street,47257305088,23765999616,2654000128,3.42,1.6,20000,Utilities,Utilities - Regulated Electric
-ZS,"Zscaler, Inc.",San Jose,CA,120 Holger Way,48319741952,2673114880,-41478000,0.0,0.0,7923,Technology,Software - Infrastructure
-WBD,"Warner Bros. Discovery, Inc.",New York,NY,230 Park Avenue South,46049361920,38441000960,772000000,0.0,0.0,35000,Communication Services,Entertainment
-PAYX,"Paychex, Inc.",Rochester,NY,911 Panorama Trail South,45713752064,5793200128,1613699968,3.4,4.32,19000,Technology,Software - Application
-FANG,"Diamondback Energy, Inc.",Midland,TX,500 West Texas Avenue,43162382336,13409999872,3816999936,2.62,3.9,1983,Energy,Oil & Gas E&P
-CPRT,"Copart, Inc.",Dallas,TX,14185 Dallas Parkway,43015667712,4646958080,1552449024,0.0,0.0,13800,Industrials,Specialty Business Services
-CCEP,Coca-Cola Europacific Partners PLC,Uxbridge,,Pemberton House,39947771904,20884000768,1534000000,2.5,2.19,41000,Consumer Defensive,Beverages - Non-Alcoholic
-TEAM,Atlassian Corporation,Sydney,NSW,341 George Street,39381659648,5215304192,-256687008,0.0,0.0,13813,Technology,Software - Application
-CHTR,"Charter Communications, Inc.",Stamford,CT,400 Washington Blvd.,38619738112,55222001664,5264000000,0.0,0.0,94500,Communication Services,Telecom Services
-MCHP,Microchip Technology Incorporated,Chandler,AZ,2355 West Chandler Boulevard,35937267712,4235800064,-178400000,2.8,1.82,19400,Technology,Semiconductors
-KDP,Keurig Dr Pepper Inc.,Burlington,MA,53 South Avenue,34409164800,15758999552,1536000000,3.63,0.92,29400,Consumer Defensive,Beverages - Non-Alcoholic
-VRSK,"Verisk Analytics, Inc.",Jersey City,NJ,545 Washington Boulevard,34382458880,2986500096,909299968,0.73,1.8,7800,Industrials,Consulting Services
-CSGP,"CoStar Group, Inc.",Arlington,VA,1201 Wilson Blvd,34146220032,2915500032,104200000,0.0,0.0,6593,Real Estate,Real Estate Services
-GEHC,GE HealthCare Technologies Inc.,Chicago,IL,500 West Monroe Street,34885902336,19967000576,2240000000,0.19,0.14,53000,Healthcare,Health Information Services
-CTSH,Cognizant Technology Solutions Corporation,Teaneck,NJ,300 Frank West Burr Boulevard,33181620224,20486000640,2436000000,1.83,1.24,343800,Technology,Information Technology Services
-KHC,The Kraft Heinz Company,Pittsburgh,PA,One PPG Place,30087092224,25309999104,-5271000064,6.29,1.6,36000,Consumer Defensive,Packaged Foods
-ODFL,"Old Dominion Freight Line, Inc.",Thomasville,NC,500 Old Dominion Way,30016212992,5638622208,1095010048,0.79,1.12,21719,Industrials,Trucking
-TTD,"The Trade Desk, Inc.",Ventura,CA,42 North Chestnut Street,25982425088,2679088128,417193984,0.0,0.0,3522,Communication Services,Advertising Agencies
-DXCM,"DexCom, Inc.",San Diego,CA,6340 Sequence Drive,26023421952,4300800000,571500032,0.0,0.0,10200,Healthcare,Medical Devices
-BIIB,Biogen Inc.,Cambridge,MA,225 Binney Street,22585980928,9996999680,1530499968,0.0,0.0,7605,Healthcare,Drug Manufacturers - General
-LULU,lululemon athletica inc.,Vancouver,BC,1818 Cornwall Avenue,20648742912,10904036352,1785750016,0.0,0.0,39000,Consumer Cyclical,Apparel Retail
-CDW,CDW Corporation,Vernon Hills,IL,200 N. Milwaukee Avenue,20347181056,21878300672,1076700032,1.61,2.5,15100,Technology,Information Technology Services
-ON,ON Semiconductor Corporation,Scottsdale,AZ,5701 North Pima Road,20591841280,6398799872,465800000,0.0,0.0,26400,Technology,Semiconductors
-GFS,GLOBALFOUNDRIES Inc.,Malta,NY,400 Stonebreak Road Extension,19374059520,6841999872,-115000000,0.0,0.0,13000,Technology,Semiconductors
+Ticker,Company,City,State,Address,Market Cap,Total Revenue,Net Profit (TTM),Dividend Yield,Dividend Rate,Full-Time Employees,Sector,Industry,Trailing PE,Forward PE
+NVDA,NVIDIA Corporation,Santa Clara,CA,2788 San Tomas Expressway,4572123234304,165217992704,86597001216,0.02,0.04,36000,Technology,Semiconductors,53.654285,45.580097
+MSFT,Microsoft Corporation,Redmond,WA,One Microsoft Way,3831388438528,281723994112,101831999488,0.7,3.64,228000,Technology,Software - Infrastructure,37.816948,34.47793
+AAPL,Apple Inc.,Cupertino,CA,One Apple Park Way,3664166256640,408624988160,99280003072,0.41,1.04,150000,Technology,Consumer Electronics,37.523556,29.711792
+AMZN,"Amazon.com, Inc.",Seattle,WA,410 Terry Avenue North,2333696065536,670038032384,70623002624,0.0,0.0,1546000,Consumer Cyclical,Internet Retail,33.35671,35.58049
+META,"Meta Platforms, Inc.",Menlo Park,CA,1 Meta Way,1789586833408,178803998720,71507001344,0.29,2.1,75945,Communication Services,Internet Content & Information,25.829405,28.157116
+AVGO,Broadcom Inc.,Palo Alto,CA,3421 Hillview Ave,1560930549760,59925999616,18812999680,0.68,2.36,37000,Technology,Semiconductors,84.753845,53.572124
+GOOGL,Alphabet Inc.,Mountain View,CA,1600 Amphitheatre Parkway,2893514276864,371399000064,115572998144,0.35,0.84,187103,Communication Services,Internet Content & Information,25.5016,26.668526
+GOOG,Alphabet Inc.,Mountain View,CA,1600 Amphitheatre Parkway,2897284956160,371399000064,115572998144,0.35,0.84,187103,Communication Services,Internet Content & Information,25.606724,26.80838
+TSLA,"Tesla, Inc.",Austin,TX,1 Tesla Road,1394402131968,92719996928,5879000064,0.0,0.0,125665,Consumer Cyclical,Auto Manufacturers,246.67647,129.42902
+NFLX,"Netflix, Inc.",Los Gatos,CA,121 Albright Way,521298575360,41693184000,10247879680,0.0,0.0,14000,Communication Services,Entertainment,52.181942,51.589462
+PLTR,Palantir Technologies Inc.,Denver,CO,1200 17th Street,423866433536,3440587008,763292032,0.0,0.0,4164,Technology,Software - Infrastructure,595.56665,380.14893
+COST,Costco Wholesale Corporation,Issaquah,WA,999 Lake Drive,414255087616,275235012608,8098999808,0.55,5.2,341000,Consumer Defensive,Discount Stores,51.359062,47.496696
+ASML,ASML Holding N.V.,Veldhoven,,De Run 6501,372804616192,32163299328,9415199744,0.75,7.39,43193,Technology,Semiconductor Equipment & Materials,33.837017,35.535206
+AMD,"Advanced Micro Devices, Inc.",Santa Clara,CA,2485 Augustine Drive,357204131840,29600000000,2729999872,0.0,0.0,28000,Technology,Semiconductors,131.01787,43.158825
+CSCO,"Cisco Systems, Inc.",San Jose,CA,170 West Tasman Drive,270892826624,56654000128,10179999744,2.34,1.64,86200,Technology,Communication Equipment,26.872551,17.570513
+AZN,AstraZeneca PLC,Cambridge,,1 Francis Crick Avenue,265536634880,56500998144,8295000064,1.84,1.57,94300,Healthcare,Drug Manufacturers - General,31.984905,15.438981
+TMUS,"T-Mobile US, Inc.",Bellevue,WA,12920 SE 38th Street,256899399680,84052000768,12215000064,1.8,4.08,70000,Communication Services,Telecom Services,21.55524,21.393627
+LIN,Linde plc,Woking,,"Forge, 43 Church Street West",214408888320,33244999680,6713999872,1.31,6.0,64842,Basic Materials,Specialty Chemicals,32.498222,26.9764
+APP,AppLovin Corporation,Palo Alto,CA,1100 Page Mill Road,194987884544,5737590784,2513516032,0.0,0.0,1533,Communication Services,Advertising Agencies,79.402336,111.717255
+SHOP,Shopify Inc.,Ottawa,ON,151 O'Connor Street,200647475200,10014000128,2344999936,0.0,0.0,8100,Technology,Software - Application,85.32778,83.02162
+MU,"Micron Technology, Inc.",Boise,ID,8000 South Federal Way,207002370048,37377998848,8538999808,0.24,0.46,53000,Technology,Semiconductors,24.265461,14.329254
+PEP,"PepsiCo, Inc.",Purchase,NY,700 Anderson Hill Road,204745523200,91747999744,7550000128,3.93,5.69,319000,Consumer Defensive,Beverages - Non-Alcoholic,28.521906,17.3511
+PDD,PDD Holdings Inc.,Dublin,,25 St Stephen’s Green,176873750528,409621528576,97922613248,0.0,0.0,23465,Consumer Cyclical,Internet Retail,13.411195,8.842442
+INTU,Intuit Inc.,Mountain View,CA,2700 Coast Avenue,180573618176,18830999552,3868999936,0.67,4.32,18200,Technology,Software - Application,47.37893,29.134953
+QCOM,QUALCOMM Incorporated,San Diego,CA,5775 Morehouse Drive,168917467136,43256999936,11573000192,2.15,3.56,49000,Technology,Semiconductors,15.125604,12.800491
+LRCX,Lam Research Corporation,Fremont,CA,4650 Cushing Parkway,167931674624,18435590144,5358217216,0.74,1.04,19000,Technology,Semiconductor Equipment & Materials,32.089157,31.187353
+INTC,Intel Corporation,Santa Clara,CA,2200 Mission College Boulevard,178252464128,53070000128,-20504000512,0.0,0.0,108900,Technology,Semiconductors,,38.62876
+BKNG,Booking Holdings Inc.,Norwalk,CT,800 Connecticut Avenue,167374356480,25024999424,4813000192,0.74,38.4,24800,Consumer Cyclical,Travel Services,36.03838,24.609482
+ARM,Arm Holdings plc,Cambridge,,110 Fulbourn Road,165043929088,4120999936,699000000,0.0,0.0,8330,Technology,Semiconductors,232.55223,75.635925
+AMAT,"Applied Materials, Inc.",Santa Clara,CA,3050 Bowers Avenue,170433691648,28612999168,6832000000,0.84,1.84,36100,Technology,Semiconductor Equipment & Materials,25.560335,22.078432
+TXN,Texas Instruments Incorporated,Dallas,TX,12500 TI Boulevard,157844389888,16675000320,5015000064,3.17,5.68,34000,Technology,Semiconductors,31.68248,29.52721
+AMGN,Amgen Inc.,Thousand Oaks,CA,One Amgen Center Drive,156523315200,34916999168,6618999808,3.22,9.52,28000,Healthcare,Drug Manufacturers - General,23.77269,14.065795
+ISRG,"Intuitive Surgical, Inc.",Sunnyvale,CA,1020 Kifer Road,155575255040,9144999936,2607600128,0.0,0.0,15638,Healthcare,Medical Instruments & Supplies,60.360237,55.215027
+ADBE,Adobe Inc.,San Jose,CA,345 Park Avenue,141855162368,23181000704,6957000192,0.0,0.0,30709,Technology,Software - Application,21.11402,16.49051
+GILD,"Gilead Sciences, Inc.",Foster City,CA,333 Lakeside Drive,145521836032,28863000576,6311000064,2.71,3.16,17600,Healthcare,Drug Manufacturers - General,23.269842,15.784657
+PANW,"Palo Alto Networks, Inc.",Santa Clara,CA,3000 Tannery Way,142339178496,9221499904,1133900032,0.0,0.0,16068,Technology,Software - Infrastructure,132.25786,29.206944
+KLAC,KLA Corporation,Milpitas,CA,One Technology Drive,131303301120,12156162048,4061643008,0.72,7.6,15000,Technology,Semiconductor Equipment & Materials,32.86437,30.381018
+HON,Honeywell International Inc.,Charlotte,NC,855 South Mint Street,128141180928,39990001664,5717000192,2.24,4.58,102000,Industrials,Conglomerates,22.987473,18.331516
+CRWD,"CrowdStrike Holdings, Inc.",Austin,TX,206 East 9th Street,125131251712,4341102080,-296985984,0.0,0.0,10047,Technology,Software - Infrastructure,,116.772835
+ADP,"Automatic Data Processing, Inc.",Roseland,NJ,One ADP Boulevard,116009533440,20560900096,4079699968,2.15,6.16,67000,Technology,Software - Application,28.695393,26.345907
+DASH,"DoorDash, Inc.",San Francisco,CA,South Tower,115532701696,11895000064,781000000,0.0,0.0,23700,Consumer Cyclical,Internet Retail,148.59616,151.9354
+ADI,"Analog Devices, Inc.",Wilmington,MA,One Analog Way,112323264512,10386794496,1957676032,1.66,3.96,24000,Technology,Semiconductors,58.09669,30.281168
+CMCSA,Comcast Corporation,Philadelphia,PA,One Comcast Center,109455466496,124184002560,22904999936,4.39,1.32,182000,Communication Services,Telecom Services,4.916252,6.768265
+CEG,Constellation Energy Corporation,Baltimore,MD,1310 Point Street,116925595648,24820000768,3008999936,0.4,1.55,14215,Utilities,Utilities - Renewable,39.06837,41.818436
+MELI,"MercadoLibre, Inc.",Montevideo,,WTC Free Zone,108561342464,24096000000,2052999936,0.0,0.0,84207,Consumer Cyclical,Internet Retail,52.87309,44.261265
+VRTX,Vertex Pharmaceuticals Incorporated,Boston,MA,50 Northern Avenue,104471502848,11418800128,3637600000,0.0,0.0,6100,Healthcare,Biotechnology,28.980795,21.708576
+CDNS,"Cadence Design Systems, Inc.",San Jose,CA,Building 5,89931235328,5089287168,1011950976,0.0,0.0,13152,Technology,Software - Application,89.19865,48.180294
+MSTR,Strategy Inc,Tysons Corner,VA,1850 Towers Crescent Plaza,89563553792,462321984,4734145024,0.0,0.0,1512,Technology,Software - Application,21.89123,-725.46515
+SBUX,Starbucks Corporation,Seattle,WA,2401 Utah Avenue South,90117578752,36689301504,2632399872,3.11,2.48,361000,Consumer Cyclical,Restaurants,34.320347,21.311827
+SNPS,"Synopsys, Inc.",Sunnyvale,CA,675 Almanor Avenue,82695307264,6435303936,1166705024,0.0,0.0,20000,Technology,Software - Infrastructure,60.080975,29.939476
+ORLY,"O'Reilly Automotive, Inc.",Springfield,MO,233 South Patterson Avenue,86835150848,17122020352,2423674112,0.0,0.0,92810,Consumer Cyclical,Auto Parts,36.681004,2.2772586
+MDLZ,"Mondelez International, Inc.",Chicago,IL,905 West Fulton Market,80134045696,37105000448,3640999936,3.28,2.0,90000,Consumer Defensive,Confectioners,22.684982,18.055393
+CTAS,Cintas Corporation,Cincinnati,OH,6800 Cintas Boulevard,76109529088,10556716032,1845040000,0.94,1.8,48300,Industrials,Specialty Business Services,41.993347,40.46795
+MRVL,"Marvell Technology, Inc.",Wilmington,DE,1000 North West Street,75864801280,7234899968,-103400000,0.26,0.24,7042,Technology,Semiconductors,,35.2
+ABNB,"Airbnb, Inc.",San Francisco,CA,888 Brannan Street,72167276544,11580000256,2624999936,0.0,0.0,7300,Consumer Cyclical,Travel Services,28.610437,26.194445
+MAR,"Marriott International, Inc.",Bethesda,MD,7750 Wisconsin Avenue,71187095552,6783000064,2467000064,1.01,2.68,418000,Consumer Cyclical,Lodging,29.49831,24.73962
+PYPL,"PayPal Holdings, Inc.",San Jose,CA,2211 North First Street,67999064064,32291999744,4679000064,0.0,0.0,24400,Financial Services,Credit Services,15.2409,14.555216
+TRI,Thomson Reuters Corporation,Toronto,ON,19 Duncan Street,68788682752,7318000128,1602000000,1.59,2.38,26400,Industrials,Specialty Business Services,42.669945,37.78731
+CSX,CSX Corporation,Jacksonville,FL,500 Water Street,66601291776,14154999808,3102000128,1.44,0.52,23500,Industrials,Railroads,21.917177,17.598522
+ADSK,"Autodesk, Inc.",San Francisco,CA,One Market Street,64862756864,6605000192,1043000000,0.0,0.0,15300,Technology,Software - Application,63.30977,33.17211
+MNST,Monster Beverage Corporation,Corona,CA,1 Monster Way,67827576832,7659164160,1573416960,0.0,0.0,5527,Consumer Defensive,Beverages - Non-Alcoholic,43.14596,37.147057
+FTNT,"Fortinet, Inc.",Sunnyvale,CA,909 Kifer Road,64121143296,6337900032,1939600000,0.0,0.0,14898,Technology,Software - Infrastructure,33.338646,34.721992
+AEP,"American Electric Power Company, Inc.",Columbus,OH,1 Riverside Plaza,62640508928,20666699776,3649700096,3.18,3.72,16330,Utilities,Utilities - Regulated Electric,17.174486,19.886248
+WDAY,"Workday, Inc.",Pleasanton,CA,6110 Stoneridge Mall Road,62658224128,8958999552,583000000,0.0,0.0,19517,Technology,Software - Application,109.66121,28.274096
+REGN,"Regeneron Pharmaceuticals, Inc.",Tarrytown,NY,777 Old Saw Mill River Road,59246977024,14214200320,4458599936,0.62,3.52,15182,Healthcare,Biotechnology,14.091253,12.337232
+AXON,"Axon Enterprise, Inc.",Scottsdale,AZ,17800 North 85th Street,55824113664,2391589888,326305984,0.0,0.0,4100,Industrials,Aerospace & Defense,176.01361,114.69274
+NXPI,NXP Semiconductors N.V.,Eindhoven,,60 High Tech Campus,52845740032,12122000384,2148000000,1.83,4.06,33100,Technology,Semiconductors,24.983313,16.03749
+ROP,"Roper Technologies, Inc.",Sarasota,FL,6496 University Parkway,54878744576,7468100096,1539600000,0.64,3.3,18200,Technology,Software - Application,35.786667,25.472527
+FAST,Fastenal Company,Winona,MN,2001 Theurer Boulevard,52957691904,7774400000,1189100032,1.88,0.88,21807,Industrials,Industrial Distribution,44.370193,21.070776
+DDOG,"Datadog, Inc.",New York,NY,620 8th Avenue,55708549120,3016056064,124580000,0.0,0.0,6500,Technology,Software - Application,443.72223,78.68966
+PCAR,PACCAR Inc,Bellevue,WA,777 - 106th Avenue N.E.,49001807872,31099600896,3072999936,1.39,1.32,30100,Industrials,Farm & Heavy Construction Machinery,16.006586,12.025566
+IDXX,"IDEXX Laboratories, Inc.",Westbrook,ME,One IDEXX Drive,49394900992,4037714944,985656000,0.0,0.0,11000,Healthcare,Diagnostics & Research,51.40716,51.622074
+EA,Electronic Arts Inc.,Redwood City,CA,209 Redwood Shores Parkway,49868779520,7473999872,1042000000,0.38,0.76,14500,Communication Services,Electronic Gaming & Multimedia,50.0,23.44666
+ROST,"Ross Stores, Inc.",Dublin,CA,5130 Hacienda Drive,48244064256,21497755648,2062835968,1.08,1.62,107000,Consumer Cyclical,Apparel Retail,23.54603,22.173393
+XEL,Xcel Energy Inc.,Minneapolis,MN,414 Nicollet Mall,48278118400,13957000192,2072999936,2.81,2.28,11380,Utilities,Utilities - Regulated Electric,22.612188,21.313316
+TTWO,"Take-Two Interactive Software, Inc.",New York,NY,110 West 44th Street,46615621632,5799199744,-4228800000,0.0,0.0,12928,Communication Services,Electronic Gaming & Multimedia,,32.232143
+BKR,Baker Hughes Company,Houston,TX,575 North Dairy Ashford Road,44896935936,27608999936,3048000000,1.92,0.92,57000,Energy,Oil & Gas Equipment & Services,14.882354,17.719845
+EXC,Exelon Corporation,Chicago,IL,10 South Dearborn Street,47615848448,23765999616,2654000128,3.43,1.6,20000,Utilities,Utilities - Regulated Electric,17.925856,17.925856
+ZS,"Zscaler, Inc.",San Jose,CA,120 Holger Way,49320202240,2673114880,-41478000,0.0,0.0,7923,Technology,Software - Infrastructure,,87.51685
+WBD,"Warner Bros. Discovery, Inc.",New York,NY,230 Park Avenue South,43759271936,38441000960,772000000,0.0,0.0,35000,Communication Services,Entertainment,57.016125,-135.96153
+PAYX,"Paychex, Inc.",Rochester,NY,911 Panorama Trail South,45305274368,5793200128,1613699968,3.45,4.32,19000,Technology,Software - Application,28.225336,23.796787
+FANG,"Diamondback Energy, Inc.",Midland,TX,500 West Texas Avenue,40863858688,13409999872,3816999936,2.7,3.9,1983,Energy,Oil & Gas E&P,10.228986,9.6420765
+CPRT,"Copart, Inc.",Dallas,TX,14185 Dallas Parkway,42541477888,4646958080,1552449024,0.0,0.0,13800,Industrials,Specialty Business Services,27.647799,25.264368
+CCEP,Coca-Cola Europacific Partners PLC,Uxbridge,,Pemberton House,40214544384,20884000768,1534000000,2.5,2.19,41000,Consumer Defensive,Beverages - Non-Alcoholic,22.583546,19.307692
+TEAM,Atlassian Corporation,Sydney,NSW,341 George Street,38098841600,5215304192,-256687008,0.0,0.0,13813,Technology,Software - Application,,35.335766
+CHTR,"Charter Communications, Inc.",Stamford,CT,400 Washington Blvd.,35602440192,55222001664,5264000000,0.0,0.0,94500,Communication Services,Telecom Services,7.1371846,7.284796
+MCHP,Microchip Technology Incorporated,Chandler,AZ,2355 West Chandler Boulevard,33192998912,4235800064,-178400000,2.76,1.82,19400,Technology,Semiconductors,,23.655771
+KDP,Keurig Dr Pepper Inc.,Burlington,MA,53 South Avenue,35081592832,15758999552,1536000000,3.56,0.92,29400,Consumer Defensive,Beverages - Non-Alcoholic,22.853983,12.597562
+VRSK,"Verisk Analytics, Inc.",Jersey City,NJ,545 Washington Boulevard,34414592000,2986500096,909299968,0.75,1.8,7800,Industrials,Consulting Services,38.248447,33.788754
+CSGP,"CoStar Group, Inc.",Arlington,VA,1201 Wilson Blvd,32210137088,2915500032,104200000,0.0,0.0,6593,Real Estate,Real Estate Services,292.4231,67.88393
+GEHC,GE HealthCare Technologies Inc.,Chicago,IL,500 West Monroe Street,32190638080,19967000576,2240000000,0.19,0.14,53000,Healthcare,Health Information Services,14.448073,15.097773
+CTSH,Cognizant Technology Solutions Corporation,Teaneck,NJ,300 Frank West Burr Boulevard,32444141568,20486000640,2436000000,1.81,1.24,343800,Technology,Information Technology Services,13.474646,13.312626
+KHC,The Kraft Heinz Company,Pittsburgh,PA,One PPG Place,29743847424,25309999104,-5271000064,6.39,1.6,36000,Consumer Defensive,Packaged Foods,,8.185668
+ODFL,"Old Dominion Freight Line, Inc.",Thomasville,NC,500 Old Dominion Way,28602832896,5638622208,1095010048,0.79,1.12,21719,Industrials,Trucking,26.633072,23.06695
+TTD,"The Trade Desk, Inc.",Ventura,CA,42 North Chestnut Street,25645053952,2679088128,417193984,0.0,0.0,3522,Communication Services,Advertising Agencies,63.192772,27.176167
+DXCM,"DexCom, Inc.",San Diego,CA,6340 Sequence Drive,25748916224,4300800000,571500032,0.0,0.0,10200,Healthcare,Medical Devices,46.23944,32.34483
+BIIB,Biogen Inc.,Cambridge,MA,225 Binney Street,21300168704,9996999680,1530499968,0.0,0.0,7605,Healthcare,Drug Manufacturers - General,13.9157095,8.720288
+LULU,lululemon athletica inc.,Vancouver,BC,1818 Cornwall Avenue,19959977984,10904036352,1785750016,0.0,0.0,39000,Consumer Cyclical,Apparel Retail,11.496721,11.273409
+CDW,CDW Corporation,Vernon Hills,IL,200 N. Milwaukee Avenue,19184017408,21878300672,1076700032,1.65,2.5,15100,Technology,Information Technology Services,18.205847,14.463933
+ON,ON Semiconductor Corporation,Scottsdale,AZ,5701 North Pima Road,19127713792,6398799872,465800000,0.0,0.0,26400,Technology,Semiconductors,44.54286,10.826388
+GFS,GLOBALFOUNDRIES Inc.,Malta,NY,400 Stonebreak Road Extension,18563801088,6841999872,-115000000,0.0,0.0,13000,Technology,Semiconductors,,18.687151
