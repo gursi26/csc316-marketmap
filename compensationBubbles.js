@@ -142,7 +142,7 @@ class CompensationBubbles {
                     stock: +row["Stock"],
                     bonus: +row["Bonus"]
                 })).sort((a, b) => a.rank - b.rank)
-            })).sort((a, b) => b.avgPay - a.avgPay);
+            })).sort((a, b) => a.avgPay - b.avgPay);
             
             return {
                 ticker: ticker,
@@ -499,7 +499,8 @@ class CompensationBubbles {
         }))
         .filter(c => c.avgPay > 0 && !isNaN(c.avgPay))
         .sort((a, b) => b.avgPay - a.avgPay)
-        .slice(0, 10);
+        .slice(0, 10)
+        .reverse();
         
         const centerX = this.width / 2;
         const centerY = this.height / 2;
