@@ -224,7 +224,9 @@ class CompensationBubbles {
             ];
             
             const totalHeight = baseHeight + stockHeight + bonusHeight;
+            const rankId = `${d.parent.data.name}-${d.data.name}`;
             
+            // Create visual segments without individual hover events
             segments.forEach(seg => {
                 if (seg.y1 - seg.y0 > 0) {
                     const segArc = d3.arc()
@@ -239,54 +241,69 @@ class CompensationBubbles {
                         .attr("fill", seg.color)
                         .attr("stroke", "white")
                         .attr("stroke-width", 0.5)
-                        .style("cursor", "pointer")
                         .attr("class", "rank-segment")
                         .attr("data-parent-role", d.parent.data.name)
-                        .attr("data-rank-id", `${d.parent.data.name}-${d.data.name}`)
-                        .on("mouseenter", (event, currentNode) => {
-                            const currentSegment = event.currentTarget;
-                            path.attr("fill-opacity", node => node === d.parent ? 1.0 : 0.3);
-                            vis.g.selectAll(".rank-segment").attr("fill-opacity", function() {
-                                return this === currentSegment ? 1.0 : 0.3;
-                            });
-                            
-                            const basePct = (d.data.basePay / d.data.value * 100).toFixed(1);
-                            const stockPct = (d.data.stock / d.data.value * 100).toFixed(1);
-                            const bonusPct = (d.data.bonus / d.data.value * 100).toFixed(1);
-                            
-                            vis.g.selectAll(".role-name-line").remove();
-                            const roleLines = d.parent.data.name.split("-");
-                            const baseY = roleLines.length === 1 ? -35 : -35 - (roleLines.length - 1) * 9;
-                            roleLines.forEach((line, i) => {
-                                vis.g.append("text")
-                                    .attr("class", "role-name-line")
-                                    .attr("text-anchor", "middle")
-                                    .attr("y", baseY + i * 18)
-                                    .attr("font-size", "1.3em")
-                                    .attr("fill", "#e0e0e0")
-                                    .style("pointer-events", "none")
-                                    .text(line);
-                            });
-                            
-                            vis.label.select(".rank-name").text(d.data.name);
-                            vis.label.select(".pay-amount").text(`$${Math.round(d.data.value).toLocaleString()}`);
-                            vis.label.select(".base-info").text(`Base: $${Math.round(d.data.basePay).toLocaleString()} (${basePct}%)`);
-                            vis.label.select(".stock-info").text(`Stock: $${Math.round(d.data.stock).toLocaleString()} (${stockPct}%)`);
-                            vis.label.select(".bonus-info").text(`Bonus: $${Math.round(d.data.bonus).toLocaleString()} (${bonusPct}%)`);
-                        })
-                        .on("mouseleave", () => {
-                            path.attr("fill-opacity", 1);
-                            vis.g.selectAll(".rank-segment").attr("fill-opacity", 1);
-                            
-                            vis.g.selectAll(".role-name-line").remove();
-                            vis.label.select(".rank-name").text("");
-                            vis.label.select(".pay-amount").text("");
-                            vis.label.select(".base-info").text("");
-                            vis.label.select(".stock-info").text("");
-                            vis.label.select(".bonus-info").text("");
-                        });
+                        .attr("data-rank-id", rankId);
                 }
             });
+            
+            // Create invisible overlay for the entire rank bar to handle hover
+            if (totalHeight > 0) {
+                const overlayArc = d3.arc()
+                    .startAngle(d.x0)
+                    .endAngle(d.x1)
+                    .innerRadius(parentY1)
+                    .outerRadius(parentY1 + totalHeight);
+                
+                vis.g.append("path")
+                    .datum(d)
+                    .attr("d", overlayArc)
+                    .attr("fill", "transparent")
+                    .style("cursor", "pointer")
+                    .attr("class", "rank-overlay")
+                    .attr("data-rank-id", rankId)
+                    .on("mouseenter", (event) => {
+                        path.attr("fill-opacity", node => node === d.parent ? 1.0 : 0.3);
+                        vis.g.selectAll(".rank-segment").attr("fill-opacity", function() {
+                            return d3.select(this).attr("data-rank-id") === rankId ? 1.0 : 0.3;
+                        });
+                        
+                        const basePct = (d.data.basePay / d.data.value * 100).toFixed(1);
+                        const stockPct = (d.data.stock / d.data.value * 100).toFixed(1);
+                        const bonusPct = (d.data.bonus / d.data.value * 100).toFixed(1);
+                        
+                        vis.g.selectAll(".role-name-line").remove();
+                        const roleLines = d.parent.data.name.split("-");
+                        const baseY = roleLines.length === 1 ? -40 : -40 - (roleLines.length - 1) * 9;
+                        roleLines.forEach((line, i) => {
+                            vis.g.append("text")
+                                .attr("class", "role-name-line")
+                                .attr("text-anchor", "middle")
+                                .attr("y", baseY + i * 18)
+                                .attr("font-size", "1.1em")
+                                .attr("fill", "#e0e0e0")
+                                .style("pointer-events", "none")
+                                .text(line);
+                        });
+                        
+                        vis.label.select(".rank-name").text(d.data.name);
+                        vis.label.select(".pay-amount").text(`$${Math.round(d.data.value).toLocaleString()}`);
+                        vis.label.select(".base-info").text(`Base: $${Math.round(d.data.basePay).toLocaleString()} (${basePct}%)`);
+                        vis.label.select(".stock-info").text(`Stock: $${Math.round(d.data.stock).toLocaleString()} (${stockPct}%)`);
+                        vis.label.select(".bonus-info").text(`Bonus: $${Math.round(d.data.bonus).toLocaleString()} (${bonusPct}%)`);
+                    })
+                    .on("mouseleave", () => {
+                        path.attr("fill-opacity", 1);
+                        vis.g.selectAll(".rank-segment").attr("fill-opacity", 1);
+                        
+                        vis.g.selectAll(".role-name-line").remove();
+                        vis.label.select(".rank-name").text("");
+                        vis.label.select(".pay-amount").text("");
+                        vis.label.select(".base-info").text("");
+                        vis.label.select(".stock-info").text("");
+                        vis.label.select(".bonus-info").text("");
+                    });
+            }
         });
 
         const companyName = vis.companyInfoMap.get(companyData.name) || companyData.name;
@@ -334,7 +351,7 @@ class CompensationBubbles {
             });
         });
         
-        const legendX = -vis.width / 2 + 40;
+        const legendX = vis.width / 2 - 120;
         const legendY = -vis.height / 2 + 40;
         const legendData = [
             { label: "Base Pay", color: "#4CAF50" },
@@ -395,14 +412,14 @@ class CompensationBubbles {
                 
                 vis.g.selectAll(".role-name-line").remove();
                 const roleLines = d.data.name.split("-");
-                const baseY = roleLines.length === 1 ? -35 : -35 - (roleLines.length - 1) * 9;
+                const baseY = roleLines.length === 1 ? -40 : -40 - (roleLines.length - 1) * 9;
                 roleLines.forEach((line, i) => {
                     vis.g.append("text")
                         .attr("class", "role-name-line")
                         .attr("text-anchor", "middle")
                         .attr("y", baseY + i * 18)
-                        .attr("font-size", "1.3em")
-                        .attr("fill", "#333")
+                        .attr("font-size", "1.1em")
+                        .attr("fill", "#e0e0e0")
                         .style("pointer-events", "none")
                         .text(line);
                 });
