@@ -1,0 +1,101 @@
+Ticker,Name,Address,Country,State,Company Type,Sector,Industry,Founding Year,Employee Count,Employee Rating,CEO Approval Percentage,Latitude,Longitude
+NVDA,NVIDIA Corporation,2788 San Tomas Expressway,United States,CA,Public,Technology,Semiconductors,1993.0,36000,4.5,97.0,37.3705437,-121.9670806
+MSFT,Microsoft Corporation,One Microsoft Way,United States,WA,Public,Technology,Software - Infrastructure,1975.0,228000,4.1,81.0,47.6410702,-122.1268817
+AAPL,Apple Inc.,One Apple Park Way,United States,CA,Public,Technology,Consumer Electronics,1976.0,150000,4.1,86.0,40.705002,-111.8660605
+AMZN,"Amazon.com, Inc.",410 Terry Avenue North,United States,WA,Public,Consumer Cyclical,Internet Retail,1994.0,1546000,3.6,58.0,47.622298,-122.3365001
+META,"Meta Platforms, Inc.",1 Meta Way,United States,CA,Public,Communication Services,Internet Content & Information,2004.0,75945,3.8,57.0,37.4810299,-122.1542335
+AVGO,Broadcom Inc.,3421 Hillview Ave,United States,CA,Public,Technology,Semiconductors,1991.0,37000,3.3,55.0,37.3990267,-122.1444156
+GOOG,Alphabet Inc.,1600 Amphitheatre Parkway,United States,CA,Public,Communication Services,Internet Content & Information,1998.0,187103,4.4,78.0,37.4224857,-122.0855846
+TSLA,"Tesla, Inc.",1 Tesla Road,United States,TX,Public,Consumer Cyclical,Auto Manufacturers,2003.0,125665,3.5,55.0,30.2226102,-97.6187555
+NFLX,"Netflix, Inc.",121 Albright Way,United States,CA,Public,Communication Services,Entertainment,1997.0,14000,4.2,93.0,37.2569243,-121.9639389
+PLTR,Palantir Technologies Inc.,1200 17th Street,United States,CO,Public,Technology,Software - Infrastructure,2004.0,4164,3.6,60.0,39.74974048743256,-104.99589957630042
+COST,Costco Wholesale Corporation,999 Lake Drive,United States,WA,Public,Consumer Defensive,Discount Stores,1976.0,341000,3.9,77.0,47.5486034,-122.0506179
+ASML,ASML Holding N.V.,De Run 6501,Netherlands,,Public,Technology,Semiconductor Equipment & Materials,1984.0,43193,4.1,92.0,51.4044463,5.4170159
+AMD,"Advanced Micro Devices, Inc.",2485 Augustine Drive,United States,CA,Public,Technology,Semiconductors,1969.0,28000,3.9,94.0,37.3829605,-121.9703774
+CSCO,"Cisco Systems, Inc.",170 West Tasman Drive,United States,CA,Public,Technology,Communication Equipment,1984.0,86200,4.1,80.0,37.4083584,-121.9540909
+AZN,AstraZeneca PLC,1 Francis Crick Avenue,United Kingdom,,Public,Healthcare,Drug Manufacturers - General,1913.0,94300,4.0,87.0,52.175268,0.1341117
+TMUS,"T-Mobile US, Inc.",12920 SE 38th Street,United States,WA,Public,Communication Services,Telecom Services,2001.0,70000,3.7,60.0,35.4262765,-97.2859577
+LIN,Linde plc,"Forge, 43 Church Street West",Canada,,Public,Basic Materials,Specialty Chemicals,1879.0,64842,3.6,82.0,43.70450312913217,-79.52237126192774
+APP,AppLovin Corporation,1100 Page Mill Road,United States,CA,Public,Communication Services,Advertising Agencies,2012.0,1533,3.7,60.0,34.7582526,-92.1971427
+SHOP,Shopify Inc.,151 O'Connor Street,Canada,ON,Public,Technology,Software - Application,2006.0,8100,3.3,47.0,45.4199878,-75.6970497
+MU,"Micron Technology, Inc.",8000 South Federal Way,United States,ID,Public,Technology,Semiconductors,1978.0,53000,3.9,82.0,43.5301411,-116.150825
+PEP,"PepsiCo, Inc.",700 Anderson Hill Road,Canada,NY,Public,Consumer Defensive,Beverages - Non-Alcoholic,1965.0,319000,3.8,80.0,41.0348634,-73.6928308
+PDD,PDD Holdings Inc.,25 St Stephen’s Green,China,,Public,Consumer Cyclical,Internet Retail,,23465,3.3,,53.3390659,-6.2566546
+INTU,Intuit Inc.,2700 Coast Avenue,United States,CA,Public,Technology,Software - Application,1983.0,18200,4.3,84.0,37.4304208,-122.0968582
+QCOM,QUALCOMM Incorporated,5775 Morehouse Drive,United States,CA,Public,Technology,Semiconductors,1985.0,49000,3.9,72.0,32.8959414,-117.1958195
+LRCX,Lam Research Corporation,4650 Cushing Parkway,United States,CA,Public,Technology,Semiconductor Equipment & Materials,1980.0,19000,4.1,92.0,37.4886142,-121.9569958
+INTC,Intel Corporation,2200 Mission College Boulevard,United States,CA,Public,Technology,Semiconductors,1968.0,108900,3.8,48.0,37.3882663,-121.963779
+BKNG,Booking Holdings Inc.,800 Connecticut Avenue,United States,CT,Public,Consumer Cyclical,Travel Services,1997.0,24800,3.9,85.0,41.0932565,-73.4541467
+ARM,Arm Holdings plc,110 Fulbourn Road,United States,,Private,Technology,Semiconductors,,8330,4.6,,52.1820434,0.1743872
+AMAT,"Applied Materials, Inc.",3050 Bowers Avenue,United States,CA,Public,Technology,Semiconductor Equipment & Materials,1967.0,36100,4.0,84.0,37.376829,-121.97789
+TXN,Texas Instruments Incorporated,12500 TI Boulevard,United States,TX,Public,Technology,Semiconductors,1930.0,34000,3.9,69.0,32.9248527,-96.7493788
+AMGN,Amgen Inc.,One Amgen Center Drive,United States,CA,Public,Healthcare,Drug Manufacturers - General,1980.0,28000,3.9,84.0,34.1910399,-118.9206609
+ISRG,"Intuitive Surgical, Inc.",1020 Kifer Road,United States,CA,Public,Healthcare,Medical Instruments & Supplies,1995.0,15638,4.2,95.0,37.3735673,-122.003953
+ADBE,Adobe Inc.,345 Park Avenue,United States,CA,Public,Technology,Software - Application,1982.0,30709,4.1,90.0,40.7577559,-73.9722731
+GILD,"Gilead Sciences, Inc.",333 Lakeside Drive,United States,CA,Public,Healthcare,Drug Manufacturers - General,1987.0,17600,3.6,74.0,-35.4322475,143.6487721
+PANW,"Palo Alto Networks, Inc.",3000 Tannery Way,United States,CA,Public,Technology,Software - Infrastructure,2005.0,16068,3.9,89.0,37.38404,-121.983974
+KLAC,KLA Corporation,One Technology Drive,United States,CA,Public,Technology,Semiconductor Equipment & Materials,1976.0,15000,4.0,92.0,33.6483698,-117.7350371
+HON,Honeywell International Inc.,855 South Mint Street,United States,NC,Public,Industrials,Conglomerates,1885.0,102000,4.1,89.0,35.2241736,-80.8524978
+CRWD,"CrowdStrike Holdings, Inc.",206 East 9th Street,United States,TX,Public,Technology,Software - Infrastructure,2011.0,10047,4.0,88.0,40.729788,-73.9889071
+ADP,"Automatic Data Processing, Inc.",One ADP Boulevard,United States,NJ,Public,Technology,Software - Application,1949.0,67000,3.8,83.0,40.8151185,-74.3073461
+DASH,"DoorDash, Inc.",South Tower,United States,CA,Public,Consumer Cyclical,Internet Retail,2013.0,23700,3.6,71.0,50.8381456,4.3377163
+ADI,"Analog Devices, Inc.",One Analog Way,United States,MA,Public,Technology,Semiconductors,1965.0,24000,3.8,82.0,42.5287601,-71.1435018
+CMCSA,Comcast Corporation,One Comcast Center,United States,PA,Public,Communication Services,Telecom Services,1963.0,182000,3.8,76.0,33.8890701,-84.4683846
+CEG,Constellation Energy Corporation,1310 Point Street,United States,MD,Public,Utilities,Utilities - Renewable,1999.0,14215,4.0,87.0,39.2804916,-76.5976024
+MELI,"MercadoLibre, Inc.",WTC Free Zone,Argentina,,Private,Consumer Cyclical,Internet Retail,,84207,4.1,,-34.9027399,-56.134432
+VRTX,Vertex Pharmaceuticals Incorporated,50 Northern Avenue,United States,MA,Public,Healthcare,Biotechnology,1989.0,6100,4.1,89.0,42.3535931,-71.0461764
+CDNS,"Cadence Design Systems, Inc.",Building 5,United States,CA,Public,Technology,Software - Application,1988.0,13152,4.2,86.0,42.3320189,-71.092835
+MSTR,Strategy Inc,1850 Towers Crescent Plaza,United States,VA,Subsidiary,Technology,Software - Application,1914.0,1512,3.8,63.0,38.916034800090834,-77.22066078797914
+SBUX,Starbucks Corporation,2401 Utah Avenue South,United States,WA,Public,Consumer Cyclical,Restaurants,1971.0,361000,3.5,41.0,47.5807667,-122.3359179
+SNPS,"Synopsys, Inc.",675 Almanor Avenue,United States,CA,Public,Technology,Software - Infrastructure,1986.0,20000,4.0,79.0,37.3980452,-122.0323385
+ORLY,"O'Reilly Automotive, Inc.",233 South Patterson Avenue,United States,MO,Public,Consumer Cyclical,Auto Parts,1957.0,92810,3.2,57.0,37.2088686,-93.248021
+MDLZ,"Mondelez International, Inc.",905 West Fulton Market,United States,IL,Public,Consumer Defensive,Confectioners,2012.0,90000,3.9,81.0,41.8864169,-87.6502131
+CTAS,Cintas Corporation,6800 Cintas Boulevard,United States,OH,Public,Industrials,Specialty Business Services,1968.0,48300,3.7,80.0,39.337862,-84.2845783
+MRVL,"Marvell Technology, Inc.",1000 North West Street,United States,DE,Public,Technology,Semiconductors,,7042,4.2,92.0,39.7471805,-75.5500972
+ABNB,"Airbnb, Inc.",888 Brannan Street,United States,CA,Public,Consumer Cyclical,Travel Services,2008.0,7300,4.2,90.0,37.7719568,-122.4054484
+MAR,"Marriott International, Inc.",7750 Wisconsin Avenue,United States,MD,Public,Consumer Cyclical,Lodging,1927.0,418000,3.9,83.0,38.9876218,-77.0954899
+PYPL,"PayPal Holdings, Inc.",2211 North First Street,United States,CA,Public,Financial Services,Credit Services,1998.0,24400,3.6,56.0,37.3768714,-121.9228061
+TRI,Thomson Reuters Corporation,19 Duncan Street,Canada,ON,Public,Industrials,Specialty Business Services,2008.0,26400,4.1,89.0,40.6013785,-74.0965957
+CSX,CSX Corporation,500 Water Street,United States,FL,Public,Industrials,Railroads,1978.0,23500,3.7,82.0,30.325065301242876,-81.66404634595126
+ADSK,"Autodesk, Inc.",One Market Street,United States,CA,Public,Technology,Software - Application,1982.0,15300,4.1,84.0,42.4639866,-70.9511468
+MNST,Monster Beverage Corporation,1 Monster Way,United States,CA,Public,Consumer Defensive,Beverages - Non-Alcoholic,2002.0,5527,3.9,88.0,33.8866745,-117.5132333
+FTNT,"Fortinet, Inc.",909 Kifer Road,United States,CA,Public,Technology,Software - Infrastructure,2000.0,14898,3.8,68.0,37.3741378,-121.9784065
+AEP,"American Electric Power Company, Inc.",1 Riverside Plaza,United States,OH,Public,Utilities,Utilities - Regulated Electric,1906.0,16330,3.0,28.0,39.9650746,-83.0054418
+WDAY,"Workday, Inc.",6110 Stoneridge Mall Road,United States,CA,Public,Technology,Software - Application,2005.0,19517,3.7,52.0,37.6986699,-121.9264412
+REGN,"Regeneron Pharmaceuticals, Inc.",777 Old Saw Mill River Road,United States,NY,Public,Healthcare,Biotechnology,1988.0,15182,3.8,78.0,41.0783771,-73.8235844
+AXON,"Axon Enterprise, Inc.",17800 North 85th Street,United States,AZ,Public,Industrials,Aerospace & Defense,1993.0,4100,4.0,92.0,47.6904061,-122.3313208
+NXPI,NXP Semiconductors N.V.,60 High Tech Campus,Netherlands,,Public,Technology,Semiconductors,2006.0,33100,4.0,85.0,51.4088881,5.4603907
+ROP,"Roper Technologies, Inc.",6496 University Parkway,United States,FL,Public,Technology,Software - Application,1860.0,18200,4.0,90.0,36.2018356,-80.2808425
+FAST,Fastenal Company,2001 Theurer Boulevard,United States,MN,Public,Industrials,Industrial Distribution,1967.0,21807,3.4,80.0,44.0623172,-91.6836102
+DDOG,"Datadog, Inc.",620 8th Avenue,United States,NY,Public,Technology,Software - Application,2010.0,6500,4.0,92.0,40.75568081350971,-73.98945030324698
+PCAR,PACCAR Inc,777 - 106th Avenue N.E.,United States,WA,Public,Industrials,Farm & Heavy Construction Machinery,1905.0,30100,3.8,79.0,46.9394482,-98.2277237
+IDXX,"IDEXX Laboratories, Inc.",One IDEXX Drive,United States,ME,Public,Healthcare,Diagnostics & Research,1983.0,11000,3.5,52.0,43.6618552,-70.3731313
+EA,Electronic Arts Inc.,209 Redwood Shores Parkway,United States,CA,Public,Communication Services,Electronic Gaming & Multimedia,1982.0,14500,4.0,73.0,37.5228311,-122.254489
+ROST,"Ross Stores, Inc.",5130 Hacienda Drive,United States,CA,Public,Consumer Cyclical,Apparel Retail,1982.0,107000,3.4,81.0,29.5598831,-98.3878658
+XEL,Xcel Energy Inc.,414 Nicollet Mall,United States,MN,Public,Utilities,Utilities - Regulated Electric,1909.0,11380,3.2,29.0,44.9796326,-93.2704443
+TTWO,"Take-Two Interactive Software, Inc.",110 West 44th Street,United States,NY,Public,Communication Services,Electronic Gaming & Multimedia,1993.0,12928,3.9,71.0,41.8669706,-80.7801907
+BKR,Baker Hughes Company,575 North Dairy Ashford Road,United States,TX,Public,Energy,Oil & Gas Equipment & Services,1907.0,57000,3.9,82.0,29.7677972,-95.6061328
+EXC,Exelon Corporation,10 South Dearborn Street,United States,IL,Public,Utilities,Utilities - Regulated Electric,2000.0,20000,4.0,75.0,41.8816239,-87.6301402
+ZS,"Zscaler, Inc.",120 Holger Way,United States,CA,Public,Technology,Software - Infrastructure,2008.0,7923,3.5,82.0,37.4182054,-121.9531508
+WBD,"Warner Bros. Discovery, Inc.",230 Park Avenue South,United States,NY,Public,Communication Services,Entertainment,2022.0,35000,3.6,40.0,40.737711,-73.9886942
+PAYX,"Paychex, Inc.",911 Panorama Trail South,United States,NY,Public,Technology,Software - Application,1971.0,19000,3.2,51.0,43.1251599,-77.4920402
+FANG,"Diamondback Energy, Inc.",500 West Texas Avenue,United States,TX,Public,Energy,Oil & Gas E&P,,1983,3.7,99.0,31.998537,-102.079463
+CPRT,"Copart, Inc.",14185 Dallas Parkway,United States,TX,Public,Industrials,Specialty Business Services,1982.0,13800,3.4,68.0,33.0028674,-96.8294385
+CCEP,Coca-Cola Europacific Partners PLC,Pemberton House,United Kingdom,,Public,Consumer Defensive,Beverages - Non-Alcoholic,1929.0,41000,3.7,80.0,51.5472576,-0.4773375
+TEAM,Atlassian Corporation,341 George Street,Australia,NSW,Public,Technology,Software - Application,2002.0,13813,3.2,50.0,-33.8672623,151.2064867
+CHTR,"Charter Communications, Inc.",400 Washington Blvd.,United States,CT,Public,Communication Services,Telecom Services,,94500,3.3,,43.035275,-76.0311677
+MCHP,Microchip Technology Incorporated,2355 West Chandler Boulevard,United States,AZ,Public,Technology,Semiconductors,1989.0,19400,3.7,82.0,33.3040695,-111.8835606
+KDP,Keurig Dr Pepper Inc.,53 South Avenue,United States,MA,Public,Consumer Defensive,Beverages - Non-Alcoholic,2018.0,29400,3.4,61.0,40.6388183,-74.165841
+VRSK,"Verisk Analytics, Inc.",545 Washington Boulevard,United States,NJ,Public,Industrials,Consulting Services,1971.0,7800,3.9,85.0,33.9834846,-118.4598166
+CSGP,"CoStar Group, Inc.",1201 Wilson Blvd,United States,VA,Public,Real Estate,Real Estate Services,1987.0,6593,2.6,32.0,38.8955712,-77.071163
+GEHC,GE HealthCare Technologies Inc.,500 West Monroe Street,United States,IL,Public,Healthcare,Health Information Services,1892.0,53000,4.2,90.0,41.8807967,-87.6404094
+CTSH,Cognizant Technology Solutions Corporation,300 Frank West Burr Boulevard,United States,NJ,Public,Technology,Information Technology Services,1994.0,343800,3.6,62.0,40.87313585013227,-74.00533660324213
+KHC,The Kraft Heinz Company,One PPG Place,United States,PA,Public,Consumer Defensive,Packaged Foods,2015.0,36000,3.8,91.0,40.4400104,-80.0037606
+ODFL,"Old Dominion Freight Line, Inc.",500 Old Dominion Way,United States,NC,Public,Industrials,Trucking,1934.0,21719,3.9,84.0,35.9089197,-80.0588492
+TTD,"The Trade Desk, Inc.",42 North Chestnut Street,United States,CA,Public,Communication Services,Advertising Agencies,2009.0,3522,4.2,88.0,34.2814276,-119.2913009
+DXCM,"DexCom, Inc.",6340 Sequence Drive,Brazil,CA,Private,Healthcare,Medical Devices,1951.0,10200,3.9,49.0,32.9069589,-117.1859864
+BIIB,Biogen Inc.,225 Binney Street,United States,MA,Public,Healthcare,Drug Manufacturers - General,1978.0,7605,3.7,58.0,42.3664435,-71.0851409
+LULU,lululemon athletica inc.,1818 Cornwall Avenue,Canada,BC,Public,Consumer Cyclical,Apparel Retail,1998.0,39000,4.1,82.0,49.2719955,-123.1470927
+CDW,CDW Corporation,200 N. Milwaukee Avenue,Canada,IL,Public,Technology,Information Technology Services,1984.0,15100,3.6,69.0,42.2292241,-87.9436658
+ON,ON Semiconductor Corporation,5701 North Pima Road,United States,AZ,Public,Technology,Semiconductors,,26400,3.2,,33.5194439,-111.889114
+GFS,GLOBALFOUNDRIES Inc.,400 Stonebreak Road Extension,United States,NY,Public,Technology,Semiconductors,2009.0,13000,3.7,78.0,42.9707616,-73.7565385
