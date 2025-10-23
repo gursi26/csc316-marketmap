@@ -2,17 +2,24 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background: #1a1a1a;
+    color: #e0e0e0;
 }
 
-#tooltip {
-    position: fixed;
-    background: white;
-    border: 1px solid #ddd;
-    padding: 10px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.1s;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+#ticker-dropdown {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #555;
     border-radius: 4px;
+    background: #2a2a2a;
+    color: #e0e0e0;
     z-index: 1000;
+}
+
+#ticker-dropdown option {
+    background: #2a2a2a;
+    color: #e0e0e0;
 }
