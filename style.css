@@ -5,10 +5,14 @@ body {
 }
 
 #tooltip {
-    position: absolute;
+    position: fixed;
     background: white;
     border: 1px solid #ddd;
     padding: 10px;
     pointer-events: none;
     opacity: 0;
+    transition: opacity 0.1s;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    z-index: 1000;
 }
