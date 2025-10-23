@@ -3,7 +3,9 @@ class CompensationBubbles {
         this.parentElement = parentElement;
         this.data = data;
         this.selectedCompany = null;
+        this.lockedRole = null; // Track if a role is locked/frozen
         this.initVis();
+        this.setupRoleColors();
     }
 
     initVis() {
@@ -18,6 +20,16 @@ class CompensationBubbles {
         
         // Setup company dropdown
         this.setupDropdown();
+    }
+
+    setupRoleColors() {
+        // Get all unique roles across all data
+        const allRoles = [...new Set(this.data.map(d => d["Role Name"]))].sort();
+        
+        // Create a color scale for all roles
+        this.roleColorScale = d3.scaleOrdinal()
+            .domain(allRoles)
+            .range(d3.schemeTableau10.concat(d3.schemePaired));
     }
 
     setupDropdown() {
@@ -43,6 +55,9 @@ class CompensationBubbles {
 
     wrangleData() {
         if (!this.selectedCompany) return;
+        
+        // Reset locked role when changing companies
+        this.lockedRole = null;
         
         // Filter data for selected company
         const companyData = this.data.filter(d => d.Ticker === this.selectedCompany);
@@ -161,6 +176,7 @@ class CompensationBubbles {
         // Draw connecting lines from roles to ranks
         roles.forEach(role => {
             const roleY = roleScale(role.avgPay);
+            const roleColor = this.roleColorScale(role.name);
             
             role.ranks.forEach(rank => {
                 const rankIndex = ranks.findIndex(r => 
@@ -180,7 +196,7 @@ class CompensationBubbles {
                         .attr("y1", roleY)
                         .attr("x2", rightX)
                         .attr("y2", rankY)
-                        .attr("stroke", c.lineColor)
+                        .attr("stroke", roleColor)
                         .attr("stroke-opacity", c.lineOpacity)
                         .attr("stroke-width", c.lineWidth);
                 }
@@ -195,7 +211,7 @@ class CompensationBubbles {
             .attr("cx", leftX)
             .attr("cy", d => roleScale(d.avgPay))
             .attr("r", c.dotRadius)
-            .attr("fill", c.roleColor)
+            .attr("fill", d => this.roleColorScale(d.name))
             .attr("stroke", "#fff")
             .attr("stroke-width", 2)
             .style("cursor", "pointer");
@@ -220,12 +236,12 @@ class CompensationBubbles {
             .attr("cx", rightX)
             .attr("cy", d => rankScale(d.totalPay))
             .attr("r", c.dotRadius)
-            .attr("fill", c.rankColor)
+            .attr("fill", d => this.roleColorScale(d.roleName))
             .attr("stroke", "#fff")
             .attr("stroke-width", 2)
             .style("cursor", "pointer");
         
-        // Add rank labels
+        // Add rank labels (hidden by default, will be shown when role is selected)
         this.svg.selectAll(".rank-label")
             .data(ranks)
             .join("text")
@@ -235,13 +251,27 @@ class CompensationBubbles {
             .attr("text-anchor", "start")
             .attr("font-size", c.fontSize)
             .text(d => `${d.roleName} - ${d.rankName}`)
-            .style("pointer-events", "none");
+            .style("pointer-events", "none")
+            .style("opacity", 0); // Hidden by default
         
         // Add tooltips and highlighting for role dots
         roleDots
+            .on("click", (event, d) => {
+                // Toggle lock on this role
+                if (this.lockedRole === d.name) {
+                    this.lockedRole = null;
+                    this.resetHighlight();
+                } else {
+                    this.lockedRole = d.name;
+                    this.highlightRole(d.name);
+                }
+                event.stopPropagation();
+            })
             .on("mouseenter", (event, d) => {
-                // Highlight this role's connections
-                this.highlightRole(d.name);
+                // Only highlight on hover if nothing is locked
+                if (!this.lockedRole) {
+                    this.highlightRole(d.name);
+                }
                 
                 const basePct = (d.avgBase / d.avgPay * 100).toFixed(1);
                 const stockPct = (d.avgStock / d.avgPay * 100).toFixed(1);
@@ -254,7 +284,8 @@ class CompensationBubbles {
                            Avg Pay: $${d.avgPay.toFixed(0)}<br>
                            Base: $${d.avgBase.toFixed(0)} (${basePct}%)<br>
                            Stock: $${d.avgStock.toFixed(0)} (${stockPct}%)<br>
-                           Bonus: $${d.avgBonus.toFixed(0)} (${bonusPct}%)`);
+                           Bonus: $${d.avgBonus.toFixed(0)} (${bonusPct}%)<br>
+                           <em style="color: #666; font-size: 11px;">Click to lock/unlock</em>`);
             })
             .on("mousemove", (event) => {
                 this.tooltip
@@ -262,35 +293,52 @@ class CompensationBubbles {
                     .style("top", (event.clientY + 10) + "px");
             })
             .on("mouseleave", () => {
-                this.resetHighlight();
+                // Only reset if nothing is locked
+                if (!this.lockedRole) {
+                    this.resetHighlight();
+                }
                 this.tooltip.style("opacity", 0);
             });
         
         // Add tooltips for rank dots
         rankDots
             .on("mouseenter", (event, d) => {
-                const basePct = (d.basePay / d.totalPay * 100).toFixed(1);
-                const stockPct = (d.stock / d.totalPay * 100).toFixed(1);
-                const bonusPct = (d.bonus / d.totalPay * 100).toFixed(1);
-                
-                this.tooltip
-                    .style("opacity", 1)
-                    .style("background", "#e3f2fd")
-                    .html(`<strong>${company} - ${d.roleName}</strong><br>
-                           Rank: ${d.rankName}<br>
-                           Total Pay: $${d.totalPay.toFixed(0)}<br>
-                           Base: $${d.basePay.toFixed(0)} (${basePct}%)<br>
-                           Stock: $${d.stock.toFixed(0)} (${stockPct}%)<br>
-                           Bonus: $${d.bonus.toFixed(0)} (${bonusPct}%)`);
+                // Only show tooltip if no role is locked, or if this rank belongs to the locked role
+                if (!this.lockedRole || d.roleName === this.lockedRole) {
+                    const basePct = (d.basePay / d.totalPay * 100).toFixed(1);
+                    const stockPct = (d.stock / d.totalPay * 100).toFixed(1);
+                    const bonusPct = (d.bonus / d.totalPay * 100).toFixed(1);
+                    
+                    this.tooltip
+                        .style("opacity", 1)
+                        .style("background", "#e3f2fd")
+                        .html(`<strong>${company} - ${d.roleName}</strong><br>
+                               Rank: ${d.rankName}<br>
+                               Total Pay: $${d.totalPay.toFixed(0)}<br>
+                               Base: $${d.basePay.toFixed(0)} (${basePct}%)<br>
+                               Stock: $${d.stock.toFixed(0)} (${stockPct}%)<br>
+                               Bonus: $${d.bonus.toFixed(0)} (${bonusPct}%)`);
+                }
             })
-            .on("mousemove", (event) => {
-                this.tooltip
-                    .style("left", (event.clientX + 10) + "px")
-                    .style("top", (event.clientY + 10) + "px");
+            .on("mousemove", (event, d) => {
+                // Only move tooltip if it's visible
+                if (!this.lockedRole || d.roleName === this.lockedRole) {
+                    this.tooltip
+                        .style("left", (event.clientX + 10) + "px")
+                        .style("top", (event.clientY + 10) + "px");
+                }
             })
             .on("mouseleave", () => {
                 this.tooltip.style("opacity", 0);
             });
+        
+        // Add click handler to SVG background to unlock
+        this.svg.on("click", () => {
+            if (this.lockedRole) {
+                this.lockedRole = null;
+                this.resetHighlight();
+            }
+        });
     }
 
     highlightRole(roleName) {
@@ -322,7 +370,7 @@ class CompensationBubbles {
             .duration(200)
             .style("opacity", (d, i) => roleRankIndices.has(i) ? 1 : 0);
         
-        // Hide all rank labels except those belonging to this role
+        // Show rank labels only for this role
         this.svg.selectAll(".rank-label")
             .transition()
             .duration(200)
@@ -363,11 +411,11 @@ class CompensationBubbles {
             .duration(200)
             .style("opacity", 1);
         
-        // Reset all rank labels
+        // Hide all rank labels (they're hidden by default in unselected view)
         this.svg.selectAll(".rank-label")
             .transition()
             .duration(200)
-            .style("opacity", 1);
+            .style("opacity", 0);
         
         // Reset all connection lines
         this.svg.selectAll(".connection-line")
