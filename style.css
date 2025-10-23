@@ -4,6 +4,31 @@ body {
     padding: 0;
 }
 
+#controls {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+#controls label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#company-select {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 #tooltip {
     position: fixed;
     background: white;
