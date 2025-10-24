@@ -2,17 +2,19 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
 }
 
 #controls {
     position: fixed;
     top: 10px;
     right: 10px;
-    background: white;
+    background: #2a2a2a;
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid #444;
     border-radius: 4px;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
     z-index: 1000;
     font-size: 12px;
 }
@@ -21,24 +23,27 @@ body {
     font-weight: bold;
     margin-right: 8px;
     font-size: 12px;
+    color: #e0e0e0;
 }
 
 #company-select {
     padding: 4px 8px;
     font-size: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #555;
     border-radius: 4px;
     cursor: pointer;
     min-width: 80px;
+    background: #333;
+    color: #e0e0e0;
 }
 
 #tooltip {
     position: fixed;
-    background: white;
-    border: 1px solid #ddd;
+    background: #2a2a2a;
+    border: 1px solid #444;
     border-radius: 6px;
     padding: 12px 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s;
@@ -55,14 +60,14 @@ body {
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 2px;
-    color: #333;
+    color: #e0e0e0;
     white-space: nowrap;
 }
 
 #tooltip .tooltip-subtitle {
     font-style: italic;
     font-size: 13px;
-    color: #666;
+    color: #999;
     margin-bottom: 10px;
 }
 
@@ -72,7 +77,7 @@ body {
     gap: 8px;
     align-items: baseline;
     margin: 5px 0;
-    color: #666;
+    color: #aaa;
 }
 
 #tooltip .tooltip-row .label {
@@ -82,7 +87,7 @@ body {
 
 #tooltip .tooltip-row .value {
     font-weight: bold;
-    color: #333;
+    color: #e0e0e0;
     text-align: right;
 }
 

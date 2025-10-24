@@ -75,21 +75,21 @@ function showRoleTooltip(role, x, y) {
     const html = `
         <div class="tooltip-title">${formatRoleName(role.name)}</div>
         <div class="tooltip-row">
-            <span class="label">Total Pay:</span>
+            <span class="label">Avg Pay:</span>
             <span class="value">${formatCurrency(total)}</span>
         </div>
         <div class="tooltip-row">
-            <span class="label">Base Pay:</span>
+            <span class="label">Avg Base:</span>
             <span class="value">${formatCurrency(role.avgBase)}</span>
             <span class="percentage">(${((role.avgBase / total) * 100).toFixed(1)}%)</span>
         </div>
         <div class="tooltip-row">
-            <span class="label">Stock:</span>
+            <span class="label">Avg Stock:</span>
             <span class="value">${formatCurrency(role.avgStock)}</span>
             <span class="percentage">(${((role.avgStock / total) * 100).toFixed(1)}%)</span>
         </div>
         <div class="tooltip-row">
-            <span class="label">Bonus:</span>
+            <span class="label">Avg Bonus:</span>
             <span class="value">${formatCurrency(role.avgBonus)}</span>
             <span class="percentage">(${((role.avgBonus / total) * 100).toFixed(1)}%)</span>
         </div>

@@ -168,7 +168,7 @@ class SlopeChart {
             .attr("y1", c.topMargin)
             .attr("x2", leftX)
             .attr("y2", this.height - c.bottomMargin)
-            .attr("stroke", "#333")
+            .attr("stroke", "#ccc")
             .attr("stroke-width", 2);
         
         this.svg.append("line")
@@ -176,7 +176,7 @@ class SlopeChart {
             .attr("y1", c.topMargin)
             .attr("x2", rightX)
             .attr("y2", this.height - c.bottomMargin)
-            .attr("stroke", "#333")
+            .attr("stroke", "#ccc")
             .attr("stroke-width", 2);
     }
 
@@ -192,23 +192,7 @@ class SlopeChart {
                 }
             });
         
-        // Draw axis in the middle
-        const axisX = (leftX + rightX) / 2;
-        
-        this.svg.append("g")
-            .attr("class", "y-axis")
-            .attr("transform", `translate(${axisX}, 0)`)
-            .call(yAxis)
-            .selectAll("text")
-            .style("font-size", "11px")
-            .style("fill", "#666");
-        
-        // Style the axis
-        this.svg.selectAll(".y-axis path, .y-axis line")
-            .style("stroke", "#ddd")
-            .style("stroke-width", 1);
-        
-        // Add horizontal grid lines
+        // Add horizontal grid lines FIRST so axis labels appear on top
         const gridLines = payScale.ticks(10);
         gridLines.forEach(tick => {
             const y = payScale(tick);
@@ -217,10 +201,42 @@ class SlopeChart {
                 .attr("y1", y)
                 .attr("x2", rightX)
                 .attr("y2", y)
-                .attr("stroke", "#f0f0f0")
+                .attr("stroke", "#555")
                 .attr("stroke-width", 1)
                 .attr("stroke-dasharray", "2,2");
         });
+        
+        // Draw axis in the middle (AFTER gridlines so labels are on top)
+        const axisX = (leftX + rightX) / 2;
+        
+        const axisGroup = this.svg.append("g")
+            .attr("class", "y-axis")
+            .attr("transform", `translate(${axisX}, 0)`)
+            .call(yAxis);
+        
+        // Add background rectangles behind text labels
+        axisGroup.selectAll("text").each(function() {
+            const textNode = d3.select(this);
+            const bbox = this.getBBox();
+            
+            // Insert rect before text
+            d3.select(this.parentNode).insert("rect", "text")
+                .attr("x", bbox.x - 2)
+                .attr("y", bbox.y - 1)
+                .attr("width", bbox.width + 4)
+                .attr("height", bbox.height + 2)
+                .attr("fill", "#1a1a1a");
+        });
+        
+        // Style text
+        axisGroup.selectAll("text")
+            .style("font-size", "11px")
+            .style("fill", "#ccc");
+        
+        // Style the axis
+        this.svg.selectAll(".y-axis path, .y-axis line")
+            .style("stroke", "#666")
+            .style("stroke-width", 1);
     }
 
     drawTitles(leftX, rightX, company, c) {
@@ -230,7 +246,8 @@ class SlopeChart {
             .attr("text-anchor", "middle")
             .attr("font-size", c.titleFontSize)
             .attr("font-weight", "bold")
-            .text("Roles (by Avg Pay)");
+            .attr("fill", "#e0e0e0")
+            .text("Roles (Avg Comp)");
         
         this.svg.append("text")
             .attr("x", rightX)
@@ -238,14 +255,19 @@ class SlopeChart {
             .attr("text-anchor", "middle")
             .attr("font-size", c.titleFontSize)
             .attr("font-weight", "bold")
-            .text("Ranks (by Total Pay)");
+            .attr("fill", "#e0e0e0")
+            .text("Ranks (Total Comp)");
+        
+        // Calculate the center axis position
+        const axisX = (leftX + rightX) / 2;
         
         this.svg.append("text")
-            .attr("x", this.width / 2)
+            .attr("x", axisX)
             .attr("y", 30)
             .attr("text-anchor", "middle")
             .attr("font-size", 24)
             .attr("font-weight", "bold")
+            .attr("fill", "#e0e0e0")
             .text(company);
     }
 
@@ -284,8 +306,8 @@ class SlopeChart {
             .attr("class", "rank-distribution")
             .attr("d", area)
             .attr("fill", "#4A90E2")
-            .attr("fill-opacity", 0.2)
-            .attr("stroke", "#4A90E2")
+            .attr("fill-opacity", 0.3)
+            .attr("stroke", "#6BA8E5")
             .attr("stroke-width", 1.5);
     }
 
@@ -329,7 +351,7 @@ class SlopeChart {
             .attr("cy", d => roleScale(d.avgPay))
             .attr("r", c.dotRadius)
             .attr("fill", d => this.roleColorScale(d.name))
-            .attr("stroke", "#fff")
+            .attr("stroke", "#1a1a1a")
             .attr("stroke-width", 2)
             .style("cursor", "pointer")
             .on("click", (event, d) => {
@@ -368,7 +390,7 @@ class SlopeChart {
             .attr("cy", d => rankScale(d.totalPay))
             .attr("r", c.dotRadius)
             .attr("fill", d => this.roleColorScale(d.roleName))
-            .attr("stroke", "#fff")
+            .attr("stroke", "#1a1a1a")
             .attr("stroke-width", 2)
             .style("cursor", "pointer");
     }

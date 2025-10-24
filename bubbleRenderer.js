@@ -65,7 +65,7 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
             .attr("width", bubbleWidth)
             .attr("height", bubbleHeight)
             .attr("rx", 8)
-            .attr("fill", "white")
+            .attr("fill", "#2a2a2a")
             .attr("stroke", roleColorScale(role.name))
             .attr("stroke-width", 1.5);
         
@@ -75,7 +75,7 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
             .attr("text-anchor", "middle")
             .attr("dominant-baseline", "middle")
             .attr("font-size", c.bubbleFontSize)
-            .attr("fill", "#333")
+            .attr("fill", "#e0e0e0")
             .text(item.text)
             .style("pointer-events", "none");
         
@@ -159,7 +159,7 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
             .attr("width", bubbleWidth)
             .attr("height", bubbleHeight)
             .attr("rx", 8)
-            .attr("fill", "white")
+            .attr("fill", "#2a2a2a")
             .attr("stroke", roleColorScale(rank.roleName))
             .attr("stroke-width", 1.5);
         
@@ -169,7 +169,7 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
             .attr("text-anchor", "middle")
             .attr("dominant-baseline", "middle")
             .attr("font-size", c.bubbleFontSize)
-            .attr("fill", "#333")
+            .attr("fill", "#e0e0e0")
             .text(text)
             .style("pointer-events", "none");
         
