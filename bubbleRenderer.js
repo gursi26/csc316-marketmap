@@ -201,9 +201,9 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX, viewMo
         svg.append("path")
             .attr("class", "rank-connector")
             .attr("data-rank-index", idx)
-            .attr("data-role-name", rank.roleName)
+            .attr("data-role-name", rank.roleName || '') // Optional in role view
             .attr("d", `M ${arrowStart} ${dotY} Q ${controlX} ${(dotY + bubbleY) / 2}, ${arrowEnd} ${bubbleY}`)
-            .attr("stroke", roleColorScale(rank.roleName))
+            .attr("stroke", roleColorScale(groupKey)) // Use groupKey for color
             .attr("stroke-width", 1.5)
             .attr("fill", "none")
             .attr("opacity", 0)

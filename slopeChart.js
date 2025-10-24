@@ -200,15 +200,18 @@ class SlopeChart {
                 return !isNaN(totalPay) && totalPay > 0;
             });
             
+            const companyDisplayName = this.companyNameMap[ticker] || ticker;
+            
             return {
                 name: ticker,
-                displayName: this.companyNameMap[ticker] || ticker,
+                displayName: companyDisplayName,
                 avgPay: d3.mean(validRows, d => +d["Total Pay"]),
                 avgBase: d3.mean(validRows, d => +d["Base Pay"]),
                 avgStock: d3.mean(validRows, d => +d["Stock"]),
                 avgBonus: d3.mean(validRows, d => +d["Bonus"]),
                 ranks: rows.map(row => ({
                     companyName: ticker,
+                    companyDisplayName: companyDisplayName,
                     rankName: row["Role Rank Name"],
                     rank: +row["Role Rank"],
                     totalPay: +row["Total Pay"],

@@ -120,8 +120,13 @@ function showRankTooltip(rank, x, y) {
     const tooltip = document.getElementById('tooltip');
     const total = rank.totalPay;
     
+    // Determine the title based on which property exists
+    // In company view: rank.roleName exists (show role name)
+    // In role view: rank.companyDisplayName exists (show full company name)
+    const title = rank.roleName ? formatRoleName(rank.roleName) : (rank.companyDisplayName || rank.companyName);
+    
     const html = `
-        <div class="tooltip-title">${formatRoleName(rank.roleName)}</div>
+        <div class="tooltip-title">${title}</div>
         <div class="tooltip-subtitle">${rank.rankName}</div>
         <div class="tooltip-row">
             <span class="label">Total Pay:</span>
