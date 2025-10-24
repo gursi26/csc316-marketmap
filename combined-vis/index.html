@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Combined Visualization</title>
+  <style>
+    /* Make the map iframe fill the whole page; remove right-side panel */
+    html,body{height:100%;margin:0}
+    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;height:100vh}
+    #left{position:fixed;inset:0;overflow:hidden}
+    iframe{border:0;width:100%;height:100%}
+  </style>
+</head>
+<body>
+  <div id="left">
+    <!-- map iframe fills the page -->
+    <iframe id="mapFrame" src="../map%20vis/index.html"></iframe>
+  </div>
+
+  <script>
+    // Combined view now only hosts the map iframe full-bleed. The map itself
+    // shows a small popup for details/roles and handles navigation. No right
+    // panel is used here to avoid the white area on the right.
+  </script>
+</body>
+</html>

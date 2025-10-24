@@ -317,7 +317,67 @@ async function init() {
 
     setupControls();
     updateVisualization(data, "ceo_approval", "employee_rating", "sentiment");
+
+    // If opened with ticker query param, focus that company
+    const params = new URLSearchParams(window.location.search);
+    const qTicker = params.get('ticker');
+    if (qTicker) {
+        focusTicker(qTicker);
+    }
 }
 
 // Start the visualization when DOM is loaded
 document.addEventListener('DOMContentLoaded', init);
+
+// allow parent frame to ask the scatter plot to focus/highlight a company
+window.addEventListener('message', (ev) => {
+    const msg = ev && ev.data;
+    if (!msg || msg.type !== 'focusCompany' || !msg.ticker) return;
+    const ticker = (msg.ticker || '').toString().toUpperCase();
+    // find circle by ticker
+    const sel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker||d.Ticker)||'').toString().toUpperCase() === ticker);
+    if (sel.empty()) return;
+    const d = sel.datum();
+    // visually highlight
+    sel.raise().attr('stroke', '#000').attr('stroke-width', 3).attr('opacity', 1);
+    // show tooltip similar to mouseover
+    tooltip.style('opacity', 1).html(`
+        <strong>${d.name || d.ticker}</strong><br/>
+        Sector: ${d.sector || ''}<br/>
+        CEO Approval: ${d.ceo_approval || 'n/a'}%<br/>
+        Employee Rating: ${d.employee_rating || 'n/a'}<br/>
+        Market Cap: $${(d.market_cap || 0).toLocaleString()}<br/>
+        Sentiment: ${d.sentiment != null ? d.sentiment.toFixed(3) : 'n/a'}
+    `);
+    // position tooltip near top-right of the scatter area
+    const rect = document.getElementById('scatterplot').getBoundingClientRect();
+    tooltip.style('left', (rect.left + 20) + 'px').style('top', (rect.top + 20) + 'px');
+    // clear highlight after a few seconds
+    setTimeout(() => {
+        sel.attr('stroke', '#fff').attr('stroke-width', 1).attr('opacity', 0.7);
+        tooltip.style('opacity', 0);
+    }, 3000);
+}, false);
+
+function focusTicker(ticker){
+    if (!ticker) return;
+    const t = (ticker||'').toString().toUpperCase();
+    const sel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker||d.Ticker)||'').toString().toUpperCase() === t);
+    if (sel.empty()) return;
+    const d = sel.datum();
+    sel.raise().attr('stroke', '#000').attr('stroke-width', 3).attr('opacity', 1);
+    tooltip.style('opacity', 1).html(`
+        <strong>${d.name || d.ticker}</strong><br/>
+        Sector: ${d.sector || ''}<br/>
+        CEO Approval: ${d.ceo_approval || 'n/a'}%<br/>
+        Employee Rating: ${d.employee_rating || 'n/a'}<br/>
+        Market Cap: $${(d.market_cap || 0).toLocaleString()}<br/>
+        Sentiment: ${d.sentiment != null ? d.sentiment.toFixed(3) : 'n/a'}
+    `);
+    const rect = document.getElementById('scatterplot').getBoundingClientRect();
+    tooltip.style('left', (rect.left + 20) + 'px').style('top', (rect.top + 20) + 'px');
+    setTimeout(() => {
+        sel.attr('stroke', '#fff').attr('stroke-width', 1).attr('opacity', 0.7);
+        tooltip.style('opacity', 0);
+    }, 3000);
+}

@@ -1,10 +1,17 @@
+:root{
+    --bg:#0b1020;
+    --panel:#101833;
+    --fg:#e6eefc;
+    --muted:#9aa7c7;
+    --accent:#5ea8ff;
+    --tooltip-bg: rgba(9,12,24,.94);
+}
+
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #1a1a1a;
-    color: #e0e0e0;
-    overflow: hidden;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    margin: 0; padding: 0;
+    background: linear-gradient(180deg,var(--bg),#070812);
+    color: var(--fg); overflow:hidden;
 }
 
 #canvas {
@@ -34,16 +41,16 @@ body {
     position: fixed;
     top: 10px;
     left: 10px;
-    background: rgba(42, 42, 42, 0.85);
-    padding: 6px 10px;
-    border: 1px solid #444;
-    border-radius: 4px;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    background: rgba(16,24,51,0.7);
+    padding: 8px 10px;
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
     z-index: 1000;
-    font-size: 11px;
-    backdrop-filter: blur(5px);
+    font-size: 12px;
+    backdrop-filter: blur(4px);
     transition: background 0.2s;
-    max-width: 224px;
+    max-width: 240px;
 }
 
 #controls:hover {
@@ -60,20 +67,9 @@ body {
 #view-mode-select,
 #item-select,
 #industry-select {
-    padding: 3px 6px;
-    font-size: 11px;
-    border: 1px solid #555;
-    border-radius: 3px;
-    cursor: pointer;
-    /* fixed width so long selected text doesn't expand the control */
-    width: 160px;
-    flex: 0 0 160px;
-    background: #333;
-    color: #e0e0e0;
-    /* prevent the selected text from wrapping and show ellipsis when truncated */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 6px 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 4px; cursor:pointer; width:160px; flex:0 0 160px;
+    background: #0e1530; color:var(--fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 
 /* Make control rows consistent spacing and keep label + control on one line */
@@ -93,20 +89,7 @@ body {
     white-space: nowrap;
 }
 
-#tooltip {
-    position: fixed;
-    background: #2a2a2a;
-    border: 1px solid #444;
-    border-radius: 6px;
-    padding: 12px 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s;
-    font-size: 13px;
-    z-index: 1000;
-    width: fit-content;
-}
+#tooltip { position: fixed; background: var(--tooltip-bg); border:1px solid rgba(255,255,255,0.04); border-radius:8px; padding:12px 14px; box-shadow:0 6px 18px rgba(0,0,0,0.6); pointer-events:none; opacity:0; transition:opacity .18s; font-size:13px; z-index:1000; width:fit-content }
 
 #tooltip.visible {
     opacity: 1;
