@@ -71,9 +71,10 @@ function formatCurrency(value) {
 function showRoleTooltip(role, x, y) {
     const tooltip = document.getElementById('tooltip');
     const total = role.avgPay;
+    const displayName = role.displayName ? role.displayName : formatRoleName(role.name);
     
     const html = `
-        <div class="tooltip-title">${formatRoleName(role.name)}</div>
+        <div class="tooltip-title">${displayName}</div>
         <div class="tooltip-row">
             <span class="label">Avg Pay:</span>
             <span class="value">${formatCurrency(total)}</span>

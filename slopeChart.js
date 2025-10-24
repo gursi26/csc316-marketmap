@@ -1,11 +1,15 @@
 class SlopeChart {
-    constructor(parentElement, data) {
+    constructor(parentElement, data, companyInfo) {
 		this.parentElement = parentElement;
         this.data = data;
+        this.companyInfo = companyInfo;
+        this.viewMode = 'company'; // 'company' or 'role'
         this.selectedCompany = null;
-        this.lockedRole = null; // Track if a role is locked/frozen
+        this.selectedRole = null;
+        this.lockedItem = null; // Track if a role/company is locked/frozen
         this.initVis();
         this.setupRoleColors();
+        this.setupCompanyNameMap();
     }
 
 	initVis() {
@@ -25,6 +29,14 @@ class SlopeChart {
         const allRoles = [...new Set(this.data.map(d => d["Role Name"]))];
         this.roleColorScale = setupRoleColorScale(allRoles);
     }
+    
+    setupCompanyNameMap() {
+        // Create a mapping from ticker to company name
+        this.companyNameMap = {};
+        this.companyInfo.forEach(company => {
+            this.companyNameMap[company.Ticker] = company.Name;
+        });
+    }
 
     setupDropdown() {
         const tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
@@ -43,15 +55,25 @@ class SlopeChart {
         // Add event listener
         dropdown.on("change", (event) => {
             this.selectedCompany = event.target.value;
+            this.viewMode = 'company';
+            this.selectedRole = null;
             this.wrangleData();
         });
     }
 
 	wrangleData() {
-        if (!this.selectedCompany) return;
+        // Reset locked item when changing view
+        this.lockedItem = null;
         
-        // Reset locked role when changing companies
-        this.lockedRole = null;
+        if (this.viewMode === 'company') {
+            this.wrangleCompanyView();
+        } else if (this.viewMode === 'role') {
+            this.wrangleRoleView();
+        }
+    }
+    
+    wrangleCompanyView() {
+        if (!this.selectedCompany) return;
         
         // Filter data for selected company
         const companyData = this.data.filter(d => d.Ticker === this.selectedCompany);
@@ -93,9 +115,64 @@ class SlopeChart {
             .sort((a, b) => b.totalPay - a.totalPay); // Sort descending (highest at top)
         
         this.displayData = {
-            company: this.selectedCompany,
-            roles: roles,
-            ranks: allRanks
+            viewMode: 'company',
+            title: this.selectedCompany,
+            leftItems: roles,
+            rightItems: allRanks
+        };
+        
+        this.updateVis();
+    }
+    
+    wrangleRoleView() {
+        if (!this.selectedRole) return;
+        
+        // Filter data for selected role
+        const roleData = this.data.filter(d => d["Role Name"] === this.selectedRole);
+        
+        // Group by company
+        const companyMap = d3.group(roleData, d => d.Ticker);
+        
+        // Process companies
+        const companies = Array.from(companyMap, ([ticker, rows]) => {
+            // Filter out rows with 0 or empty pay BEFORE calculating averages
+            const validRows = rows.filter(row => {
+                const totalPay = +row["Total Pay"];
+                return !isNaN(totalPay) && totalPay > 0;
+            });
+            
+            return {
+                name: ticker,
+                displayName: this.companyNameMap[ticker] || ticker,
+                avgPay: d3.mean(validRows, d => +d["Total Pay"]),
+                avgBase: d3.mean(validRows, d => +d["Base Pay"]),
+                avgStock: d3.mean(validRows, d => +d["Stock"]),
+                avgBonus: d3.mean(validRows, d => +d["Bonus"]),
+                ranks: rows.map(row => ({
+                    companyName: ticker,
+                    rankName: row["Role Rank Name"],
+                    rank: +row["Role Rank"],
+                    totalPay: +row["Total Pay"],
+                    basePay: +row["Base Pay"],
+                    stock: +row["Stock"],
+                    bonus: +row["Bonus"]
+                })).sort((a, b) => a.rank - b.rank)
+            };
+        })
+        .filter(c => !isNaN(c.avgPay) && c.avgPay > 0)
+        .sort((a, b) => b.avgPay - a.avgPay)
+        .slice(0, 10); // Top 10 companies only
+        
+        // Flatten all ranks for these top 10 companies
+        const allRanks = companies.flatMap(company => company.ranks)
+            .filter(r => !isNaN(r.totalPay) && r.totalPay > 0)
+            .sort((a, b) => b.totalPay - a.totalPay);
+        
+        this.displayData = {
+            viewMode: 'role',
+            title: formatRoleName(this.selectedRole),
+            leftItems: companies,
+            rightItems: allRanks
         };
         
         this.updateVis();
@@ -104,30 +181,35 @@ class SlopeChart {
     updateVis() {
         this.svg.selectAll("*").remove();
         
-        const { roles, ranks, company } = this.displayData;
+        const { viewMode, title, leftItems, rightItems } = this.displayData;
         
-        if (!roles.length || !ranks.length) return;
+        if (!leftItems.length || !rightItems.length) return;
         
         const c = SLOPE_CHART_CONSTANTS;
         
-        // Calculate positions for the two vertical lines
-        const leftX = c.leftMargin;
-        const rightX = this.width * 0.65;
+        // Calculate the width needed for the chart (30% wider)
+        const chartWidth = this.width * 0.91; // 0.7 * 1.3 = 0.91
+        const chartHeight = this.height - c.topMargin - c.bottomMargin;
+        
+        // Center the chart horizontally
+        const chartCenterX = this.width / 2;
+        const leftX = chartCenterX - chartWidth / 2 + c.leftMargin;
+        const rightX = chartCenterX + chartWidth / 2 - c.rightMargin;
         
         // Calculate available height for plotting
         const plotHeight = this.height - c.topMargin - c.bottomMargin;
         
-        // Create a unified scale for both roles and ranks
-        const maxRolePay = d3.max(roles, d => d.avgPay);
-        const maxRankPay = d3.max(ranks, d => d.totalPay);
-        const maxPay = Math.max(maxRolePay, maxRankPay);
+        // Create a unified scale for both left and right items
+        const maxLeftPay = d3.max(leftItems, d => d.avgPay);
+        const maxRightPay = d3.max(rightItems, d => d.totalPay);
+        const maxPay = Math.max(maxLeftPay, maxRightPay);
         
         const payScale = d3.scaleLinear()
             .domain([0, maxPay])
             .range([c.topMargin + plotHeight, c.topMargin]);
         
-        const roleScale = payScale;
-        const rankScale = payScale;
+        const leftScale = payScale;
+        const rightScale = payScale;
         
         // Draw vertical lines
         this.drawVerticalLines(leftX, rightX, c);
@@ -136,27 +218,27 @@ class SlopeChart {
         this.drawAxisAndGrid(payScale, leftX, rightX, c);
         
         // Draw titles
-        this.drawTitles(leftX, rightX, company, c);
+        this.drawTitles(leftX, rightX, title, viewMode, c);
         
         // Draw rank distribution
-        this.drawRankDistribution(ranks, rankScale, rightX, c);
+        this.drawRankDistribution(rightItems, rightScale, rightX, c);
         
-        // Draw connecting lines from roles to ranks
-        this.drawConnectionLines(roles, ranks, roleScale, rankScale, leftX, rightX, c);
+        // Draw connecting lines
+        this.drawConnectionLines(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode, c);
         
-        // Draw role dots
-        this.drawRoleDots(roles, roleScale, leftX, c);
+        // Draw left dots (roles or companies)
+        this.drawLeftDots(leftItems, leftScale, leftX, viewMode, c);
         
-        // Draw rank dots
-        this.drawRankDots(ranks, rankScale, rightX, c);
+        // Draw right dots (ranks)
+        this.drawRightDots(rightItems, rightScale, rightX, viewMode, c);
         
-        // Render role and rank bubbles
-        this.renderBubbles(roles, ranks, roleScale, rankScale, leftX, rightX);
+        // Render bubbles
+        this.renderBubbles(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode);
         
         // Add click handler to SVG background to unlock
         this.svg.on("click", () => {
-            if (this.lockedRole) {
-                this.lockedRole = null;
+            if (this.lockedItem) {
+                this.lockedItem = null;
                 resetHighlight(this.svg);
             }
         });
@@ -239,7 +321,10 @@ class SlopeChart {
             .style("stroke-width", 1);
     }
 
-    drawTitles(leftX, rightX, company, c) {
+    drawTitles(leftX, rightX, title, viewMode, c) {
+        const leftLabel = viewMode === 'company' ? 'Roles (Avg Comp)' : 'Companies (Avg Comp)';
+        const rightLabel = 'Ranks (Total Comp)';
+        
         this.svg.append("text")
             .attr("x", leftX)
             .attr("y", c.topMargin - 30)
@@ -247,7 +332,7 @@ class SlopeChart {
             .attr("font-size", c.titleFontSize)
             .attr("font-weight", "bold")
             .attr("fill", "#e0e0e0")
-            .text("Roles (Avg Comp)");
+            .text(leftLabel);
         
         this.svg.append("text")
             .attr("x", rightX)
@@ -256,7 +341,7 @@ class SlopeChart {
             .attr("font-size", c.titleFontSize)
             .attr("font-weight", "bold")
             .attr("fill", "#e0e0e0")
-            .text("Ranks (Total Comp)");
+            .text(rightLabel);
         
         // Calculate the center axis position
         const axisX = (leftX + rightX) / 2;
@@ -268,7 +353,7 @@ class SlopeChart {
             .attr("font-size", 24)
             .attr("font-weight", "bold")
             .attr("fill", "#e0e0e0")
-            .text(company);
+            .text(title);
     }
 
     drawRankDistribution(ranks, rankScale, rightX, c) {
@@ -311,30 +396,39 @@ class SlopeChart {
             .attr("stroke-width", 1.5);
     }
 
-    drawConnectionLines(roles, ranks, roleScale, rankScale, leftX, rightX, c) {
-        roles.forEach(role => {
-            const roleY = roleScale(role.avgPay);
-            const roleColor = this.roleColorScale(role.name);
+    drawConnectionLines(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode, c) {
+        leftItems.forEach(leftItem => {
+            const leftY = leftScale(leftItem.avgPay);
+            const itemColor = this.roleColorScale(leftItem.name);
             
-            role.ranks.forEach(rank => {
-                const rankIndex = ranks.findIndex(r => 
-                    r.roleName === rank.roleName && 
-                    r.rankName === rank.rankName && 
-                    r.totalPay === rank.totalPay
-                );
+            leftItem.ranks.forEach(rank => {
+                let rankIndex;
+                if (viewMode === 'company') {
+                    rankIndex = rightItems.findIndex(r => 
+                        r.roleName === rank.roleName && 
+                        r.rankName === rank.rankName && 
+                        r.totalPay === rank.totalPay
+                    );
+                } else {
+                    rankIndex = rightItems.findIndex(r => 
+                        r.companyName === rank.companyName && 
+                        r.rankName === rank.rankName && 
+                        r.totalPay === rank.totalPay
+                    );
+                }
                 
                 if (rankIndex !== -1) {
-                    const rankY = rankScale(ranks[rankIndex].totalPay);
+                    const rightY = rightScale(rightItems[rankIndex].totalPay);
                     
                     this.svg.append("line")
                         .attr("class", "connection-line")
-                        .attr("data-role", role.name)
+                        .attr("data-left-item", leftItem.name)
                         .attr("data-rank-index", rankIndex)
                         .attr("x1", leftX)
-                        .attr("y1", roleY)
+                        .attr("y1", leftY)
                         .attr("x2", rightX)
-                        .attr("y2", rankY)
-                        .attr("stroke", roleColor)
+                        .attr("y2", rightY)
+                        .attr("stroke", itemColor)
                         .attr("stroke-opacity", c.lineOpacity)
                         .attr("stroke-width", c.lineWidth);
                 }
@@ -342,31 +436,47 @@ class SlopeChart {
         });
     }
 
-    drawRoleDots(roles, roleScale, leftX, c) {
-        this.svg.selectAll(".role-dot")
-            .data(roles)
+    drawLeftDots(leftItems, leftScale, leftX, viewMode, c) {
+        const self = this;
+        this.svg.selectAll(".left-dot")
+            .data(leftItems)
             .join("circle")
-            .attr("class", "role-dot")
+            .attr("class", "left-dot")
             .attr("cx", leftX)
-            .attr("cy", d => roleScale(d.avgPay))
+            .attr("cy", d => leftScale(d.avgPay))
             .attr("r", c.dotRadius)
             .attr("fill", d => this.roleColorScale(d.name))
             .attr("stroke", "#1a1a1a")
             .attr("stroke-width", 2)
             .style("cursor", "pointer")
             .on("click", (event, d) => {
-                if (this.lockedRole === d.name) {
-                    this.lockedRole = null;
-                    resetHighlight(this.svg);
+                if (self.lockedItem === d.name) {
+                    self.lockedItem = null;
+                    resetHighlight(self.svg);
                 } else {
-                    this.lockedRole = d.name;
-                    highlightRole(this.svg, d.name, this.displayData.ranks);
+                    self.lockedItem = d.name;
+                    highlightLeftItem(self.svg, d.name, self.displayData.rightItems, viewMode);
                 }
                 event.stopPropagation();
             })
+            .on("dblclick", (event, d) => {
+                event.stopPropagation();
+                hideTooltip();
+                if (viewMode === 'company') {
+                    // Switch to role view
+                    self.selectedRole = d.name;
+                    self.viewMode = 'role';
+                    self.wrangleData();
+                } else {
+                    // Switch to company view
+                    self.selectedCompany = d.name;
+                    self.viewMode = 'company';
+                    self.wrangleData();
+                }
+            })
             .on("mouseenter", (event, d) => {
-                if (!this.lockedRole) {
-                    highlightRole(this.svg, d.name, this.displayData.ranks);
+                if (!self.lockedItem) {
+                    highlightLeftItem(self.svg, d.name, self.displayData.rightItems, viewMode);
                 }
                 showRoleTooltip(d, event.clientX, event.clientY);
             })
@@ -374,71 +484,90 @@ class SlopeChart {
                 updateTooltipPosition(event.clientX, event.clientY);
             })
             .on("mouseleave", () => {
-                if (!this.lockedRole) {
-                    resetHighlight(this.svg);
+                if (!self.lockedItem) {
+                    resetHighlight(self.svg);
                 }
                 hideTooltip();
             });
     }
 
-    drawRankDots(ranks, rankScale, rightX, c) {
-        this.svg.selectAll(".rank-dot")
-            .data(ranks)
+    drawRightDots(rightItems, rightScale, rightX, viewMode, c) {
+        this.svg.selectAll(".right-dot")
+            .data(rightItems)
             .join("circle")
-            .attr("class", "rank-dot")
+            .attr("class", "right-dot")
             .attr("cx", rightX)
-            .attr("cy", d => rankScale(d.totalPay))
+            .attr("cy", d => rightScale(d.totalPay))
             .attr("r", c.dotRadius)
-            .attr("fill", d => this.roleColorScale(d.roleName))
+            .attr("fill", d => {
+                const key = viewMode === 'company' ? d.roleName : d.companyName;
+                return this.roleColorScale(key);
+            })
             .attr("stroke", "#1a1a1a")
             .attr("stroke-width", 2)
             .style("cursor", "pointer");
     }
 
-    renderBubbles(roles, ranks, roleScale, rankScale, leftX, rightX) {
+    renderBubbles(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode) {
         const self = this;
         
-        // Create event handlers for role bubbles
-        const roleBubbleHandlers = {
-            onClick: (event, role) => {
-                if (self.lockedRole === role.name) {
-                    self.lockedRole = null;
+        // Create event handlers for left bubbles
+        const leftBubbleHandlers = {
+            onClick: (event, item) => {
+                if (self.lockedItem === item.name) {
+                    self.lockedItem = null;
                     resetHighlight(self.svg);
                 } else {
-                    self.lockedRole = role.name;
-                    highlightRole(self.svg, role.name, self.displayData.ranks);
+                    self.lockedItem = item.name;
+                    highlightLeftItem(self.svg, item.name, self.displayData.rightItems, viewMode);
                 }
                 event.stopPropagation();
             },
-            onMouseEnter: (event, role) => {
-                if (!self.lockedRole) {
-                    highlightRole(self.svg, role.name, self.displayData.ranks);
+            onDblClick: (event, item) => {
+                event.stopPropagation();
+                hideTooltip();
+                if (viewMode === 'company') {
+                    // Switch to role view
+                    self.selectedRole = item.name;
+                    self.viewMode = 'role';
+                    self.wrangleData();
+                } else {
+                    // Switch to company view
+                    self.selectedCompany = item.name;
+                    self.viewMode = 'company';
+                    self.wrangleData();
+                }
+            },
+            onMouseEnter: (event, item) => {
+                if (!self.lockedItem) {
+                    highlightLeftItem(self.svg, item.name, self.displayData.rightItems, viewMode);
                 }
             },
             onMouseLeave: () => {
-                if (!self.lockedRole) {
+                if (!self.lockedItem) {
                     resetHighlight(self.svg);
                 }
             }
         };
         
-        // Render role bubbles
+        // Render left bubbles (roles or companies)
         renderRoleBubbles(
             this.svg,
-            roles,
-            roleScale,
+            leftItems,
+            leftScale,
             this.roleColorScale,
             leftX,
-            roleBubbleHandlers
+            leftBubbleHandlers
         );
         
-        // Render rank bubbles
+        // Render right bubbles (ranks)
         renderRankBubbles(
             this.svg,
-            ranks,
-            rankScale,
+            rightItems,
+            rightScale,
             this.roleColorScale,
-            rightX
+            rightX,
+            viewMode
         );
     }
 }

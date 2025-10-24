@@ -31,25 +31,26 @@ function resolveBottomJustifiedCollisions(bubbleData, bubbleHeight, minSpacing) 
 }
 
 /**
- * Applies collision detection to visible rank bubbles for a specific role
+ * Applies collision detection to visible rank bubbles for a specific item (role or company)
  * Updates bubble positions directly in the DOM
  * 
  * @param {Object} svg - D3 selection of the SVG element
- * @param {string} roleName - Name of the role to process
+ * @param {string} itemName - Name of the item to process (role or company)
  * @param {number} bubbleHeight - Height of each bubble
  * @param {number} minSpacing - Minimum spacing between bubbles
+ * @param {string} viewMode - Current view mode ('company' or 'role'), defaults to 'company'
  * @returns {Array} - Array of visible rank bubble data with adjusted positions
  */
-function applyRankBubbleCollisions(svg, roleName, bubbleHeight, minSpacing) {
+function applyRankBubbleCollisions(svg, itemName, bubbleHeight, minSpacing, viewMode = 'company') {
     const visibleRankBubbles = [];
     
-    // Collect only the bubbles for this role
+    // Collect only the bubbles for this item
     svg.selectAll(".rank-label-bubble").each(function() {
         const bubble = d3.select(this);
-        const rankRoleName = bubble.attr("data-role-name");
+        const groupKey = bubble.attr("data-group-key");
         const rankIndex = parseInt(bubble.attr("data-rank-index"));
         
-        if (rankRoleName === roleName) {
+        if (groupKey === itemName) {
             const rect = bubble.select("rect");
             const currentY = parseFloat(rect.attr("y")) + bubbleHeight / 2; // Center Y
             visibleRankBubbles.push({

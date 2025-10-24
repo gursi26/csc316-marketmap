@@ -1,95 +1,111 @@
 // Interaction and highlighting logic for the visualization
 
 /**
- * Highlights a specific role and shows its associated ranks
+ * Highlights a left item (role or company) and shows its associated ranks
+ * 
+ * @param {Object} svg - D3 selection of the SVG element
+ * @param {string} itemName - Name of the item to highlight
+ * @param {Array} ranks - Array of all rank objects
+ * @param {string} viewMode - Current view mode ('company' or 'role')
+ */
+function highlightLeftItem(svg, itemName, ranks, viewMode) {
+    // Get the indices of ranks that belong to this item
+    const itemRankIndices = new Set();
+    ranks.forEach((rank, idx) => {
+        const matchKey = viewMode === 'company' ? rank.roleName : rank.companyName;
+        if (matchKey === itemName) {
+            itemRankIndices.add(idx);
+        }
+    });
+    
+    // Apply collision detection ONLY to rank bubbles for this item
+    const c = SLOPE_CHART_CONSTANTS;
+    const bubbleHeight = c.bubbleHeight;
+    const bubbleMinSpacing = c.bubbleMinSpacing;
+    const visibleRankBubbles = applyRankBubbleCollisions(svg, itemName, bubbleHeight, bubbleMinSpacing, viewMode);
+    
+    // Update positions of visible rank bubbles
+    updateRankBubblePositions(svg, visibleRankBubbles);
+    
+    // Grey out all left dots except the hovered one
+    svg.selectAll(".left-dot")
+        .transition()
+        .duration(200)
+        .style("opacity", function() {
+            const d = d3.select(this).datum();
+            return d.name === itemName ? 1 : 0.2;
+        });
+    
+    // Grey out all left label bubbles except the hovered one
+    svg.selectAll(".role-label-bubble")
+        .transition()
+        .duration(200)
+        .style("opacity", function() {
+            const bubbleItem = d3.select(this).attr("data-role");
+            return bubbleItem === itemName ? 1 : 0.2;
+        });
+    
+    // Grey out left connectors
+    svg.selectAll(".role-connector")
+        .transition()
+        .duration(200)
+        .style("opacity", function() {
+            const connectorItem = d3.select(this).attr("data-role");
+            return connectorItem === itemName ? 0.6 : 0.1;
+        });
+    
+    // Hide all right dots except those belonging to this item
+    svg.selectAll(".right-dot")
+        .transition()
+        .duration(200)
+        .style("opacity", (d, i) => itemRankIndices.has(i) ? 1 : 0);
+    
+    // Show rank label bubbles only for this item
+    svg.selectAll(".rank-label-bubble")
+        .transition()
+        .duration(200)
+        .style("opacity", function() {
+            const rankIndex = parseInt(d3.select(this).attr("data-rank-index"));
+            return itemRankIndices.has(rankIndex) ? 1 : 0;
+        })
+        .on("end", function() {
+            // Enable/disable pointer events based on visibility
+            const rankIndex = parseInt(d3.select(this).attr("data-rank-index"));
+            d3.select(this).style("pointer-events", itemRankIndices.has(rankIndex) ? "all" : "none");
+        });
+    
+    // Show rank connectors only for this item
+    svg.selectAll(".rank-connector")
+        .transition()
+        .duration(200)
+        .style("opacity", function() {
+            const rankIndex = parseInt(d3.select(this).attr("data-rank-index"));
+            return itemRankIndices.has(rankIndex) ? 0.6 : 0;
+        });
+    
+    // Highlight connection lines for this item
+    svg.selectAll(".connection-line")
+        .transition()
+        .duration(200)
+        .attr("stroke-opacity", function() {
+            const lineItem = d3.select(this).attr("data-left-item");
+            return lineItem === itemName ? 0.8 : 0.05;
+        })
+        .attr("stroke-width", function() {
+            const lineItem = d3.select(this).attr("data-left-item");
+            return lineItem === itemName ? 2.5 : SLOPE_CHART_CONSTANTS.lineWidth;
+        });
+}
+
+/**
+ * Highlights a specific role and shows its associated ranks (legacy function for company view)
  * 
  * @param {Object} svg - D3 selection of the SVG element
  * @param {string} roleName - Name of the role to highlight
  * @param {Array} ranks - Array of all rank objects
  */
 function highlightRole(svg, roleName, ranks) {
-    // Get the indices of ranks that belong to this role
-    const roleRankIndices = new Set();
-    ranks.forEach((rank, idx) => {
-        if (rank.roleName === roleName) {
-            roleRankIndices.add(idx);
-        }
-    });
-    
-    // Apply collision detection ONLY to rank bubbles for this role
-    const c = SLOPE_CHART_CONSTANTS;
-    const bubbleHeight = c.bubbleHeight;
-    const bubbleMinSpacing = c.bubbleMinSpacing;
-    const visibleRankBubbles = applyRankBubbleCollisions(svg, roleName, bubbleHeight, bubbleMinSpacing);
-    
-    // Update positions of visible rank bubbles
-    updateRankBubblePositions(svg, visibleRankBubbles);
-    
-    // Grey out all role dots except the hovered one
-    svg.selectAll(".role-dot")
-        .transition()
-        .duration(200)
-        .style("opacity", d => d.name === roleName ? 1 : 0.2);
-    
-    // Grey out all role label bubbles except the hovered one
-    svg.selectAll(".role-label-bubble")
-        .transition()
-        .duration(200)
-        .style("opacity", function() {
-            const bubbleRole = d3.select(this).attr("data-role");
-            return bubbleRole === roleName ? 1 : 0.2;
-        });
-    
-    // Grey out role connectors
-    svg.selectAll(".role-connector")
-        .transition()
-        .duration(200)
-        .style("opacity", function() {
-            const connectorRole = d3.select(this).attr("data-role");
-            return connectorRole === roleName ? 0.6 : 0.1;
-        });
-    
-    // Hide all rank dots except those belonging to this role
-    svg.selectAll(".rank-dot")
-        .transition()
-        .duration(200)
-        .style("opacity", (d, i) => roleRankIndices.has(i) ? 1 : 0);
-    
-    // Show rank label bubbles only for this role
-    svg.selectAll(".rank-label-bubble")
-        .transition()
-        .duration(200)
-        .style("opacity", function() {
-            const rankIndex = parseInt(d3.select(this).attr("data-rank-index"));
-            return roleRankIndices.has(rankIndex) ? 1 : 0;
-        })
-        .on("end", function() {
-            // Enable/disable pointer events based on visibility
-            const rankIndex = parseInt(d3.select(this).attr("data-rank-index"));
-            d3.select(this).style("pointer-events", roleRankIndices.has(rankIndex) ? "all" : "none");
-        });
-    
-    // Show rank connectors only for this role
-    svg.selectAll(".rank-connector")
-        .transition()
-        .duration(200)
-        .style("opacity", function() {
-            const rankIndex = parseInt(d3.select(this).attr("data-rank-index"));
-            return roleRankIndices.has(rankIndex) ? 0.6 : 0;
-        });
-    
-    // Highlight connection lines for this role
-    svg.selectAll(".connection-line")
-        .transition()
-        .duration(200)
-        .attr("stroke-opacity", function() {
-            const lineRole = d3.select(this).attr("data-role");
-            return lineRole === roleName ? 0.8 : 0.05;
-        })
-        .attr("stroke-width", function() {
-            const lineRole = d3.select(this).attr("data-role");
-            return lineRole === roleName ? 2.5 : SLOPE_CHART_CONSTANTS.lineWidth;
-        });
+    highlightLeftItem(svg, roleName, ranks, 'company');
 }
 
 /**
@@ -100,8 +116,8 @@ function highlightRole(svg, roleName, ranks) {
 function resetHighlight(svg) {
     const c = SLOPE_CHART_CONSTANTS;
     
-    // Reset all role dots
-    svg.selectAll(".role-dot")
+    // Reset all left dots
+    svg.selectAll(".left-dot")
         .transition()
         .duration(200)
         .style("opacity", 1);
@@ -118,8 +134,8 @@ function resetHighlight(svg) {
         .duration(200)
         .style("opacity", 0.4);
     
-    // Reset all rank dots
-    svg.selectAll(".rank-dot")
+    // Reset all right dots
+    svg.selectAll(".right-dot")
         .transition()
         .duration(200)
         .style("opacity", 1);

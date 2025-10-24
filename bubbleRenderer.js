@@ -19,7 +19,7 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
     
     // Prepare bubble data with initial positions
     const roleBubbleData = roles.map((role) => {
-        const text = formatRoleName(role.name);
+        const text = role.displayName ? role.displayName : formatRoleName(role.name);
         
         // Create temporary text element to measure actual width
         const tempText = svg.append("text")
@@ -82,6 +82,11 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
         // Add event handlers
         bubbleGroup
             .on("click", (event) => handlers.onClick(event, role))
+            .on("dblclick", (event) => {
+                if (handlers.onDblClick) {
+                    handlers.onDblClick(event, role);
+                }
+            })
             .on("mouseenter", (event) => {
                 handlers.onMouseEnter(event, role);
                 showRoleTooltip(role, event.clientX, event.clientY);
@@ -119,7 +124,7 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
  * @param {Function} roleColorScale - D3 color scale for roles
  * @param {number} rightX - X position of the rank line
  */
-function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
+function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX, viewMode = 'company') {
     const c = SLOPE_CHART_CONSTANTS;
     const bubbleHeight = c.bubbleHeight;
     const bubblePadding = c.bubblePadding;
@@ -142,11 +147,14 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
         const bubbleY = dotY;
         const rankBubbleX = rankBubbleLeftEdge;
         
+        // Get the appropriate grouping key based on view mode
+        const groupKey = viewMode === 'company' ? rank.roleName : rank.companyName;
+        
         // Draw bubble group
         const bubbleGroup = svg.append("g")
             .attr("class", "rank-label-bubble")
             .attr("data-rank-index", idx)
-            .attr("data-role-name", rank.roleName)
+            .attr("data-group-key", groupKey)
             .attr("data-original-rect-y", bubbleY - bubbleHeight / 2)
             .attr("data-original-text-y", bubbleY)
             .style("opacity", 0)
@@ -160,7 +168,7 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
             .attr("height", bubbleHeight)
             .attr("rx", 8)
             .attr("fill", "#2a2a2a")
-            .attr("stroke", roleColorScale(rank.roleName))
+            .attr("stroke", roleColorScale(groupKey))
             .attr("stroke-width", 1.5);
         
         bubbleGroup.append("text")
