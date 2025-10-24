@@ -153,11 +153,15 @@ class SlopeChart {
             
             return {
                 name: roleName,
+                companyName: this.selectedCompany,
+                companyDisplayName: this.companyNameMap[this.selectedCompany] || this.selectedCompany,
                 avgPay: d3.mean(validRows, d => +d["Total Pay"]),
                 avgBase: d3.mean(validRows, d => +d["Base Pay"]),
                 avgStock: d3.mean(validRows, d => +d["Stock"]),
                 avgBonus: d3.mean(validRows, d => +d["Bonus"]),
                 ranks: rows.map(row => ({
+                    companyName: this.selectedCompany,
+                    companyDisplayName: this.companyNameMap[this.selectedCompany] || this.selectedCompany,
                     roleName: roleName,
                     rankName: row["Role Rank Name"],
                     rank: +row["Role Rank"],
@@ -208,6 +212,7 @@ class SlopeChart {
             return {
                 name: ticker,
                 displayName: companyDisplayName,
+                roleName: this.selectedRole,
                 avgPay: d3.mean(validRows, d => +d["Total Pay"]),
                 avgBase: d3.mean(validRows, d => +d["Base Pay"]),
                 avgStock: d3.mean(validRows, d => +d["Stock"]),
@@ -215,6 +220,7 @@ class SlopeChart {
                 ranks: rows.map(row => ({
                     companyName: ticker,
                     companyDisplayName: companyDisplayName,
+                    roleName: this.selectedRole,
                     rankName: row["Role Rank Name"],
                     rank: +row["Role Rank"],
                     totalPay: +row["Total Pay"],
@@ -256,6 +262,13 @@ class SlopeChart {
         
         const c = SLOPE_CHART_CONSTANTS;
         
+        // Calculate vertical offset to center the chart
+        // Total content height from title top (22) to instructional text bottom
+        const titleTop = 22;
+        const instructionalTextBottom = this.height - c.bottomMargin + 40 + c.instructionalTextLineSpacing + 5;
+        const totalContentHeight = instructionalTextBottom - titleTop;
+        const verticalOffset = (this.height - totalContentHeight) / 2 - titleTop;
+        
         // Calculate the width needed for the chart (30% wider)
         const chartWidth = this.width * 0.91; // 0.7 * 1.3 = 0.91
         const chartHeight = this.height - c.topMargin - c.bottomMargin;
@@ -265,7 +278,8 @@ class SlopeChart {
         const leftX = chartCenterX - chartWidth / 2 + c.leftMargin;
         const rightX = chartCenterX + chartWidth / 2 - c.rightMargin;
         
-        // Calculate available height for plotting
+        // Calculate available height for plotting (adjusted for vertical centering)
+        const adjustedTopMargin = c.topMargin + verticalOffset;
         const plotHeight = this.height - c.topMargin - c.bottomMargin;
         
         // Create a unified scale for both left and right items
@@ -275,19 +289,19 @@ class SlopeChart {
         
         const payScale = d3.scaleLinear()
             .domain([0, maxPay])
-            .range([c.topMargin + plotHeight, c.topMargin]);
+            .range([adjustedTopMargin + plotHeight, adjustedTopMargin]);
         
         const leftScale = payScale;
         const rightScale = payScale;
         
         // Draw vertical lines
-        this.drawVerticalLines(leftX, rightX, c);
+        this.drawVerticalLines(leftX, rightX, c, verticalOffset);
         
         // Draw axis and grid
-        this.drawAxisAndGrid(payScale, leftX, rightX, c);
+        this.drawAxisAndGrid(payScale, leftX, rightX, c, verticalOffset);
         
         // Draw titles
-        this.drawTitles(leftX, rightX, title, viewMode, c, animateTitle);
+        this.drawTitles(leftX, rightX, title, viewMode, c, animateTitle, verticalOffset);
         
         // Draw rank distribution
         this.drawRankDistribution(rightItems, rightScale, rightX, c);
@@ -304,6 +318,9 @@ class SlopeChart {
         // Render bubbles
         this.renderBubbles(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode);
         
+        // Draw instructional text at the bottom
+        this.drawInstructionalText(leftX, viewMode, c, verticalOffset);
+        
         // Add click handler to SVG background to unlock
         this.svg.on("click", () => {
             if (this.lockedItem) {
@@ -313,25 +330,25 @@ class SlopeChart {
         });
     }
 
-    drawVerticalLines(leftX, rightX, c) {
+    drawVerticalLines(leftX, rightX, c, verticalOffset = 0) {
         this.svg.append("line")
             .attr("x1", leftX)
-            .attr("y1", c.topMargin)
+            .attr("y1", c.topMargin + verticalOffset)
             .attr("x2", leftX)
-            .attr("y2", this.height - c.bottomMargin)
+            .attr("y2", this.height - c.bottomMargin + verticalOffset)
             .attr("stroke", "#ccc")
             .attr("stroke-width", 2);
         
         this.svg.append("line")
             .attr("x1", rightX)
-            .attr("y1", c.topMargin)
+            .attr("y1", c.topMargin + verticalOffset)
             .attr("x2", rightX)
-            .attr("y2", this.height - c.bottomMargin)
+            .attr("y2", this.height - c.bottomMargin + verticalOffset)
             .attr("stroke", "#ccc")
             .attr("stroke-width", 2);
     }
 
-    drawAxisAndGrid(payScale, leftX, rightX, c) {
+    drawAxisAndGrid(payScale, leftX, rightX, c, verticalOffset = 0) {
         // Create axis
         const yAxis = d3.axisLeft(payScale)
             .ticks(10)
@@ -390,22 +407,43 @@ class SlopeChart {
             .style("stroke-width", 1);
     }
 
-    drawTitles(leftX, rightX, title, viewMode, c, animateTitle = false) {
-        const leftLabel = viewMode === 'company' ? 'Roles (Avg Comp)' : 'Companies (Avg Comp)';
+    drawTitles(leftX, rightX, title, viewMode, c, animateTitle = false, verticalOffset = 0) {
         const rightLabel = 'Ranks (Total Comp)';
         
-        this.svg.append("text")
-            .attr("x", leftX)
-            .attr("y", c.topMargin - 30)
-            .attr("text-anchor", "middle")
-            .attr("font-size", c.titleFontSize)
-            .attr("font-weight", "bold")
-            .attr("fill", "#e0e0e0")
-            .text(leftLabel);
+        // Handle left label with potential wrapping for role view
+        if (viewMode === 'company') {
+            this.svg.append("text")
+                .attr("x", leftX)
+                .attr("y", c.topMargin - 30 + verticalOffset)
+                .attr("text-anchor", "middle")
+                .attr("font-size", c.titleFontSize)
+                .attr("font-weight", "bold")
+                .attr("fill", "#e0e0e0")
+                .text('Roles (Avg Comp)');
+        } else {
+            // Role view: display "Top 10 Companies (Avg Comp)" on two lines
+            this.svg.append("text")
+                .attr("x", leftX)
+                .attr("y", c.topMargin - 38 + verticalOffset)
+                .attr("text-anchor", "middle")
+                .attr("font-size", c.titleFontSize)
+                .attr("font-weight", "bold")
+                .attr("fill", "#e0e0e0")
+                .text('Top 10 Companies');
+            
+            this.svg.append("text")
+                .attr("x", leftX)
+                .attr("y", c.topMargin - 20 + verticalOffset)
+                .attr("text-anchor", "middle")
+                .attr("font-size", c.titleFontSize)
+                .attr("font-weight", "bold")
+                .attr("fill", "#e0e0e0")
+                .text('(Avg Comp)');
+        }
         
         this.svg.append("text")
             .attr("x", rightX)
-            .attr("y", c.topMargin - 30)
+            .attr("y", c.topMargin - 30 + verticalOffset)
             .attr("text-anchor", "middle")
             .attr("font-size", c.titleFontSize)
             .attr("font-weight", "bold")
@@ -415,39 +453,53 @@ class SlopeChart {
         // Calculate the center axis position
         const axisX = (leftX + rightX) / 2;
         
-        // If we should animate the title and have a source, animate it
+        // Draw the main chart title (static)
+        const mainTitleY = 22 + verticalOffset;
+        const subtitleY = mainTitleY + c.chartTitleSpacing;
+        
+        this.svg.append("text")
+            .attr("class", "chart-main-title")
+            .attr("x", axisX)
+            .attr("y", mainTitleY)
+            .attr("text-anchor", "middle")
+            .attr("font-size", c.chartMainTitleFontSize)
+            .attr("font-weight", "bold")
+            .attr("fill", "#e0e0e0")
+            .text(c.chartMainTitle);
+        
+        // If we should animate the subtitle and have a source, animate it
         if (animateTitle && this.titleAnimationSource) {
             const source = this.titleAnimationSource;
             
-            // Create animated text that moves from source to title position
+            // Create animated text that moves from source to subtitle position
             this.svg.append("text")
                 .attr("class", "animated-title")
                 .attr("x", source.x)
                 .attr("y", source.y)
                 .attr("text-anchor", "middle")
                 .attr("font-size", c.bubbleFontSize)
-                .attr("font-weight", "bold")
-                .attr("fill", "#e0e0e0")
+                .attr("font-weight", "normal")
+                .attr("fill", "#bbb")
                 .text(source.text)
                 .transition()
                 .duration(600)
                 .attr("x", axisX)
-                .attr("y", 30)
-                .attr("font-size", 24)
+                .attr("y", subtitleY)
+                .attr("font-size", c.chartSubtitleFontSize)
                 .on("end", function() {
                     // Remove the animated text
                     d3.select(this).remove();
                 });
             
-            // Create the final title (hidden initially, will appear after animation)
+            // Create the final subtitle (hidden initially, will appear after animation)
             this.svg.append("text")
-                .attr("class", "main-title")
+                .attr("class", "chart-subtitle")
                 .attr("x", axisX)
-                .attr("y", 30)
+                .attr("y", subtitleY)
                 .attr("text-anchor", "middle")
-                .attr("font-size", 24)
-                .attr("font-weight", "bold")
-                .attr("fill", "#e0e0e0")
+                .attr("font-size", c.chartSubtitleFontSize)
+                .attr("font-weight", "normal")
+                .attr("fill", "#bbb")
                 .style("opacity", 0)
                 .text(title)
                 .transition()
@@ -458,17 +510,47 @@ class SlopeChart {
             // Clear the animation source after using it
             this.titleAnimationSource = null;
         } else {
-            // No animation, just draw the title normally
+            // No animation, just draw the subtitle normally
             this.svg.append("text")
-                .attr("class", "main-title")
+                .attr("class", "chart-subtitle")
                 .attr("x", axisX)
-                .attr("y", 30)
+                .attr("y", subtitleY)
                 .attr("text-anchor", "middle")
-                .attr("font-size", 24)
-                .attr("font-weight", "bold")
-                .attr("fill", "#e0e0e0")
+                .attr("font-size", c.chartSubtitleFontSize)
+                .attr("font-weight", "normal")
+                .attr("fill", "#bbb")
                 .text(title);
         }
+    }
+
+    drawInstructionalText(leftX, viewMode, c, verticalOffset = 0) {
+        const bottomY = this.height - c.bottomMargin + 40 + verticalOffset;
+        
+        // Get appropriate text based on view mode
+        const line1Text = viewMode === 'company' ? c.instructionalTextLine1Company : c.instructionalTextLine1Role;
+        const line2Text = viewMode === 'company' ? c.instructionalTextLine2Company : c.instructionalTextLine2Role;
+        
+        // First line
+        this.svg.append("text")
+            .attr("class", "instructional-text")
+            .attr("x", leftX)
+            .attr("y", bottomY)
+            .attr("text-anchor", "start")
+            .attr("font-size", c.instructionalTextFontSize)
+            .attr("font-style", "italic")
+            .attr("fill", "#999")
+            .text(line1Text);
+        
+        // Second line
+        this.svg.append("text")
+            .attr("class", "instructional-text")
+            .attr("x", leftX)
+            .attr("y", bottomY + c.instructionalTextLineSpacing)
+            .attr("text-anchor", "start")
+            .attr("font-size", c.instructionalTextFontSize)
+            .attr("font-style", "italic")
+            .attr("fill", "#999")
+            .text(line2Text);
     }
 
     drawRankDistribution(ranks, rankScale, rightX, c) {

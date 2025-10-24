@@ -20,7 +20,10 @@ body {
 }
 
 .main-title,
-.animated-title {
+.animated-title,
+.chart-main-title,
+.chart-subtitle,
+.instructional-text {
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -92,22 +95,37 @@ body {
     margin-bottom: 2px;
     color: #e0e0e0;
     white-space: nowrap;
+    text-align: center;
 }
 
 #tooltip .tooltip-subtitle {
     font-style: italic;
-    font-size: 13px;
+    font-size: 12px;
     color: #999;
+    margin-bottom: 3px;
+    text-align: center;
+}
+
+#tooltip .tooltip-subtitle:last-of-type {
     margin-bottom: 10px;
 }
 
 #tooltip .tooltip-row {
     display: grid;
-    grid-template-columns: 80px auto auto;
-    gap: 8px;
+    grid-template-columns: 105px auto;
+    gap: 12px;
     align-items: baseline;
     margin: 5px 0;
     color: #aaa;
+}
+
+#tooltip .legend-box {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    border-radius: 2px;
+    vertical-align: middle;
 }
 
 #tooltip .tooltip-row .label {
@@ -126,4 +144,19 @@ body {
     font-size: 11px;
     text-align: left;
     min-width: 50px;
+}
+
+#tooltip .tooltip-data {
+    margin-bottom: 10px;
+    display: inline-block;
+    text-align: left;
+}
+
+#tooltip .tooltip-chart {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#tooltip {
+    text-align: center;
 }
