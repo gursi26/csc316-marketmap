@@ -17,9 +17,9 @@
 
   <main class="layout">
     <aside class="sidebar">
-      <div class="control">
-        <label for="roleSelect">Role name</label>
-        <select id="roleSelect"></select>
+      <div class="instructions">
+        <p>Click a state on the map to zoom in</p>
+        <p>Click a company building to learn more</p>
       </div>
 
       <fieldset class="control">
@@ -27,6 +27,11 @@
         <label><input type="radio" name="heightMetric" value="salary" checked> Entry-level salary</label>
         <label><input type="radio" name="heightMetric" value="return"> 2022→2025 Return (%)</label>
       </fieldset>
+
+      <div class="control">
+        <label for="roleSelect">Role name</label>
+        <select id="roleSelect"></select>
+      </div>
 
       <fieldset class="control">
         <legend>Color metric</legend>
@@ -36,6 +41,13 @@
 
       <div class="legend" id="legendColor">
         <!-- created/updated by JS -->
+      </div>
+
+      <div class="company-list-section">
+        <div class="company-list-header">Companies</div>
+        <div id="companyList" class="company-list">
+          <!-- populated by JS -->
+        </div>
       </div>
     </aside>
 

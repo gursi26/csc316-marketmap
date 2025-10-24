@@ -25,7 +25,7 @@
         <div id="cp-title" class="map-popup-title"></div>
         <div class="map-popup-actions">
           <button id="cp-details" class="btn-primary">Details</button>
-          <button id="cp-roles" class="btn-primary">Roles</button>
+          <button id="cp-roles" class="btn-primary">Pay Progression</button>
         </div>
       </div>
     `;
@@ -76,6 +76,7 @@
   const roleSelect   = d3.select("#roleSelect");
   const heightRadios = d3.selectAll("input[name=heightMetric]");
   const colorRadios  = d3.selectAll("input[name=colorMetric]");
+  const companyListEl = d3.select("#companyList");
 
   // Data
   let companies = [], salaries = [], financials = [], prices = [];
@@ -83,6 +84,9 @@
   // Zoom state
   let zoomTarget = null;   // {type:'state', id}
   let currentZoom = 1;     // scale factor applied to gRoot; buildings counter-scale by 1/currentZoom
+  
+  // Filter state
+  let selectedCompanyTicker = null; // ticker of filtered company, or null for no filter
 
   // Load
   Promise.all([
@@ -177,24 +181,50 @@
 
   // ---- UI ----
   function setupUI(){
-    // role options
-    const roles = Array.from(new Set(
+    // role options: count non-empty Pay data per role, sort by count descending
+    const roleCounts = new Map();
+    salaries.forEach(s => {
+      const roleName = pick(s, ["Role name","rolename","role"]);
+      const pay = pick(s, ["Total pay","totalpay","compensation","pay"]);
+      if (!roleName) return;
+      const payVal = pay ? String(pay).trim() : "";
+      if (payVal && payVal !== "" && !isNaN(+payVal) && +payVal > 0) {
+        roleCounts.set(roleName, (roleCounts.get(roleName) || 0) + 1);
+      }
+    });
+    
+    // Get unique roles from rank 1 entries, sort by data count
+    const rank1Roles = Array.from(new Set(
       salaries.filter(s => String(pick(s, ["Role rank","rolerank","rank"])).trim()==="1")
               .map(s => pick(s, ["Role name","rolename","role"]))
               .filter(Boolean)
-    )).sort((a,b)=>a.localeCompare(b));
+    ));
+    
+    const rolesSorted = rank1Roles.sort((a,b) => {
+      const countA = roleCounts.get(a) || 0;
+      const countB = roleCounts.get(b) || 0;
+      return countB - countA; // descending
+    });
 
-    roleSelect.selectAll("option").data(roles).join("option")
-      .attr("value", d=>d).text(d=>d);
+    // Format role names: remove hyphens, capitalize properly
+    const formatRoleName = (role) => {
+      return role.split('-')
+                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                 .join(' ');
+    };
+
+    roleSelect.selectAll("option").data(rolesSorted).join("option")
+      .attr("value", d=>d).text(d=>formatRoleName(d));
 
     // listeners
-    roleSelect.on("change", () => { colorStates(); renderBuildings(); renderForeign(); });
-    heightRadios.on("change", () => { toggleRole(); colorStates(); renderBuildings(); renderForeign(); updateLegend(); });
+    roleSelect.on("change", () => { colorStates(); renderBuildings(); renderForeign(); updateCompanyList(); });
+    heightRadios.on("change", () => { toggleRole(); colorStates(); renderBuildings(); renderForeign(); updateLegend(); updateCompanyList(); });
     colorRadios.on("change", () => { renderBuildings(); renderForeign(); updateLegend(); });
 
     toggleRole();
     buildLegendSkeleton();
     updateLegend();
+    updateCompanyList();
   }
 
   function toggleRole(){
@@ -223,6 +253,64 @@
       L.select(".tick-mid").text("50");
       L.select(".tick-right").text("100");
     }
+  }
+
+  // ---- Company List ----
+  function updateCompanyList(){
+    const roleName = roleSelect.node().value;
+    const hMetric = d3.select('input[name=heightMetric]:checked').node().value;
+
+    // Get companies with valid data for current metric
+    const companiesWithData = companies.map(c => {
+      const hVal = hMetric==="salary" ? getRank1Salary(c.Ticker, roleName) : getReturn2225(c.Ticker);
+      return { ...c, hVal };
+    }).filter(c => c.hVal != null && isFinite(c.hVal));
+
+    // Sort by height metric (descending)
+    companiesWithData.sort((a,b) => b.hVal - a.hVal);
+
+    // Render list
+    const items = companyListEl.selectAll(".company-list-item")
+      .data(companiesWithData, d => d.Ticker);
+
+    const enter = items.enter()
+      .append("div")
+      .attr("class", "company-list-item");
+
+    enter.append("span").attr("class", "company-name");
+    enter.append("span").attr("class", "company-value");
+
+    const all = enter.merge(items);
+
+    all.classed("active", d => d.Ticker === selectedCompanyTicker);
+    
+    all.select(".company-name").text(d => d.Name || d.Ticker);
+    
+    all.select(".company-value").text(d => {
+      if (hMetric === "salary") {
+        return "$" + d3.format(",")(Math.round(d.hVal));
+      } else {
+        return d3.format(".1f")(d.hVal) + "%";
+      }
+    });
+
+    all.on("click", function(event, d){
+      event.stopPropagation();
+      // Toggle selection: if same company, deselect; otherwise select
+      if (selectedCompanyTicker === d.Ticker) {
+        selectedCompanyTicker = null;
+      } else {
+        selectedCompanyTicker = d.Ticker;
+      }
+      updateCompanyList();
+      renderBuildings();
+      renderForeign();
+    });
+
+    // Reorder DOM elements to match the sorted data order
+    all.order();
+
+    items.exit().remove();
   }
 
   // ---- Render orchestrators ----
@@ -285,7 +373,8 @@
       const widthPx = (mc && mc>0) ? widthScale(Math.log(mc)) : 6; // width by log market cap
       const hVal = hMetric==="salary" ? getRank1Salary(c.Ticker, roleName) : getReturn2225(c.Ticker);
       return { ...c, px: proj?proj[0]:null, py: proj?proj[1]:null, widthPx, hVal };
-    }).filter(d=>d.px!=null && d.py!=null && d.hVal!=null);
+    }).filter(d=>d.px!=null && d.py!=null && d.hVal!=null)
+      .filter(d => !selectedCompanyTicker || d.Ticker === selectedCompanyTicker); // filter by selection
 
     if (hMetric==="salary"){
       const [mn,mx] = d3.extent(data, d=>d.hVal);
@@ -421,7 +510,8 @@
 
   // ---- Foreign (country circles + mini buildings) ----
   function renderForeign(){
-    const foreign = companies.filter(c => (c.Country||"").trim().toLowerCase() !== "united states" && (c.Country||"").trim()!=="");
+    const foreign = companies.filter(c => (c.Country||"").trim().toLowerCase() !== "united states" && (c.Country||"").trim()!=="")
+      .filter(c => !selectedCompanyTicker || c.Ticker === selectedCompanyTicker); // filter by selection
     const byCountry = d3.group(foreign, d=>d.Country);
     const countries = Array.from(byCountry.keys()).sort();
     const centerX = 1000, startY = 60, vSpacing = 110;
@@ -590,6 +680,13 @@
   // Click empty space to reset
   svg.on("click", function(){
     if (zoomTarget) resetView();
+    // Also reset company filter
+    if (selectedCompanyTicker) {
+      selectedCompanyTicker = null;
+      updateCompanyList();
+      renderBuildings();
+      renderForeign();
+    }
   });
 
   // hide popup when clicking outside

@@ -22,8 +22,24 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: ui-sans-seri
 .sidebar{ padding:16px; border-right:1px solid var(--grid); background:var(--panel) }
 .viz{ position:relative; overflow:hidden; background:linear-gradient(180deg,#0b1020 0%, #0c1225 100%) }
 
+.instructions{ 
+  margin-bottom:20px; 
+  padding:12px; 
+  background:var(--panel-2); 
+  border-radius:10px; 
+  border:1px solid var(--grid);
+}
+.instructions p{ 
+  margin:0; 
+  font-size:13px; 
+  color:var(--muted); 
+  line-height:1.6;
+}
+
 .control{ margin-bottom:16px }
 fieldset{ border:1px solid var(--grid); padding:8px 10px; border-radius:10px; background:var(--panel-2) }
+fieldset label{ display:block; margin-bottom:8px }
+fieldset label:last-child{ margin-bottom:0 }
 label, legend{ font-size:14px }
 select{ width:100%; margin-top:6px; padding:.45rem .6rem; border-radius:10px; border:1px solid var(--grid); background:#0c1430; color:var(--fg) }
 input[type=radio]{ cursor:pointer }
@@ -82,6 +98,36 @@ button{ font-family:inherit }
 .legend .caption{ color:var(--muted); font-size:12px; margin-bottom:6px }
 .legend .bar{ height:10px; border-radius:6px; background:linear-gradient(90deg,#d64d4d,#f0d34a,#36b37e) }
 .legend .ticks{ display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-top:4px }
+
+/* Company List */
+.company-list-section{ margin-top:20px }
+.company-list-header{ font-size:14px; font-weight:600; color:var(--fg); margin-bottom:8px }
+.company-list{ 
+  max-height:300px; 
+  overflow-y:auto; 
+  border:1px solid var(--grid); 
+  border-radius:10px; 
+  background:var(--panel-2);
+  scrollbar-width:thin;
+  scrollbar-color:var(--grid) transparent;
+}
+.company-list::-webkit-scrollbar{ width:6px }
+.company-list::-webkit-scrollbar-track{ background:transparent }
+.company-list::-webkit-scrollbar-thumb{ background:var(--grid); border-radius:3px }
+.company-list-item{ 
+  padding:8px 10px; 
+  cursor:pointer; 
+  border-bottom:1px solid var(--grid);
+  transition:background .15s ease;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.company-list-item:last-child{ border-bottom:none }
+.company-list-item:hover{ background:rgba(94,168,255,0.1) }
+.company-list-item.active{ background:rgba(94,168,255,0.2); border-left:3px solid var(--accent) }
+.company-name{ font-size:13px; color:var(--fg); font-weight:500 }
+.company-value{ font-size:12px; color:var(--muted); font-weight:600 }
 
 /* Tooltip (closer to cursor) */
 .tooltip{
