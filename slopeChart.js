@@ -8,6 +8,7 @@ class SlopeChart {
         this.selectedRole = null;
         this.lockedItem = null; // Track if a role/company is locked/frozen
         this.titleAnimationSource = null; // Track the source position for title animation
+        this.previousDistributionPath = null; // Track previous distribution for smooth transitions
         this.setupRoleColors();
         this.setupCompanyNameMap();
         this.initVis();
@@ -304,7 +305,7 @@ class SlopeChart {
         this.drawTitles(leftX, rightX, title, viewMode, c, animateTitle, verticalOffset);
         
         // Draw rank distribution
-        this.drawRankDistribution(rightItems, rightScale, rightX, c);
+        this.drawRankDistribution(rightItems, rightScale, rightX, c, animateTitle);
         
         // Draw connecting lines
         this.drawConnectionLines(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode, c);
@@ -553,7 +554,7 @@ class SlopeChart {
             .text(line2Text);
     }
 
-    drawRankDistribution(ranks, rankScale, rightX, c) {
+    drawRankDistribution(ranks, rankScale, rightX, c, animate = false) {
         // Extract total pay values
         const payValues = ranks.map(d => d.totalPay);
         
@@ -582,15 +583,29 @@ class SlopeChart {
             .y(d => rankScale(d[0])) // Vertical position based on pay
             .curve(d3.curveBasis);
         
+        // Generate the new path
+        const newPath = area(density);
+        
         // Draw the distribution area
-        this.svg.append("path")
-            .datum(density)
+        const path = this.svg.append("path")
             .attr("class", "rank-distribution")
-            .attr("d", area)
             .attr("fill", "#4A90E2")
             .attr("fill-opacity", 0.3)
             .attr("stroke", "#6BA8E5")
             .attr("stroke-width", 1.5);
+        
+        // If we should animate and have a previous path, transition from it
+        if (animate && this.previousDistributionPath) {
+            path.attr("d", this.previousDistributionPath)
+                .transition()
+                .duration(600)
+                .attr("d", newPath);
+        } else {
+            path.attr("d", newPath);
+        }
+        
+        // Store this path for next transition
+        this.previousDistributionPath = newPath;
     }
 
     drawConnectionLines(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode, c) {
