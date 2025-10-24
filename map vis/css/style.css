@@ -6,6 +6,9 @@
   --muted:#9aa7c7;
   --grid:#2a3357;
   --tooltip-bg: rgba(9,12,24,.94);
+  --accent: #5ea8ff;
+  --button-bg: linear-gradient(180deg,#2b7a4a,#1f5d39);
+  --button-fg: #042;
 }
 
 *{ box-sizing:border-box }
@@ -24,6 +27,44 @@ fieldset{ border:1px solid var(--grid); padding:8px 10px; border-radius:10px; ba
 label, legend{ font-size:14px }
 select{ width:100%; margin-top:6px; padding:.45rem .6rem; border-radius:10px; border:1px solid var(--grid); background:#0c1430; color:var(--fg) }
 input[type=radio]{ cursor:pointer }
+
+/* Buttons (used by map popup) */
+button{ font-family:inherit }
+.btn-primary{ background:var(--button-bg); color:var(--button-fg); padding:6px 10px; border-radius:6px; border:0; cursor:pointer }
+.btn-secondary{ background:#111827; color:var(--fg); padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,.04); cursor:pointer }
+
+/* Map popup (company options) */
+.map-popup{
+  position:absolute;
+  display:block; /* controlled via inline style in JS when showing/hiding */
+  background: linear-gradient(180deg, rgba(12,18,37,0.98), rgba(8,12,24,0.98));
+  color:var(--fg);
+  border:1px solid rgba(255,255,255,0.04);
+  padding:8px;
+  border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+  z-index:99999;
+  min-width:180px;
+  pointer-events:auto;
+}
+.map-popup:after{
+  /* small caret/arrow pointing to the anchor point */
+  content:"";
+  position:absolute;
+  left:12px;
+  top:-8px;
+  width:0;height:0;
+  border-left:7px solid transparent;
+  border-right:7px solid transparent;
+  border-bottom:8px solid rgba(12,18,37,0.98);
+}
+.map-popup-inner{ display:flex; flex-direction:column; gap:8px }
+.map-popup-title{ font-weight:700; font-size:13px; color:var(--fg); }
+.map-popup-actions{ display:flex; gap:8px }
+.map-popup .btn-primary{ background: linear-gradient(180deg, var(--accent), #2a73d6); color:#042; padding:8px 10px; border-radius:8px; }
+.map-popup .btn-secondary{ background:transparent; color:var(--fg); border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px }
+.map-popup .btn-primary:active, .map-popup .btn-secondary:active{ transform:translateY(1px) }
+.map-popup [id^="cp-"]{ font-size:13px }
 
 #chart{ width:100%; height:100% }
 .state{ fill:#1a2447; stroke:#2a3357; stroke-width:.8; cursor:pointer }

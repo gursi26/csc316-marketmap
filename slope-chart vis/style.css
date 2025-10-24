@@ -1,0 +1,178 @@
+:root{
+    --bg:#0b1020;
+    --panel:#101833;
+    --fg:#e6eefc;
+    --muted:#9aa7c7;
+    --accent:#5ea8ff;
+    --tooltip-bg: rgba(9,12,24,.94);
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    margin: 0; padding: 0;
+    background: linear-gradient(180deg,var(--bg),#070812);
+    color: var(--fg); overflow:hidden;
+}
+
+#canvas {
+    display: block;
+}
+
+.role-label-bubble text,
+.rank-label-bubble text {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.main-title,
+.animated-title,
+.chart-main-title,
+.chart-subtitle,
+.instructional-text {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#controls {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: rgba(16,24,51,0.7);
+    padding: 8px 10px;
+    border: 1px solid rgba(255,255,255,0.03);
+    border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    z-index: 1000;
+    font-size: 12px;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s;
+    max-width: 240px;
+}
+
+/* Back to map button */
+.back-to-map{
+    position:fixed; top:12px; right:12px; z-index:99999;
+    background: rgba(10,14,30,0.95); color: var(--fg); border:1px solid rgba(255,255,255,0.06);
+    padding:10px 12px; border-radius:8px; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,0.65); text-decoration:none; display:inline-block;
+    pointer-events: auto;
+}
+.back-to-map:hover{ transform:translateY(-1px); }
+.back-to-map:focus{ outline: 3px solid rgba(94,168,255,0.22); outline-offset: 3px }
+
+#controls:hover {
+    background: rgba(42, 42, 42, 0.95);
+}
+
+#controls label {
+    font-weight: bold;
+    margin-right: 6px;
+    font-size: 11px;
+    color: #e0e0e0;
+}
+
+#view-mode-select,
+#item-select,
+#industry-select {
+    padding: 6px 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 4px; cursor:pointer; width:160px; flex:0 0 160px;
+    background: #0e1530; color:var(--fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* Make control rows consistent spacing and keep label + control on one line */
+#controls .control-row {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Ensure labels do not overflow and are kept to a single line */
+#controls .control-row label {
+    flex: 0 0 auto;
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#tooltip { position: fixed; background: var(--tooltip-bg); border:1px solid rgba(255,255,255,0.04); border-radius:8px; padding:12px 14px; box-shadow:0 6px 18px rgba(0,0,0,0.6); pointer-events:none; opacity:0; transition:opacity .18s; font-size:13px; z-index:1000; width:fit-content }
+
+#tooltip.visible {
+    opacity: 1;
+}
+
+#tooltip .tooltip-title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 2px;
+    color: #e0e0e0;
+    white-space: nowrap;
+    text-align: center;
+}
+
+#tooltip .tooltip-subtitle {
+    font-style: italic;
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 3px;
+    text-align: center;
+}
+
+#tooltip .tooltip-subtitle:last-of-type {
+    margin-bottom: 10px;
+}
+
+#tooltip .tooltip-row {
+    display: grid;
+    grid-template-columns: 105px auto;
+    gap: 12px;
+    align-items: baseline;
+    margin: 5px 0;
+    color: #aaa;
+}
+
+#tooltip .legend-box {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+#tooltip .tooltip-row .label {
+    font-weight: 500;
+    text-align: left;
+}
+
+#tooltip .tooltip-row .value {
+    font-weight: bold;
+    color: #e0e0e0;
+    text-align: right;
+}
+
+#tooltip .tooltip-row .percentage {
+    color: #888;
+    font-size: 11px;
+    text-align: left;
+    min-width: 50px;
+}
+
+#tooltip .tooltip-data {
+    margin-bottom: 10px;
+    display: inline-block;
+    text-align: left;
+}
+
+#tooltip .tooltip-chart {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#tooltip {
+    text-align: center;
+}

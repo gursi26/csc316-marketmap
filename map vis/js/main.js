@@ -11,6 +11,62 @@
   const gForeign   = gRoot.append("g").attr("id","gForeign");
   const tooltip    = d3.select("#tooltip");
 
+  // small floating menu for company options
+  let companyPopup = null;
+  function createCompanyPopup(){
+    if (companyPopup) return companyPopup;
+    companyPopup = document.createElement('div');
+    // Use CSS classes so styling is centralized in CSS
+    companyPopup.className = 'map-popup';
+    companyPopup.setAttribute('role', 'dialog');
+    companyPopup.setAttribute('aria-hidden', 'true');
+    companyPopup.innerHTML = `
+      <div class="map-popup-inner">
+        <div id="cp-title" class="map-popup-title"></div>
+        <div class="map-popup-actions">
+          <button id="cp-details" class="btn-primary">Details</button>
+          <button id="cp-roles" class="btn-primary">Roles</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(companyPopup);
+    // ensure it's initially hidden for assistive tech
+    companyPopup.style.display = 'none';
+    return companyPopup;
+  }
+
+  function showCompanyPopup(event, company){
+    const popup = createCompanyPopup();
+    const title = popup.querySelector('#cp-title');
+    const btnDetails = popup.querySelector('#cp-details');
+    const btnRoles = popup.querySelector('#cp-roles');
+    title.textContent = (company.Name || company.Ticker || 'Company');
+
+    // position near mouse
+    const x = (event.pageX || (event.clientX + window.scrollX)) + 8;
+    const y = (event.pageY || (event.clientY + window.scrollY)) + 8;
+    popup.style.left = x + 'px';
+    popup.style.top = y + 'px';
+    popup.style.display = '';
+
+    // remove previous handlers
+    btnDetails.onclick = null; btnRoles.onclick = null;
+
+    btnDetails.onclick = function(ev){
+      ev.stopPropagation();
+      // navigate to scatter-plot index, pass ticker
+      const t = encodeURIComponent(company.Ticker || '');
+      window.location.href = `../scatter-plot%20vis/index.html?ticker=${t}`;
+    };
+    btnRoles.onclick = function(ev){
+      ev.stopPropagation();
+      const t = encodeURIComponent(company.Ticker || '');
+      window.location.href = `../slope-chart%20vis/index.html?ticker=${t}`;
+    };
+  }
+
+  function hideCompanyPopup(){ if (companyPopup) companyPopup.style.display = 'none'; }
+
   const mapW = 900, mapH = 650;
   const projection = d3.geoAlbersUsa().translate([mapW/2, mapH/2]).scale(1200);
   const path = d3.geoPath(projection);
@@ -254,7 +310,19 @@
     const sel = gBuildings.selectAll("g.building").data(data, d=>d.Ticker);
     const enter = sel.enter().append("g").attr("class","building")
       .on("mousemove", (ev,d)=> showTip(ev, d, roleName, hMetric))
-      .on("mouseleave", hideTip);
+      .on("mouseleave", hideTip)
+      .on("click", (ev, d) => {
+        // show small popup with options
+        try { showCompanyPopup(ev, d); } catch (e) {}
+        // still postMessage for parent-aware embedding
+        try {
+          const payload = { Ticker: d.Ticker, Name: d.Name, Address: d.Address, State: d.State };
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'companyClick', data: payload }, '*');
+          }
+        } catch (e) {}
+        ev.stopPropagation();
+      });
 
     enter.append("path").attr("class","face-front");
     enter.append("path").attr("class","face-side");
@@ -383,7 +451,17 @@
       const bSel = g.selectAll("g.mini-building").data(d.items, dd=>dd.Ticker);
       const bEnter = bSel.enter().append("g").attr("class","mini-building")
         .on("mousemove", (ev,dd)=> showTip(ev, dd, roleSelect.node().value, d3.select('input[name=heightMetric]:checked').node().value))
-        .on("mouseleave", hideTip);
+        .on("mouseleave", hideTip)
+        .on("click", (ev, dd) => {
+          try { showCompanyPopup(ev, dd); } catch (e) {}
+          try {
+            const payload = { Ticker: dd.Ticker, Name: dd.Name, Address: dd.Address, State: dd.State };
+            if (window.parent && window.parent !== window) {
+              window.parent.postMessage({ type: 'companyClick', data: payload }, '*');
+            }
+          } catch (e) {}
+          ev.stopPropagation();
+        });
 
       bEnter.append("path").attr("class","face-front");
       bEnter.append("path").attr("class","face-side");
@@ -513,6 +591,18 @@
   svg.on("click", function(){
     if (zoomTarget) resetView();
   });
+
+  // hide popup when clicking outside
+  document.addEventListener('click', () => { hideCompanyPopup(); });
+
+  // allow parent to request view reset
+  window.addEventListener('message', (ev) => {
+    const msg = ev && ev.data;
+    if (!msg || !msg.type) return;
+    if (msg.type === 'resetSelection') {
+      try { resetView(); } catch (e) {}
+    }
+  }, false);
 
 })();
 
