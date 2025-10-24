@@ -31,3 +31,64 @@ body {
     cursor: pointer;
     min-width: 80px;
 }
+
+#tooltip {
+    position: fixed;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 13px;
+    z-index: 1000;
+    width: fit-content;
+}
+
+#tooltip.visible {
+    opacity: 1;
+}
+
+#tooltip .tooltip-title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 2px;
+    color: #333;
+    white-space: nowrap;
+}
+
+#tooltip .tooltip-subtitle {
+    font-style: italic;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+#tooltip .tooltip-row {
+    display: grid;
+    grid-template-columns: 80px auto auto;
+    gap: 8px;
+    align-items: baseline;
+    margin: 5px 0;
+    color: #666;
+}
+
+#tooltip .tooltip-row .label {
+    font-weight: 500;
+    text-align: left;
+}
+
+#tooltip .tooltip-row .value {
+    font-weight: bold;
+    color: #333;
+    text-align: right;
+}
+
+#tooltip .tooltip-row .percentage {
+    color: #888;
+    font-size: 11px;
+    text-align: left;
+    min-width: 50px;
+}

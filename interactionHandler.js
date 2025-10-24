@@ -61,6 +61,11 @@ function highlightRole(svg, roleName, ranks) {
         .style("opacity", function() {
             const rankIndex = parseInt(d3.select(this).attr("data-rank-index"));
             return roleRankIndices.has(rankIndex) ? 1 : 0;
+        })
+        .on("end", function() {
+            // Enable/disable pointer events based on visibility
+            const rankIndex = parseInt(d3.select(this).attr("data-rank-index"));
+            d3.select(this).style("pointer-events", roleRankIndices.has(rankIndex) ? "all" : "none");
         });
     
     // Show rank connectors only for this role
@@ -139,7 +144,11 @@ function resetHighlight(svg) {
         // Hide bubble
         bubble.transition()
             .duration(200)
-            .style("opacity", 0);
+            .style("opacity", 0)
+            .on("end", function() {
+                // Disable pointer events when hidden
+                d3.select(this).style("pointer-events", "none");
+            });
     });
     
     // Hide rank connectors and reset paths

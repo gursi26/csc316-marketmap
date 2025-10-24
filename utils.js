@@ -47,3 +47,116 @@ function setupRoleColorScale(allRoles) {
         .range(d3.schemeTableau10.concat(d3.schemePaired));
 }
 
+/**
+ * Formats a number as currency
+ * @param {number} value - The value to format
+ * @returns {string} - Formatted currency string
+ */
+function formatCurrency(value) {
+    if (value >= 1000000) {
+        return `$${(value / 1000000).toFixed(2)}M`;
+    } else if (value >= 1000) {
+        return `$${(value / 1000).toFixed(1)}k`;
+    } else {
+        return `$${value.toFixed(0)}`;
+    }
+}
+
+/**
+ * Shows tooltip with role compensation data
+ * @param {Object} role - Role data object
+ * @param {number} x - X position for tooltip
+ * @param {number} y - Y position for tooltip
+ */
+function showRoleTooltip(role, x, y) {
+    const tooltip = document.getElementById('tooltip');
+    const total = role.avgPay;
+    
+    const html = `
+        <div class="tooltip-title">${formatRoleName(role.name)}</div>
+        <div class="tooltip-row">
+            <span class="label">Total Pay:</span>
+            <span class="value">${formatCurrency(total)}</span>
+        </div>
+        <div class="tooltip-row">
+            <span class="label">Base Pay:</span>
+            <span class="value">${formatCurrency(role.avgBase)}</span>
+            <span class="percentage">(${((role.avgBase / total) * 100).toFixed(1)}%)</span>
+        </div>
+        <div class="tooltip-row">
+            <span class="label">Stock:</span>
+            <span class="value">${formatCurrency(role.avgStock)}</span>
+            <span class="percentage">(${((role.avgStock / total) * 100).toFixed(1)}%)</span>
+        </div>
+        <div class="tooltip-row">
+            <span class="label">Bonus:</span>
+            <span class="value">${formatCurrency(role.avgBonus)}</span>
+            <span class="percentage">(${((role.avgBonus / total) * 100).toFixed(1)}%)</span>
+        </div>
+    `;
+    
+    tooltip.innerHTML = html;
+    tooltip.style.left = `${x + 15}px`;
+    tooltip.style.top = `${y + 15}px`;
+    tooltip.classList.add('visible');
+}
+
+/**
+ * Hides the tooltip
+ */
+function hideTooltip() {
+    const tooltip = document.getElementById('tooltip');
+    tooltip.classList.remove('visible');
+}
+
+/**
+ * Shows tooltip with rank compensation data
+ * @param {Object} rank - Rank data object
+ * @param {number} x - X position for tooltip
+ * @param {number} y - Y position for tooltip
+ */
+function showRankTooltip(rank, x, y) {
+    const tooltip = document.getElementById('tooltip');
+    const total = rank.totalPay;
+    
+    const html = `
+        <div class="tooltip-title">${formatRoleName(rank.roleName)}</div>
+        <div class="tooltip-subtitle">${rank.rankName}</div>
+        <div class="tooltip-row">
+            <span class="label">Total Pay:</span>
+            <span class="value">${formatCurrency(total)}</span>
+        </div>
+        <div class="tooltip-row">
+            <span class="label">Base Pay:</span>
+            <span class="value">${formatCurrency(rank.basePay)}</span>
+            <span class="percentage">(${((rank.basePay / total) * 100).toFixed(1)}%)</span>
+        </div>
+        <div class="tooltip-row">
+            <span class="label">Stock:</span>
+            <span class="value">${formatCurrency(rank.stock)}</span>
+            <span class="percentage">(${((rank.stock / total) * 100).toFixed(1)}%)</span>
+        </div>
+        <div class="tooltip-row">
+            <span class="label">Bonus:</span>
+            <span class="value">${formatCurrency(rank.bonus)}</span>
+            <span class="percentage">(${((rank.bonus / total) * 100).toFixed(1)}%)</span>
+        </div>
+    `;
+    
+    tooltip.innerHTML = html;
+    tooltip.style.left = `${x + 15}px`;
+    tooltip.style.top = `${y + 15}px`;
+    tooltip.classList.add('visible');
+}
+
+/**
+ * Updates tooltip position
+ * @param {number} x - X position
+ * @param {number} y - Y position
+ */
+function updateTooltipPosition(x, y) {
+    const tooltip = document.getElementById('tooltip');
+    tooltip.style.left = `${x + 15}px`;
+    tooltip.style.top = `${y + 15}px`;
+}
+

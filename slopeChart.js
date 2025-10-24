@@ -130,6 +130,9 @@ class SlopeChart {
         // Draw titles
         this.drawTitles(leftX, rightX, company, c);
         
+        // Draw rank distribution
+        this.drawRankDistribution(ranks, rankScale, rightX, c);
+        
         // Draw connecting lines from roles to ranks
         this.drawConnectionLines(roles, ranks, roleScale, rankScale, leftX, rightX, c);
         
@@ -238,6 +241,46 @@ class SlopeChart {
             .text(company);
     }
 
+    drawRankDistribution(ranks, rankScale, rightX, c) {
+        // Extract total pay values
+        const payValues = ranks.map(d => d.totalPay);
+        
+        // Get the axis range (0 to max value on axis)
+        const maxPay = d3.max(payValues);
+        
+        // Create thresholds from 0 to maxPay
+        const thresholds = d3.range(0, maxPay, maxPay / 150);
+        
+        // Calculate bandwidth for kernel density estimation
+        const bandwidth = maxPay / 15;
+        
+        // Calculate density
+        const density = kernelDensityEstimator(kernelGaussian(bandwidth), thresholds)(payValues);
+        
+        // Create scale for density (horizontal extent to the left of rank line)
+        const maxDensity = d3.max(density, d => d[1]);
+        const densityScale = d3.scaleLinear()
+            .domain([0, maxDensity])
+            .range([rightX, rightX - 300]); // Extend 300px to the left for more variation
+        
+        // Create the area generator (rotated - horizontal instead of vertical)
+        const area = d3.area()
+            .x0(rightX) // Right edge (baseline)
+            .x1(d => densityScale(d[1])) // Left extent based on density
+            .y(d => rankScale(d[0])) // Vertical position based on pay
+            .curve(d3.curveBasis);
+        
+        // Draw the distribution area
+        this.svg.append("path")
+            .datum(density)
+            .attr("class", "rank-distribution")
+            .attr("d", area)
+            .attr("fill", "#4A90E2")
+            .attr("fill-opacity", 0.2)
+            .attr("stroke", "#4A90E2")
+            .attr("stroke-width", 1.5);
+    }
+
     drawConnectionLines(roles, ranks, roleScale, rankScale, leftX, rightX, c) {
         roles.forEach(role => {
             const roleY = roleScale(role.avgPay);
@@ -295,11 +338,16 @@ class SlopeChart {
                 if (!this.lockedRole) {
                     highlightRole(this.svg, d.name, this.displayData.ranks);
                 }
+                showRoleTooltip(d, event.clientX, event.clientY);
+            })
+            .on("mousemove", (event) => {
+                updateTooltipPosition(event.clientX, event.clientY);
             })
             .on("mouseleave", () => {
                 if (!this.lockedRole) {
                     resetHighlight(this.svg);
                 }
+                hideTooltip();
             });
     }
 

@@ -12,14 +12,23 @@
  */
 function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handlers) {
     const bubbleHeight = 15;
-    const bubblePadding = 5;
+    const bubblePadding = 8;
     const bubbleMinSpacing = 2;
     const bubbleRightEdge = leftX - 20;
     
     // Prepare bubble data with initial positions
     const roleBubbleData = roles.map((role) => {
         const text = formatRoleName(role.name);
-        const textWidth = text.length * 5;
+        
+        // Create temporary text element to measure actual width
+        const tempText = svg.append("text")
+            .attr("font-size", 10)
+            .text(text)
+            .style("visibility", "hidden");
+        
+        const textWidth = tempText.node().getBBox().width;
+        tempText.remove();
+        
         const bubbleWidth = textWidth + bubblePadding * 2;
         
         return {
@@ -71,8 +80,17 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
         // Add event handlers
         bubbleGroup
             .on("click", (event) => handlers.onClick(event, role))
-            .on("mouseenter", (event) => handlers.onMouseEnter(event, role))
-            .on("mouseleave", () => handlers.onMouseLeave());
+            .on("mouseenter", (event) => {
+                handlers.onMouseEnter(event, role);
+                showRoleTooltip(role, event.clientX, event.clientY);
+            })
+            .on("mousemove", (event) => {
+                updateTooltipPosition(event.clientX, event.clientY);
+            })
+            .on("mouseleave", () => {
+                handlers.onMouseLeave();
+                hideTooltip();
+            });
         
         // Draw curved arrow from bubble to dot
         const arrowStart = bubbleRightEdge;
@@ -101,12 +119,21 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
  */
 function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
     const bubbleHeight = 15;
-    const bubblePadding = 5;
+    const bubblePadding = 8;
     const rankBubbleLeftEdge = rightX + 20;
     
     ranks.forEach((rank, idx) => {
         const text = `${formatRoleName(rank.roleName)} - ${rank.rankName}`;
-        const textWidth = text.length * 5;
+        
+        // Create temporary text element to measure actual width
+        const tempText = svg.append("text")
+            .attr("font-size", 10)
+            .text(text)
+            .style("visibility", "hidden");
+        
+        const textWidth = tempText.node().getBBox().width;
+        tempText.remove();
+        
         const bubbleWidth = textWidth + bubblePadding * 2;
         const dotY = rankScale(rank.totalPay);
         const bubbleY = dotY;
@@ -120,7 +147,8 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
             .attr("data-original-rect-y", bubbleY - bubbleHeight / 2)
             .attr("data-original-text-y", bubbleY + 3)
             .style("opacity", 0)
-            .style("cursor", "pointer");
+            .style("cursor", "pointer")
+            .style("pointer-events", "none"); // Disable interactions when invisible
         
         bubbleGroup.append("rect")
             .attr("x", rankBubbleX)
@@ -140,6 +168,18 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
             .attr("fill", "#333")
             .text(text)
             .style("pointer-events", "none");
+        
+        // Add event handlers for tooltip
+        bubbleGroup
+            .on("mouseenter", (event) => {
+                showRankTooltip(rank, event.clientX, event.clientY);
+            })
+            .on("mousemove", (event) => {
+                updateTooltipPosition(event.clientX, event.clientY);
+            })
+            .on("mouseleave", () => {
+                hideTooltip();
+            });
         
         // Draw curved arrow from dot to bubble
         const arrowStart = rightX;
