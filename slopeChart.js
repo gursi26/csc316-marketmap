@@ -39,31 +39,90 @@ class SlopeChart {
     }
 
     setupDropdown() {
+        const self = this;
+        
+        // Get all tickers and roles
         const tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
+        const roles = [...new Set(this.data.map(d => d["Role Name"]))].sort();
         
-        const dropdown = d3.select("#company-select");
+        // Setup view mode dropdown
+        const viewModeSelect = d3.select("#view-mode-select");
+        viewModeSelect.on("change", function() {
+            self.viewMode = this.value;
+            self.updateItemDropdown();
+            self.wrangleData();
+        });
         
-        dropdown.selectAll("option")
-            .data(tickers)
-            .join("option")
-            .attr("value", d => d)
-            .text(d => d);
+        // Setup item dropdown
+        const itemSelect = d3.select("#item-select");
+        itemSelect.on("change", function() {
+            if (self.viewMode === 'company') {
+                self.selectedCompany = this.value;
+                self.selectedRole = null;
+            } else {
+                self.selectedRole = this.value;
+                self.selectedCompany = null;
+            }
+            self.wrangleData();
+        });
         
         // Set initial company
         this.selectedCompany = tickers[0];
         
-        // Add event listener
-        dropdown.on("change", (event) => {
-            this.selectedCompany = event.target.value;
-            this.viewMode = 'company';
-            this.selectedRole = null;
-            this.wrangleData();
-        });
+        // Populate initial dropdown
+        this.updateItemDropdown();
+    }
+    
+    updateItemDropdown() {
+        const itemSelect = d3.select("#item-select");
+        const itemLabel = d3.select("#item-label");
+        const viewModeSelect = d3.select("#view-mode-select");
+        
+        // Update view mode dropdown to match current state
+        viewModeSelect.property("value", this.viewMode);
+        
+        if (this.viewMode === 'company') {
+            const tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
+            
+            itemLabel.text("Company:");
+            
+            itemSelect.selectAll("option")
+                .data(tickers)
+                .join("option")
+                .attr("value", d => d)
+                .text(d => d);
+            
+            // Set to current company
+            if (!this.selectedCompany || tickers.indexOf(this.selectedCompany) === -1) {
+                this.selectedCompany = tickers[0];
+            }
+            itemSelect.property("value", this.selectedCompany);
+            
+        } else {
+            const roles = [...new Set(this.data.map(d => d["Role Name"]))].sort();
+            
+            itemLabel.text("Role:");
+            
+            itemSelect.selectAll("option")
+                .data(roles)
+                .join("option")
+                .attr("value", d => d)
+                .text(d => formatRoleName(d));
+            
+            // Set to current role
+            if (!this.selectedRole || roles.indexOf(this.selectedRole) === -1) {
+                this.selectedRole = roles[0];
+            }
+            itemSelect.property("value", this.selectedRole);
+        }
     }
 
 	wrangleData() {
         // Reset locked item when changing view
         this.lockedItem = null;
+        
+        // Update dropdowns to match current state
+        this.updateItemDropdown();
         
         if (this.viewMode === 'company') {
             this.wrangleCompanyView();

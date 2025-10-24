@@ -6,8 +6,17 @@
 </head>
 <body>
     <div id="controls">
-        <label for="company-select">Select Company:</label>
-        <select id="company-select"></select>
+        <div style="margin-bottom: 8px;">
+            <label for="view-mode-select">Select By:</label>
+            <select id="view-mode-select">
+                <option value="company">Company</option>
+                <option value="role">Role</option>
+            </select>
+        </div>
+        <div>
+            <label for="item-select" id="item-label">Company:</label>
+            <select id="item-select"></select>
+        </div>
     </div>
     <div id="tooltip"></div>
     <svg id="canvas"></svg>

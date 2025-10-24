@@ -39,13 +39,14 @@ body {
     color: #e0e0e0;
 }
 
-#company-select {
+#view-mode-select,
+#item-select {
     padding: 4px 8px;
     font-size: 12px;
     border: 1px solid #555;
     border-radius: 4px;
     cursor: pointer;
-    min-width: 80px;
+    min-width: 100px;
     background: #333;
     color: #e0e0e0;
 }
