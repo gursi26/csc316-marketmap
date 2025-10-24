@@ -97,9 +97,8 @@ function showRoleTooltip(role, x, y) {
     `;
     
     tooltip.innerHTML = html;
-    tooltip.style.left = `${x + 15}px`;
-    tooltip.style.top = `${y + 15}px`;
     tooltip.classList.add('visible');
+    updateTooltipPosition(x, y);
 }
 
 /**
@@ -150,19 +149,40 @@ function showRankTooltip(rank, x, y) {
     `;
     
     tooltip.innerHTML = html;
-    tooltip.style.left = `${x + 15}px`;
-    tooltip.style.top = `${y + 15}px`;
     tooltip.classList.add('visible');
+    updateTooltipPosition(x, y);
 }
 
 /**
- * Updates tooltip position
+ * Updates tooltip position dynamically based on cursor location
  * @param {number} x - X position
  * @param {number} y - Y position
  */
 function updateTooltipPosition(x, y) {
     const tooltip = document.getElementById('tooltip');
-    tooltip.style.left = `${x + 15}px`;
-    tooltip.style.top = `${y + 15}px`;
+    const tooltipRect = tooltip.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // Default offset from cursor
+    const offsetX = 15;
+    const offsetY = 15;
+    
+    // Calculate position
+    let left = x + offsetX;
+    let top = y + offsetY;
+    
+    // Check if tooltip would go off the right edge
+    if (left + tooltipRect.width > viewportWidth) {
+        left = x - tooltipRect.width - offsetX;
+    }
+    
+    // Check if tooltip would go off the bottom edge
+    if (top + tooltipRect.height > viewportHeight) {
+        top = y - tooltipRect.height - offsetY;
+    }
+    
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${top}px`;
 }
 

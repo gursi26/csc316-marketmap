@@ -9,7 +9,7 @@ const SLOPE_CHART_CONSTANTS = {
     fontSize: 12,
     titleFontSize: 16,
     lineColor: "#888",
-    lineOpacity: 0.3,
+    lineOpacity: 0.5,
     lineWidth: 1.5,
     roleColor: "#4A90E2",
     rankColor: "#E94B3C",
