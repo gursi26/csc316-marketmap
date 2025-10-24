@@ -58,16 +58,39 @@ body {
 }
 
 #view-mode-select,
-#item-select {
+#item-select,
+#industry-select {
     padding: 3px 6px;
     font-size: 11px;
     border: 1px solid #555;
     border-radius: 3px;
     cursor: pointer;
-    width: 100%;
-    max-width: 160px;
+    /* fixed width so long selected text doesn't expand the control */
+    width: 160px;
+    flex: 0 0 160px;
     background: #333;
     color: #e0e0e0;
+    /* prevent the selected text from wrapping and show ellipsis when truncated */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Make control rows consistent spacing and keep label + control on one line */
+#controls .control-row {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Ensure labels do not overflow and are kept to a single line */
+#controls .control-row label {
+    flex: 0 0 auto;
+    max-width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #tooltip {

@@ -6,17 +6,23 @@
 </head>
 <body>
     <div id="controls">
-        <div style="margin-bottom: 8px;">
+        <div class="control-row">
             <label for="view-mode-select">Select By:</label>
             <select id="view-mode-select">
                 <option value="company">Company</option>
                 <option value="role">Role</option>
             </select>
         </div>
-        <div>
+        <!-- Industry filter (appears before company filter) -->
+        <div class="control-row">
+            <label for="industry-select" id="industry-label">Industry:</label>
+            <select id="industry-select"></select>
+        </div>
+        <div class="control-row">
             <label for="item-select" id="item-label">Company:</label>
             <select id="item-select"></select>
         </div>
+        <!-- Role filter removed: only three dropdowns remain (view mode, industry, company) -->
     </div>
     <div id="tooltip"></div>
     <svg id="canvas"></svg>

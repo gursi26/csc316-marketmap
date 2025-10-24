@@ -1,20 +1,52 @@
+/**
+ * SlopeChart
+ *  - Renders a slope chart showing either roles (per company) or companies (per role).
+ *
+ * Constructor inputs:
+ *  - parentElement: selector or DOM element of an <svg> used for rendering
+ *  - data: array of salary rows (expects fields like Ticker, Role Name, Total Pay, Base Pay, Stock, Bonus, Role Rank)
+ *  - companyInfo: array of company metadata rows (expects Ticker, Name, Industry)
+ *
+ * Behavior / outputs:
+ *  - Keeps internal state (viewMode, selectedCompany/selectedRole, selectedIndustry)
+ *  - Updates the DOM controls (#view-mode-select, #industry-select, #item-select) and redraws the chart
+ */
 class SlopeChart {
+    /**
+     * Create a SlopeChart instance.
+     * @param {string|HTMLElement} parentElement - selector/element for the <svg>
+     * @param {Array<Object>} data - cleaned salary dataset rows
+     * @param {Array<Object>} companyInfo - company metadata rows
+     */
     constructor(parentElement, data, companyInfo) {
-		this.parentElement = parentElement;
+        this.parentElement = parentElement;
         this.data = data;
         this.companyInfo = companyInfo;
+
+        // UI state
         this.viewMode = 'company'; // 'company' or 'role'
         this.selectedCompany = null;
-        this.selectedRole = null;
-        this.lockedItem = null; // Track if a role/company is locked/frozen
-        this.titleAnimationSource = null; // Track the source position for title animation
-        this.previousDistributionPath = null; // Track previous distribution for smooth transitions
+        this.selectedRole = null; // used when viewMode === 'role'
+        this.selectedIndustry = 'All';
+
+        // Interaction state
+        this.lockedItem = null; // if an item is 'locked' (clicked)
+        this.titleAnimationSource = null; // used for the animated subtitle transition
+        this.previousDistributionPath = null; // stores previous KDE path for smooth transitions
+
+        // Derived mappings / helpers
         this.setupRoleColors();
         this.setupCompanyNameMap();
+
+        // Initialize rendering and controls
         this.initVis();
     }
 
-	initVis() {
+    /**
+     * Initialize SVG sizing and controls.
+     * Sets svg width/height and wires control dropdowns.
+     */
+    initVis() {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
         
@@ -23,33 +55,52 @@ class SlopeChart {
             .attr("height", this.height);
         
         // Setup company dropdown
+        // Populate and wire the control dropdowns
         this.setupDropdown();
     }
 
+    /**
+     * Prepare a color scale for roles. This keeps coloring consistent
+     * between left items (roles/companies) and rank bubbles.
+     */
     setupRoleColors() {
-        // Get all unique roles across all data
+        // Build color mapping for roles (used for consistent coloring throughout)
         const allRoles = [...new Set(this.data.map(d => d["Role Name"]))];
         this.roleColorScale = setupRoleColorScale(allRoles);
     }
     
+    /**
+     * Build quick lookup maps:
+     *  - this.companyNameMap: ticker -> display name
+     *  - this.companyIndustryMap: ticker -> industry string
+     */
     setupCompanyNameMap() {
-        // Create a mapping from ticker to company name
+        // Create lookup maps: ticker -> display name and ticker -> industry
         this.companyNameMap = {};
+        this.companyIndustryMap = {};
         this.companyInfo.forEach(company => {
             if (company.Ticker && company.Name) {
                 this.companyNameMap[company.Ticker] = company.Name;
+                this.companyIndustryMap[company.Ticker] = company.Industry || '';
             }
         });
     }
 
+    /**
+     * Populate and wire the UI dropdowns: view-mode, industry and the
+     * main item-select (which is contextual: company or role depending on viewMode).
+     */
     setupDropdown() {
         const self = this;
         
         // Get all tickers and roles
         const tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
         const roles = [...new Set(this.data.map(d => d["Role Name"]))].sort();
+        // Build industry list from companyInfo
+        const industries = [...new Set(this.companyInfo.map(c => c.Industry).filter(Boolean))].sort();
+        industries.unshift('All');
         
-        // Setup view mode dropdown
+        // Setup view mode dropdown (Company vs Role)
         const viewModeSelect = d3.select("#view-mode-select");
         viewModeSelect.on("change", function() {
             self.viewMode = this.value;
@@ -57,7 +108,9 @@ class SlopeChart {
             self.wrangleData();
         });
         
-        // Setup item dropdown
+        // Setup main item dropdown. Its meaning changes with viewMode:
+        // - viewMode === 'company' => item dropdown lists companies
+        // - viewMode === 'role' => item dropdown lists roles
         const itemSelect = d3.select("#item-select");
         itemSelect.on("change", function() {
             if (self.viewMode === 'company') {
@@ -69,24 +122,60 @@ class SlopeChart {
             }
             self.wrangleData();
         });
+
+        // Setup industry dropdown (filters company list and role availability)
+        const industrySelect = d3.select('#industry-select');
+        industrySelect.selectAll('option')
+            .data(industries)
+            .join('option')
+            .attr('value', d => d)
+            .text(d => d === 'All' ? 'All industries' : d);
+
+        industrySelect.on('change', function() {
+            self.selectedIndustry = this.value;
+            // When industry changes, refresh available roles/companies and redraw
+            self.updateItemDropdown();
+            self.wrangleData();
+        });
+
+    // Note: The UI no longer includes a separate role-select. Roles are selected
+    // through the main item dropdown when viewMode === 'role'.
+
         
-        // Set initial company
-        this.selectedCompany = tickers[0];
-        
-        // Populate initial dropdown
-        this.updateItemDropdown();
+    // Set initial selections
+    this.selectedIndustry = this.selectedIndustry || 'All';
+    this.selectedCompany = tickers[0];
+
+    // Populate initial dropdowns
+    this.updateItemDropdown();
     }
     
+    /**
+     * Refresh the item-select options based on current viewMode and selectedIndustry.
+     * - In company mode: item-select lists companies (filtered by industry if selected)
+     * - In role mode: item-select lists roles available in the selected industry
+     */
     updateItemDropdown() {
         const itemSelect = d3.select("#item-select");
         const itemLabel = d3.select("#item-label");
         const viewModeSelect = d3.select("#view-mode-select");
+    const industrySelect = d3.select('#industry-select');
         
         // Update view mode dropdown to match current state
         viewModeSelect.property("value", this.viewMode);
         
         if (this.viewMode === 'company') {
-            const tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
+            let tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
+            // If an industry is selected, filter tickers by industry mapping
+            if (this.selectedIndustry && this.selectedIndustry !== 'All') {
+                tickers = tickers.filter(t => (this.companyIndustryMap[t] || '') === this.selectedIndustry);
+            }
+            // If no companies in the selected industry, fall back to all tickers
+            if (tickers.length === 0) {
+                tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
+            }
+            // Update industry selector UI value
+            if (industrySelect.node()) industrySelect.property('value', this.selectedIndustry);
             
             itemLabel.text("Company:");
             
@@ -101,9 +190,17 @@ class SlopeChart {
                 this.selectedCompany = tickers[0];
             }
             itemSelect.property("value", this.selectedCompany);
-            
-        } else {
-            const roles = [...new Set(this.data.map(d => d["Role Name"]))].sort();
+        
+        }
+        else {
+            // When selecting by role, show roles available within the selected industry
+            let roles;
+            if (this.selectedIndustry && this.selectedIndustry !== 'All') {
+                const tickersInIndustry = Object.keys(this.companyIndustryMap).filter(t => (this.companyIndustryMap[t] || '') === this.selectedIndustry);
+                roles = [...new Set(this.data.filter(d => tickersInIndustry.includes(d.Ticker)).map(d => d["Role Name"]))].sort();
+            } else {
+                roles = [...new Set(this.data.map(d => d["Role Name"]))].sort();
+            }
             
             itemLabel.text("Role:");
             
@@ -119,7 +216,15 @@ class SlopeChart {
             }
             itemSelect.property("value", this.selectedRole);
         }
+
+        
+        // Role dropdown removed: no UI to update here.
+
     }
+
+    // Role filtering helper removed since the role dropdown UI was removed.
+
+    
 
 	wrangleData(withTransition = false) {
         // Reset locked item when changing view
@@ -135,6 +240,11 @@ class SlopeChart {
         }
     }
     
+    /**
+     * Build display data for company view.
+     * Left items: roles within the selected company (avg comp)
+     * Right items: flattened ranks across the company
+     */
     wrangleCompanyView(withTransition = false) {
         if (!this.selectedCompany) return;
         
@@ -191,6 +301,11 @@ class SlopeChart {
         this.updateVis(withTransition);
     }
     
+    /**
+     * Build display data for role view.
+     * If an industry is selected, only companies from that industry are considered.
+     * The resulting companies are sorted by average pay and limited to top 10.
+     */
     wrangleRoleView(withTransition = false) {
         if (!this.selectedRole) return;
         
@@ -198,7 +313,14 @@ class SlopeChart {
         const roleData = this.data.filter(d => d["Role Name"] === this.selectedRole);
         
         // Group by company
-        const companyMap = d3.group(roleData, d => d.Ticker);
+        // If an industry is selected, restrict companies to that industry first
+        let filteredRoleData = roleData;
+        if (this.selectedIndustry && this.selectedIndustry !== 'All') {
+            const tickersInIndustry = Object.keys(this.companyIndustryMap).filter(t => (this.companyIndustryMap[t] || '') === this.selectedIndustry);
+            filteredRoleData = roleData.filter(d => tickersInIndustry.includes(d.Ticker));
+        }
+
+        const companyMap = d3.group(filteredRoleData, d => d.Ticker);
         
         // Process companies
         const companies = Array.from(companyMap, ([ticker, rows]) => {
@@ -232,8 +354,8 @@ class SlopeChart {
             };
         })
         .filter(c => !isNaN(c.avgPay) && c.avgPay > 0)
-        .sort((a, b) => b.avgPay - a.avgPay)
-        .slice(0, 10); // Top 10 companies only
+    .sort((a, b) => b.avgPay - a.avgPay)
+    .slice(0, 10); // Top 10 companies only (if industry has many companies, show top 10)
         
         // Flatten all ranks for these top 10 companies
         const allRanks = companies.flatMap(company => company.ranks)
@@ -256,6 +378,10 @@ class SlopeChart {
         this.drawVisualization(withTransition);
     }
     
+    /**
+     * Core draw routine: lays out axes, titles, distributions, lines and bubbles.
+     * This method assumes this.displayData has been prepared by a wrangle* method.
+     */
     drawVisualization(animateTitle = false) {
         const { viewMode, title, leftItems, rightItems } = this.displayData;
         
