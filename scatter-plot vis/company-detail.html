@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .company-detail-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .company-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .back-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        .back-button:hover {
+            background: #5a6fd8;
+        }
+        
+        .company-info {
+            margin-top: 20px;
+        }
+        
+        .info-item {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="company-detail-container">
+        <div class="company-circle" id="company-circle">
+            <!-- Company name will be inserted here -->
+        </div>
+        
+        <div class="company-info" id="company-info">
+            <!-- Company details will be inserted here -->
+        </div>
+        
+        <button class="back-button" onclick="goBack()">← Back to Market Map</button>
+    </div>
+
+    <script>
+        // Get company data from URL parameters
+        function getCompanyData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const companyData = urlParams.get('data');
+            
+            if (companyData) {
+                return JSON.parse(decodeURIComponent(companyData));
+            }
+            return null;
+        }
+        
+        // Display company information
+        function displayCompanyInfo() {
+            const company = getCompanyData();
+            
+            if (!company) {
+                document.getElementById('company-circle').textContent = 'Company Not Found';
+                return;
+            }
+            
+            // Display company name in circle
+            document.getElementById('company-circle').textContent = company.name;
+            
+            // Display company details
+            const infoDiv = document.getElementById('company-info');
+            infoDiv.innerHTML = `
+                <div class="info-item">
+                    <span class="info-label">Ticker:</span> ${company.ticker}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Sector:</span> ${company.sector}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Industry:</span> ${company.industry}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">CEO Approval:</span> ${company.ceo_approval}%
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Employee Rating:</span> ${company.employee_rating}/5
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Market Cap:</span> $${(company.market_cap / 1e9).toFixed(1)}B
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Revenue:</span> $${(company.revenue / 1e9).toFixed(1)}B
+                </div>
+                <div class="info-item">
+                    <span class="info-label">P/E Ratio:</span> ${company.pe_ratio.toFixed(1)}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Sentiment:</span> ${company.sentiment.toFixed(3)}
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Employees:</span> ${company.employee_count.toLocaleString()}
+                </div>
+            `;
+        }
+        
+        // Go back to main page
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', displayCompanyInfo);
+    </script>
+</body>
+</html>
