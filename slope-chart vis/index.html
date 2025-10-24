@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Ensure this navigates the top-level page (works even when the slope chart is shown inside an iframe) -->
+    <a id="backToMap" class="back-to-map" href="../combined-vis/index.html" target="_top" rel="noopener">← Back to Map</a>
     <div id="controls">
         <div class="control-row">
             <label for="view-mode-select">Select By:</label>
@@ -35,6 +37,7 @@
     <script src="interactionHandler.js"></script>
     <script src="slopeChart.js"></script>
     <script src="main.js"></script>
+    <!-- Back link is an anchor so it works without JS -->
 </body>
 </html>
 

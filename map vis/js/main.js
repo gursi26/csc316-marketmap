@@ -16,23 +16,22 @@
   function createCompanyPopup(){
     if (companyPopup) return companyPopup;
     companyPopup = document.createElement('div');
-    companyPopup.style.position = 'absolute';
-    companyPopup.style.background = 'rgba(0,0,0,0.85)';
-    companyPopup.style.color = '#fff';
-    companyPopup.style.padding = '8px';
-    companyPopup.style.borderRadius = '6px';
-    companyPopup.style.boxShadow = '0 4px 12px rgba(0,0,0,0.4)';
-    companyPopup.style.zIndex = 9999;
-    companyPopup.style.display = 'none';
+    // Use CSS classes so styling is centralized in CSS
+    companyPopup.className = 'map-popup';
+    companyPopup.setAttribute('role', 'dialog');
+    companyPopup.setAttribute('aria-hidden', 'true');
     companyPopup.innerHTML = `
-      <div id="cp-title" style="font-weight:700;margin-bottom:6px"></div>
-      <div style="display:flex;gap:6px">
-        <button id="cp-details" style="padding:6px 8px;border-radius:4px;border:0;cursor:pointer;background:#2b7;color:#042">Details</button>
-        <button id="cp-roles" style="padding:6px 8px;border-radius:4px;border:0;cursor:pointer;background:#eee;color:#222">Roles</button>
+      <div class="map-popup-inner">
+        <div id="cp-title" class="map-popup-title"></div>
+        <div class="map-popup-actions">
+          <button id="cp-details" class="btn-primary">Details</button>
+          <button id="cp-roles" class="btn-primary">Roles</button>
+        </div>
       </div>
     `;
     document.body.appendChild(companyPopup);
-    // click handlers will be assigned when shown
+    // ensure it's initially hidden for assistive tech
+    companyPopup.style.display = 'none';
     return companyPopup;
   }
 

@@ -6,62 +6,54 @@
     <title>Company Details</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        :root{ --card-bg:#0c1225; --fg:#e6eefc; --muted:#9aa7c7; --accent:#5ea8ff }
         .company-detail-container {
-            max-width: 800px;
-            margin: 50px auto;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 40px;
+            max-width: 880px;
+            margin: 48px auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            padding: 36px;
             text-align: center;
+            color: var(--fg);
         }
-        
+
         .company-circle {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--accent) 0%, #3b6fb8 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
+            margin: 0 auto 24px;
+            color: #06121a;
+            font-size: 20px;
+            font-weight: 700;
             text-align: center;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(255,255,255,0.03);
         }
-        
+
         .back-button {
-            background: #667eea;
-            color: white;
+            background: var(--accent);
+            color: #042;
             border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 16px;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
             cursor: pointer;
-            margin-top: 20px;
-            transition: background 0.3s;
+            margin-top: 18px;
+            transition: transform .08s ease, box-shadow .08s ease;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.5);
         }
-        
-        .back-button:hover {
-            background: #5a6fd8;
-        }
-        
-        .company-info {
-            margin-top: 20px;
-        }
-        
-        .info-item {
-            margin: 10px 0;
-            font-size: 16px;
-            color: #333;
-        }
-        
-        .info-label {
-            font-weight: bold;
-            color: #667eea;
-        }
+
+        .back-button:active { transform: translateY(1px) }
+
+        .company-info { margin-top: 14px }
+
+        .info-item { margin: 8px 0; font-size: 14px; color: var(--fg) }
+
+        .info-label { font-weight: 700; color: var(--accent); margin-right:6px }
     </style>
 </head>
 <body>
@@ -137,9 +129,9 @@
             `;
         }
         
-        // Go back to main page
+        // Go back to combined map view
         function goBack() {
-            window.location.href = 'index.html';
+            window.location.href = '../combined-vis/index.html';
         }
         
         // Initialize page
