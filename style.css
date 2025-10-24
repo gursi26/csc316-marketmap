@@ -19,6 +19,14 @@ body {
     -ms-user-select: none;
 }
 
+.main-title,
+.animated-title {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
 #controls {
     position: fixed;
     top: 10px;

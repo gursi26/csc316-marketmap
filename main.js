@@ -4,4 +4,6 @@ Promise.all([
 ]).then(([salaryData, companyInfo]) => {
     const viz = new SlopeChart("#canvas", salaryData, companyInfo);
     viz.wrangleData();
+}).catch(error => {
+    console.error("Error loading data:", error);
 });

@@ -7,9 +7,10 @@ class SlopeChart {
         this.selectedCompany = null;
         this.selectedRole = null;
         this.lockedItem = null; // Track if a role/company is locked/frozen
-        this.initVis();
+        this.titleAnimationSource = null; // Track the source position for title animation
         this.setupRoleColors();
         this.setupCompanyNameMap();
+        this.initVis();
     }
 
 	initVis() {
@@ -34,7 +35,9 @@ class SlopeChart {
         // Create a mapping from ticker to company name
         this.companyNameMap = {};
         this.companyInfo.forEach(company => {
-            this.companyNameMap[company.Ticker] = company.Name;
+            if (company.Ticker && company.Name) {
+                this.companyNameMap[company.Ticker] = company.Name;
+            }
         });
     }
 
@@ -90,7 +93,7 @@ class SlopeChart {
                 .data(tickers)
                 .join("option")
                 .attr("value", d => d)
-                .text(d => d);
+                .text(d => this.companyNameMap[d] || d);
             
             // Set to current company
             if (!this.selectedCompany || tickers.indexOf(this.selectedCompany) === -1) {
@@ -117,7 +120,7 @@ class SlopeChart {
         }
     }
 
-	wrangleData() {
+	wrangleData(withTransition = false) {
         // Reset locked item when changing view
         this.lockedItem = null;
         
@@ -125,13 +128,13 @@ class SlopeChart {
         this.updateItemDropdown();
         
         if (this.viewMode === 'company') {
-            this.wrangleCompanyView();
+            this.wrangleCompanyView(withTransition);
         } else if (this.viewMode === 'role') {
-            this.wrangleRoleView();
+            this.wrangleRoleView(withTransition);
         }
     }
     
-    wrangleCompanyView() {
+    wrangleCompanyView(withTransition = false) {
         if (!this.selectedCompany) return;
         
         // Filter data for selected company
@@ -175,15 +178,15 @@ class SlopeChart {
         
         this.displayData = {
             viewMode: 'company',
-            title: this.selectedCompany,
+            title: this.companyNameMap[this.selectedCompany] || this.selectedCompany,
             leftItems: roles,
             rightItems: allRanks
         };
         
-        this.updateVis();
+        this.updateVis(withTransition);
     }
     
-    wrangleRoleView() {
+    wrangleRoleView(withTransition = false) {
         if (!this.selectedRole) return;
         
         // Filter data for selected role
@@ -237,12 +240,16 @@ class SlopeChart {
             rightItems: allRanks
         };
         
-        this.updateVis();
+        this.updateVis(withTransition);
     }
 
-    updateVis() {
+    updateVis(withTransition = false) {
+        // Always do instant switch, only the title will animate
         this.svg.selectAll("*").remove();
-        
+        this.drawVisualization(withTransition);
+    }
+    
+    drawVisualization(animateTitle = false) {
         const { viewMode, title, leftItems, rightItems } = this.displayData;
         
         if (!leftItems.length || !rightItems.length) return;
@@ -280,7 +287,7 @@ class SlopeChart {
         this.drawAxisAndGrid(payScale, leftX, rightX, c);
         
         // Draw titles
-        this.drawTitles(leftX, rightX, title, viewMode, c);
+        this.drawTitles(leftX, rightX, title, viewMode, c, animateTitle);
         
         // Draw rank distribution
         this.drawRankDistribution(rightItems, rightScale, rightX, c);
@@ -383,7 +390,7 @@ class SlopeChart {
             .style("stroke-width", 1);
     }
 
-    drawTitles(leftX, rightX, title, viewMode, c) {
+    drawTitles(leftX, rightX, title, viewMode, c, animateTitle = false) {
         const leftLabel = viewMode === 'company' ? 'Roles (Avg Comp)' : 'Companies (Avg Comp)';
         const rightLabel = 'Ranks (Total Comp)';
         
@@ -408,14 +415,60 @@ class SlopeChart {
         // Calculate the center axis position
         const axisX = (leftX + rightX) / 2;
         
-        this.svg.append("text")
-            .attr("x", axisX)
-            .attr("y", 30)
-            .attr("text-anchor", "middle")
-            .attr("font-size", 24)
-            .attr("font-weight", "bold")
-            .attr("fill", "#e0e0e0")
-            .text(title);
+        // If we should animate the title and have a source, animate it
+        if (animateTitle && this.titleAnimationSource) {
+            const source = this.titleAnimationSource;
+            
+            // Create animated text that moves from source to title position
+            this.svg.append("text")
+                .attr("class", "animated-title")
+                .attr("x", source.x)
+                .attr("y", source.y)
+                .attr("text-anchor", "middle")
+                .attr("font-size", c.bubbleFontSize)
+                .attr("font-weight", "bold")
+                .attr("fill", "#e0e0e0")
+                .text(source.text)
+                .transition()
+                .duration(600)
+                .attr("x", axisX)
+                .attr("y", 30)
+                .attr("font-size", 24)
+                .on("end", function() {
+                    // Remove the animated text
+                    d3.select(this).remove();
+                });
+            
+            // Create the final title (hidden initially, will appear after animation)
+            this.svg.append("text")
+                .attr("class", "main-title")
+                .attr("x", axisX)
+                .attr("y", 30)
+                .attr("text-anchor", "middle")
+                .attr("font-size", 24)
+                .attr("font-weight", "bold")
+                .attr("fill", "#e0e0e0")
+                .style("opacity", 0)
+                .text(title)
+                .transition()
+                .delay(600)
+                .duration(0)
+                .style("opacity", 1);
+            
+            // Clear the animation source after using it
+            this.titleAnimationSource = null;
+        } else {
+            // No animation, just draw the title normally
+            this.svg.append("text")
+                .attr("class", "main-title")
+                .attr("x", axisX)
+                .attr("y", 30)
+                .attr("text-anchor", "middle")
+                .attr("font-size", 24)
+                .attr("font-weight", "bold")
+                .attr("fill", "#e0e0e0")
+                .text(title);
+        }
     }
 
     drawRankDistribution(ranks, rankScale, rightX, c) {
@@ -524,16 +577,26 @@ class SlopeChart {
             .on("dblclick", (event, d) => {
                 event.stopPropagation();
                 hideTooltip();
+                
+                // Store the position and text for title animation
+                const text = d.displayName ? d.displayName : (viewMode === 'company' ? formatRoleName(d.name) : d.name);
+                self.titleAnimationSource = {
+                    x: leftX,
+                    y: leftScale(d.avgPay),
+                    text: text,
+                    newTitle: viewMode === 'company' ? formatRoleName(d.name) : d.displayName
+                };
+                
                 if (viewMode === 'company') {
                     // Switch to role view
                     self.selectedRole = d.name;
                     self.viewMode = 'role';
-                    self.wrangleData();
+                    self.wrangleData(true);
                 } else {
                     // Switch to company view
                     self.selectedCompany = d.name;
                     self.viewMode = 'company';
-                    self.wrangleData();
+                    self.wrangleData(true);
                 }
             })
             .on("mouseenter", (event, d) => {
@@ -588,16 +651,26 @@ class SlopeChart {
             onDblClick: (event, item) => {
                 event.stopPropagation();
                 hideTooltip();
+                
+                // Store the position and text for title animation
+                const text = item.displayName ? item.displayName : (viewMode === 'company' ? formatRoleName(item.name) : item.name);
+                self.titleAnimationSource = {
+                    x: leftX,
+                    y: leftScale(item.avgPay),
+                    text: text,
+                    newTitle: viewMode === 'company' ? formatRoleName(item.name) : item.displayName
+                };
+                
                 if (viewMode === 'company') {
                     // Switch to role view
                     self.selectedRole = item.name;
                     self.viewMode = 'role';
-                    self.wrangleData();
+                    self.wrangleData(true);
                 } else {
                     // Switch to company view
                     self.selectedCompany = item.name;
                     self.viewMode = 'company';
-                    self.wrangleData();
+                    self.wrangleData(true);
                 }
             },
             onMouseEnter: (event, item) => {
