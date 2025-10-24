@@ -66,7 +66,7 @@
             <!-- Company details will be inserted here -->
         </div>
         
-        <button class="back-button" onclick="goBack()">← Back to Market Map</button>
+    <button class="back-button" onclick="goBack()">← Back to Scatter Plot</button>
     </div>
 
     <script>
@@ -129,9 +129,10 @@
             `;
         }
         
-        // Go back to combined map view
+        // Go back to the scatter-plot view (local index.html)
         function goBack() {
-            window.location.href = '../combined-vis/index.html';
+            // Navigate to the scatter-plot page in the same folder
+            window.location.href = 'index.html';
         }
         
         // Initialize page
