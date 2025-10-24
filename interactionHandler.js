@@ -17,8 +17,9 @@ function highlightRole(svg, roleName, ranks) {
     });
     
     // Apply collision detection ONLY to rank bubbles for this role
-    const bubbleHeight = 15;
-    const bubbleMinSpacing = 2;
+    const c = SLOPE_CHART_CONSTANTS;
+    const bubbleHeight = c.bubbleHeight;
+    const bubbleMinSpacing = c.bubbleMinSpacing;
     const visibleRankBubbles = applyRankBubbleCollisions(svg, roleName, bubbleHeight, bubbleMinSpacing);
     
     // Update positions of visible rank bubbles

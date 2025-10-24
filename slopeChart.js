@@ -60,23 +60,31 @@ class SlopeChart {
         const roleMap = d3.group(companyData, d => d["Role Name"]);
             
         // Process roles
-        const roles = Array.from(roleMap, ([roleName, rows]) => ({
-            name: roleName,
-            avgPay: d3.mean(rows, d => +d["Total Pay"]),
-            avgBase: d3.mean(rows, d => +d["Base Pay"]),
-            avgStock: d3.mean(rows, d => +d["Stock"]),
-            avgBonus: d3.mean(rows, d => +d["Bonus"]),
-            ranks: rows.map(row => ({
-                roleName: roleName,
-                rankName: row["Role Rank Name"],
-                rank: +row["Role Rank"],
-                totalPay: +row["Total Pay"],
-                basePay: +row["Base Pay"],
-                stock: +row["Stock"],
-                bonus: +row["Bonus"]
-            })).sort((a, b) => a.rank - b.rank)
-        }))
-        .filter(r => !isNaN(r.avgPay))
+        const roles = Array.from(roleMap, ([roleName, rows]) => {
+            // Filter out rows with 0 or empty pay BEFORE calculating averages
+            const validRows = rows.filter(row => {
+                const totalPay = +row["Total Pay"];
+                return !isNaN(totalPay) && totalPay > 0;
+            });
+            
+            return {
+                name: roleName,
+                avgPay: d3.mean(validRows, d => +d["Total Pay"]),
+                avgBase: d3.mean(validRows, d => +d["Base Pay"]),
+                avgStock: d3.mean(validRows, d => +d["Stock"]),
+                avgBonus: d3.mean(validRows, d => +d["Bonus"]),
+                ranks: rows.map(row => ({
+                    roleName: roleName,
+                    rankName: row["Role Rank Name"],
+                    rank: +row["Role Rank"],
+                    totalPay: +row["Total Pay"],
+                    basePay: +row["Base Pay"],
+                    stock: +row["Stock"],
+                    bonus: +row["Bonus"]
+                })).sort((a, b) => a.rank - b.rank)
+            };
+        })
+        .filter(r => !isNaN(r.avgPay) && r.avgPay > 0)
         .sort((a, b) => b.avgPay - a.avgPay); // Sort by average pay descending
         
         // Flatten all ranks and sort by total pay, filtering out 0 or empty pay

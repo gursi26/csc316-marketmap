@@ -11,10 +11,11 @@
  * @param {Object} handlers - Object containing click and hover event handlers
  */
 function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handlers) {
-    const bubbleHeight = 15;
-    const bubblePadding = 8;
-    const bubbleMinSpacing = 2;
-    const bubbleRightEdge = leftX - 20;
+    const c = SLOPE_CHART_CONSTANTS;
+    const bubbleHeight = c.bubbleHeight;
+    const bubblePadding = c.bubblePadding;
+    const bubbleMinSpacing = c.bubbleMinSpacing;
+    const bubbleRightEdge = leftX - c.bubbleConnectorGap;
     
     // Prepare bubble data with initial positions
     const roleBubbleData = roles.map((role) => {
@@ -22,7 +23,7 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
         
         // Create temporary text element to measure actual width
         const tempText = svg.append("text")
-            .attr("font-size", 10)
+            .attr("font-size", c.bubbleFontSize)
             .text(text)
             .style("visibility", "hidden");
         
@@ -70,9 +71,10 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
         
         bubbleGroup.append("text")
             .attr("x", bubbleX + bubbleWidth / 2)
-            .attr("y", bubbleY + 3)
+            .attr("y", bubbleY)
             .attr("text-anchor", "middle")
-            .attr("font-size", 10)
+            .attr("dominant-baseline", "middle")
+            .attr("font-size", c.bubbleFontSize)
             .attr("fill", "#333")
             .text(item.text)
             .style("pointer-events", "none");
@@ -118,16 +120,17 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
  * @param {number} rightX - X position of the rank line
  */
 function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
-    const bubbleHeight = 15;
-    const bubblePadding = 8;
-    const rankBubbleLeftEdge = rightX + 20;
+    const c = SLOPE_CHART_CONSTANTS;
+    const bubbleHeight = c.bubbleHeight;
+    const bubblePadding = c.bubblePadding;
+    const rankBubbleLeftEdge = rightX + c.bubbleConnectorGap;
     
     ranks.forEach((rank, idx) => {
-        const text = `${formatRoleName(rank.roleName)} - ${rank.rankName}`;
+        const text = rank.rankName;
         
         // Create temporary text element to measure actual width
         const tempText = svg.append("text")
-            .attr("font-size", 10)
+            .attr("font-size", c.bubbleFontSize)
             .text(text)
             .style("visibility", "hidden");
         
@@ -145,7 +148,7 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
             .attr("data-rank-index", idx)
             .attr("data-role-name", rank.roleName)
             .attr("data-original-rect-y", bubbleY - bubbleHeight / 2)
-            .attr("data-original-text-y", bubbleY + 3)
+            .attr("data-original-text-y", bubbleY)
             .style("opacity", 0)
             .style("cursor", "pointer")
             .style("pointer-events", "none"); // Disable interactions when invisible
@@ -162,9 +165,10 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX) {
         
         bubbleGroup.append("text")
             .attr("x", rankBubbleX + bubbleWidth / 2)
-            .attr("y", bubbleY + 3)
+            .attr("y", bubbleY)
             .attr("text-anchor", "middle")
-            .attr("font-size", 10)
+            .attr("dominant-baseline", "middle")
+            .attr("font-size", c.bubbleFontSize)
             .attr("fill", "#333")
             .text(text)
             .style("pointer-events", "none");
