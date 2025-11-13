@@ -1,0 +1,58 @@
+{
+  "Technology": [
+    "Communication Equipment",
+    "Consumer Electronics",
+    "Electronic Gaming & Multimedia",
+    "Information Technology Services",
+    "Internet Content & Information",
+    "Internet Retail",
+    "Semiconductor Equipment & Materials",
+    "Semiconductors",
+    "Software - Application",
+    "Software - Infrastructure"
+  ],
+  "Healthcare & Life Sciences": [
+    "Biotechnology",
+    "Diagnostics & Research",
+    "Drug Manufacturers - General",
+    "Health Information Services",
+    "Medical Devices",
+    "Medical Instruments & Supplies"
+  ],
+  "Consumer Goods & Retail": [
+    "Apparel Retail",
+    "Beverages - Non-Alcoholic",
+    "Confectioners",
+    "Discount Stores",
+    "Packaged Foods",
+    "Restaurants"
+  ],
+  "Industrials & Manufacturing": [
+    "Aerospace & Defense",
+    "Auto Manufacturers",
+    "Auto Parts",
+    "Farm & Heavy Construction Machinery",
+    "Industrial Distribution",
+    "Railroads",
+    "Trucking"
+  ],
+  "Energy & Utilities": [
+    "Oil & Gas E&P",
+    "Oil & Gas Equipment & Services",
+    "Utilities - Regulated Electric",
+    "Utilities - Renewable"
+  ],
+  "Business & Professional Services": [
+    "Advertising Agencies",
+    "Consulting Services",
+    "Credit Services",
+    "Conglomerates",
+    "Specialty Business Services",
+    "Specialty Chemicals",
+    "Real Estate Services",
+    "Lodging",
+    "Travel Services",
+    "Entertainment",
+    "Telecom Services"
+  ]
+}
