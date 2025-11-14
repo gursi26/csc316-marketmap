@@ -89,11 +89,15 @@ function createScales(data, xAxis, yAxis) {
 
 // Create axes
 function createAxes(xScale, yScale, xAxis, yAxis) {
+    // Custom formatters for different axes
+    const xFormat = getAxisFormatter(xAxis);
+    const yFormat = getAxisFormatter(yAxis);
+    
     const xAxisGenerator = d3.axisBottom(xScale)
-        .tickFormat(d3.format(".1f"));
+        .tickFormat(xFormat);
 
     const yAxisGenerator = d3.axisLeft(yScale)
-        .tickFormat(d3.format(".1f"));
+        .tickFormat(yFormat);
 
     // Remove existing axes
     g.selectAll(".x-axis").remove();
@@ -127,6 +131,19 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
         .attr("dy", "1em")
         .style("text-anchor", "middle")
         .text(getAxisLabel(yAxis));
+}
+
+// Add this new function
+function getAxisFormatter(axis) {
+    if (axis === 'revenue' || axis === 'market_cap') {
+        // Format large numbers in billions with B suffix
+        return d => {
+            if (d >= 1e9) return (d / 1e9).toFixed(1) + 'B';
+            if (d >= 1e6) return (d / 1e6).toFixed(1) + 'M';
+            return d.toFixed(0);
+        };
+    }
+    return d3.format(".1f");
 }
 
 function getAxisLabel(axis) {
