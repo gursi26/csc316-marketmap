@@ -1,0 +1,2017 @@
+Ticker,Benefit Category,Benefit Description
+AAPL,Unique To Apple,Music Events
+AAPL,Unique To Apple,Fertility Assistance
+AAPL,"Insurance, Health, & Wellness","Free Dinner $2,600"
+AAPL,"Insurance, Health, & Wellness",Free Snacks $730
+AAPL,"Insurance, Health, & Wellness",Life Insurance
+AAPL,"Insurance, Health, & Wellness",Gym On-Site $300
+AAPL,"Insurance, Health, & Wellness",Health Insurance
+AAPL,"Insurance, Health, & Wellness",On-Site Fitness Classes
+AAPL,"Insurance, Health, & Wellness",Gym Discount
+AAPL,"Insurance, Health, & Wellness",Paternity Leave
+AAPL,"Insurance, Health, & Wellness",Health Savings Account (HSA) $750
+AAPL,"Insurance, Health, & Wellness",On-Site Mother's Room
+AAPL,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+AAPL,"Insurance, Health, & Wellness",Pet Insurance
+AAPL,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+AAPL,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+AAPL,"Insurance, Health, & Wellness",Free Drinks $365
+AAPL,"Insurance, Health, & Wellness",Employee Assistance Program
+AAPL,"Insurance, Health, & Wellness",Sick Time
+AAPL,"Insurance, Health, & Wellness",Custom Work Station
+AAPL,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $360
+AAPL,"Insurance, Health, & Wellness",Maternity Leave
+AAPL,"Insurance, Health, & Wellness",Sabbatical
+AAPL,"Insurance, Health, & Wellness",On-Site Clinic
+AAPL,"Insurance, Health, & Wellness",Dental Insurance
+AAPL,"Insurance, Health, & Wellness",Vision Insurance
+AAPL,"Insurance, Health, & Wellness",Disability Insurance
+AAPL,Home,On-Site Laundry
+AAPL,Home,Immigration Assistance
+AAPL,Home,Fertility Assistance
+AAPL,Home,Company Phones
+AAPL,Home,Business Travel Insurance
+AAPL,Home,On-Site Employee Mall
+AAPL,Home,Remote Work
+AAPL,Home,Military Leave
+AAPL,Home,Relocation Bonus
+AAPL,Home,Adoption Assistance
+AAPL,Financial & Retirement,Roth 401k
+AAPL,Financial & Retirement,Mega Backdoor Roth
+AAPL,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+AAPL,Financial & Retirement,Flexible Spending Account (FSA)
+AAPL,Financial & Retirement,"401k $7,200"
+AAPL,Perks & Discounts,Employee Discount
+AAPL,Perks & Discounts,Tuition Reimbursement
+AAPL,Perks & Discounts,Employee Credit $250
+AAPL,Perks & Discounts,Learning and Development
+AAPL,Transportation,Regional transit system
+AAPL,Transportation,Bikes on Campus
+AAPL,Transportation,Company Shuttle
+AAPL,Transportation,Transport allowance
+AAPL,Other,Donation Match
+AAPL,Other,Volunteer Time Off
+SBUX,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+SBUX,"Insurance, Health, & Wellness",Dental Insurance
+SBUX,"Insurance, Health, & Wellness",Employee Assistance Program
+SBUX,"Insurance, Health, & Wellness",Health Insurance
+SBUX,"Insurance, Health, & Wellness",Life Insurance
+SBUX,"Insurance, Health, & Wellness",Paternity Leave
+SBUX,"Insurance, Health, & Wellness",Disability Insurance
+SBUX,"Insurance, Health, & Wellness",Gym On-Site $300
+SBUX,"Insurance, Health, & Wellness",Maternity Leave
+SBUX,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+SBUX,"Insurance, Health, & Wellness",Sick Time
+SBUX,"Insurance, Health, & Wellness",Sabbatical
+SBUX,"Insurance, Health, & Wellness",Vision Insurance
+SBUX,Home,Adoption Assistance
+SBUX,Home,Fertility Assistance
+SBUX,Home,Immigration Assistance
+SBUX,Home,Remote Work
+SBUX,Home,Military Leave
+SBUX,Financial & Retirement,"401k $6,000"
+SBUX,Financial & Retirement,Flexible Spending Account (FSA)
+SBUX,Financial & Retirement,Roth 401k
+SBUX,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+SBUX,Perks & Discounts,Tuition Reimbursement
+SBUX,Perks & Discounts,Employee Discount
+SBUX,Perks & Discounts,Learning and Development
+SBUX,Transportation,Regional transit system
+SBUX,Transportation,Transport allowance
+SBUX,Other,Donation Match
+TRI,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+TRI,"Insurance, Health, & Wellness",Dental Insurance
+TRI,"Insurance, Health, & Wellness",Employee Assistance Program
+TRI,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+TRI,"Insurance, Health, & Wellness",Gym Discount
+TRI,"Insurance, Health, & Wellness",Health Insurance
+TRI,"Insurance, Health, & Wellness",Life Insurance
+TRI,"Insurance, Health, & Wellness",On-Site Clinic
+TRI,"Insurance, Health, & Wellness",On-Site Mother's Room
+TRI,"Insurance, Health, & Wellness",Paternity Leave
+TRI,"Insurance, Health, & Wellness",Sabbatical
+TRI,"Insurance, Health, & Wellness",Vision Insurance
+TRI,"Insurance, Health, & Wellness",Custom Work Station
+TRI,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+TRI,"Insurance, Health, & Wellness",Free Drinks $365
+TRI,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+TRI,"Insurance, Health, & Wellness",Gym On-Site $300
+TRI,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+TRI,"Insurance, Health, & Wellness",Maternity Leave
+TRI,"Insurance, Health, & Wellness",On-Site Fitness Classes
+TRI,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+TRI,"Insurance, Health, & Wellness",Sick Time
+TRI,Home,Adoption Assistance
+TRI,Home,Business Travel Insurance
+TRI,Home,Immigration Assistance
+TRI,Home,On-Site Car Wash / Detailing
+TRI,Home,On-Site Laundry
+TRI,Home,Phone Bill Reimbursement
+TRI,Home,Bereavement Leave
+TRI,Home,Company Phones
+TRI,Home,Housing Stipend
+TRI,Home,Military Leave
+TRI,Home,On-Site Employee Mall
+TRI,Home,On-Site Tire Replacement
+TRI,Home,Relocation Bonus
+TRI,Home,Remote Work
+TRI,Home,Fertility Assistance
+TRI,Financial & Retirement,Flexible Spending Account (FSA)
+TRI,Financial & Retirement,Roth 401k
+TRI,Financial & Retirement,Mega Backdoor Roth
+TRI,Financial & Retirement,Student Loan Repayment Plan
+TRI,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+TRI,Financial & Retirement,"401k $6,000"
+TRI,Perks & Discounts,Employee Credit
+TRI,Perks & Discounts,Learning and Development
+TRI,Perks & Discounts,Tuition Reimbursement
+TRI,Other,Donation Match
+TRI,Other,Volunteer Time Off
+INTC,Unique To Intel,An Extra Vacation Boost
+INTC,Unique To Intel,Free HDCP
+INTC,"Insurance, Health, & Wellness",Gym On-Site $300
+INTC,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+INTC,"Insurance, Health, & Wellness",On-Site Fitness Classes
+INTC,"Insurance, Health, & Wellness",On-Site Mother's Room
+INTC,"Insurance, Health, & Wellness",Dental Insurance
+INTC,"Insurance, Health, & Wellness",Free Drinks $365
+INTC,"Insurance, Health, & Wellness",On-Site Clinic
+INTC,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+INTC,"Insurance, Health, & Wellness",Vision Insurance
+INTC,"Insurance, Health, & Wellness",Paternity Leave
+INTC,"Insurance, Health, & Wellness",Sick Time
+INTC,"Insurance, Health, & Wellness",Maternity Leave
+INTC,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+INTC,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+INTC,"Insurance, Health, & Wellness",Employee Assistance Program
+INTC,"Insurance, Health, & Wellness",Life Insurance
+INTC,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+INTC,"Insurance, Health, & Wellness",Health Insurance
+INTC,"Insurance, Health, & Wellness",Disability Insurance
+INTC,"Insurance, Health, & Wellness",Sabbatical
+INTC,"Insurance, Health, & Wellness",Custom Work Station
+INTC,"Insurance, Health, & Wellness",Free Snacks $730
+INTC,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+INTC,"Insurance, Health, & Wellness","Free Lunch $2,600"
+INTC,"Insurance, Health, & Wellness","Free Dinner $2,600"
+INTC,Home,Adoption Assistance
+INTC,Home,Fertility Assistance
+INTC,Home,On-Site Car Wash / Detailing
+INTC,Home,Relocation Bonus
+INTC,Home,On-Site Laundry
+INTC,Home,Business Travel Insurance
+INTC,Home,Immigration Assistance
+INTC,Home,Company Phones
+INTC,Home,Remote Work
+INTC,Home,Military Leave
+INTC,Financial & Retirement,Mega Backdoor Roth
+INTC,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+INTC,Financial & Retirement,Roth 401k
+INTC,Financial & Retirement,Flexible Spending Account (FSA)
+INTC,Financial & Retirement,"401k $6,000"
+INTC,Perks & Discounts,Employee Discount
+INTC,Perks & Discounts,Tuition Reimbursement
+INTC,Transportation,Company Shuttle
+INTC,Transportation,Transport allowance
+INTC,Other,Additional Leaves
+INTC,Other,Family Care
+INTC,Other,Donation Match
+INTC,Other,Volunteer Time Off
+SNPS,Unique To Synopsys,Genetic Testing
+SNPS,"Insurance, Health, & Wellness",Health Insurance
+SNPS,"Insurance, Health, & Wellness",Dental Insurance
+SNPS,"Insurance, Health, & Wellness",Vision Insurance
+SNPS,"Insurance, Health, & Wellness",Employee Assistance Program
+SNPS,"Insurance, Health, & Wellness",Health Savings Account (HSA) $500
+SNPS,"Insurance, Health, & Wellness",Disability Insurance
+SNPS,"Insurance, Health, & Wellness",Life Insurance
+SNPS,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+SNPS,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+SNPS,"Insurance, Health, & Wellness",Paternity Leave
+SNPS,"Insurance, Health, & Wellness",Maternity Leave
+SNPS,"Insurance, Health, & Wellness",Pet Insurance
+SNPS,"Insurance, Health, & Wellness",Free Snacks $730
+SNPS,Home,Business Travel Insurance
+SNPS,Home,Adoption Assistance
+SNPS,Financial & Retirement,Roth 401k
+SNPS,Financial & Retirement,Student Loan Repayment Plan
+SNPS,Financial & Retirement,Flexible Spending Account (FSA)
+SNPS,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+SNPS,Financial & Retirement,"401k $1,200"
+SNPS,Perks & Discounts,Employee Discount
+SNPS,Perks & Discounts,Tuition Reimbursement
+SNPS,Other,Designed for Wellness
+SNPS,Other,Near-Site Health Center
+SNPS,Other,Weight Management Program
+SNPS,Other,Fitness Resources
+CDW,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+CDW,"Insurance, Health, & Wellness",Vision Insurance
+CDW,"Insurance, Health, & Wellness",Health Insurance
+CDW,"Insurance, Health, & Wellness",Dental Insurance
+CDW,"Insurance, Health, & Wellness",Disability Insurance
+CDW,"Insurance, Health, & Wellness",Life Insurance
+CDW,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+CDW,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+CDW,"Insurance, Health, & Wellness",Sick Time
+CDW,Home,Military Leave
+CDW,Financial & Retirement,Flexible Spending Account (FSA)
+CDW,Financial & Retirement,401k
+CDW,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+CDW,Perks & Discounts,Learning and Development
+CDW,Perks & Discounts,Tuition Reimbursement
+HON,"Insurance, Health, & Wellness",Health Insurance
+HON,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+HON,"Insurance, Health, & Wellness",Dental Insurance
+HON,"Insurance, Health, & Wellness",Vision Insurance
+HON,"Insurance, Health, & Wellness",Life Insurance
+HON,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+HON,"Insurance, Health, & Wellness",Disability Insurance
+HON,"Insurance, Health, & Wellness",Employee Assistance Program
+HON,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+HON,"Insurance, Health, & Wellness",Maternity Leave
+HON,"Insurance, Health, & Wellness",Paternity Leave
+HON,Home,Adoption Assistance
+HON,Home,Military Leave
+HON,Financial & Retirement,Flexible Spending Account (FSA)
+HON,Financial & Retirement,Roth 401k
+HON,Financial & Retirement,"401k $8,400"
+HON,Perks & Discounts,Employee Discount
+HON,Perks & Discounts,Tuition Reimbursement
+HON,Transportation,Transport allowance
+HON,Other,Business Travel and Accident Insurance (BTA) Insurance
+DXCM,"Insurance, Health, & Wellness",Vision Insurance
+DXCM,"Insurance, Health, & Wellness",Health Insurance
+DXCM,"Insurance, Health, & Wellness",Dental Insurance
+DXCM,"Insurance, Health, & Wellness",Life Insurance
+DXCM,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+DXCM,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+DXCM,"Insurance, Health, & Wellness",Disability Insurance
+DXCM,"Insurance, Health, & Wellness",Maternity Leave
+DXCM,"Insurance, Health, & Wellness",Paternity Leave
+DXCM,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+DXCM,"Insurance, Health, & Wellness",Sick Time
+DXCM,"Insurance, Health, & Wellness",Gym Discount
+DXCM,"Insurance, Health, & Wellness",Employee Assistance Program
+DXCM,Home,Military Leave
+DXCM,Home,Phone Bill Reimbursement
+DXCM,Financial & Retirement,Flexible Spending Account (FSA)
+DXCM,Financial & Retirement,401k
+DXCM,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+DXCM,Perks & Discounts,Employee Discount
+LULU,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+LULU,"Insurance, Health, & Wellness",Vision Insurance
+LULU,"Insurance, Health, & Wellness",Health Insurance
+LULU,"Insurance, Health, & Wellness",Dental Insurance
+LULU,"Insurance, Health, & Wellness",Maternity Leave
+LULU,"Insurance, Health, & Wellness",Paternity Leave
+LULU,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+LULU,"Insurance, Health, & Wellness",Disability Insurance
+LULU,"Insurance, Health, & Wellness","Gym / Wellness Reimbursement CA$4,230"
+LULU,"Insurance, Health, & Wellness",Life Insurance
+LULU,"Insurance, Health, & Wellness",Sabbatical
+LULU,"Insurance, Health, & Wellness",Sick Time
+LULU,Home,Relocation Bonus
+LULU,Home,"Phone Bill Reimbursement CA$1,269"
+LULU,Perks & Discounts,Employee Discount
+LULU,Transportation,Transport allowance
+ADI,"Insurance, Health, & Wellness",Health Insurance
+ADI,"Insurance, Health, & Wellness",Dental Insurance
+ADI,"Insurance, Health, & Wellness",Vision Insurance
+ADI,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ADI,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+ADI,"Insurance, Health, & Wellness",Life Insurance
+ADI,"Insurance, Health, & Wellness",Disability Insurance
+ADI,"Insurance, Health, & Wellness",Sick Time
+ADI,"Insurance, Health, & Wellness",Employee Assistance Program
+ADI,"Insurance, Health, & Wellness",On-Site Mother's Room
+ADI,"Insurance, Health, & Wellness",Paternity Leave
+ADI,"Insurance, Health, & Wellness",Maternity Leave
+ADI,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+ADI,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+ADI,"Insurance, Health, & Wellness",Gym On-Site $300
+ADI,Home,Relocation Bonus
+ADI,Home,Immigration Assistance
+ADI,Financial & Retirement,401k
+ADI,Financial & Retirement,Flexible Spending Account (FSA)
+ADI,Perks & Discounts,Learning and Development
+ADI,Perks & Discounts,Tuition Reimbursement
+ADI,Other,Donation Match
+EA,"Insurance, Health, & Wellness",Gym On-Site $300
+EA,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+EA,"Insurance, Health, & Wellness",On-Site Fitness Classes
+EA,"Insurance, Health, & Wellness",Paternity Leave
+EA,"Insurance, Health, & Wellness",Maternity Leave
+EA,"Insurance, Health, & Wellness",Health Insurance
+EA,"Insurance, Health, & Wellness",Dental Insurance
+EA,"Insurance, Health, & Wellness",Vision Insurance
+EA,"Insurance, Health, & Wellness",Employee Assistance Program
+EA,"Insurance, Health, & Wellness",Life Insurance
+EA,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+EA,"Insurance, Health, & Wellness",Disability Insurance
+EA,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+EA,"Insurance, Health, & Wellness",Sick Time
+EA,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $500
+EA,"Insurance, Health, & Wellness",Pet Insurance
+EA,"Insurance, Health, & Wellness",Gym Discount
+EA,Home,Fertility Assistance
+EA,Home,Business Travel Insurance
+EA,Home,Military Leave
+EA,Home,Adoption Assistance
+EA,Home,Remote Work
+EA,Financial & Retirement,Flexible Spending Account (FSA)
+EA,Financial & Retirement,Roth 401k
+EA,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+EA,Financial & Retirement,"401k $3,600"
+EA,Perks & Discounts,Employee Discount
+EA,Perks & Discounts,Learning and Development
+EA,Perks & Discounts,Tuition Reimbursement
+EA,Transportation,Company Shuttle
+EA,Other,Game console reimbursement
+AXON,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+AXON,"Insurance, Health, & Wellness",Dental Insurance
+AXON,"Insurance, Health, & Wellness",Gym Discount
+AXON,"Insurance, Health, & Wellness",Health Insurance
+AXON,"Insurance, Health, & Wellness",Life Insurance
+AXON,"Insurance, Health, & Wellness",Paternity Leave
+AXON,"Insurance, Health, & Wellness",Vision Insurance
+AXON,"Insurance, Health, & Wellness",Free Drinks $365
+AXON,"Insurance, Health, & Wellness",Free Snacks $730
+AXON,"Insurance, Health, & Wellness",Health Savings Account (HSA) $720
+AXON,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+AXON,"Insurance, Health, & Wellness",Employee Assistance Program
+AXON,"Insurance, Health, & Wellness",Gym On-Site $300
+AXON,"Insurance, Health, & Wellness",Disability Insurance
+AXON,"Insurance, Health, & Wellness",Sick Time
+AXON,"Insurance, Health, & Wellness",Maternity Leave
+AXON,Home,Relocation Bonus
+AXON,Financial & Retirement,"401k $3,600"
+AXON,Financial & Retirement,Flexible Spending Account (FSA)
+AXON,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+AXON,Perks & Discounts,Tuition Reimbursement
+AXON,Perks & Discounts,Learning and Development
+AXON,Perks & Discounts,Employee Discount
+AXON,Transportation,Regional transit system
+AXON,Transportation,Transport allowance
+AXON,Other,Volunteer Time Off
+AXON,Other,Company Sponsored Family Events
+AXON,Other,Company Outings
+CRWD,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+CRWD,"Insurance, Health, & Wellness",Dental Insurance
+CRWD,"Insurance, Health, & Wellness",Employee Assistance Program
+CRWD,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+CRWD,"Insurance, Health, & Wellness",Paternity Leave
+CRWD,"Insurance, Health, & Wellness",Maternity Leave
+CRWD,"Insurance, Health, & Wellness",Disability Insurance
+CRWD,"Insurance, Health, & Wellness",Free Drinks $365
+CRWD,"Insurance, Health, & Wellness","Free Lunch $2,600"
+CRWD,"Insurance, Health, & Wellness",Health Insurance
+CRWD,"Insurance, Health, & Wellness",Life Insurance
+CRWD,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+CRWD,"Insurance, Health, & Wellness",Vision Insurance
+CRWD,"Insurance, Health, & Wellness",Sick Time
+CRWD,Home,Immigration Assistance
+CRWD,Home,Adoption Assistance
+CRWD,Home,Relocation Bonus
+CRWD,Home,Fertility Assistance
+CRWD,Home,Phone Bill Reimbursement
+CRWD,Home,Remote Work
+CRWD,Financial & Retirement,401k
+CRWD,Financial & Retirement,Flexible Spending Account (FSA)
+CRWD,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+CRWD,Perks & Discounts,Employee Credit
+CRWD,Perks & Discounts,Employee Discount
+CRWD,Perks & Discounts,Tuition Reimbursement
+CRWD,Perks & Discounts,Learning and Development
+CRWD,Transportation,Transport allowance
+CRWD,Other,Donation Match
+CRWD,Other,Volunteer Time Off
+PEP,"Insurance, Health, & Wellness",Health Insurance
+PEP,"Insurance, Health, & Wellness",Vision Insurance
+PEP,"Insurance, Health, & Wellness",Dental Insurance
+PEP,"Insurance, Health, & Wellness",Life Insurance
+PEP,"Insurance, Health, & Wellness",Employee Assistance Program
+PEP,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+PEP,"Insurance, Health, & Wellness",Paternity Leave
+PEP,"Insurance, Health, & Wellness",Maternity Leave
+PEP,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+PEP,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+PEP,"Insurance, Health, & Wellness",Disability Insurance
+PEP,Home,Adoption Assistance
+PEP,Home,Military Leave
+PEP,Financial & Retirement,401k
+PEP,Financial & Retirement,Flexible Spending Account (FSA)
+PEP,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+PEP,Perks & Discounts,Tuition Reimbursement
+PEP,Perks & Discounts,Learning and Development
+PEP,Transportation,Regional transit system
+PEP,Other,Donation Match
+ABNB,Unique To Airbnb,Travel Stipend
+ABNB,"Insurance, Health, & Wellness",Free Breakfast
+ABNB,"Insurance, Health, & Wellness","Free Dinner $2,080"
+ABNB,"Insurance, Health, & Wellness","Free Lunch $2,600"
+ABNB,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+ABNB,"Insurance, Health, & Wellness",On-Site Fitness Classes
+ABNB,"Insurance, Health, & Wellness",Dental Insurance
+ABNB,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+ABNB,"Insurance, Health, & Wellness",Free Drinks $365
+ABNB,"Insurance, Health, & Wellness",Free Snacks $730
+ABNB,"Insurance, Health, & Wellness",Health Insurance
+ABNB,"Insurance, Health, & Wellness",Life Insurance
+ABNB,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+ABNB,"Insurance, Health, & Wellness",Vision Insurance
+ABNB,"Insurance, Health, & Wellness",Disability Insurance
+ABNB,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+ABNB,"Insurance, Health, & Wellness",Gym On-Site $300
+ABNB,"Insurance, Health, & Wellness",Maternity Leave
+ABNB,"Insurance, Health, & Wellness",Paternity Leave
+ABNB,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ABNB,"Insurance, Health, & Wellness",Sick Time
+ABNB,Home,Fertility Assistance
+ABNB,Home,Adoption Assistance
+ABNB,Home,Remote Work
+ABNB,Financial & Retirement,"401k $3,600"
+ABNB,Financial & Retirement,Flexible Spending Account (FSA)
+ABNB,Financial & Retirement,Roth 401k
+ABNB,Perks & Discounts,Employee Credit
+ABNB,Transportation,Transport allowance
+ABNB,Other,Donation Match
+ABNB,Other,Pet Friendly Workplace
+ABNB,Other,Volunteer Time Off
+ZS,"Insurance, Health, & Wellness",Employee Assistance Program
+ZS,"Insurance, Health, & Wellness",Maternity Leave
+ZS,"Insurance, Health, & Wellness",Paternity Leave
+ZS,"Insurance, Health, & Wellness",Pet Insurance
+ZS,"Insurance, Health, & Wellness",Sick Time
+ZS,"Insurance, Health, & Wellness",Dental Insurance
+ZS,"Insurance, Health, & Wellness",Disability Insurance
+ZS,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+ZS,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+ZS,"Insurance, Health, & Wellness",Life Insurance
+ZS,"Insurance, Health, & Wellness",Free Snacks $730
+ZS,"Insurance, Health, & Wellness",Free Drinks $365
+ZS,"Insurance, Health, & Wellness",Gym On-Site $300
+ZS,"Insurance, Health, & Wellness",Health Insurance
+ZS,"Insurance, Health, & Wellness",On-Site Mother's Room
+ZS,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+ZS,"Insurance, Health, & Wellness",Custom Work Station
+ZS,"Insurance, Health, & Wellness",Free Breakfast
+ZS,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ZS,"Insurance, Health, & Wellness",Vision Insurance
+ZS,"Insurance, Health, & Wellness",Free Lunch $520
+ZS,"Insurance, Health, & Wellness",Free Dinner $520
+ZS,Home,Military Leave
+ZS,Home,Fertility Assistance
+ZS,Home,Remote Work
+ZS,Financial & Retirement,"401k $2,000"
+ZS,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+ZS,Financial & Retirement,Flexible Spending Account (FSA)
+ZS,Financial & Retirement,Roth 401k
+ZS,Perks & Discounts,Employee Discount
+ZS,Perks & Discounts,Tuition Reimbursement
+ZS,Perks & Discounts,Learning and Development
+ZS,Transportation,Transport allowance
+ZS,Other,Referral Program
+AMZN,Unique To Amazon,Pet Friendly Workplace
+AMZN,Unique To Amazon,Anytime Pay
+AMZN,"Insurance, Health, & Wellness",Life Insurance
+AMZN,"Insurance, Health, & Wellness",Health Insurance
+AMZN,"Insurance, Health, & Wellness",Paternity Leave
+AMZN,"Insurance, Health, & Wellness",Dental Insurance
+AMZN,"Insurance, Health, & Wellness",Vision Insurance
+AMZN,"Insurance, Health, & Wellness",On-Site Mother's Room
+AMZN,"Insurance, Health, & Wellness",Pet Insurance
+AMZN,"Insurance, Health, & Wellness",Custom Work Station
+AMZN,"Insurance, Health, & Wellness",Health Savings Account (HSA) $500
+AMZN,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+AMZN,"Insurance, Health, & Wellness",Sabbatical
+AMZN,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+AMZN,"Insurance, Health, & Wellness",Sick Time
+AMZN,"Insurance, Health, & Wellness",Disability Insurance
+AMZN,"Insurance, Health, & Wellness",Maternity Leave
+AMZN,"Insurance, Health, & Wellness",COVID-Related Benefits
+AMZN,"Insurance, Health, & Wellness",Employee Assistance Program
+AMZN,"Insurance, Health, & Wellness",On-Site Clinic
+AMZN,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+AMZN,"Insurance, Health, & Wellness",Free Snacks $730
+AMZN,"Insurance, Health, & Wellness",Free Drinks $365
+AMZN,Home,Adoption Assistance
+AMZN,Home,Fertility Assistance
+AMZN,Home,Phone Bill Reimbursement $600
+AMZN,Home,Relocation Bonus
+AMZN,Home,Military Leave
+AMZN,Home,Immigration Assistance
+AMZN,Financial & Retirement,Roth 401k
+AMZN,Financial & Retirement,Flexible Spending Account (FSA)
+AMZN,Financial & Retirement,Mega Backdoor Roth
+AMZN,Financial & Retirement,"401k $2,400"
+AMZN,Perks & Discounts,Employee Discount
+AMZN,Perks & Discounts,Learning and Development
+AMZN,Transportation,Company Shuttle
+AMZN,Transportation,Regional transit system
+AMZN,Transportation,Transport allowance
+AMZN,Other,Remote Policy
+PAYX,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+PAYX,"Insurance, Health, & Wellness",Dental Insurance
+PAYX,"Insurance, Health, & Wellness",Employee Assistance Program
+PAYX,"Insurance, Health, & Wellness",Health Insurance
+PAYX,"Insurance, Health, & Wellness",Life Insurance
+PAYX,"Insurance, Health, & Wellness",Paternity Leave
+PAYX,"Insurance, Health, & Wellness",Vision Insurance
+PAYX,"Insurance, Health, & Wellness",Disability Insurance
+PAYX,"Insurance, Health, & Wellness",Maternity Leave
+PAYX,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+PAYX,"Insurance, Health, & Wellness",Sick Time
+PAYX,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+PAYX,Home,Adoption Assistance
+PAYX,Home,Fertility Assistance
+PAYX,Home,Remote Work
+PAYX,Home,Bereavement Leave
+PAYX,Home,Military Leave
+PAYX,Financial & Retirement,Flexible Spending Account (FSA)
+PAYX,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+PAYX,Financial & Retirement,"401k $4,800"
+PAYX,Perks & Discounts,Employee Discount
+PAYX,Other,Volunteer Time Off
+BKR,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+BKR,"Insurance, Health, & Wellness",Dental Insurance
+BKR,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+BKR,"Insurance, Health, & Wellness",Health Insurance
+BKR,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+BKR,"Insurance, Health, & Wellness",Life Insurance
+BKR,"Insurance, Health, & Wellness",Maternity Leave
+BKR,"Insurance, Health, & Wellness",Vision Insurance
+BKR,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+BKR,Home,Remote Work
+BKR,Home,Military Leave
+BKR,Financial & Retirement,401k
+MRVL,Unique To Marvell,2nd.MD
+MRVL,"Insurance, Health, & Wellness",Dental Insurance
+MRVL,"Insurance, Health, & Wellness",On-Site Clinic
+MRVL,"Insurance, Health, & Wellness",On-Site Mother's Room
+MRVL,"Insurance, Health, & Wellness",Disability Insurance
+MRVL,"Insurance, Health, & Wellness",Gym On-Site $300
+MRVL,"Insurance, Health, & Wellness",On-Site Fitness Classes
+MRVL,"Insurance, Health, & Wellness",Vision Insurance
+MRVL,"Insurance, Health, & Wellness",Health Insurance
+MRVL,"Insurance, Health, & Wellness",Health Savings Account (HSA) $500
+MRVL,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+MRVL,"Insurance, Health, & Wellness",Life Insurance
+MRVL,"Insurance, Health, & Wellness",Maternity Leave
+MRVL,"Insurance, Health, & Wellness",Paternity Leave
+MRVL,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+MRVL,"Insurance, Health, & Wellness",Sick Time
+MRVL,"Insurance, Health, & Wellness",Employee Assistance Program
+MRVL,Home,On-Site Car Wash / Detailing
+MRVL,Home,On-Site Laundry
+MRVL,Home,Fertility Assistance
+MRVL,Home,Adoption Assistance
+MRVL,Financial & Retirement,Roth 401k
+MRVL,Financial & Retirement,"401k $11,000"
+MRVL,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+MRVL,Financial & Retirement,Flexible Spending Account (FSA)
+MRVL,Perks & Discounts,Employee Discount
+MRVL,Perks & Discounts,Tuition Reimbursement
+MRVL,Transportation,Transport allowance
+MRVL,Other,Employee Referral Program
+WDAY,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+WDAY,"Insurance, Health, & Wellness",Dental Insurance
+WDAY,"Insurance, Health, & Wellness",Free Snacks $730
+WDAY,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $600
+WDAY,"Insurance, Health, & Wellness","Health Savings Account (HSA) $1,125"
+WDAY,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+WDAY,"Insurance, Health, & Wellness",Pet Insurance
+WDAY,"Insurance, Health, & Wellness",Vision Insurance
+WDAY,"Insurance, Health, & Wellness",Disability Insurance
+WDAY,"Insurance, Health, & Wellness",Employee Assistance Program
+WDAY,"Insurance, Health, & Wellness",Health Insurance
+WDAY,"Insurance, Health, & Wellness",Life Insurance
+WDAY,"Insurance, Health, & Wellness",Sick Time
+WDAY,"Insurance, Health, & Wellness",Gym On-Site $300
+WDAY,"Insurance, Health, & Wellness",Free Drinks $365
+WDAY,"Insurance, Health, & Wellness",Paternity Leave
+WDAY,"Insurance, Health, & Wellness",Maternity Leave
+WDAY,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+WDAY,"Insurance, Health, & Wellness",On-Site Clinic
+WDAY,"Insurance, Health, & Wellness",On-Site Mother's Room
+WDAY,"Insurance, Health, & Wellness",Gym Discount
+WDAY,Home,Adoption Assistance
+WDAY,Home,Immigration Assistance
+WDAY,Home,Military Leave
+WDAY,Home,Remote Work
+WDAY,Financial & Retirement,"401k $3,600"
+WDAY,Financial & Retirement,Roth 401k
+WDAY,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+WDAY,Financial & Retirement,Flexible Spending Account (FSA)
+WDAY,Financial & Retirement,Mega Backdoor Roth
+WDAY,Perks & Discounts,Employee Discount
+WDAY,Transportation,Bikes on Campus
+WDAY,Transportation,Regional transit system
+WDAY,Transportation,Transport allowance
+WDAY,Other,Donation Match
+WDAY,Other,Pet Friendly Workplace
+WDAY,Other,Back up Child Care
+WDAY,Other,Volunteer Time Off
+QCOM,"Insurance, Health, & Wellness",Health Insurance
+QCOM,"Insurance, Health, & Wellness",Life Insurance
+QCOM,"Insurance, Health, & Wellness",On-Site Clinic
+QCOM,"Insurance, Health, & Wellness",On-Site Mother's Room
+QCOM,"Insurance, Health, & Wellness",Gym On-Site $300
+QCOM,"Insurance, Health, & Wellness",On-Site Fitness Classes
+QCOM,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+QCOM,"Insurance, Health, & Wellness",Vision Insurance
+QCOM,"Insurance, Health, & Wellness",Employee Assistance Program
+QCOM,"Insurance, Health, & Wellness",Health Savings Account (HSA) $750
+QCOM,"Insurance, Health, & Wellness",Paternity Leave
+QCOM,"Insurance, Health, & Wellness",Maternity Leave
+QCOM,"Insurance, Health, & Wellness",Sick Time
+QCOM,"Insurance, Health, & Wellness",Free Drinks $365
+QCOM,"Insurance, Health, & Wellness",Dental Insurance
+QCOM,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+QCOM,"Insurance, Health, & Wellness",Disability Insurance
+QCOM,"Insurance, Health, & Wellness",Gym Discount
+QCOM,"Insurance, Health, & Wellness",Custom Work Station
+QCOM,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+QCOM,"Insurance, Health, & Wellness","Free Lunch $2,600"
+QCOM,"Insurance, Health, & Wellness",Free Snacks $730
+QCOM,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $600
+QCOM,Home,Adoption Assistance
+QCOM,Home,Fertility Assistance
+QCOM,Home,Immigration Assistance
+QCOM,Home,Phone Bill Reimbursement
+QCOM,Home,Relocation Bonus
+QCOM,Home,Remote Work
+QCOM,Financial & Retirement,Mega Backdoor Roth
+QCOM,Financial & Retirement,Flexible Spending Account (FSA)
+QCOM,Financial & Retirement,Roth 401k
+QCOM,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+QCOM,Financial & Retirement,"401k $1,500"
+QCOM,Perks & Discounts,Employee Discount
+QCOM,Perks & Discounts,Tuition Reimbursement
+QCOM,Perks & Discounts,Learning and Development
+QCOM,Transportation,Company Shuttle
+QCOM,Transportation,Transport allowance
+QCOM,Other,Volunteer Time Off
+QCOM,Other,Donation Match
+ORLY,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+ORLY,"Insurance, Health, & Wellness",Disability Insurance
+ORLY,"Insurance, Health, & Wellness",Dental Insurance
+ORLY,"Insurance, Health, & Wellness",Employee Assistance Program
+ORLY,"Insurance, Health, & Wellness",Maternity Leave
+ORLY,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ORLY,"Insurance, Health, & Wellness",Gym Discount
+ORLY,"Insurance, Health, & Wellness",Health Insurance
+ORLY,"Insurance, Health, & Wellness",Life Insurance
+ORLY,"Insurance, Health, & Wellness",Vision Insurance
+ORLY,Home,Remote Work
+ORLY,Financial & Retirement,401k
+ORLY,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+ORLY,Financial & Retirement,Student Loan Repayment Plan
+ORLY,Financial & Retirement,Flexible Spending Account (FSA)
+ORLY,Financial & Retirement,Roth 401k
+ORLY,Perks & Discounts,Tuition Reimbursement
+ORLY,Perks & Discounts,Employee Discount
+ORLY,Other,Volunteer Time Off
+AEP,Home,Military Leave
+APP,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+APP,"Insurance, Health, & Wellness",Custom Work Station
+APP,"Insurance, Health, & Wellness",Disability Insurance
+APP,"Insurance, Health, & Wellness",Free Drinks $365
+APP,"Insurance, Health, & Wellness",Free Snacks $730
+APP,"Insurance, Health, & Wellness",Gym On-Site $300
+APP,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+APP,"Insurance, Health, & Wellness",Maternity Leave
+APP,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+APP,"Insurance, Health, & Wellness",Sick Time
+APP,"Insurance, Health, & Wellness",Dental Insurance
+APP,"Insurance, Health, & Wellness","Free Lunch $2,600"
+APP,"Insurance, Health, & Wellness",Health Insurance
+APP,"Insurance, Health, & Wellness",Life Insurance
+APP,"Insurance, Health, & Wellness",Paternity Leave
+APP,"Insurance, Health, & Wellness",Vision Insurance
+APP,Home,Adoption Assistance
+APP,Home,Fertility Assistance
+APP,Home,Phone Bill Reimbursement
+APP,Home,Remote Work
+APP,Financial & Retirement,Flexible Spending Account (FSA)
+APP,Financial & Retirement,"401k $4,200"
+APP,Other,Donation Match
+APP,Other,Referral Bonus
+APP,Other,Volunteer Time Off
+DASH,"Insurance, Health, & Wellness",Custom Work Station
+DASH,"Insurance, Health, & Wellness","Free Dinner $2,600"
+DASH,"Insurance, Health, & Wellness","Free Lunch $2,600"
+DASH,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $900
+DASH,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+DASH,"Insurance, Health, & Wellness",Sick Time
+DASH,"Insurance, Health, & Wellness",Free Drinks $365
+DASH,"Insurance, Health, & Wellness",Free Snacks $730
+DASH,"Insurance, Health, & Wellness",Gym Discount
+DASH,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+DASH,"Insurance, Health, & Wellness",Health Insurance
+DASH,"Insurance, Health, & Wellness",Dental Insurance
+DASH,"Insurance, Health, & Wellness",Vision Insurance
+DASH,"Insurance, Health, & Wellness",Life Insurance
+DASH,"Insurance, Health, & Wellness",Disability Insurance
+DASH,"Insurance, Health, & Wellness",Pet Insurance
+DASH,"Insurance, Health, & Wellness",Maternity Leave
+DASH,"Insurance, Health, & Wellness",Paternity Leave
+DASH,Home,Relocation Bonus
+DASH,Home,Fertility Assistance
+DASH,Home,Remote Work
+DASH,Financial & Retirement,401k
+DASH,Financial & Retirement,Flexible Spending Account (FSA)
+DASH,Perks & Discounts,Employee Credit $120
+DASH,Perks & Discounts,Employee Discount
+DASH,Perks & Discounts,Tuition Reimbursement
+DASH,Transportation,Regional transit system
+DASH,Transportation,Transport allowance
+DASH,Other,Pet Friendly Workplace
+DASH,Other,Quarterly team offsites
+GOOGL,Unique To Google,Fertility Assistance
+GOOGL,Unique To Google,Baby Bonding Bucks
+GOOGL,Unique To Google,Travel Insurance
+GOOGL,Unique To Google,On-site Massage
+GOOGL,Unique To Google,At Home COVID Test Kits
+GOOGL,"Insurance, Health, & Wellness","Free Lunch $2,600"
+GOOGL,"Insurance, Health, & Wellness",Life Insurance
+GOOGL,"Insurance, Health, & Wellness",Health Insurance
+GOOGL,"Insurance, Health, & Wellness",Sick Time
+GOOGL,"Insurance, Health, & Wellness",Dental Insurance
+GOOGL,"Insurance, Health, & Wellness",Vision Insurance
+GOOGL,"Insurance, Health, & Wellness",Disability Insurance
+GOOGL,"Insurance, Health, & Wellness",On-Site Clinic
+GOOGL,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+GOOGL,"Insurance, Health, & Wellness",Paternity Leave
+GOOGL,"Insurance, Health, & Wellness",Maternity Leave
+GOOGL,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+GOOGL,"Insurance, Health, & Wellness","Health Savings Account (HSA) $1,000"
+GOOGL,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+GOOGL,"Insurance, Health, & Wellness","Free Dinner $2,600"
+GOOGL,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+GOOGL,"Insurance, Health, & Wellness",Employee Assistance Program
+GOOGL,"Insurance, Health, & Wellness",Free Snacks $730
+GOOGL,"Insurance, Health, & Wellness",Custom Work Station
+GOOGL,"Insurance, Health, & Wellness",Free Drinks $365
+GOOGL,"Insurance, Health, & Wellness",On-Site Fitness Classes
+GOOGL,"Insurance, Health, & Wellness",Gym On-Site $300
+GOOGL,"Insurance, Health, & Wellness",Sabbatical
+GOOGL,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+GOOGL,"Insurance, Health, & Wellness",On-Site Mother's Room
+GOOGL,Home,On-Site Laundry
+GOOGL,Home,Phone Bill Reimbursement $840
+GOOGL,Home,Surrogacy Assistance
+GOOGL,Home,Adoption Assistance
+GOOGL,Home,Remote Work
+GOOGL,Home,Military Leave
+GOOGL,Home,Relocation Bonus
+GOOGL,Home,Business Travel Insurance
+GOOGL,Home,Immigration Assistance
+GOOGL,Home,Bereavement Leave
+GOOGL,Financial & Retirement,Student Loan Repayment Plan
+GOOGL,Financial & Retirement,"401k $9,750"
+GOOGL,Financial & Retirement,Flexible Spending Account (FSA)
+GOOGL,Financial & Retirement,Mega Backdoor Roth
+GOOGL,Financial & Retirement,Roth 401k
+GOOGL,Perks & Discounts,Employee Discount
+GOOGL,Perks & Discounts,Tuition Reimbursement
+GOOGL,Perks & Discounts,Learning and Development
+GOOGL,Transportation,Transport allowance
+GOOGL,Transportation,Company Shuttle
+GOOGL,Transportation,Regional transit system
+GOOGL,Transportation,Bikes on Campus
+GOOGL,Other,Donation Match
+GOOGL,Other,Volunteer Time Off
+GOOGL,Other,Accident Insurance
+GOOGL,Other,Caregiver Leave
+GOOGL,Other,Pet Friendly Workplace
+MSFT,Unique To Microsoft,Transport allowance
+MSFT,Unique To Microsoft,Childcare / Babysitting Reimbursement
+MSFT,"Insurance, Health, & Wellness",Maternity Leave
+MSFT,"Insurance, Health, & Wellness",Paternity Leave
+MSFT,"Insurance, Health, & Wellness",Sick Time
+MSFT,"Insurance, Health, & Wellness",Sabbatical
+MSFT,"Insurance, Health, & Wellness","Gym / Wellness Reimbursement $1,500"
+MSFT,"Insurance, Health, & Wellness",Disability Insurance
+MSFT,"Insurance, Health, & Wellness",Free Snacks $730
+MSFT,"Insurance, Health, & Wellness",Free Drinks $365
+MSFT,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+MSFT,"Insurance, Health, & Wellness","Health Savings Account (HSA) $1,000"
+MSFT,"Insurance, Health, & Wellness",Free Breakfast
+MSFT,"Insurance, Health, & Wellness",Free Lunch
+MSFT,"Insurance, Health, & Wellness",On-Site Clinic
+MSFT,"Insurance, Health, & Wellness",Life Insurance
+MSFT,"Insurance, Health, & Wellness",Vision Insurance
+MSFT,"Insurance, Health, & Wellness",Employee Assistance Program
+MSFT,"Insurance, Health, & Wellness",Dental Insurance
+MSFT,"Insurance, Health, & Wellness",Custom Work Station
+MSFT,"Insurance, Health, & Wellness",On-Site Mother's Room
+MSFT,"Insurance, Health, & Wellness",Health Insurance
+MSFT,"Insurance, Health, & Wellness",Gym On-Site $300
+MSFT,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+MSFT,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+MSFT,"Insurance, Health, & Wellness",Gym Discount
+MSFT,"Insurance, Health, & Wellness",On-Site Fitness Classes
+MSFT,Home,Phone Bill Reimbursement $900
+MSFT,Home,Remote Work
+MSFT,Home,Military Leave
+MSFT,Home,Relocation Bonus
+MSFT,Home,Fertility Assistance
+MSFT,Home,Adoption Assistance
+MSFT,Home,Business Travel Insurance
+MSFT,Home,On-Site Tire Replacement
+MSFT,Home,On-Site Laundry
+MSFT,Home,Immigration Assistance
+MSFT,Home,Housing Stipend
+MSFT,Home,On-Site Car Wash / Detailing
+MSFT,Home,On-Site Employee Mall
+MSFT,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+MSFT,Financial & Retirement,Student Loan Repayment Plan
+MSFT,Financial & Retirement,"401k $11,500"
+MSFT,Financial & Retirement,Mega Backdoor Roth
+MSFT,Financial & Retirement,Flexible Spending Account (FSA)
+MSFT,Financial & Retirement,Roth 401k
+MSFT,Perks & Discounts,Tuition Reimbursement
+MSFT,Perks & Discounts,Employee Discount
+MSFT,Perks & Discounts,Learning and Development
+MSFT,Perks & Discounts,Employee Credit
+MSFT,Transportation,Company Shuttle
+MSFT,Transportation,Bikes on Campus
+MSFT,Transportation,Regional transit system
+MSFT,Other,Donation Match
+MSFT,Other,Volunteer Time Off
+MSFT,Other,Pet Friendly Workplace
+MSFT,Other,Family Sickness Leave
+MSFT,Other,Legal Insurance
+AMGN,"Insurance, Health, & Wellness",Vision Insurance
+AMGN,"Insurance, Health, & Wellness",Health Insurance
+AMGN,"Insurance, Health, & Wellness",Dental Insurance
+AMGN,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+AMGN,"Insurance, Health, & Wellness",Employee Assistance Program
+AMGN,"Insurance, Health, & Wellness",Gym On-Site $300
+AMGN,"Insurance, Health, & Wellness",Disability Insurance
+AMGN,"Insurance, Health, & Wellness",Life Insurance
+AMGN,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+AMGN,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+AMGN,"Insurance, Health, & Wellness",Maternity Leave
+AMGN,"Insurance, Health, & Wellness",Paternity Leave
+AMGN,"Insurance, Health, & Wellness",On-Site Mother's Room
+AMGN,"Insurance, Health, & Wellness",Sick Time
+AMGN,Home,Adoption Assistance
+AMGN,Home,Remote Work
+AMGN,Home,Military Leave
+AMGN,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+AMGN,Financial & Retirement,401k
+AMGN,Perks & Discounts,Learning and Development
+AMGN,Perks & Discounts,Tuition Reimbursement
+INTU,"Insurance, Health, & Wellness",Free Snacks $730
+INTU,"Insurance, Health, & Wellness",Free Drinks $365
+INTU,"Insurance, Health, & Wellness",Gym On-Site $300
+INTU,"Insurance, Health, & Wellness",Health Insurance
+INTU,"Insurance, Health, & Wellness",Custom Work Station
+INTU,"Insurance, Health, & Wellness",On-Site Fitness Classes
+INTU,"Insurance, Health, & Wellness",Maternity Leave
+INTU,"Insurance, Health, & Wellness",Paternity Leave
+INTU,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+INTU,"Insurance, Health, & Wellness",Dental Insurance
+INTU,"Insurance, Health, & Wellness",Vision Insurance
+INTU,"Insurance, Health, & Wellness",On-Site Mother's Room
+INTU,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+INTU,"Insurance, Health, & Wellness",Pet Insurance
+INTU,"Insurance, Health, & Wellness",Sick Time
+INTU,"Insurance, Health, & Wellness",Life Insurance
+INTU,"Insurance, Health, & Wellness",Disability Insurance
+INTU,"Insurance, Health, & Wellness",Employee Assistance Program
+INTU,"Insurance, Health, & Wellness","Gym / Wellness Reimbursement $1,300"
+INTU,"Insurance, Health, & Wellness",Health Savings Account (HSA) $750
+INTU,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+INTU,Home,On-Site Employee Mall
+INTU,Home,Phone Bill Reimbursement $600
+INTU,Home,Immigration Assistance
+INTU,Home,Company Phones
+INTU,Home,Relocation Bonus
+INTU,Home,Fertility Assistance
+INTU,Home,Adoption Assistance
+INTU,Home,Business Travel Insurance
+INTU,Home,Remote Work
+INTU,Home,Military Leave
+INTU,Financial & Retirement,Roth 401k
+INTU,Financial & Retirement,"401k $21,500"
+INTU,Financial & Retirement,Mega Backdoor Roth
+INTU,Financial & Retirement,Mega Backdoor Roth
+INTU,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+INTU,Financial & Retirement,Flexible Spending Account (FSA) $750
+INTU,Perks & Discounts,Employee Discount
+INTU,Perks & Discounts,"Employee Credit $1,000"
+INTU,Perks & Discounts,Tuition Reimbursement
+INTU,Perks & Discounts,Learning and Development
+INTU,Transportation,Company Shuttle
+INTU,Transportation,Regional transit system
+INTU,Transportation,Bikes on Campus
+INTU,Transportation,Transport allowance
+INTU,Other,Donation Match
+INTU,Other,Volunteer Time Off
+INTU,Other,Transgender Benefits
+AVGO,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+AVGO,"Insurance, Health, & Wellness",Employee Assistance Program
+AVGO,"Insurance, Health, & Wellness",Health Insurance
+AVGO,"Insurance, Health, & Wellness",Life Insurance
+AVGO,"Insurance, Health, & Wellness",Vision Insurance
+AVGO,"Insurance, Health, & Wellness",Sick Time
+AVGO,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+AVGO,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+AVGO,Home,Phone Bill Reimbursement
+AVGO,Home,Immigration Assistance
+AVGO,Home,Company Phones
+GILD,"Insurance, Health, & Wellness",Disability Insurance
+GILD,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+GILD,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+GILD,"Insurance, Health, & Wellness",Health Insurance
+GILD,"Insurance, Health, & Wellness",Life Insurance
+GILD,"Insurance, Health, & Wellness",Dental Insurance
+GILD,"Insurance, Health, & Wellness",Vision Insurance
+GILD,"Insurance, Health, & Wellness",Sick Time
+GILD,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+GILD,"Insurance, Health, & Wellness",Employee Assistance Program
+GILD,"Insurance, Health, & Wellness",Gym On-Site $300
+GILD,"Insurance, Health, & Wellness",Free Breakfast $520
+GILD,"Insurance, Health, & Wellness",Free Snacks $730
+GILD,"Insurance, Health, & Wellness",Paternity Leave
+GILD,"Insurance, Health, & Wellness",Maternity Leave
+GILD,Home,Adoption Assistance
+GILD,Financial & Retirement,Roth 401k
+GILD,Financial & Retirement,Flexible Spending Account (FSA)
+GILD,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+GILD,Financial & Retirement,"401k $15,000"
+GILD,Perks & Discounts,Employee Discount
+GILD,Transportation,Company Shuttle
+GILD,Other,Back-up Care
+SHOP,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+SHOP,"Insurance, Health, & Wellness",Dental Insurance
+SHOP,"Insurance, Health, & Wellness",Employee Assistance Program
+SHOP,"Insurance, Health, & Wellness",Health Insurance
+SHOP,"Insurance, Health, & Wellness",Life Insurance
+SHOP,"Insurance, Health, & Wellness",Paternity Leave
+SHOP,"Insurance, Health, & Wellness",Sick Time
+SHOP,"Insurance, Health, & Wellness",Custom Work Station
+SHOP,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+SHOP,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+SHOP,"Insurance, Health, & Wellness",Maternity Leave
+SHOP,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+SHOP,"Insurance, Health, & Wellness",Vision Insurance
+SHOP,"Insurance, Health, & Wellness",Pet Insurance
+SHOP,"Insurance, Health, & Wellness",Disability Insurance
+SHOP,Home,Adoption Assistance
+SHOP,Home,Company Phones
+SHOP,Home,Business Travel Insurance
+SHOP,Home,Fertility Assistance
+SHOP,Home,Immigration Assistance
+SHOP,Home,Phone Bill Reimbursement
+SHOP,Home,Remote Work
+SHOP,Financial & Retirement,Flexible Spending Account (FSA)
+SHOP,Perks & Discounts,Learning and Development
+SHOP,Perks & Discounts,Employee Discount
+SHOP,Other,Pet Friendly Workplace
+TSLA,Unique To Tesla,Short Term Disability
+TSLA,Unique To Tesla,Long Term Disability
+TSLA,Unique To Tesla,Surrogacy Assistance
+TSLA,Unique To Tesla,Kindercare Discounts
+TSLA,"Insurance, Health, & Wellness",Gym Discount
+TSLA,"Insurance, Health, & Wellness",Health Insurance
+TSLA,"Insurance, Health, & Wellness",Dental Insurance
+TSLA,"Insurance, Health, & Wellness",Gym On-Site $300
+TSLA,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+TSLA,"Insurance, Health, & Wellness",On-Site Fitness Classes
+TSLA,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+TSLA,"Insurance, Health, & Wellness",Life Insurance
+TSLA,"Insurance, Health, & Wellness",Vision Insurance
+TSLA,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+TSLA,"Insurance, Health, & Wellness",Employee Assistance Program
+TSLA,"Insurance, Health, & Wellness",Paternity Leave
+TSLA,"Insurance, Health, & Wellness",Maternity Leave
+TSLA,"Insurance, Health, & Wellness",Disability Insurance
+TSLA,"Insurance, Health, & Wellness",Pet Insurance
+TSLA,Home,Phone Bill Reimbursement $600
+TSLA,Home,Fertility Assistance
+TSLA,Home,Adoption Assistance
+TSLA,Home,Business Travel Insurance
+TSLA,Home,Remote Work
+TSLA,Financial & Retirement,Roth 401k
+TSLA,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+TSLA,Financial & Retirement,Student Loan Repayment Plan
+TSLA,Financial & Retirement,"401k $5,100"
+TSLA,Financial & Retirement,Flexible Spending Account (FSA)
+TSLA,Perks & Discounts,Employee Discount
+TSLA,Transportation,Company Shuttle
+TSLA,Transportation,Transport allowance
+PANW,Unique To Palo Alto Networks,Student Loan Resources
+PANW,"Insurance, Health, & Wellness",Health Insurance
+PANW,"Insurance, Health, & Wellness",Life Insurance
+PANW,"Insurance, Health, & Wellness",On-Site Mother's Room
+PANW,"Insurance, Health, & Wellness",Dental Insurance
+PANW,"Insurance, Health, & Wellness",Free Drinks $365
+PANW,"Insurance, Health, & Wellness",Free Snacks $730
+PANW,"Insurance, Health, & Wellness",Gym On-Site $300
+PANW,"Insurance, Health, & Wellness",Health Savings Account (HSA) $750
+PANW,"Insurance, Health, & Wellness",Maternity Leave
+PANW,"Insurance, Health, & Wellness",Vision Insurance
+PANW,"Insurance, Health, & Wellness","Gym / Wellness Reimbursement $1,000"
+PANW,"Insurance, Health, & Wellness",On-Site Fitness Classes
+PANW,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+PANW,"Insurance, Health, & Wellness",Paternity Leave
+PANW,"Insurance, Health, & Wellness",Employee Assistance Program
+PANW,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+PANW,"Insurance, Health, & Wellness",Disability Insurance
+PANW,"Insurance, Health, & Wellness",Pet Insurance
+PANW,Home,Business Travel Insurance
+PANW,Home,On-Site Tire Replacement
+PANW,Home,Immigration Assistance
+PANW,Home,"Phone Bill Reimbursement $1,440"
+PANW,Home,Adoption Assistance
+PANW,Home,Military Leave
+PANW,Home,Fertility Assistance
+PANW,Home,Remote Work
+PANW,Financial & Retirement,401k $500
+PANW,Financial & Retirement,Mega Backdoor Roth
+PANW,Financial & Retirement,Flexible Spending Account (FSA)
+PANW,Financial & Retirement,Roth 401k
+PANW,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+PANW,Perks & Discounts,Employee Discount
+PANW,Other,Donation Match
+PANW,Other,Pet Friendly Workplace
+PANW,Other,Child Care and Elder Care
+PANW,Other,Legal Protection
+PANW,Other,Auto and Home Insurance
+VRSK,"Insurance, Health, & Wellness",Health Insurance
+VRSK,"Insurance, Health, & Wellness",Dental Insurance
+VRSK,"Insurance, Health, & Wellness",Vision Insurance
+VRSK,"Insurance, Health, & Wellness",Life Insurance
+VRSK,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+VRSK,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+VRSK,"Insurance, Health, & Wellness",Disability Insurance
+VRSK,"Insurance, Health, & Wellness",Employee Assistance Program
+VRSK,"Insurance, Health, & Wellness",Maternity Leave
+VRSK,"Insurance, Health, & Wellness",Paternity Leave
+VRSK,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+VRSK,"Insurance, Health, & Wellness",Free Snacks $730
+VRSK,"Insurance, Health, & Wellness",Free Lunch
+VRSK,Home,Military Leave
+VRSK,Home,Remote Work
+VRSK,Financial & Retirement,Flexible Spending Account (FSA)
+VRSK,Financial & Retirement,401k
+VRSK,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+VRSK,Perks & Discounts,Employee Discount
+VRSK,Perks & Discounts,Learning and Development
+VRSK,Perks & Discounts,Tuition Reimbursement
+VRSK,Other,Donation Match
+CSCO,"Insurance, Health, & Wellness",Health Savings Account (HSA) $800
+CSCO,"Insurance, Health, & Wellness",On-Site Fitness Classes
+CSCO,"Insurance, Health, & Wellness",On-Site Mother's Room
+CSCO,"Insurance, Health, & Wellness",Dental Insurance
+CSCO,"Insurance, Health, & Wellness",Free Breakfast $520
+CSCO,"Insurance, Health, & Wellness",Free Snacks $730
+CSCO,"Insurance, Health, & Wellness",Health Insurance
+CSCO,"Insurance, Health, & Wellness",Life Insurance
+CSCO,"Insurance, Health, & Wellness",On-Site Clinic
+CSCO,"Insurance, Health, & Wellness",Vision Insurance
+CSCO,"Insurance, Health, & Wellness",Gym Discount
+CSCO,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+CSCO,"Insurance, Health, & Wellness",Free Drinks $365
+CSCO,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+CSCO,"Insurance, Health, & Wellness",Gym On-Site $300
+CSCO,"Insurance, Health, & Wellness",Sabbatical
+CSCO,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+CSCO,"Insurance, Health, & Wellness",Maternity Leave
+CSCO,"Insurance, Health, & Wellness",Paternity Leave
+CSCO,"Insurance, Health, & Wellness",Employee Assistance Program
+CSCO,"Insurance, Health, & Wellness","Free Lunch $2,600"
+CSCO,"Insurance, Health, & Wellness",Sick Time
+CSCO,"Insurance, Health, & Wellness",Disability Insurance
+CSCO,Home,Relocation Bonus
+CSCO,Home,Business Travel Insurance
+CSCO,Home,Immigration Assistance
+CSCO,Home,Adoption Assistance
+CSCO,Home,Surrogacy Assistance
+CSCO,Home,Fertility Assistance
+CSCO,Home,Company Phones
+CSCO,Home,Remote Work
+CSCO,Home,Military Leave
+CSCO,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+CSCO,Financial & Retirement,Flexible Spending Account (FSA)
+CSCO,Financial & Retirement,Roth 401k
+CSCO,Financial & Retirement,Mega Backdoor Roth
+CSCO,Financial & Retirement,"401k $5,400"
+CSCO,Perks & Discounts,Tuition Reimbursement
+CSCO,Perks & Discounts,Employee Discount
+CSCO,Perks & Discounts,Learning and Development
+CSCO,Transportation,Transport allowance
+CSCO,Transportation,Company Shuttle
+CSCO,Transportation,Regional transit system
+CSCO,Other,Pet Friendly Workplace
+CSCO,Other,Volunteer Time Off
+CSCO,Other,Donation Match
+MU,"Insurance, Health, & Wellness",Dental Insurance
+MU,"Insurance, Health, & Wellness",Employee Assistance Program
+MU,"Insurance, Health, & Wellness",Health Insurance
+MU,"Insurance, Health, & Wellness",Life Insurance
+MU,"Insurance, Health, & Wellness",On-Site Clinic
+MU,"Insurance, Health, & Wellness",On-Site Mother's Room
+MU,"Insurance, Health, & Wellness",Paternity Leave
+MU,"Insurance, Health, & Wellness",Disability Insurance
+MU,"Insurance, Health, & Wellness",Gym On-Site $300
+MU,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+MU,"Insurance, Health, & Wellness",Maternity Leave
+MU,"Insurance, Health, & Wellness",On-Site Fitness Classes
+MU,"Insurance, Health, & Wellness",Vision Insurance
+MU,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+MU,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+MU,"Insurance, Health, & Wellness",Free Breakfast
+MU,"Insurance, Health, & Wellness",Free Drinks $365
+MU,"Insurance, Health, & Wellness",Free Snacks $730
+MU,"Insurance, Health, & Wellness",Sabbatical
+MU,"Insurance, Health, & Wellness",Sick Time
+MU,Home,Relocation Bonus
+MU,Home,Immigration Assistance
+MU,Home,Fertility Assistance
+MU,Home,Military Leave
+MU,Home,Remote Work
+MU,Financial & Retirement,Flexible Spending Account (FSA)
+MU,Financial & Retirement,Roth 401k
+MU,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+MU,Financial & Retirement,"401k $6,000"
+MU,Perks & Discounts,Employee Discount
+MU,Perks & Discounts,Tuition Reimbursement
+MU,Transportation,Company Shuttle
+MU,Other,Donation Match
+MU,Other,Training and Education Programs
+CTSH,"Insurance, Health, & Wellness",Sick Time
+CTSH,"Insurance, Health, & Wellness",Dental Insurance
+CTSH,"Insurance, Health, & Wellness",Health Insurance
+CTSH,"Insurance, Health, & Wellness",Life Insurance
+CTSH,"Insurance, Health, & Wellness",Vision Insurance
+CTSH,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+CTSH,"Insurance, Health, & Wellness",Disability Insurance
+CTSH,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+CTSH,"Insurance, Health, & Wellness",Employee Assistance Program
+CTSH,"Insurance, Health, & Wellness",Paternity Leave
+CTSH,"Insurance, Health, & Wellness",Maternity Leave
+CTSH,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+CTSH,Home,Fertility Assistance
+CTSH,Home,Immigration Assistance
+CTSH,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+CTSH,Financial & Retirement,"401k $3,600"
+CTSH,Financial & Retirement,Roth 401k
+CTSH,Perks & Discounts,Employee Discount
+CTSH,Perks & Discounts,Learning and Development
+CTSH,Other,Volunteer Time Off
+ADSK,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+ADSK,"Insurance, Health, & Wellness",Employee Assistance Program
+ADSK,"Insurance, Health, & Wellness",Health Insurance
+ADSK,"Insurance, Health, & Wellness",Life Insurance
+ADSK,"Insurance, Health, & Wellness",On-Site Mother's Room
+ADSK,"Insurance, Health, & Wellness",Paternity Leave
+ADSK,"Insurance, Health, & Wellness",Vision Insurance
+ADSK,"Insurance, Health, & Wellness","Gym / Wellness Reimbursement $1,000"
+ADSK,"Insurance, Health, & Wellness",Gym On-Site $300
+ADSK,"Insurance, Health, & Wellness",Maternity Leave
+ADSK,"Insurance, Health, & Wellness",On-Site Fitness Classes
+ADSK,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ADSK,"Insurance, Health, & Wellness",Sick Time
+ADSK,"Insurance, Health, & Wellness",Custom Work Station
+ADSK,"Insurance, Health, & Wellness",Dental Insurance
+ADSK,"Insurance, Health, & Wellness",Health Savings Account (HSA) $750
+ADSK,"Insurance, Health, & Wellness",Disability Insurance
+ADSK,"Insurance, Health, & Wellness",Sabbatical
+ADSK,"Insurance, Health, & Wellness",Pet Insurance
+ADSK,Home,Bereavement Leave
+ADSK,Home,Company Phones
+ADSK,Home,Business Travel Insurance
+ADSK,Home,Fertility Assistance
+ADSK,Home,Adoption Assistance
+ADSK,Home,Remote Work
+ADSK,Home,Military Leave
+ADSK,Financial & Retirement,Roth 401k
+ADSK,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+ADSK,Financial & Retirement,Flexible Spending Account (FSA)
+ADSK,Financial & Retirement,Mega Backdoor Roth
+ADSK,Financial & Retirement,"401k $4,500"
+ADSK,Perks & Discounts,Employee Discount
+ADSK,Perks & Discounts,Tuition Reimbursement
+ADSK,Perks & Discounts,Learning and Development
+ADSK,Transportation,Regional transit system
+ADSK,Other,Volunteer Time Off
+ADSK,Other,Auto & Home Insurance
+ADSK,Other,Donation Match
+TMUS,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+TMUS,"Insurance, Health, & Wellness",Vision Insurance
+TMUS,"Insurance, Health, & Wellness",Health Savings Account (HSA) $500
+TMUS,"Insurance, Health, & Wellness",Maternity Leave
+TMUS,"Insurance, Health, & Wellness",Paternity Leave
+TMUS,"Insurance, Health, & Wellness",Health Insurance
+TMUS,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+TMUS,"Insurance, Health, & Wellness",Gym Discount
+TMUS,"Insurance, Health, & Wellness",On-Site Mother's Room
+TMUS,"Insurance, Health, & Wellness",Dental Insurance
+TMUS,"Insurance, Health, & Wellness",Gym On-Site $300
+TMUS,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+TMUS,"Insurance, Health, & Wellness",Employee Assistance Program
+TMUS,"Insurance, Health, & Wellness",Free Snacks $730
+TMUS,"Insurance, Health, & Wellness",Pet Insurance
+TMUS,"Insurance, Health, & Wellness",Disability Insurance
+TMUS,"Insurance, Health, & Wellness",Life Insurance
+TMUS,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+TMUS,Home,Immigration Assistance
+TMUS,Home,Remote Work
+TMUS,Home,Fertility Assistance
+TMUS,Home,Adoption Assistance
+TMUS,Home,Business Travel Insurance
+TMUS,Home,Military Leave
+TMUS,Financial & Retirement,Roth 401k
+TMUS,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+TMUS,Financial & Retirement,Flexible Spending Account (FSA)
+TMUS,Financial & Retirement,"401k $4,800"
+TMUS,Perks & Discounts,Tuition Reimbursement
+TMUS,Perks & Discounts,Employee Discount
+TMUS,Transportation,Company Shuttle
+TMUS,Other,Donation Match
+TMUS,Other,Volunteer Time Off
+TMUS,Other,Employee Referral Program
+TMUS,Other,Autism coverage
+TMUS,Other,Gender-affirming services
+TMUS,Other,LiveMagenta life coach
+ADP,"Insurance, Health, & Wellness",Dental Insurance
+ADP,"Insurance, Health, & Wellness",Vision Insurance
+ADP,"Insurance, Health, & Wellness",On-Site Clinic
+ADP,"Insurance, Health, & Wellness",Employee Assistance Program
+ADP,"Insurance, Health, & Wellness",Health Insurance
+ADP,"Insurance, Health, & Wellness",Disability Insurance
+ADP,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+ADP,"Insurance, Health, & Wellness",Life Insurance
+ADP,"Insurance, Health, & Wellness",Pet Insurance
+ADP,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ADP,"Insurance, Health, & Wellness",Maternity Leave
+ADP,"Insurance, Health, & Wellness",Paternity Leave
+ADP,Home,Adoption Assistance
+ADP,Home,Fertility Assistance
+ADP,Home,Surrogacy Assistance
+ADP,Home,Military Leave
+ADP,Financial & Retirement,Flexible Spending Account (FSA)
+ADP,Financial & Retirement,Student Loan Repayment Plan
+ADP,Financial & Retirement,"401k $7,200"
+ADP,Other,Tobacco Surcharge
+ADP,Other,Personal Accident Insurance
+AMD,"Insurance, Health, & Wellness",Employee Assistance Program
+AMD,"Insurance, Health, & Wellness",Health Insurance
+AMD,"Insurance, Health, & Wellness",Custom Work Station
+AMD,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $600
+AMD,"Insurance, Health, & Wellness",Gym On-Site $300
+AMD,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+AMD,"Insurance, Health, & Wellness",On-Site Fitness Classes
+AMD,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+AMD,"Insurance, Health, & Wellness",Gym Discount
+AMD,"Insurance, Health, & Wellness",Free Drinks $365
+AMD,"Insurance, Health, & Wellness",On-Site Mother's Room
+AMD,"Insurance, Health, & Wellness",Dental Insurance
+AMD,"Insurance, Health, & Wellness",Vision Insurance
+AMD,"Insurance, Health, & Wellness",Maternity Leave
+AMD,"Insurance, Health, & Wellness",Paternity Leave
+AMD,"Insurance, Health, & Wellness",Life Insurance
+AMD,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+AMD,"Insurance, Health, & Wellness",Disability Insurance
+AMD,"Insurance, Health, & Wellness",Sick Time
+AMD,Home,Company Phones
+AMD,Home,Relocation Bonus
+AMD,Home,Business Travel Insurance
+AMD,Home,Immigration Assistance
+AMD,Home,Adoption Assistance
+AMD,Home,Fertility Assistance
+AMD,Financial & Retirement,Flexible Spending Account (FSA)
+AMD,Financial & Retirement,Roth 401k
+AMD,Financial & Retirement,"401k $5,400"
+AMD,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+AMD,Perks & Discounts,Employee Credit
+AMD,Perks & Discounts,Learning and Development
+AMD,Perks & Discounts,Employee Discount
+AMD,Perks & Discounts,Tuition Reimbursement
+AMD,Transportation,Bikes on Campus
+AMD,Other,Donation Match
+AMD,Other,Volunteer Time Off
+NFLX,"Insurance, Health, & Wellness","Free Lunch $2,600"
+NFLX,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+NFLX,"Insurance, Health, & Wellness",Gym Discount
+NFLX,"Insurance, Health, & Wellness",On-Site Mother's Room
+NFLX,"Insurance, Health, & Wellness",Sick Time
+NFLX,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+NFLX,"Insurance, Health, & Wellness",Free Drinks $365
+NFLX,"Insurance, Health, & Wellness",Free Snacks $730
+NFLX,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+NFLX,"Insurance, Health, & Wellness",On-Site Fitness Classes
+NFLX,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+NFLX,"Insurance, Health, & Wellness",Vision Insurance
+NFLX,"Insurance, Health, & Wellness",Dental Insurance
+NFLX,"Insurance, Health, & Wellness",Maternity Leave
+NFLX,"Insurance, Health, & Wellness",Paternity Leave
+NFLX,"Insurance, Health, & Wellness",Disability Insurance
+NFLX,"Insurance, Health, & Wellness",Life Insurance
+NFLX,"Insurance, Health, & Wellness",Custom Work Station
+NFLX,"Insurance, Health, & Wellness",On-Site Clinic
+NFLX,"Insurance, Health, & Wellness",Health Insurance
+NFLX,"Insurance, Health, & Wellness",Employee Assistance Program
+NFLX,Home,On-Site Employee Mall
+NFLX,Home,Relocation Bonus
+NFLX,Home,Company Phones
+NFLX,Home,On-Site Laundry
+NFLX,Home,Phone Bill Reimbursement
+NFLX,Home,Military Leave
+NFLX,Home,Adoption Assistance
+NFLX,Home,Remote Work
+NFLX,Home,Fertility Assistance
+NFLX,Financial & Retirement,Mega Backdoor Roth
+NFLX,Financial & Retirement,Roth 401k
+NFLX,Financial & Retirement,"401k $4,800"
+NFLX,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+NFLX,Perks & Discounts,Employee Discount
+NFLX,Transportation,Transport allowance
+NFLX,Transportation,Company Shuttle
+NFLX,Other,Pet Friendly Workplace
+NFLX,Other,Donation Match
+NFLX,Other,Family Care
+NFLX,Other,Serious Injury
+LRCX,"Insurance, Health, & Wellness",Dental Insurance
+LRCX,"Insurance, Health, & Wellness",Employee Assistance Program
+LRCX,"Insurance, Health, & Wellness",Health Insurance
+LRCX,"Insurance, Health, & Wellness",Vision Insurance
+LRCX,"Insurance, Health, & Wellness",Custom Work Station
+LRCX,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $500
+LRCX,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+LRCX,"Insurance, Health, & Wellness",Pet Insurance
+LRCX,"Insurance, Health, & Wellness",Sick Time
+LRCX,"Insurance, Health, & Wellness","Health Savings Account (HSA) $1,300"
+LRCX,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+LRCX,"Insurance, Health, & Wellness",Life Insurance
+LRCX,"Insurance, Health, & Wellness",Disability Insurance
+LRCX,"Insurance, Health, & Wellness",Maternity Leave
+LRCX,"Insurance, Health, & Wellness",Paternity Leave
+LRCX,Home,Adoption Assistance
+LRCX,Home,Fertility Assistance
+LRCX,Home,Bereavement Leave
+LRCX,Home,Remote Work
+LRCX,Financial & Retirement,"401k $3,600"
+LRCX,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+LRCX,Financial & Retirement,Flexible Spending Account (FSA)
+LRCX,Perks & Discounts,Tuition Reimbursement
+ADBE,"Insurance, Health, & Wellness",Custom Work Station
+ADBE,"Insurance, Health, & Wellness",Gym On-Site $300
+ADBE,"Insurance, Health, & Wellness",Maternity Leave
+ADBE,"Insurance, Health, & Wellness",On-Site Fitness Classes
+ADBE,"Insurance, Health, & Wellness",On-Site Mother's Room
+ADBE,"Insurance, Health, & Wellness",Dental Insurance
+ADBE,"Insurance, Health, & Wellness",Free Drinks $365
+ADBE,"Insurance, Health, & Wellness",Free Snacks $730
+ADBE,"Insurance, Health, & Wellness",Health Insurance
+ADBE,"Insurance, Health, & Wellness",Life Insurance
+ADBE,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ADBE,"Insurance, Health, & Wellness",Vision Insurance
+ADBE,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+ADBE,"Insurance, Health, & Wellness",Employee Assistance Program
+ADBE,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $500
+ADBE,"Insurance, Health, & Wellness",Gym Discount
+ADBE,"Insurance, Health, & Wellness",Paternity Leave
+ADBE,"Insurance, Health, & Wellness",Pet Insurance
+ADBE,"Insurance, Health, & Wellness",Sick Time
+ADBE,"Insurance, Health, & Wellness",Sabbatical
+ADBE,"Insurance, Health, & Wellness","Free Dinner $2,600"
+ADBE,"Insurance, Health, & Wellness",Disability Insurance
+ADBE,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+ADBE,"Insurance, Health, & Wellness","Free Lunch $2,600"
+ADBE,"Insurance, Health, & Wellness",Health Savings Account (HSA) $800
+ADBE,Home,Adoption Assistance
+ADBE,Home,Immigration Assistance
+ADBE,Home,On-Site Employee Mall
+ADBE,Home,Company Phones
+ADBE,Home,Fertility Assistance
+ADBE,Home,Business Travel Insurance
+ADBE,Home,Phone Bill Reimbursement
+ADBE,Home,Remote Work
+ADBE,Home,Military Leave
+ADBE,Financial & Retirement,Roth 401k
+ADBE,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+ADBE,Financial & Retirement,"401k $3,600"
+ADBE,Financial & Retirement,Flexible Spending Account (FSA)
+ADBE,Perks & Discounts,Employee Discount
+ADBE,Perks & Discounts,Tuition Reimbursement
+ADBE,Perks & Discounts,Learning and Development
+ADBE,Transportation,Bikes on Campus
+ADBE,Transportation,Regional transit system
+ADBE,Transportation,Company Shuttle
+ADBE,Transportation,Transport allowance
+ADBE,Other,Donation Match
+ADBE,Other,Volunteer Time Off
+ADBE,Other,Referral Bonus
+ADBE,Other,Childcare/Babysitting Reimbursement
+ADBE,Other,Family Sickness Leave
+MELI,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+MELI,"Insurance, Health, & Wellness",Custom Work Station
+MELI,"Insurance, Health, & Wellness",Free Breakfast
+MELI,"Insurance, Health, & Wellness",Employee Assistance Program
+MELI,"Insurance, Health, & Wellness",Free Lunch
+MELI,"Insurance, Health, & Wellness",Free Drinks $365
+MELI,"Insurance, Health, & Wellness",Free Snacks $730
+MELI,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+MELI,"Insurance, Health, & Wellness",Health Insurance
+MELI,"Insurance, Health, & Wellness",Maternity Leave
+MELI,"Insurance, Health, & Wellness",Paternity Leave
+MELI,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+MELI,"Insurance, Health, & Wellness",Vision Insurance
+MELI,"Insurance, Health, & Wellness",Sick Time
+MELI,Home,Housing Stipend
+MELI,Home,Remote Work
+MELI,Perks & Discounts,Employee Credit
+MELI,Perks & Discounts,Employee Discount
+MELI,Transportation,Company Shuttle
+TXN,"Insurance, Health, & Wellness",Health Savings Account (HSA) $750
+TXN,"Insurance, Health, & Wellness",Employee Assistance Program
+TXN,"Insurance, Health, & Wellness",On-Site Mother's Room
+TXN,"Insurance, Health, & Wellness",Maternity Leave
+TXN,"Insurance, Health, & Wellness",Paternity Leave
+TXN,"Insurance, Health, & Wellness",Health Insurance
+TXN,"Insurance, Health, & Wellness",Life Insurance
+TXN,"Insurance, Health, & Wellness",Dental Insurance
+TXN,"Insurance, Health, & Wellness",Vision Insurance
+TXN,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+TXN,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+TXN,"Insurance, Health, & Wellness",Disability Insurance
+TXN,Home,Adoption Assistance
+TXN,Home,Remote Work
+TXN,Home,Military Leave
+TXN,Financial & Retirement,"401k $4,800"
+TXN,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+TXN,Financial & Retirement,Flexible Spending Account (FSA)
+TXN,Other,Profit Sharing
+TXN,Other,Child care
+EXC,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+EXC,"Insurance, Health, & Wellness",Dental Insurance
+EXC,"Insurance, Health, & Wellness",Employee Assistance Program
+EXC,"Insurance, Health, & Wellness",Gym Discount
+EXC,"Insurance, Health, & Wellness",Health Insurance
+EXC,"Insurance, Health, & Wellness",Life Insurance
+EXC,"Insurance, Health, & Wellness",Vision Insurance
+EXC,"Insurance, Health, & Wellness",Custom Work Station
+EXC,"Insurance, Health, & Wellness",Disability Insurance
+EXC,Home,Military Leave
+EXC,Financial & Retirement,401k
+EXC,Financial & Retirement,Flexible Spending Account (FSA)
+EXC,Financial & Retirement,Roth 401k
+EXC,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+EXC,Financial & Retirement,Mega Backdoor Roth
+EXC,Financial & Retirement,Student Loan Repayment Plan
+NVDA,"Insurance, Health, & Wellness",Health Insurance
+NVDA,"Insurance, Health, & Wellness",Gym Discount
+NVDA,"Insurance, Health, & Wellness","Health Savings Account (HSA) $3,000"
+NVDA,"Insurance, Health, & Wellness",On-Site Clinic
+NVDA,"Insurance, Health, & Wellness",Dental Insurance
+NVDA,"Insurance, Health, & Wellness",Vision Insurance
+NVDA,"Insurance, Health, & Wellness",Pet Insurance
+NVDA,"Insurance, Health, & Wellness",Life Insurance
+NVDA,"Insurance, Health, & Wellness",Disability Insurance
+NVDA,"Insurance, Health, & Wellness",Paternity Leave
+NVDA,"Insurance, Health, & Wellness",Maternity Leave
+NVDA,"Insurance, Health, & Wellness",Employee Assistance Program
+NVDA,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+NVDA,"Insurance, Health, & Wellness",Sick Time
+NVDA,"Insurance, Health, & Wellness",Free Drinks $365
+NVDA,"Insurance, Health, & Wellness",Custom Work Station
+NVDA,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+NVDA,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+NVDA,"Insurance, Health, & Wellness",Gym On-Site $300
+NVDA,"Insurance, Health, & Wellness",On-Site Fitness Classes
+NVDA,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+NVDA,"Insurance, Health, & Wellness",Free Snacks $730
+NVDA,"Insurance, Health, & Wellness",On-Site Mother's Room
+NVDA,Home,Adoption Assistance
+NVDA,Home,Immigration Assistance
+NVDA,Home,Relocation Bonus
+NVDA,Home,Remote Work
+NVDA,Home,Military Leave
+NVDA,Financial & Retirement,Roth 401k
+NVDA,Financial & Retirement,Flexible Spending Account (FSA)
+NVDA,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+NVDA,Financial & Retirement,"401k $6,000"
+NVDA,Perks & Discounts,Tuition Reimbursement
+NVDA,Perks & Discounts,Employee Discount
+NVDA,Perks & Discounts,Employee Credit
+NVDA,Transportation,Transport allowance
+NVDA,Other,Donation Match
+NVDA,Other,Volunteer Time Off
+NVDA,Other,Pet Friendly Workplace
+META,Unique To Facebook,On-Site Clinic
+META,Unique To Facebook,On-Site Spa
+META,Unique To Facebook,On-Site Barbershop
+META,Unique To Facebook,Newborn bonus
+META,Unique To Facebook,Rooftop Nature Park
+META,"Insurance, Health, & Wellness",Life Insurance
+META,"Insurance, Health, & Wellness",Health Insurance
+META,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+META,"Insurance, Health, & Wellness","Free Lunch $2,600"
+META,"Insurance, Health, & Wellness",Free Snacks $730
+META,"Insurance, Health, & Wellness",Gym On-Site $300
+META,"Insurance, Health, & Wellness",Paternity Leave
+META,"Insurance, Health, & Wellness",Sick Time
+META,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+META,"Insurance, Health, & Wellness",On-Site Mother's Room
+META,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+META,"Insurance, Health, & Wellness",Free Drinks $365
+META,"Insurance, Health, & Wellness",Employee Assistance Program
+META,"Insurance, Health, & Wellness",Custom Work Station
+META,"Insurance, Health, & Wellness",Maternity Leave
+META,"Insurance, Health, & Wellness",Sabbatical
+META,"Insurance, Health, & Wellness",On-Site Fitness Classes
+META,"Insurance, Health, & Wellness",Dental Insurance
+META,"Insurance, Health, & Wellness",Vision Insurance
+META,"Insurance, Health, & Wellness",Disability Insurance
+META,"Insurance, Health, & Wellness","Gym / Wellness Reimbursement $2,000"
+META,"Insurance, Health, & Wellness","Free Dinner $2,080"
+META,Home,On-Site Tire Replacement
+META,Home,Company Phones
+META,Home,Immigration Assistance
+META,Home,Phone Bill Reimbursement
+META,Home,Fertility Assistance
+META,Home,Adoption Assistance
+META,Home,Remote Work
+META,Home,Military Leave
+META,Financial & Retirement,Flexible Spending Account (FSA)
+META,Financial & Retirement,Mega Backdoor Roth
+META,Financial & Retirement,"401k $10,250"
+META,Perks & Discounts,Employee Discount
+META,Perks & Discounts,Learning and Development
+META,Perks & Discounts,"Employee Credit $2,000"
+META,Transportation,Company Shuttle
+META,Transportation,Bikes on Campus
+META,Transportation,Regional transit system
+META,Transportation,Transport allowance
+META,Other,Child care reimbursement
+META,Other,Family Sickness Leave
+PLTR,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+PLTR,"Insurance, Health, & Wellness",Gym Discount
+PLTR,"Insurance, Health, & Wellness",Health Insurance
+PLTR,"Insurance, Health, & Wellness",Life Insurance
+PLTR,"Insurance, Health, & Wellness",On-Site Mother's Room
+PLTR,"Insurance, Health, & Wellness",Paternity Leave
+PLTR,"Insurance, Health, & Wellness",Sick Time
+PLTR,"Insurance, Health, & Wellness",Dental Insurance
+PLTR,"Insurance, Health, & Wellness","Health Savings Account (HSA) $1,200"
+PLTR,"Insurance, Health, & Wellness",Maternity Leave
+PLTR,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+PLTR,"Insurance, Health, & Wellness",Vision Insurance
+PLTR,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+PLTR,"Insurance, Health, & Wellness",Disability Insurance
+PLTR,"Insurance, Health, & Wellness",Employee Assistance Program
+PLTR,Home,Fertility Assistance
+PLTR,Home,Remote Work
+PLTR,Home,Military Leave
+PLTR,Financial & Retirement,Mega Backdoor Roth
+PLTR,Financial & Retirement,Roth 401k
+PLTR,Financial & Retirement,Flexible Spending Account (FSA)
+PLTR,Financial & Retirement,401k
+PLTR,Other,Pet Friendly Workplace
+TEAM,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+TEAM,"Insurance, Health, & Wellness",Dental Insurance
+TEAM,"Insurance, Health, & Wellness",Employee Assistance Program
+TEAM,"Insurance, Health, & Wellness","Free Dinner $2,600"
+TEAM,"Insurance, Health, & Wellness","Free Lunch $2,600"
+TEAM,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+TEAM,"Insurance, Health, & Wellness",Health Insurance
+TEAM,"Insurance, Health, & Wellness",Life Insurance
+TEAM,"Insurance, Health, & Wellness",Sick Time
+TEAM,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+TEAM,"Insurance, Health, & Wellness",Free Drinks $365
+TEAM,"Insurance, Health, & Wellness",Free Snacks $730
+TEAM,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $600
+TEAM,"Insurance, Health, & Wellness","Health Savings Account (HSA) $1,000"
+TEAM,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+TEAM,"Insurance, Health, & Wellness",Vision Insurance
+TEAM,"Insurance, Health, & Wellness",Gym Discount
+TEAM,"Insurance, Health, & Wellness",On-Site Mother's Room
+TEAM,"Insurance, Health, & Wellness",Custom Work Station
+TEAM,"Insurance, Health, & Wellness",Sabbatical
+TEAM,"Insurance, Health, & Wellness",Paternity Leave
+TEAM,"Insurance, Health, & Wellness",Maternity Leave
+TEAM,"Insurance, Health, & Wellness",On-Site Fitness Classes
+TEAM,Home,Relocation Bonus
+TEAM,Home,Phone Bill Reimbursement $900
+TEAM,Home,Immigration Assistance
+TEAM,Home,Remote Work
+TEAM,Financial & Retirement,"401k $4,800"
+TEAM,Perks & Discounts,Employee Discount
+TEAM,Perks & Discounts,Tuition Reimbursement
+TEAM,Perks & Discounts,Learning and Development
+TEAM,Transportation,Transport allowance
+TEAM,Other,Donation Match
+TEAM,Other,Pet Friendly Workplace
+TEAM,Other,Volunteer Time Off
+ASML,"Insurance, Health, & Wellness",Custom Work Station
+ASML,"Insurance, Health, & Wellness",Health Insurance
+ASML,"Insurance, Health, & Wellness",Life Insurance
+ASML,"Insurance, Health, & Wellness",On-Site Clinic
+ASML,"Insurance, Health, & Wellness",On-Site Mother's Room
+ASML,"Insurance, Health, & Wellness",Sick Time
+ASML,"Insurance, Health, & Wellness",Dental Insurance
+ASML,"Insurance, Health, & Wellness",Gym On-Site $300
+ASML,"Insurance, Health, & Wellness","Health Savings Account (HSA) $1,000"
+ASML,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ASML,"Insurance, Health, & Wellness",Pet Insurance
+ASML,"Insurance, Health, & Wellness",Vision Insurance
+ASML,"Insurance, Health, & Wellness",Employee Assistance Program
+ASML,"Insurance, Health, & Wellness",Paternity Leave
+ASML,"Insurance, Health, & Wellness",Maternity Leave
+ASML,Home,Immigration Assistance
+ASML,Home,Relocation Bonus
+ASML,Home,Remote Work
+ASML,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+ASML,Financial & Retirement,401k
+ASML,Transportation,Regional transit system
+ASML,Transportation,Company Shuttle
+CSX,Home,Military Leave
+PYPL,Unique To PayPal,Marathon Training
+PYPL,"Insurance, Health, & Wellness",Free Snacks $730
+PYPL,"Insurance, Health, & Wellness",Free Drinks $365
+PYPL,"Insurance, Health, & Wellness",Life Insurance
+PYPL,"Insurance, Health, & Wellness",Gym On-Site $300
+PYPL,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+PYPL,"Insurance, Health, & Wellness",On-Site Clinic
+PYPL,"Insurance, Health, & Wellness",Health Insurance
+PYPL,"Insurance, Health, & Wellness",Custom Work Station
+PYPL,"Insurance, Health, & Wellness",On-Site Fitness Classes
+PYPL,"Insurance, Health, & Wellness",Gym Discount
+PYPL,"Insurance, Health, & Wellness",Sick Time
+PYPL,"Insurance, Health, & Wellness",Paternity Leave
+PYPL,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+PYPL,"Insurance, Health, & Wellness",Dental Insurance
+PYPL,"Insurance, Health, & Wellness",Vision Insurance
+PYPL,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+PYPL,"Insurance, Health, & Wellness",On-Site Mother's Room
+PYPL,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+PYPL,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+PYPL,"Insurance, Health, & Wellness",Disability Insurance
+PYPL,"Insurance, Health, & Wellness",Employee Assistance Program
+PYPL,"Insurance, Health, & Wellness",Maternity Leave
+PYPL,"Insurance, Health, & Wellness",Sabbatical
+PYPL,"Insurance, Health, & Wellness",Free Breakfast $520
+PYPL,Home,On-Site Employee Mall
+PYPL,Home,On-Site Laundry
+PYPL,Home,Phone Bill Reimbursement
+PYPL,Home,Immigration Assistance
+PYPL,Home,Adoption Assistance
+PYPL,Home,Housing Stipend
+PYPL,Home,On-Site Tire Replacement
+PYPL,Home,Company Phones
+PYPL,Home,Relocation Bonus
+PYPL,Home,On-Site Car Wash / Detailing
+PYPL,Home,Fertility Assistance
+PYPL,Home,Remote Work
+PYPL,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+PYPL,Financial & Retirement,Roth 401k
+PYPL,Financial & Retirement,Mega Backdoor Roth
+PYPL,Financial & Retirement,"401k $24,300"
+PYPL,Perks & Discounts,Employee Discount
+PYPL,Perks & Discounts,Employee Credit
+PYPL,Perks & Discounts,Tuition Reimbursement
+PYPL,Perks & Discounts,Learning and Development
+PYPL,Transportation,Company Shuttle
+PYPL,Transportation,Regional transit system
+PYPL,Transportation,Transport allowance
+PYPL,Transportation,Bikes on Campus
+PYPL,Other,Donation Match
+PYPL,Other,Volunteer Time Off
+DDOG,"Insurance, Health, & Wellness",Vision Insurance
+DDOG,"Insurance, Health, & Wellness",Maternity Leave
+DDOG,"Insurance, Health, & Wellness",Pet Insurance
+DDOG,"Insurance, Health, & Wellness","Free Lunch $1,560"
+DDOG,"Insurance, Health, & Wellness",Health Insurance
+DDOG,"Insurance, Health, & Wellness",Gym Discount
+DDOG,"Insurance, Health, & Wellness",Life Insurance
+DDOG,"Insurance, Health, & Wellness",Sick Time
+DDOG,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+DDOG,"Insurance, Health, & Wellness",Paternity Leave
+DDOG,"Insurance, Health, & Wellness","Health Savings Account (HSA) $1,800"
+DDOG,"Insurance, Health, & Wellness","Gym / Wellness Reimbursement $1,200"
+DDOG,"Insurance, Health, & Wellness",Dental Insurance
+DDOG,"Insurance, Health, & Wellness",Employee Assistance Program
+DDOG,"Insurance, Health, & Wellness",Free Snacks $730
+DDOG,"Insurance, Health, & Wellness",Free Drinks $365
+DDOG,"Insurance, Health, & Wellness",Disability Insurance
+DDOG,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+DDOG,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+DDOG,Home,Company Phones
+DDOG,Home,Fertility Assistance
+DDOG,Home,Remote Work
+DDOG,Home,Adoption Assistance
+DDOG,Home,Military Leave
+DDOG,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+DDOG,Financial & Retirement,Flexible Spending Account (FSA)
+DDOG,Financial & Retirement,"401k $12,000"
+DDOG,Financial & Retirement,Roth 401k
+DDOG,Perks & Discounts,Tuition Reimbursement
+DDOG,Perks & Discounts,Learning and Development
+DDOG,Perks & Discounts,Employee Discount
+DDOG,Transportation,Transport allowance
+DDOG,Other,Spring Health
+DDOG,Other,Child Care Subsidy
+DDOG,Other,Referral Bonus
+DDOG,Other,Social Events
+DDOG,Other,Gender-Affirming Care Benefits
+CMCSA,"Insurance, Health, & Wellness",Custom Work Station
+CMCSA,"Insurance, Health, & Wellness",Free Lunch $520
+CMCSA,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+CMCSA,"Insurance, Health, & Wellness",Health Insurance
+CMCSA,"Insurance, Health, & Wellness",Life Insurance
+CMCSA,"Insurance, Health, & Wellness",On-Site Mother's Room
+CMCSA,"Insurance, Health, & Wellness",Dental Insurance
+CMCSA,"Insurance, Health, & Wellness",Free Drinks $365
+CMCSA,"Insurance, Health, & Wellness",Free Snacks $730
+CMCSA,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $150
+CMCSA,"Insurance, Health, & Wellness",Gym On-Site $300
+CMCSA,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+CMCSA,"Insurance, Health, & Wellness",Pet Insurance
+CMCSA,"Insurance, Health, & Wellness",Vision Insurance
+CMCSA,"Insurance, Health, & Wellness",Maternity Leave
+CMCSA,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+CMCSA,"Insurance, Health, & Wellness",Employee Assistance Program
+CMCSA,"Insurance, Health, & Wellness",Paternity Leave
+CMCSA,"Insurance, Health, & Wellness",On-Site Clinic
+CMCSA,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+CMCSA,"Insurance, Health, & Wellness",Disability Insurance
+CMCSA,Home,Adoption Assistance
+CMCSA,Home,Relocation Bonus
+CMCSA,Home,Company Phones
+CMCSA,Home,Fertility Assistance
+CMCSA,Home,Immigration Assistance
+CMCSA,Home,Military Leave
+CMCSA,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+CMCSA,Financial & Retirement,Roth 401k
+CMCSA,Financial & Retirement,"401k $7,200"
+CMCSA,Financial & Retirement,"Flexible Spending Account (FSA) $5,000"
+CMCSA,Perks & Discounts,Tuition Reimbursement
+CMCSA,Perks & Discounts,Learning and Development
+CMCSA,Perks & Discounts,Employee Discount
+CMCSA,Transportation,Regional transit system
+CMCSA,Transportation,Transport allowance
+CMCSA,Other,Donation Match
+NXPI,"Insurance, Health, & Wellness",Dental Insurance
+NXPI,"Insurance, Health, & Wellness",Employee Assistance Program
+NXPI,"Insurance, Health, & Wellness",Health Insurance
+NXPI,"Insurance, Health, & Wellness",Life Insurance
+NXPI,"Insurance, Health, & Wellness",Vision Insurance
+NXPI,"Insurance, Health, & Wellness",Free Drinks $365
+NXPI,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $240
+NXPI,"Insurance, Health, & Wellness",Health Savings Account (HSA) $500
+NXPI,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+NXPI,Home,Immigration Assistance
+NXPI,Home,Bereavement Leave
+NXPI,Home,Relocation Bonus
+NXPI,Financial & Retirement,"401k $6,000"
+NXPI,Financial & Retirement,Flexible Spending Account (FSA)
+NXPI,Financial & Retirement,Roth 401k
+NXPI,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+NXPI,Perks & Discounts,Employee Discount
+AZN,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+AZN,"Insurance, Health, & Wellness",Dental Insurance
+AZN,"Insurance, Health, & Wellness",Employee Assistance Program
+AZN,"Insurance, Health, & Wellness",Health Insurance
+AZN,"Insurance, Health, & Wellness",Life Insurance
+AZN,"Insurance, Health, & Wellness",On-Site Clinic
+AZN,"Insurance, Health, & Wellness",Paternity Leave
+AZN,"Insurance, Health, & Wellness",Vision Insurance
+AZN,"Insurance, Health, & Wellness",Disability Insurance
+AZN,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+AZN,"Insurance, Health, & Wellness",Sick Time
+AZN,Home,Phone Bill Reimbursement $75
+AZN,Home,Remote Work
+AZN,Financial & Retirement,"401k $7,200"
+AZN,Financial & Retirement,Roth 401k
+AZN,Financial & Retirement,Mega Backdoor Roth
+AZN,Other,Donation Match
+AZN,Other,Referral Bonus
+AZN,Other,Volunteer Time Off
+AMAT,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+AMAT,"Insurance, Health, & Wellness",Dental Insurance
+AMAT,"Insurance, Health, & Wellness",Gym On-Site $300
+AMAT,"Insurance, Health, & Wellness",Health Savings Account (HSA) $300
+AMAT,"Insurance, Health, & Wellness",Maternity Leave
+AMAT,"Insurance, Health, & Wellness",On-Site Fitness Classes
+AMAT,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+AMAT,"Insurance, Health, & Wellness",Vision Insurance
+AMAT,"Insurance, Health, & Wellness",Custom Work Station
+AMAT,"Insurance, Health, & Wellness",On-Site Mother's Room
+AMAT,"Insurance, Health, & Wellness",Paternity Leave
+AMAT,"Insurance, Health, & Wellness",Sick Time
+AMAT,"Insurance, Health, & Wellness",On-Site Clinic
+AMAT,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+AMAT,"Insurance, Health, & Wellness",Employee Assistance Program
+AMAT,"Insurance, Health, & Wellness",Disability Insurance
+AMAT,"Insurance, Health, & Wellness",Life Insurance
+AMAT,"Insurance, Health, & Wellness",Health Insurance
+AMAT,Home,Company Phones
+AMAT,Home,Relocation Bonus
+AMAT,Financial & Retirement,Roth 401k
+AMAT,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+AMAT,Financial & Retirement,"401k $5,400"
+AMAT,Financial & Retirement,Flexible Spending Account (FSA)
+AMAT,Perks & Discounts,Employee Discount
+AMAT,Perks & Discounts,Tuition Reimbursement
+AMAT,Transportation,Bikes on Campus
+AMAT,Transportation,Company Shuttle
+AMAT,Other,Donation Match
+AMAT,Other,Corporate Library
+ARM,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+ARM,"Insurance, Health, & Wellness",Dental Insurance
+ARM,"Insurance, Health, & Wellness",Employee Assistance Program
+ARM,"Insurance, Health, & Wellness",Gym On-Site $300
+ARM,"Insurance, Health, & Wellness",Health Insurance
+ARM,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+ARM,"Insurance, Health, & Wellness",Life Insurance
+ARM,"Insurance, Health, & Wellness",Maternity Leave
+ARM,"Insurance, Health, & Wellness",On-Site Fitness Classes
+ARM,"Insurance, Health, & Wellness",Paternity Leave
+ARM,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ARM,"Insurance, Health, & Wellness",Sabbatical
+ARM,"Insurance, Health, & Wellness",Sick Time
+ARM,"Insurance, Health, & Wellness",Vision Insurance
+ARM,"Insurance, Health, & Wellness",Disability Insurance
+ARM,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+ARM,"Insurance, Health, & Wellness",Free Lunch
+ARM,"Insurance, Health, & Wellness",Free Snacks $730
+ARM,Home,Immigration Assistance
+ARM,Home,Relocation Bonus
+ARM,Home,Remote Work
+ARM,Financial & Retirement,401k
+ARM,Financial & Retirement,Mega Backdoor Roth
+ARM,Financial & Retirement,Roth 401k
+ARM,Financial & Retirement,Flexible Spending Account (FSA)
+ARM,Perks & Discounts,Learning and Development
+ARM,Transportation,Bikes on Campus
+ARM,Transportation,Company Shuttle
+ARM,Other,Donation Match
+ARM,Other,Volunteer Time Off
+COST,"Insurance, Health, & Wellness",Dental Insurance
+COST,"Insurance, Health, & Wellness",On-Site Mother's Room
+COST,"Insurance, Health, & Wellness",Vision Insurance
+COST,"Insurance, Health, & Wellness",Gym On-Site $300
+COST,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+COST,"Insurance, Health, & Wellness",Sick Time
+COST,"Insurance, Health, & Wellness",Health Insurance
+COST,"Insurance, Health, & Wellness",Life Insurance
+COST,"Insurance, Health, & Wellness",Employee Assistance Program
+COST,"Insurance, Health, & Wellness",Gym Discount
+COST,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+COST,"Insurance, Health, & Wellness",Disability Insurance
+COST,"Insurance, Health, & Wellness",Paternity Leave
+COST,"Insurance, Health, & Wellness",Maternity Leave
+COST,Home,Bereavement Leave
+COST,Home,Military Leave
+COST,Financial & Retirement,401k
+COST,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+COST,Perks & Discounts,Employee Discount
+COST,Perks & Discounts,Tuition Reimbursement
+COST,Other,Volunteer Time Off
+COST,Other,Donation Match
+ISRG,"Insurance, Health, & Wellness",Paternity Leave
+ISRG,"Insurance, Health, & Wellness",Maternity Leave
+ISRG,"Insurance, Health, & Wellness",On-Site Mother's Room
+ISRG,"Insurance, Health, & Wellness",Disability Insurance
+ISRG,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+ISRG,"Insurance, Health, & Wellness",Health Insurance
+ISRG,"Insurance, Health, & Wellness",Dental Insurance
+ISRG,"Insurance, Health, & Wellness",Vision Insurance
+ISRG,"Insurance, Health, & Wellness",Employee Assistance Program
+ISRG,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+ISRG,"Insurance, Health, & Wellness",Sick Time
+ISRG,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+ISRG,"Insurance, Health, & Wellness",Gym Discount
+ISRG,Home,Remote Work
+ISRG,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+ISRG,Financial & Retirement,Flexible Spending Account (FSA)
+ISRG,Perks & Discounts,Learning and Development
+ISRG,Perks & Discounts,Tuition Reimbursement
+ISRG,Perks & Discounts,Employee Discount
+ISRG,Transportation,Bikes on Campus
+ISRG,Other,Parents Support
+ISRG,Other,Identity Restoration Services
+ISRG,Other,Donation Match
+BKNG,"Insurance, Health, & Wellness","Free Lunch $2,600"
+BKNG,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+BKNG,"Insurance, Health, & Wellness",Maternity Leave
+BKNG,"Insurance, Health, & Wellness",On-Site Mother's Room
+BKNG,"Insurance, Health, & Wellness",Paternity Leave
+BKNG,"Insurance, Health, & Wellness",Sick Time
+BKNG,"Insurance, Health, & Wellness",Dental Insurance
+BKNG,"Insurance, Health, & Wellness",Free Snacks $730
+BKNG,"Insurance, Health, & Wellness",Gym Discount
+BKNG,"Insurance, Health, & Wellness",Health Insurance
+BKNG,"Insurance, Health, & Wellness",Life Insurance
+BKNG,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+BKNG,"Insurance, Health, & Wellness",Vision Insurance
+BKNG,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+BKNG,Home,Relocation Bonus
+BKNG,Home,Company Phones
+BKNG,Financial & Retirement,"401k $3,600"
+BKNG,Perks & Discounts,Tuition Reimbursement
+BKNG,Perks & Discounts,Employee Discount
+BKNG,Transportation,Bikes on Campus
+BKNG,Transportation,Transport allowance
+BKNG,Other,Pension Plan
+XEL,"Insurance, Health, & Wellness",Vision Insurance
+XEL,"Insurance, Health, & Wellness",Health Insurance
+XEL,"Insurance, Health, & Wellness",Dental Insurance
+XEL,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+XEL,"Insurance, Health, & Wellness",Maternity Leave
+XEL,"Insurance, Health, & Wellness",Paternity Leave
+XEL,"Insurance, Health, & Wellness",Employee Assistance Program
+XEL,"Insurance, Health, & Wellness",Disability Insurance
+XEL,"Insurance, Health, & Wellness",Life Insurance
+XEL,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+XEL,Home,Adoption Assistance
+XEL,Home,Military Leave
+XEL,Financial & Retirement,401k
+XEL,Perks & Discounts,Tuition Reimbursement
+XEL,Other,Volunteer Time Off
+TTD,"Insurance, Health, & Wellness",Dental Insurance
+TTD,"Insurance, Health, & Wellness",Gender Neutral Bathrooms
+TTD,"Insurance, Health, & Wellness",Health Insurance
+TTD,"Insurance, Health, & Wellness",Life Insurance
+TTD,"Insurance, Health, & Wellness",On-Site Mother's Room
+TTD,"Insurance, Health, & Wellness",Paternity Leave
+TTD,"Insurance, Health, & Wellness",Vision Insurance
+TTD,"Insurance, Health, & Wellness",Disability Insurance
+TTD,"Insurance, Health, & Wellness",Free Drinks $365
+TTD,"Insurance, Health, & Wellness",Free Snacks $730
+TTD,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement
+TTD,"Insurance, Health, & Wellness",Maternity Leave
+TTD,"Insurance, Health, & Wellness",Sick Time
+TTD,"Insurance, Health, & Wellness",Gym On-Site $300
+TTD,"Insurance, Health, & Wellness",Health Savings Account (HSA)
+TTD,"Insurance, Health, & Wellness","Free Lunch $1,040"
+TTD,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+TTD,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+TTD,"Insurance, Health, & Wellness",Custom Work Station
+TTD,"Insurance, Health, & Wellness",Employee Assistance Program
+TTD,"Insurance, Health, & Wellness","Free Breakfast $2,600"
+TTD,"Insurance, Health, & Wellness",Sabbatical
+TTD,Home,Adoption Assistance
+TTD,Home,Business Travel Insurance
+TTD,Home,Fertility Assistance
+TTD,Home,Phone Bill Reimbursement
+TTD,Home,Bereavement Leave
+TTD,Home,Relocation Bonus
+TTD,Home,Remote Work
+TTD,Financial & Retirement,401k
+TTD,Financial & Retirement,Flexible Spending Account (FSA)
+TTD,Financial & Retirement,Roth 401k
+TTD,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+TTD,Financial & Retirement,Mega Backdoor Roth
+TTD,Perks & Discounts,Tuition Reimbursement
+TTD,Transportation,Transport allowance
+KLAC,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+KLAC,"Insurance, Health, & Wellness",Dental Insurance
+KLAC,"Insurance, Health, & Wellness",Employee Assistance Program
+KLAC,"Insurance, Health, & Wellness",Health Insurance
+KLAC,"Insurance, Health, & Wellness",Life Insurance
+KLAC,"Insurance, Health, & Wellness",Disability Insurance
+KLAC,"Insurance, Health, & Wellness",Gym / Wellness Reimbursement $300
+KLAC,"Insurance, Health, & Wellness",Health Savings Account (HSA) $500
+KLAC,"Insurance, Health, & Wellness",On-Site Fitness Classes
+KLAC,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+KLAC,"Insurance, Health, & Wellness",Pet Insurance
+KLAC,"Insurance, Health, & Wellness",Vision Insurance
+KLAC,Home,Adoption Assistance
+KLAC,Home,Business Travel Insurance
+KLAC,Home,Fertility Assistance
+KLAC,Home,Immigration Assistance
+KLAC,Home,Remote Work
+KLAC,Home,Bereavement Leave
+KLAC,Home,Company Phones
+KLAC,Home,Relocation Bonus
+KLAC,Financial & Retirement,"401k $3,000"
+KLAC,Financial & Retirement,Flexible Spending Account (FSA)
+KLAC,Financial & Retirement,Employee Stock Purchase Program (ESPP)
+KLAC,Financial & Retirement,Student Loan Repayment Plan
+KLAC,Perks & Discounts,Learning and Development
+KLAC,Perks & Discounts,Employee Discount
+KLAC,Perks & Discounts,Tuition Reimbursement
+KLAC,Transportation,Regional transit system
+KLAC,Other,Donation Match
+FTNT,"Insurance, Health, & Wellness",Accidental death and dismemberment (AD&D) Insurance
+FTNT,"Insurance, Health, & Wellness",Dental Insurance
+FTNT,"Insurance, Health, & Wellness",Health Insurance
+FTNT,"Insurance, Health, & Wellness",Vision Insurance
+FTNT,"Insurance, Health, & Wellness",Health Savings Account (HSA) $750
+FTNT,"Insurance, Health, & Wellness",PTO (Vacation / Personal Days)
+FTNT,"Insurance, Health, & Wellness",Life Insurance
+FTNT,"Insurance, Health, & Wellness",Disability Insurance
+FTNT,"Insurance, Health, & Wellness",Sick Time
+FTNT,"Insurance, Health, & Wellness",Maternity Leave
+FTNT,"Insurance, Health, & Wellness",Paternity Leave
+FTNT,Home,Bereavement Leave
+FTNT,Home,Remote Work
+FTNT,Home,Military Leave
+FTNT,Financial & Retirement,"401k $5,300"
+FTNT,Other,Volunteer Time Off

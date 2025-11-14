@@ -3,25 +3,134 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Combined Visualization</title>
-  <style>
-    /* Make the map iframe fill the whole page; remove right-side panel */
-    html,body{height:100%;margin:0}
-    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;height:100vh}
-    #left{position:fixed;inset:0;overflow:hidden}
-    iframe{border:0;width:100%;height:100%}
-  </style>
+  <title>MarketMap 📡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Rubik+80s+Fade&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/d3@7"></script>
+  <script src="https://unpkg.com/topojson-client@3"></script>
 </head>
 <body>
-  <div id="left">
-    <!-- map iframe fills the page -->
-    <iframe id="mapFrame" src="map%20vis/index.html"></iframe>
+  <div class="snap-container">
+      <div class="section section-one">
+          <h1 class="rubik">MarketMap</h1>
+          <h4 class="major-mono">a gps for your career path</h4>
+          <div class="button-holder">
+            <button id="guideButton" class="work-sans-400">See Guide ⓘ</button>
+            <button id="scrollDownButton" class="work-sans-400">Get Started ↓</button>
+          </div>
+          
+          <!-- <div style="height: 9em;"></div> -->
+      </div>
+      <div class="section section-two">
+        <div class="mapvis-wrapper">
+        <div class="app-header">
+          <h1>Company Atlas</h1>
+          <p class="subtitle">Entry-level salary or 2022→2025 return (height) · log(Market Cap) (width) · Rating / CEO approval (color)</p>
+        </div>
+
+        <main class="layout">
+          <aside class="sidebar">
+            <div class="instructions">
+              <p>Click a state on the map to zoom in</p>
+              <p>Click a company building to learn more</p>
+            </div>
+
+            <fieldset class="control">
+              <legend>Height metric</legend>
+              <label><input type="radio" name="heightMetric" value="salary" checked> Entry-level salary</label>
+              <label><input type="radio" name="heightMetric" value="return"> 2022→2025 Return (%)</label>
+            </fieldset>
+
+            <div class="control">
+              <label for="roleSelect">Role name</label>
+              <select id="roleSelect"></select>
+            </div>
+
+            <fieldset class="control">
+              <legend>Color metric</legend>
+              <label><input type="radio" name="colorMetric" value="employee_rating" checked> Employee rating</label>
+              <label><input type="radio" name="colorMetric" value="ceo_approval"> CEO approval</label>
+            </fieldset>
+
+            <div class="legend" id="legendColor">
+              <!-- created/updated by JS -->
+            </div>
+
+            <div class="company-list-section">
+              <div class="company-list-header">Companies</div>
+              <div id="companyList" class="company-list">
+                <!-- populated by JS -->
+              </div>
+            </div>
+          </aside>
+
+          <section class="viz">
+            <div id="tooltip" class="tooltip" style="display:none"></div>
+            <svg id="chart" viewBox="0 0 1200 680" preserveAspectRatio="xMidYMid meet"></svg>
+          </section>
+        </main>
+
+        <script>
+          window.APP_CONFIG = {
+            dataDir: "data",
+            files: {
+              info: "Company-info.csv",
+              financials: "Company-financials.csv",
+              salary: "Company-salary.csv",
+              prices: "nasdaq100_yearly_prices.csv"
+            }
+          };
+        </script>
+        <script src="js/mapvis.js"></script>
+
+        </div>
+      </div>
+      <div class="section section-three">
+          <h1>Slope Chart Viz</h1>
+      </div>
+      <div class="section section-four">
+          <h1>Scatter Plot Viz</h1>
+      </div>
   </div>
 
   <script>
     // Combined view now only hosts the map iframe full-bleed. The map itself
     // shows a small popup for details/roles and handles navigation. No right
     // panel is used here to avoid the white area on the right.
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get all the sections that can be navigated
+        const sections = document.querySelectorAll('.section');
+        let currentSectionIndex = 0;
+
+        // Function to scroll to a specific section index
+        const scrollToSection = (index) => {
+            // Ensure the index is within the valid range
+            if (index >= 0 && index < sections.length) {
+                sections[index].scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+                currentSectionIndex = index;
+            }
+        };
+
+        // Add keyboard event listener to the whole document
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+                event.preventDefault(); // Prevent default browser scrolling
+                scrollToSection(currentSectionIndex + 1);
+            } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+                event.preventDefault(); // Prevent default browser scrolling
+                scrollToSection(currentSectionIndex - 1);
+            }
+        });
+
+        document.getElementById('scrollDownButton').addEventListener('click', function() {
+          scrollToSection(1);
+        });
+    });
+
   </script>
 </body>
 </html>

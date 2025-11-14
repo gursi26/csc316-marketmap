@@ -1,0 +1,265 @@
+:root{
+  --bg:#04060e;
+  --panel:#101833;
+  --panel-2:#0e1530;
+  --fg:#e6eefc;
+  --muted:#9aa7c7;
+  --grid:#2a3357;
+  --tooltip-bg: rgba(9,12,24,.94);
+  --accent: #5ea8ff;
+  --button-bg: linear-gradient(180deg,#2b7a4a,#1f5d39);
+  --button-fg: #042;
+}
+
+.rubik {
+  font-family: "Rubik 80s Fade", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.major-mono {
+  font-family: "Major Mono Display", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.work-sans-400 {
+  font-family: "Work Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 350;
+  font-style: normal;
+}
+
+/* Reset default margins for html and body */
+html, body {
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth; 
+}
+
+h1 {
+    font-size: 3.5em;
+    margin-bottom: 0;
+}
+
+.snap-container {
+    /* Set container height to full viewport height */
+    height: 100vh;
+    /* Enable vertical scrolling within the container */
+    overflow-y: scroll;
+    /* Define the snapping behavior */
+    scroll-snap-type: y mandatory;
+}
+
+.section {
+    /* Set each section to full viewport height and width */
+    height: 100vh;
+    width: 100vw;
+    /* Ensure the section snaps to the start of the viewport */
+    scroll-snap-align: start;
+    
+    /* Center content within each section (optional) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 2rem;
+}
+
+/* Add different colors to distinguish sections (optional) */
+.section-one {
+     background:
+        /* top, transparent black, faked with gradient */ 
+        linear-gradient(
+          rgba(0, 0, 0, 0.8), 
+          rgba(0, 0, 0, 0.8)
+        ),
+        /* bottom, image */
+       url('../dataset/city-bg.jpg');
+    /* background-color: #000000;
+    background-image: url('../dataset/city-bg.jpg');
+    background-position: center;
+    mix-blend-mode: color-burn;
+    background-size: 100% 100%; */
+}
+
+.section-two {
+    background-color: var(--bg);
+}
+
+.section-three {
+    background-color: #27ae60;
+}
+
+.section-four {
+    background-color: #409bf0;
+}
+
+.button-holder {
+    margin-top: 0.2em;
+    margin-bottom: 1em;
+}
+
+#scrollDownButton, #guideButton {
+  /* position: absolute;
+  bottom: 20px;
+  right: 20px; */
+  height: 80%;
+  margin-top: 0.5em;
+  margin-left: 0.85em;
+  margin-right: 0.85em;
+  padding: 10px 20px;
+  background-color: #00000032;
+  color: white;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: white;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
+  transition-duration: 0.4s;
+}
+
+#scrollDownButton:hover {
+    color: black;
+    background-color: #ffffffbd;
+    /* font-weight: 400; */
+}
+
+#guideButton:hover {
+    color: black;
+    background-color: #ffffffbd;
+    /* font-weight: 400; */
+}
+
+.mapvis-wrapper {
+    width: 100vw;
+    height: 100vh;
+}
+
+
+*{ box-sizing:border-box }
+body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial }
+
+.app-header{ padding:16px 20px; border-bottom:1px solid var(--grid) }
+.app-header h1{ margin:0; font-size:22px; font-weight:700 }
+.app-header .subtitle{ margin:.4rem 0 0; color:var(--muted); font-size:13px }
+
+.layout{ display:grid; grid-template-columns:320px 1fr; min-height:calc(100vh - 70px) }
+.sidebar{ padding:16px; border-right:1px solid var(--grid); background:var(--panel) }
+.viz{ position:relative; overflow:hidden; background:linear-gradient(180deg,#0b1020 0%, #0c1225 100%) }
+
+.instructions{ 
+  margin-bottom:20px; 
+  padding:12px; 
+  background:var(--panel-2); 
+  border-radius:10px; 
+  border:1px solid var(--grid);
+}
+.instructions p{ 
+  margin:0; 
+  font-size:13px; 
+  color:var(--muted); 
+  line-height:1.6;
+}
+
+.control{ margin-bottom:16px }
+fieldset{ border:1px solid var(--grid); padding:8px 10px; border-radius:10px; background:var(--panel-2) }
+fieldset label{ display:block; margin-bottom:8px }
+fieldset label:last-child{ margin-bottom:0 }
+label, legend{ font-size:14px }
+select{ width:100%; margin-top:6px; padding:.45rem .6rem; border-radius:10px; border:1px solid var(--grid); background:#0c1430; color:var(--fg) }
+input[type=radio]{ cursor:pointer }
+
+/* Buttons (used by map popup) */
+button{ font-family:inherit }
+.btn-primary{ background:var(--button-bg); color:var(--button-fg); padding:6px 10px; border-radius:6px; border:0; cursor:pointer }
+.btn-secondary{ background:#111827; color:var(--fg); padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,.04); cursor:pointer }
+
+/* Map popup (company options) */
+.map-popup{
+  position:absolute;
+  display:block; /* controlled via inline style in JS when showing/hiding */
+  background: linear-gradient(180deg, rgba(12,18,37,0.98), rgba(8,12,24,0.98));
+  color:var(--fg);
+  border:1px solid rgba(255,255,255,0.04);
+  padding:8px;
+  border-radius:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+  z-index:99999;
+  min-width:180px;
+  pointer-events:auto;
+}
+.map-popup:after{
+  /* small caret/arrow pointing to the anchor point */
+  content:"";
+  position:absolute;
+  left:12px;
+  top:-8px;
+  width:0;height:0;
+  border-left:7px solid transparent;
+  border-right:7px solid transparent;
+  border-bottom:8px solid rgba(12,18,37,0.98);
+}
+.map-popup-inner{ display:flex; flex-direction:column; gap:8px }
+.map-popup-title{ font-weight:700; font-size:13px; color:var(--fg); }
+.map-popup-actions{ display:flex; gap:8px }
+.map-popup .btn-primary{ background: linear-gradient(180deg, var(--accent), #2a73d6); color:#042; padding:8px 10px; border-radius:8px; }
+.map-popup .btn-secondary{ background:transparent; color:var(--fg); border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:8px }
+.map-popup .btn-primary:active, .map-popup .btn-secondary:active{ transform:translateY(1px) }
+.map-popup [id^="cp-"]{ font-size:13px }
+
+#chart{ width:100%; height:100% }
+.state{ fill:#1a2447; stroke:#2a3357; stroke-width:.8; cursor:pointer }
+.state-active{ stroke:#7aa2ff; stroke-width:1.4 }
+
+.country-circle{ fill:#0f1835; stroke:#3a4a82 }
+.country-label{ fill:#9aa7c7; font-size:12px; text-anchor:middle }
+
+/* Buildings */
+.building, .mini-building{ pointer-events:auto }
+.building .outline, .mini-building .outline{ fill:none; stroke:rgba(255,255,255,.14); stroke-width:.4 }
+
+/* Legend */
+.legend{ margin-top:12px }
+.legend .caption{ color:var(--muted); font-size:12px; margin-bottom:6px }
+.legend .bar{ height:10px; border-radius:6px; background:linear-gradient(90deg,#d64d4d,#f0d34a,#36b37e) }
+.legend .ticks{ display:flex; justify-content:space-between; color:var(--muted); font-size:12px; margin-top:4px }
+
+/* Company List */
+.company-list-section{ margin-top:20px }
+.company-list-header{ font-size:14px; font-weight:600; color:var(--fg); margin-bottom:8px }
+.company-list{ 
+  max-height:300px; 
+  overflow-y:auto; 
+  border:1px solid var(--grid); 
+  border-radius:10px; 
+  background:var(--panel-2);
+  scrollbar-width:thin;
+  scrollbar-color:var(--grid) transparent;
+}
+.company-list::-webkit-scrollbar{ width:6px }
+.company-list::-webkit-scrollbar-track{ background:transparent }
+.company-list::-webkit-scrollbar-thumb{ background:var(--grid); border-radius:3px }
+.company-list-item{ 
+  padding:8px 10px; 
+  cursor:pointer; 
+  border-bottom:1px solid var(--grid);
+  transition:background .15s ease;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.company-list-item:last-child{ border-bottom:none }
+.company-list-item:hover{ background:rgba(94,168,255,0.1) }
+.company-list-item.active{ background:rgba(94,168,255,0.2); border-left:3px solid var(--accent) }
+.company-name{ font-size:13px; color:var(--fg); font-weight:500 }
+.company-value{ font-size:12px; color:var(--muted); font-weight:600 }
+
+/* Tooltip (closer to cursor) */
+.tooltip{
+  position:absolute; background:var(--tooltip-bg); color:#fff;
+  border:1px solid rgba(255,255,255,.08); padding:8px 10px; border-radius:10px;
+  font-size:12px; pointer-events:none; white-space:nowrap; box-shadow:0 4px 18px rgba(0,0,0,.35)
+}
