@@ -233,7 +233,7 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX, viewMo
         
         // Draw curved arrow from dot to bubble
         const arrowStart = rightX;
-        const arrowEnd = rankBubbleX;
+        const arrowEnd = rankBubbleX - 1; // Extend slightly into bubble for better visual connection
         const controlX = (arrowStart + arrowEnd) / 2;
         
         svg.append("path")
