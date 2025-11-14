@@ -201,37 +201,64 @@ function createColorLegend(data, colorBy) {
                 `);
         });
     } else {
-        // Create simple manual color scale
+        // Create gradient legend for continuous scales
         const domain = d3.extent(data, d => d[colorBy]);
+        const colorScale = colorScales[colorBy];
+        colorScale.domain(domain);
         
         const colorScaleDiv = content.append("div")
             .attr("class", "color-scale");
 
-        // Create simple red-to-blue gradient bar with labels
-        const scaleBar = colorScaleDiv.append("div")
-            .attr("class", "color-scale-bar")
-            .style("background", "linear-gradient(to right, #ff9999, #87ceeb)")
-            .style("position", "relative");
+        // Create SVG for gradient
+        const gradientSvg = colorScaleDiv.append("svg")
+            .attr("width", 200)
+            .attr("height", 40);
 
-        // Add Low label on the left
-        scaleBar.append("span")
-            .style("position", "absolute")
-            .style("left", "-30px")
-            .style("top", "50%")
-            .style("transform", "translateY(-50%)")
-            .style("font-size", "12px")
-            .style("color", "#666")
-            .text("Low");
+        // Define gradient
+        const defs = gradientSvg.append("defs");
+        const gradient = defs.append("linearGradient")
+            .attr("id", `gradient-${colorBy}`)
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "100%")
+            .attr("y2", "0%");
 
-        // Add High label on the right
-        scaleBar.append("span")
-            .style("position", "absolute")
-            .style("right", "-30px")
-            .style("top", "50%")
-            .style("transform", "translateY(-50%)")
-            .style("font-size", "12px")
-            .style("color", "#666")
-            .text("High");
+        // Add color stops based on the actual color scale
+        const steps = 10;
+        for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            const value = domain[0] + t * (domain[1] - domain[0]);
+            gradient.append("stop")
+                .attr("offset", `${t * 100}%`)
+                .attr("stop-color", colorScale(value));
+        }
+
+        // Draw gradient bar
+        gradientSvg.append("rect")
+            .attr("x", 30)
+            .attr("y", 10)
+            .attr("width", 140)
+            .attr("height", 20)
+            .style("fill", `url(#gradient-${colorBy})`)
+            .style("stroke", "#999")
+            .style("stroke-width", 1);
+
+        // Add labels
+        gradientSvg.append("text")
+            .attr("x", 25)
+            .attr("y", 25)
+            .attr("text-anchor", "end")
+            .style("font-size", "11px")
+            .style("fill", "#666")
+            .text(domain[0].toFixed(1));
+
+        gradientSvg.append("text")
+            .attr("x", 175)
+            .attr("y", 25)
+            .attr("text-anchor", "start")
+            .style("font-size", "11px")
+            .style("fill", "#666")
+            .text(domain[1].toFixed(1));
     }
 }
 
