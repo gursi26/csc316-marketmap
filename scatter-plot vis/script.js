@@ -149,7 +149,7 @@ function getAxisFormatter(axis) {
 function getAxisLabel(axis) {
     const labels = {
         ceo_approval: "CEO Approval (%)",
-        employee_rating: "Employee Rating",
+        employee_rating: "Employee Rating (out of 5)",
         sentiment: "Sentiment Score",
         pe_ratio: "P/E Ratio",
         revenue: "Revenue ($B)",
@@ -179,7 +179,7 @@ function createColorLegend(data, colorBy) {
 
     const title = legendContainer.append("div")
         .attr("class", "color-legend-title")
-        .text(`Color represents: ${getAxisLabel(colorBy)}`);
+        .text(`Colour represents: ${getAxisLabel(colorBy)}`);
 
     const content = legendContainer.append("div")
         .attr("class", "color-legend-content");
