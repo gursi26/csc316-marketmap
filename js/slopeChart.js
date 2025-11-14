@@ -49,8 +49,8 @@ class SlopeChart {
         this.height = window.innerHeight;
         
         this.svg = d3.select(this.parentElement)
-            .attr("width", this.width)
-            .attr("height", this.height);
+            // .attr("width", this.width)
+            // .attr("height", this.height);
         
         // Setup company dropdown
         // Populate and wire the control dropdowns
@@ -533,6 +533,7 @@ class SlopeChart {
                 .attr("text-anchor", "middle")
                 .attr("font-size", c.titleFontSize)
                 .attr("font-weight", "bold")
+                .attr("font-family", "Work Sans")
                 .attr("fill", "#e0e0e0")
                 .text('Roles (Avg Comp)');
         } else {
@@ -543,6 +544,7 @@ class SlopeChart {
                 .attr("text-anchor", "middle")
                 .attr("font-size", c.titleFontSize)
                 .attr("font-weight", "bold")
+                .attr("font-family", "Work Sans")
                 .attr("fill", "#e0e0e0")
                 .text('Top 10 Companies');
             
@@ -552,6 +554,7 @@ class SlopeChart {
                 .attr("text-anchor", "middle")
                 .attr("font-size", c.titleFontSize)
                 .attr("font-weight", "bold")
+                .attr("font-family", "Work Sans")
                 .attr("fill", "#e0e0e0")
                 .text('(Avg Comp)');
         }
@@ -562,6 +565,7 @@ class SlopeChart {
             .attr("text-anchor", "middle")
             .attr("font-size", c.titleFontSize)
             .attr("font-weight", "bold")
+                .attr("font-family", "Work Sans")
             .attr("fill", "#e0e0e0")
             .text(rightLabel);
         
@@ -579,6 +583,7 @@ class SlopeChart {
             .attr("text-anchor", "middle")
             .attr("font-size", c.chartMainTitleFontSize)
             .attr("font-weight", "bold")
+                .attr("font-family", "Work Sans")
             .attr("fill", "#e0e0e0")
             .text(c.chartMainTitle);
         
@@ -617,6 +622,7 @@ class SlopeChart {
             .attr("dominant-baseline", "central")
             .attr("font-size", c.infoIconRadius * 1.4)
             .attr("font-weight", "bold")
+                .attr("font-family", "Work Sans")
             .attr("font-style", "italic")
             .attr("fill", "#ffffff")
             .text("i")
@@ -642,7 +648,6 @@ class SlopeChart {
         
         // Get appropriate text based on view mode
         const line1Text = viewMode === 'company' ? c.instructionalTextLine1Company : c.instructionalTextLine1Role;
-        const line2Text = viewMode === 'company' ? c.instructionalTextLine2Company : c.instructionalTextLine2Role;
         
         // First line
         this.svg.append("text")
@@ -654,17 +659,6 @@ class SlopeChart {
             .attr("font-style", "italic")
             .attr("fill", "#999")
             .text(line1Text);
-        
-        // Second line
-        this.svg.append("text")
-            .attr("class", "instructional-text")
-            .attr("x", leftX)
-            .attr("y", bottomY + c.instructionalTextLineSpacing)
-            .attr("text-anchor", "start")
-            .attr("font-size", c.instructionalTextFontSize)
-            .attr("font-style", "italic")
-            .attr("fill", "#999")
-            .text(line2Text);
     }
 
     drawRankDistribution(ranks, rankScale, rightX, c) {

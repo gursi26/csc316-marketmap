@@ -45,11 +45,9 @@ const SLOPE_CHART_CONSTANTS = {
     dropdownHeight: 32,  // Height of dropdown selects (px)
     dropdownLabelFontSize: 15,  // Font size for dropdown labels
     // Instructional text for company view (showing roles on left)
-    instructionalTextLine1Company: "Click a role to see ranks",
-    instructionalTextLine2Company: "Double-click a role to see breakdown by company",
+    instructionalTextLine1Company: "Click a role to see ranks, double-click to see breakdown by company",
     // Instructional text for role view (showing companies on left)
-    instructionalTextLine1Role: "Click a company to see ranks",
-    instructionalTextLine2Role: "Double-click a company to see breakdown by role"
+    instructionalTextLine1Role: "Click a company to see ranks, double-click to see breakdown by role",
 };
 
 const ANIMATION_DURATION = 800;

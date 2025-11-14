@@ -11,6 +11,8 @@
   --button-fg: #042;
 }
 
+/* ====== OVERALL SITE ====== */
+
 .rubik {
   font-family: "Rubik 80s Fade", system-ui;
   font-weight: 400;
@@ -61,35 +63,31 @@ h1 {
     /* Center content within each section (optional) */
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     color: white;
-    font-size: 2rem;
+    overflow: hidden
 }
 
 /* Add different colors to distinguish sections (optional) */
 .section-one {
-     background:
-        /* top, transparent black, faked with gradient */ 
-        linear-gradient(
-          rgba(0, 0, 0, 0.8), 
-          rgba(0, 0, 0, 0.8)
-        ),
-        /* bottom, image */
-       url('../dataset/city-bg.jpg');
-    /* background-color: #000000;
-    background-image: url('../dataset/city-bg.jpg');
-    background-position: center;
-    mix-blend-mode: color-burn;
-    background-size: 100% 100%; */
+    background:
+      /* top, transparent black, faked with gradient */ 
+      linear-gradient(
+        rgba(0, 0, 0, 0.8), 
+        rgba(0, 0, 0, 0.8)
+      ),
+      /* bottom, image */
+      url('../dataset/city-bg.jpg');
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
 }
 
 .section-two {
-    background-color: var(--bg);
+    background:linear-gradient(180deg,#0b1020 0%, #0c1225 100%);
 }
 
 .section-three {
-    background-color: #27ae60;
+    background-color: var(--bg);
 }
 
 .section-four {
@@ -133,6 +131,9 @@ h1 {
     /* font-weight: 400; */
 }
 
+
+/* ====== MAP VIS ====== */
+
 .mapvis-wrapper {
     width: 100vw;
     height: 100vh;
@@ -148,7 +149,15 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
 
 .layout{ display:grid; grid-template-columns:320px 1fr; min-height:calc(100vh - 70px) }
 .sidebar{ padding:16px; border-right:1px solid var(--grid); background:var(--panel) }
-.viz{ position:relative; overflow:hidden; background:linear-gradient(180deg,#0b1020 0%, #0c1225 100%) }
+.viz{
+    position:relative;
+    overflow:hidden;
+    
+    background-size: 20px 20px;
+    background-image:
+        linear-gradient(to right, var(--panel-2) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--panel-2) 1px, transparent 1px);
+}
 
 .instructions{ 
   margin-bottom:20px; 
@@ -263,3 +272,255 @@ button{ font-family:inherit }
   border:1px solid rgba(255,255,255,.08); padding:8px 10px; border-radius:10px;
   font-size:12px; pointer-events:none; white-space:nowrap; box-shadow:0 4px 18px rgba(0,0,0,.35)
 }
+
+/* ====== SLOPE CHART ====== */
+.slope-chart-wrapper {
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    margin: 0; padding: 0;
+    /* background: linear-gradient(180deg,var(--bg),#070812); */
+    color: var(--fg); overflow:hidden;
+}
+
+#canvas {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
+.role-label-bubble text,
+.rank-label-bubble text {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.main-title,
+.animated-title,
+.chart-main-title,
+.chart-subtitle,
+.instructional-text {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.animated-title {
+    pointer-events: none;
+    z-index: 10000;
+}
+
+#controls {
+    position: relative;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    z-index: 1000;
+    font-size: 14px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Back to map button */
+.back-to-map{
+    position:relative; top:12px; left: 80vw; z-index:99999;
+    background: rgba(10,14,30,0.95); color: var(--fg); border:1px solid rgba(255,255,255,0.06);
+    padding:10px 12px; border-radius:8px; font-weight:400; box-shadow:0 8px 24px rgba(0,0,0,0.65); text-decoration:none; display:inline-block;
+    pointer-events: auto;
+}
+.back-to-map:hover{ transform:translateY(-1px); }
+.back-to-map:focus{ outline: 3px solid rgba(94,168,255,0.22); outline-offset: 3px }
+
+
+#controls label {
+    font-weight: normal;
+    margin-right: 8px;
+    font-size: 15px;
+    color: #999;
+    font-style: italic;
+}
+
+#view-mode-select,
+#item-select {
+    padding: 6px 10px; 
+    font-size: 13px; 
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 5px; 
+    cursor: pointer; 
+    width: 140px;
+    height: 32px;
+    background: rgba(16,24,51,0.5); 
+    color: #e0e0e0; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+#view-mode-select:hover,
+#item-select:hover {
+    background: rgba(16,24,51,0.8);
+    border-color: rgba(255,255,255,0.3);
+}
+
+#view-mode-select:focus,
+#item-select:focus {
+    outline: 2px solid rgba(94,168,255,0.4);
+    outline-offset: 2px;
+}
+
+/* Company logo next to dropdown */
+.dropdown-logo {
+    width: 28px;
+    height: 28px;
+    margin-left: 8px;
+    border-radius: 4px;
+    background: #ffffff;
+    padding: 2px;
+    display: none;
+    object-fit: contain;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.dropdown-logo.visible {
+    display: inline-block;
+}
+
+/* Make control rows consistent spacing and keep label + control on one line */
+#controls .control-row {
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Ensure labels do not overflow and are kept to a single line */
+#controls .control-row label {
+    flex: 0 0 auto;
+    max-width: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Add a subtle separator between the two control rows */
+#controls .control-row:first-child::after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 24px;
+    background: rgba(255,255,255,0.15);
+    margin: 0 4px;
+}
+
+#tooltip-slope { position: fixed; background: var(--tooltip-bg); border:1px solid rgba(255,255,255,0.04); border-radius:8px; padding:12px 14px; box-shadow:0 6px 18px rgba(0,0,0,0.6); pointer-events:none; opacity:0; transition:opacity .18s; font-size:13px; z-index:1000; width:fit-content }
+
+#tooltip-slope.visible {
+    opacity: 1;
+}
+
+#tooltip-slope .tooltip-title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 2px;
+    color: #e0e0e0;
+    white-space: nowrap;
+    text-align: center;
+}
+
+#tooltip-slope .tooltip-subtitle {
+    font-style: italic;
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 3px;
+    text-align: center;
+}
+
+#tooltip-slope .tooltip-subtitle:last-of-type {
+    margin-bottom: 10px;
+}
+
+#tooltip-slope .tooltip-row {
+    display: grid;
+    grid-template-columns: 105px auto;
+    gap: 12px;
+    align-items: baseline;
+    margin: 5px 0;
+    color: #aaa;
+}
+
+#tooltip-slope .legend-box {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+#tooltip-slope .tooltip-row .label {
+    font-weight: 500;
+    text-align: left;
+}
+
+#tooltip-slope .tooltip-row .value {
+    font-weight: bold;
+    color: #e0e0e0;
+    text-align: right;
+}
+
+#tooltip-slope .tooltip-row .percentage {
+    color: #888;
+    font-size: 11px;
+    text-align: left;
+    min-width: 50px;
+}
+
+#tooltip-slope .tooltip-data {
+    margin-bottom: 10px;
+    display: inline-block;
+    text-align: left;
+}
+
+#tooltip-slope .tooltip-chart {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#tooltip-slope {
+    text-align: center;
+}
+
+/* Info popup styles */
+#info-popup {
+    position: fixed;
+    background: var(--tooltip-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 13px;
+    z-index: 10000;
+    max-width: 380px;
+    color: #e0e0e0;
+    line-height: 1.6;
+    white-space: pre-line;
+    text-align: left;
+}
+
+#info-popup.visible {
+    opacity: 1;
+}
+
+
