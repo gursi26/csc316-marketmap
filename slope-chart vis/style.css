@@ -108,6 +108,23 @@ body {
     outline-offset: 2px;
 }
 
+/* Company logo next to dropdown */
+.dropdown-logo {
+    width: 28px;
+    height: 28px;
+    margin-left: 8px;
+    border-radius: 4px;
+    background: #ffffff;
+    padding: 2px;
+    display: none;
+    object-fit: contain;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.dropdown-logo.visible {
+    display: inline-block;
+}
+
 /* Make control rows consistent spacing and keep label + control on one line */
 #controls .control-row {
     margin-bottom: 0;

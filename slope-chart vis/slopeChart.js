@@ -148,6 +148,7 @@ class SlopeChart {
         const itemSelect = d3.select("#item-select");
         const itemLabel = d3.select("#item-label");
         const viewModeSelect = d3.select("#view-mode-select");
+        const companyLogo = d3.select("#company-logo");
         
         // Update view mode dropdown to match current state
         viewModeSelect.property("value", this.viewMode);
@@ -169,6 +170,16 @@ class SlopeChart {
                 this.selectedCompany = tickers[0];
             }
             itemSelect.property("value", this.selectedCompany);
+            
+            // Update and show company logo
+            const logoPath = `../dataset/logos/images/${this.selectedCompany}.png`;
+            companyLogo
+                .attr("src", logoPath)
+                .classed("visible", true)
+                .on("error", function() {
+                    // Hide logo if it fails to load
+                    d3.select(this).classed("visible", false);
+                });
         }
         else {
             // Use pre-sorted roles
@@ -187,6 +198,9 @@ class SlopeChart {
                 this.selectedRole = roles[0];
             }
             itemSelect.property("value", this.selectedRole);
+            
+            // Hide logo in role view
+            companyLogo.classed("visible", false);
         }
     }
 
@@ -863,7 +877,8 @@ class SlopeChart {
             leftScale,
             this.roleColorScale,
             leftX,
-            leftBubbleHandlers
+            leftBubbleHandlers,
+            viewMode
         );
         
         // Render right bubbles (ranks)

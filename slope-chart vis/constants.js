@@ -18,8 +18,12 @@ const SLOPE_CHART_CONSTANTS = {
     bubblePadding: 7,  // Horizontal padding inside bubbles (left/right)
     bubbleVerticalPadding: 7,  // Vertical padding inside bubbles (top/bottom)
     bubbleFontSize: 12,  // Font size for bubble text
-    bubbleConnectorGap: 20,  // Gap between vertical line and bubble edge
+    bubbleConnectorGap: 35,  // Gap between vertical line and bubble edge
     bubbleMinSpacing: 5,  // Minimum vertical spacing between bubbles
+    // Logo bubble settings (for company logos in role view)
+    logoBubbleSize: 40,  // Size of square bubble containing logo
+    logoSize: 32,  // Size of logo image inside bubble
+    logoPadding: 4,  // Padding around logo inside bubble
     tooltipStackedBarWidth: 200,  // Width of stacked bar in tooltip
     tooltipIconSize: 14,  // Size of icons in tooltip stacked bar
     instructionalTextFontSize: 15,  // Font size for instructional text at bottom
