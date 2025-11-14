@@ -110,9 +110,10 @@ function updateRankBubblePositions(svg, bubbleData) {
             const path = connector.attr("d");
             const match = path.match(/M ([\d.]+) ([\d.]+)/);
             if (match) {
+                const c = SLOPE_CHART_CONSTANTS;
                 const arrowStart = parseFloat(match[1]);
                 const dotY = parseFloat(match[2]);
-                const arrowEnd = arrowStart + 20;
+                const arrowEnd = arrowStart + c.bubbleConnectorGap - 1; // Use constant and extend into bubble
                 const controlX = (arrowStart + arrowEnd) / 2;
                 
                 connector.attr("d", `M ${arrowStart} ${dotY} Q ${controlX} ${(dotY + item.bubbleY) / 2}, ${arrowEnd} ${item.bubbleY}`);

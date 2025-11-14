@@ -9,10 +9,12 @@
  * @param {Function} roleColorScale - D3 color scale for roles
  * @param {number} leftX - X position of the role line
  * @param {Object} handlers - Object containing click and hover event handlers
+ * @param {string} viewMode - Current view mode ('company' or 'role')
  */
-function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handlers) {
+function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handlers, viewMode = 'company') {
     const c = SLOPE_CHART_CONSTANTS;
-    const bubbleHeight = c.bubbleHeight;
+    const isRoleView = viewMode === 'role';
+    const bubbleHeight = isRoleView ? c.logoBubbleSize : c.bubbleHeight;
     const bubblePadding = c.bubblePadding;
     const bubbleMinSpacing = c.bubbleMinSpacing;
     const bubbleRightEdge = leftX - c.bubbleConnectorGap;
@@ -20,17 +22,23 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
     // Prepare bubble data with initial positions
     const roleBubbleData = roles.map((role) => {
         const text = role.displayName ? role.displayName : formatRoleName(role.name);
+        let bubbleWidth;
         
-        // Create temporary text element to measure actual width
-        const tempText = svg.append("text")
-            .attr("font-size", c.bubbleFontSize)
-            .text(text)
-            .style("visibility", "hidden");
-        
-        const textWidth = tempText.node().getBBox().width;
-        tempText.remove();
-        
-        const bubbleWidth = textWidth + bubblePadding * 2;
+        if (isRoleView) {
+            // For role view (companies), use square bubbles for logos
+            bubbleWidth = c.logoBubbleSize;
+        } else {
+            // For company view (roles), measure text width
+            const tempText = svg.append("text")
+                .attr("font-size", c.bubbleFontSize)
+                .text(text)
+                .style("visibility", "hidden");
+            
+            const textWidth = tempText.node().getBBox().width;
+            tempText.remove();
+            
+            bubbleWidth = textWidth + bubblePadding * 2;
+        }
         
         return {
             role: role,
@@ -64,20 +72,50 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
             .attr("y", bubbleY - bubbleHeight / 2)
             .attr("width", bubbleWidth)
             .attr("height", bubbleHeight)
-            .attr("rx", 8)
-            .attr("fill", "#2a2a2a")
+            .attr("rx", isRoleView ? 6 : 8)
+            .attr("fill", isRoleView ? "#ffffff" : "#2a2a2a")
             .attr("stroke", roleColorScale(role.name))
             .attr("stroke-width", 1.5);
         
-        bubbleGroup.append("text")
-            .attr("x", bubbleX + bubbleWidth / 2)
-            .attr("y", bubbleY)
-            .attr("text-anchor", "middle")
-            .attr("dominant-baseline", "middle")
-            .attr("font-size", c.bubbleFontSize)
-            .attr("fill", "#e0e0e0")
-            .text(item.text)
-            .style("pointer-events", "none");
+        if (isRoleView) {
+            // For role view, show company logo
+            const ticker = role.name; // In role view, role.name is the company ticker
+            const logoPath = `../dataset/logos/images/${ticker}.png`;
+            
+            // Add logo image
+            bubbleGroup.append("image")
+                .attr("href", logoPath)
+                .attr("x", bubbleX + c.logoPadding)
+                .attr("y", bubbleY - c.logoSize / 2)
+                .attr("width", c.logoSize)
+                .attr("height", c.logoSize)
+                .attr("preserveAspectRatio", "xMidYMid meet")
+                .style("pointer-events", "none")
+                .on("error", function() {
+                    // Fallback to text if image fails to load
+                    d3.select(this).remove();
+                    bubbleGroup.append("text")
+                        .attr("x", bubbleX + bubbleWidth / 2)
+                        .attr("y", bubbleY)
+                        .attr("text-anchor", "middle")
+                        .attr("dominant-baseline", "middle")
+                        .attr("font-size", c.bubbleFontSize)
+                        .attr("fill", "#e0e0e0")
+                        .text(ticker)
+                        .style("pointer-events", "none");
+                });
+        } else {
+            // For company view, show role name as text
+            bubbleGroup.append("text")
+                .attr("x", bubbleX + bubbleWidth / 2)
+                .attr("y", bubbleY)
+                .attr("text-anchor", "middle")
+                .attr("dominant-baseline", "middle")
+                .attr("font-size", c.bubbleFontSize)
+                .attr("fill", "#e0e0e0")
+                .text(item.text)
+                .style("pointer-events", "none");
+        }
         
         // Add event handlers
         bubbleGroup
@@ -195,7 +233,7 @@ function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX, viewMo
         
         // Draw curved arrow from dot to bubble
         const arrowStart = rightX;
-        const arrowEnd = rankBubbleX;
+        const arrowEnd = rankBubbleX - 1; // Extend slightly into bubble for better visual connection
         const controlX = (arrowStart + arrowEnd) / 2;
         
         svg.append("path")

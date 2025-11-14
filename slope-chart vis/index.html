@@ -15,18 +15,14 @@
                 <option value="role">Role</option>
             </select>
         </div>
-        <!-- Industry filter (appears before company filter) -->
-        <div class="control-row">
-            <label for="industry-select" id="industry-label">Industry:</label>
-            <select id="industry-select"></select>
-        </div>
         <div class="control-row">
             <label for="item-select" id="item-label">Company:</label>
             <select id="item-select"></select>
+            <img id="company-logo" class="dropdown-logo" alt="">
         </div>
-        <!-- Role filter removed: only three dropdowns remain (view mode, industry, company) -->
     </div>
     <div id="tooltip"></div>
+    <div id="info-popup"></div>
     <svg id="canvas"></svg>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="constants.js"></script>
