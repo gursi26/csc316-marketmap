@@ -24,14 +24,12 @@ class SlopeChart {
         this.companyInfo = companyInfo;
 
         // UI state
-        this.viewMode = 'company'; // 'company' or 'role'
+        this.viewMode = 'role'; // 'company' or 'role'
         this.selectedCompany = null;
         this.selectedRole = null; // used when viewMode === 'role'
-        this.selectedIndustry = 'All';
 
         // Interaction state
         this.lockedItem = null; // if an item is 'locked' (clicked)
-        this.titleAnimationSource = null; // used for the animated subtitle transition
         this.previousDistributionPath = null; // stores previous KDE path for smooth transitions
 
         // Derived mappings / helpers
@@ -87,18 +85,29 @@ class SlopeChart {
     }
 
     /**
-     * Populate and wire the UI dropdowns: view-mode, industry and the
-     * main item-select (which is contextual: company or role depending on viewMode).
+     * Populate and wire the UI dropdowns: view-mode and item-select
+     * (which is contextual: company or role depending on viewMode).
      */
     setupDropdown() {
         const self = this;
         
-        // Get all tickers and roles
-        const tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
-        const roles = [...new Set(this.data.map(d => d["Role Name"]))].sort();
-        // Build industry list from companyInfo
-        const industries = [...new Set(this.companyInfo.map(c => c.Industry).filter(Boolean))].sort();
-        industries.unshift('All');
+        // Count data entries for each ticker and role for sorting
+        const tickerCounts = {};
+        const roleCounts = {};
+        this.data.forEach(d => {
+            tickerCounts[d.Ticker] = (tickerCounts[d.Ticker] || 0) + 1;
+            roleCounts[d["Role Name"]] = (roleCounts[d["Role Name"]] || 0) + 1;
+        });
+        
+        // Get all tickers and roles, sorted by data count (descending)
+        const tickers = [...new Set(this.data.map(d => d.Ticker))]
+            .sort((a, b) => tickerCounts[b] - tickerCounts[a]);
+        const roles = [...new Set(this.data.map(d => d["Role Name"]))]
+            .sort((a, b) => roleCounts[b] - roleCounts[a]);
+        
+        // Store for later use in updateItemDropdown
+        this.sortedTickers = tickers;
+        this.sortedRoles = roles;
         
         // Setup view mode dropdown (Company vs Role)
         const viewModeSelect = d3.select("#view-mode-select");
@@ -123,59 +132,29 @@ class SlopeChart {
             self.wrangleData();
         });
 
-        // Setup industry dropdown (filters company list and role availability)
-        const industrySelect = d3.select('#industry-select');
-        industrySelect.selectAll('option')
-            .data(industries)
-            .join('option')
-            .attr('value', d => d)
-            .text(d => d === 'All' ? 'All industries' : d);
+        // Set initial selections (default to role view with first role)
+        this.selectedRole = roles[0];
 
-        industrySelect.on('change', function() {
-            self.selectedIndustry = this.value;
-            // When industry changes, refresh available roles/companies and redraw
-            self.updateItemDropdown();
-            self.wrangleData();
-        });
-
-    // Note: The UI no longer includes a separate role-select. Roles are selected
-    // through the main item dropdown when viewMode === 'role'.
-
-        
-    // Set initial selections
-    this.selectedIndustry = this.selectedIndustry || 'All';
-    this.selectedCompany = tickers[0];
-
-    // Populate initial dropdowns
-    this.updateItemDropdown();
+        // Populate initial dropdowns
+        this.updateItemDropdown();
     }
     
     /**
-     * Refresh the item-select options based on current viewMode and selectedIndustry.
-     * - In company mode: item-select lists companies (filtered by industry if selected)
-     * - In role mode: item-select lists roles available in the selected industry
+     * Refresh the item-select options based on current viewMode.
+     * - In company mode: item-select lists companies (sorted by data count)
+     * - In role mode: item-select lists roles (sorted by data count)
      */
     updateItemDropdown() {
         const itemSelect = d3.select("#item-select");
         const itemLabel = d3.select("#item-label");
         const viewModeSelect = d3.select("#view-mode-select");
-    const industrySelect = d3.select('#industry-select');
         
         // Update view mode dropdown to match current state
         viewModeSelect.property("value", this.viewMode);
         
         if (this.viewMode === 'company') {
-            let tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
-            // If an industry is selected, filter tickers by industry mapping
-            if (this.selectedIndustry && this.selectedIndustry !== 'All') {
-                tickers = tickers.filter(t => (this.companyIndustryMap[t] || '') === this.selectedIndustry);
-            }
-            // If no companies in the selected industry, fall back to all tickers
-            if (tickers.length === 0) {
-                tickers = [...new Set(this.data.map(d => d.Ticker))].sort();
-            }
-            // Update industry selector UI value
-            if (industrySelect.node()) industrySelect.property('value', this.selectedIndustry);
+            // Use pre-sorted tickers
+            const tickers = this.sortedTickers;
             
             itemLabel.text("Company:");
             
@@ -190,17 +169,10 @@ class SlopeChart {
                 this.selectedCompany = tickers[0];
             }
             itemSelect.property("value", this.selectedCompany);
-        
         }
         else {
-            // When selecting by role, show roles available within the selected industry
-            let roles;
-            if (this.selectedIndustry && this.selectedIndustry !== 'All') {
-                const tickersInIndustry = Object.keys(this.companyIndustryMap).filter(t => (this.companyIndustryMap[t] || '') === this.selectedIndustry);
-                roles = [...new Set(this.data.filter(d => tickersInIndustry.includes(d.Ticker)).map(d => d["Role Name"]))].sort();
-            } else {
-                roles = [...new Set(this.data.map(d => d["Role Name"]))].sort();
-            }
+            // Use pre-sorted roles
+            const roles = this.sortedRoles;
             
             itemLabel.text("Role:");
             
@@ -216,17 +188,13 @@ class SlopeChart {
             }
             itemSelect.property("value", this.selectedRole);
         }
-
-        
-        // Role dropdown removed: no UI to update here.
-
     }
 
     // Role filtering helper removed since the role dropdown UI was removed.
 
     
 
-	wrangleData(withTransition = false) {
+	wrangleData() {
         // Reset locked item when changing view
         this.lockedItem = null;
         
@@ -234,9 +202,9 @@ class SlopeChart {
         this.updateItemDropdown();
         
         if (this.viewMode === 'company') {
-            this.wrangleCompanyView(withTransition);
+            this.wrangleCompanyView();
         } else if (this.viewMode === 'role') {
-            this.wrangleRoleView(withTransition);
+            this.wrangleRoleView();
         }
     }
     
@@ -245,7 +213,7 @@ class SlopeChart {
      * Left items: roles within the selected company (avg comp)
      * Right items: flattened ranks across the company
      */
-    wrangleCompanyView(withTransition = false) {
+    wrangleCompanyView() {
         if (!this.selectedCompany) return;
         
         // Filter data for selected company
@@ -270,17 +238,23 @@ class SlopeChart {
                 avgBase: d3.mean(validRows, d => +d["Base Pay"]),
                 avgStock: d3.mean(validRows, d => +d["Stock"]),
                 avgBonus: d3.mean(validRows, d => +d["Bonus"]),
-                ranks: rows.map(row => ({
-                    companyName: this.selectedCompany,
-                    companyDisplayName: this.companyNameMap[this.selectedCompany] || this.selectedCompany,
-                    roleName: roleName,
-                    rankName: row["Role Rank Name"],
-                    rank: +row["Role Rank"],
-                    totalPay: +row["Total Pay"],
-                    basePay: +row["Base Pay"],
-                    stock: +row["Stock"],
-                    bonus: +row["Bonus"]
-                })).sort((a, b) => a.rank - b.rank)
+                ranks: rows.map(row => {
+                    const rankNum = +row["Role Rank"];
+                    const rankName = row["Role Rank Name"] && row["Role Rank Name"].trim() 
+                        ? row["Role Rank Name"] 
+                        : `L${rankNum}`;
+                    return {
+                        companyName: this.selectedCompany,
+                        companyDisplayName: this.companyNameMap[this.selectedCompany] || this.selectedCompany,
+                        roleName: roleName,
+                        rankName: rankName,
+                        rank: rankNum,
+                        totalPay: +row["Total Pay"],
+                        basePay: +row["Base Pay"],
+                        stock: +row["Stock"],
+                        bonus: +row["Bonus"]
+                    };
+                }).sort((a, b) => a.rank - b.rank)
             };
         })
         .filter(r => !isNaN(r.avgPay) && r.avgPay > 0)
@@ -298,29 +272,21 @@ class SlopeChart {
             rightItems: allRanks
         };
         
-        this.updateVis(withTransition);
+        this.updateVis();
     }
     
     /**
      * Build display data for role view.
-     * If an industry is selected, only companies from that industry are considered.
      * The resulting companies are sorted by average pay and limited to top 10.
      */
-    wrangleRoleView(withTransition = false) {
+    wrangleRoleView() {
         if (!this.selectedRole) return;
         
         // Filter data for selected role
         const roleData = this.data.filter(d => d["Role Name"] === this.selectedRole);
         
         // Group by company
-        // If an industry is selected, restrict companies to that industry first
-        let filteredRoleData = roleData;
-        if (this.selectedIndustry && this.selectedIndustry !== 'All') {
-            const tickersInIndustry = Object.keys(this.companyIndustryMap).filter(t => (this.companyIndustryMap[t] || '') === this.selectedIndustry);
-            filteredRoleData = roleData.filter(d => tickersInIndustry.includes(d.Ticker));
-        }
-
-        const companyMap = d3.group(filteredRoleData, d => d.Ticker);
+        const companyMap = d3.group(roleData, d => d.Ticker);
         
         // Process companies
         const companies = Array.from(companyMap, ([ticker, rows]) => {
@@ -340,17 +306,23 @@ class SlopeChart {
                 avgBase: d3.mean(validRows, d => +d["Base Pay"]),
                 avgStock: d3.mean(validRows, d => +d["Stock"]),
                 avgBonus: d3.mean(validRows, d => +d["Bonus"]),
-                ranks: rows.map(row => ({
-                    companyName: ticker,
-                    companyDisplayName: companyDisplayName,
-                    roleName: this.selectedRole,
-                    rankName: row["Role Rank Name"],
-                    rank: +row["Role Rank"],
-                    totalPay: +row["Total Pay"],
-                    basePay: +row["Base Pay"],
-                    stock: +row["Stock"],
-                    bonus: +row["Bonus"]
-                })).sort((a, b) => a.rank - b.rank)
+                ranks: rows.map(row => {
+                    const rankNum = +row["Role Rank"];
+                    const rankName = row["Role Rank Name"] && row["Role Rank Name"].trim() 
+                        ? row["Role Rank Name"] 
+                        : `L${rankNum}`;
+                    return {
+                        companyName: ticker,
+                        companyDisplayName: companyDisplayName,
+                        roleName: this.selectedRole,
+                        rankName: rankName,
+                        rank: rankNum,
+                        totalPay: +row["Total Pay"],
+                        basePay: +row["Base Pay"],
+                        stock: +row["Stock"],
+                        bonus: +row["Bonus"]
+                    };
+                }).sort((a, b) => a.rank - b.rank)
             };
         })
         .filter(c => !isNaN(c.avgPay) && c.avgPay > 0)
@@ -369,20 +341,20 @@ class SlopeChart {
             rightItems: allRanks
         };
         
-        this.updateVis(withTransition);
+        this.updateVis();
     }
 
-    updateVis(withTransition = false) {
-        // Always do instant switch, only the title will animate
+    updateVis() {
+        // Clear and redraw
         this.svg.selectAll("*").remove();
-        this.drawVisualization(withTransition);
+        this.drawVisualization();
     }
     
     /**
      * Core draw routine: lays out axes, titles, distributions, lines and bubbles.
      * This method assumes this.displayData has been prepared by a wrangle* method.
      */
-    drawVisualization(animateTitle = false) {
+    drawVisualization() {
         const { viewMode, title, leftItems, rightItems } = this.displayData;
         
         if (!leftItems.length || !rightItems.length) return;
@@ -428,10 +400,10 @@ class SlopeChart {
         this.drawAxisAndGrid(payScale, leftX, rightX, c, verticalOffset);
         
         // Draw titles
-        this.drawTitles(leftX, rightX, title, viewMode, c, animateTitle, verticalOffset);
+        this.drawTitles(leftX, rightX, title, viewMode, c, verticalOffset);
         
         // Draw rank distribution
-        this.drawRankDistribution(rightItems, rightScale, rightX, c, animateTitle);
+        this.drawRankDistribution(rightItems, rightScale, rightX, c);
         
         // Draw connecting lines
         this.drawConnectionLines(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode, c);
@@ -525,8 +497,10 @@ class SlopeChart {
         
         // Style text
         axisGroup.selectAll("text")
-            .style("font-size", "11px")
-            .style("fill", "#ccc");
+            .style("font-size", `${c.yAxisFontSize}px`)
+            .style("fill", "#ccc")
+            .style("opacity", c.yAxisOpacity)
+            .style("font-weight", c.yAxisFontWeight);
         
         // Style the axis
         this.svg.selectAll(".y-axis path, .y-axis line")
@@ -534,7 +508,7 @@ class SlopeChart {
             .style("stroke-width", 1);
     }
 
-    drawTitles(leftX, rightX, title, viewMode, c, animateTitle = false, verticalOffset = 0) {
+    drawTitles(leftX, rightX, title, viewMode, c, verticalOffset = 0) {
         const rightLabel = 'Ranks (Total Comp)';
         
         // Handle left label with potential wrapping for role view
@@ -584,7 +558,7 @@ class SlopeChart {
         const mainTitleY = 22 + verticalOffset;
         const subtitleY = mainTitleY + c.chartTitleSpacing;
         
-        this.svg.append("text")
+        const mainTitleText = this.svg.append("text")
             .attr("class", "chart-main-title")
             .attr("x", axisX)
             .attr("y", mainTitleY)
@@ -594,60 +568,59 @@ class SlopeChart {
             .attr("fill", "#e0e0e0")
             .text(c.chartMainTitle);
         
-        // If we should animate the subtitle and have a source, animate it
-        if (animateTitle && this.titleAnimationSource) {
-            const source = this.titleAnimationSource;
-            
-            // Create animated text that moves from source to subtitle position
-            this.svg.append("text")
-                .attr("class", "animated-title")
-                .attr("x", source.x)
-                .attr("y", source.y)
-                .attr("text-anchor", "middle")
-                .attr("font-size", c.bubbleFontSize)
-                .attr("font-weight", "normal")
-                .attr("fill", "#bbb")
-                .text(source.text)
-                .transition()
-                .duration(600)
-                .attr("x", axisX)
-                .attr("y", subtitleY)
-                .attr("font-size", c.chartSubtitleFontSize)
-                .on("end", function() {
-                    // Remove the animated text
-                    d3.select(this).remove();
-                });
-            
-            // Create the final subtitle (hidden initially, will appear after animation)
-            this.svg.append("text")
-                .attr("class", "chart-subtitle")
-                .attr("x", axisX)
-                .attr("y", subtitleY)
-                .attr("text-anchor", "middle")
-                .attr("font-size", c.chartSubtitleFontSize)
-                .attr("font-weight", "normal")
-                .attr("fill", "#bbb")
-                .style("opacity", 0)
-                .text(title)
-                .transition()
-                .delay(600)
-                .duration(0)
-                .style("opacity", 1);
-            
-            // Clear the animation source after using it
-            this.titleAnimationSource = null;
-        } else {
-            // No animation, just draw the subtitle normally
-            this.svg.append("text")
-                .attr("class", "chart-subtitle")
-                .attr("x", axisX)
-                .attr("y", subtitleY)
-                .attr("text-anchor", "middle")
-                .attr("font-size", c.chartSubtitleFontSize)
-                .attr("font-weight", "normal")
-                .attr("fill", "#bbb")
-                .text(title);
-        }
+        // Calculate position for info icon (to the right of title)
+        const titleBBox = mainTitleText.node().getBBox();
+        const iconX = titleBBox.x + titleBBox.width + c.infoIconOffset;
+        const iconY = mainTitleY;
+        
+        // Draw info icon group
+        const infoIconGroup = this.svg.append("g")
+            .attr("class", "info-icon")
+            .style("cursor", "pointer");
+        
+        // Draw invisible circle for larger hover area
+        infoIconGroup.append("circle")
+            .attr("cx", iconX)
+            .attr("cy", iconY - c.infoIconRadius / 2)
+            .attr("r", c.infoIconRadius + 2)
+            .attr("fill", "transparent")
+            .attr("stroke", "none");
+        
+        // Draw visible circle
+        infoIconGroup.append("circle")
+            .attr("cx", iconX)
+            .attr("cy", iconY - c.infoIconRadius / 2)
+            .attr("r", c.infoIconRadius)
+            .attr("fill", "none")
+            .attr("stroke", "#ffffff")
+            .attr("stroke-width", 2);
+        
+        // Draw "i" text
+        infoIconGroup.append("text")
+            .attr("x", iconX)
+            .attr("y", iconY - c.infoIconRadius / 2)
+            .attr("text-anchor", "middle")
+            .attr("dominant-baseline", "central")
+            .attr("font-size", c.infoIconRadius * 1.4)
+            .attr("font-weight", "bold")
+            .attr("font-style", "italic")
+            .attr("fill", "#ffffff")
+            .text("i")
+            .style("pointer-events", "none");
+        
+        // Add hover handlers for info icon
+        infoIconGroup
+            .on("mouseenter", (event) => {
+                showInfoPopup(c.infoPopupText, event.clientX, event.clientY);
+            })
+            .on("mousemove", (event) => {
+                updateInfoPopupPosition(event.clientX, event.clientY);
+            })
+            .on("mouseleave", () => {
+                hideInfoPopup();
+            });
+        
+        // Animation removed - dropdowns now handle the display
     }
 
     drawInstructionalText(leftX, viewMode, c, verticalOffset = 0) {
@@ -680,7 +653,7 @@ class SlopeChart {
             .text(line2Text);
     }
 
-    drawRankDistribution(ranks, rankScale, rightX, c, animate = false) {
+    drawRankDistribution(ranks, rankScale, rightX, c) {
         // Extract total pay values
         const payValues = ranks.map(d => d.totalPay);
         
@@ -720,15 +693,8 @@ class SlopeChart {
             .attr("stroke", "#6BA8E5")
             .attr("stroke-width", 1.5);
         
-        // If we should animate and have a previous path, transition from it
-        if (animate && this.previousDistributionPath) {
-            path.attr("d", this.previousDistributionPath)
-                .transition()
-                .duration(600)
-                .attr("d", newPath);
-        } else {
-            path.attr("d", newPath);
-        }
+        // Draw the path
+        path.attr("d", newPath);
         
         // Store this path for next transition
         this.previousDistributionPath = newPath;
@@ -801,25 +767,16 @@ class SlopeChart {
                 event.stopPropagation();
                 hideTooltip();
                 
-                // Store the position and text for title animation
-                const text = d.displayName ? d.displayName : (viewMode === 'company' ? formatRoleName(d.name) : d.name);
-                self.titleAnimationSource = {
-                    x: leftX,
-                    y: leftScale(d.avgPay),
-                    text: text,
-                    newTitle: viewMode === 'company' ? formatRoleName(d.name) : d.displayName
-                };
-                
                 if (viewMode === 'company') {
                     // Switch to role view
                     self.selectedRole = d.name;
                     self.viewMode = 'role';
-                    self.wrangleData(true);
+                    self.wrangleData();
                 } else {
                     // Switch to company view
                     self.selectedCompany = d.name;
                     self.viewMode = 'company';
-                    self.wrangleData(true);
+                    self.wrangleData();
                 }
             })
             .on("mouseenter", (event, d) => {
@@ -875,25 +832,16 @@ class SlopeChart {
                 event.stopPropagation();
                 hideTooltip();
                 
-                // Store the position and text for title animation
-                const text = item.displayName ? item.displayName : (viewMode === 'company' ? formatRoleName(item.name) : item.name);
-                self.titleAnimationSource = {
-                    x: leftX,
-                    y: leftScale(item.avgPay),
-                    text: text,
-                    newTitle: viewMode === 'company' ? formatRoleName(item.name) : item.displayName
-                };
-                
                 if (viewMode === 'company') {
                     // Switch to role view
                     self.selectedRole = item.name;
                     self.viewMode = 'role';
-                    self.wrangleData(true);
+                    self.wrangleData();
                 } else {
                     // Switch to company view
                     self.selectedCompany = item.name;
                     self.viewMode = 'company';
-                    self.wrangleData(true);
+                    self.wrangleData();
                 }
             },
             onMouseEnter: (event, item) => {

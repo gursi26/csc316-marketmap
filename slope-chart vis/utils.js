@@ -238,3 +238,55 @@ function updateTooltipPosition(x, y, side = null) {
     tooltip.style.top = `${top}px`;
 }
 
+/**
+ * Shows info popup with text
+ * @param {string} text - The text to display
+ * @param {number} x - X position for popup
+ * @param {number} y - Y position for popup
+ */
+function showInfoPopup(text, x, y) {
+    const popup = document.getElementById('info-popup');
+    popup.textContent = text;
+    popup.classList.add('visible');
+    updateInfoPopupPosition(x, y);
+}
+
+/**
+ * Hides the info popup
+ */
+function hideInfoPopup() {
+    const popup = document.getElementById('info-popup');
+    popup.classList.remove('visible');
+}
+
+/**
+ * Updates info popup position
+ * @param {number} x - X position
+ * @param {number} y - Y position
+ */
+function updateInfoPopupPosition(x, y) {
+    const popup = document.getElementById('info-popup');
+    const popupRect = popup.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    const offsetX = 15;
+    const offsetY = 15;
+    
+    let left = x + offsetX;
+    let top = y + offsetY;
+    
+    // Check if popup would go off the right edge
+    if (left + popupRect.width > viewportWidth) {
+        left = x - popupRect.width - offsetX;
+    }
+    
+    // Check if popup would go off the bottom edge
+    if (top + popupRect.height > viewportHeight) {
+        top = y - popupRect.height - offsetY;
+    }
+    
+    popup.style.left = `${left}px`;
+    popup.style.top = `${top}px`;
+}
+

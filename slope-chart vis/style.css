@@ -37,20 +37,26 @@ body {
     -ms-user-select: none;
 }
 
+.animated-title {
+    pointer-events: none;
+    z-index: 10000;
+}
+
 #controls {
     position: fixed;
-    top: 10px;
-    left: 10px;
-    background: rgba(16,24,51,0.7);
-    padding: 8px 10px;
-    border: 1px solid rgba(255,255,255,0.03);
-    border-radius: 6px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-shadow: none;
     z-index: 1000;
-    font-size: 12px;
-    backdrop-filter: blur(4px);
-    transition: background 0.2s;
-    max-width: 240px;
+    font-size: 14px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Back to map button */
@@ -63,28 +69,48 @@ body {
 .back-to-map:hover{ transform:translateY(-1px); }
 .back-to-map:focus{ outline: 3px solid rgba(94,168,255,0.22); outline-offset: 3px }
 
-#controls:hover {
-    background: rgba(42, 42, 42, 0.95);
-}
 
 #controls label {
-    font-weight: bold;
-    margin-right: 6px;
-    font-size: 11px;
-    color: #e0e0e0;
+    font-weight: normal;
+    margin-right: 8px;
+    font-size: 15px;
+    color: #999;
+    font-style: italic;
 }
 
 #view-mode-select,
-#item-select,
-#industry-select {
-    padding: 6px 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.04);
-    border-radius: 4px; cursor:pointer; width:160px; flex:0 0 160px;
-    background: #0e1530; color:var(--fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+#item-select {
+    padding: 6px 10px; 
+    font-size: 13px; 
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 5px; 
+    cursor: pointer; 
+    width: 140px;
+    height: 32px;
+    background: rgba(16,24,51,0.5); 
+    color: #e0e0e0; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+#view-mode-select:hover,
+#item-select:hover {
+    background: rgba(16,24,51,0.8);
+    border-color: rgba(255,255,255,0.3);
+}
+
+#view-mode-select:focus,
+#item-select:focus {
+    outline: 2px solid rgba(94,168,255,0.4);
+    outline-offset: 2px;
 }
 
 /* Make control rows consistent spacing and keep label + control on one line */
 #controls .control-row {
-    margin-bottom: 8px;
+    margin-bottom: 0;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -93,10 +119,20 @@ body {
 /* Ensure labels do not overflow and are kept to a single line */
 #controls .control-row label {
     flex: 0 0 auto;
-    max-width: 90px;
+    max-width: none;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* Add a subtle separator between the two control rows */
+#controls .control-row:first-child::after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 24px;
+    background: rgba(255,255,255,0.15);
+    margin: 0 4px;
 }
 
 #tooltip { position: fixed; background: var(--tooltip-bg); border:1px solid rgba(255,255,255,0.04); border-radius:8px; padding:12px 14px; box-shadow:0 6px 18px rgba(0,0,0,0.6); pointer-events:none; opacity:0; transition:opacity .18s; font-size:13px; z-index:1000; width:fit-content }
@@ -175,4 +211,28 @@ body {
 
 #tooltip {
     text-align: center;
+}
+
+/* Info popup styles */
+#info-popup {
+    position: fixed;
+    background: var(--tooltip-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    font-size: 13px;
+    z-index: 10000;
+    max-width: 380px;
+    color: #e0e0e0;
+    line-height: 1.6;
+    white-space: pre-line;
+    text-align: left;
+}
+
+#info-popup.visible {
+    opacity: 1;
 }
