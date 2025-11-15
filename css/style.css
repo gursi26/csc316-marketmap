@@ -9,6 +9,7 @@
   --accent: #5ea8ff;
   --button-bg: linear-gradient(180deg,#2b7a4a,#1f5d39);
   --button-fg: #042;
+  --card-bg:#0c1225;
 }
 
 /* ====== OVERALL SITE ====== */
@@ -60,7 +61,6 @@ h1 {
     /* Ensure the section snaps to the start of the viewport */
     scroll-snap-align: start;
     
-    /* Center content within each section (optional) */
     display: flex;
     flex-direction: column;
     color: white;
@@ -72,8 +72,8 @@ h1 {
     background:
       /* top, transparent black, faked with gradient */ 
       linear-gradient(
-        rgba(0, 0, 0, 0.8), 
-        rgba(0, 0, 0, 0.8)
+        rgba(0, 0, 2, 0.8), 
+        rgba(0, 0, 2, 0.8)
       ),
       /* bottom, image */
       url('../dataset/city-bg.jpg');
@@ -523,4 +523,170 @@ button{ font-family:inherit }
     opacity: 1;
 }
 
+/* ====== SCATTER PLOT ====== */
 
+.container-scatter {
+    /* max-width: 1200px; */
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    margin: 0 auto;
+    /* background: var(--card-bg); */
+    padding: 18px;
+    background: #090b1c;
+    color: var(--fg);
+}
+
+/* h1 { text-align:center; color:var(--fg); margin-bottom:8px } */
+.subtitle-scatter { text-align:center; color:var(--muted); margin-bottom:24px; font-style:italic; }
+
+.chart-container-scatter { position:relative }
+
+.tooltip-scatter {
+    position: absolute;
+    background: var(--tooltip-bg);
+    color: var(--fg);
+    padding: 10px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s;
+    font-size: 12px;
+    max-width: 260px;
+    z-index: 1000;
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+.axis-label { font-size: 14px; font-weight:600; fill:var(--muted) }
+
+.controls-and-legend {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.legend-scatter {
+    display:flex; flex-direction: column; justify-content:center; gap:10px;
+    background: var(--panel); padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03);
+}
+.legend-item { display:flex; align-items:center; gap:8px }
+.legend-color{ width:18px; height:18px; border-radius:50% }
+.legend-text{ font-size:12px; color:var(--fg) }
+
+.color-legend { display:flex; flex-direction: row; padding-top:10px; padding-bottom:10px; padding-left:20px; padding-right:20px; background: var(--panel); border-radius:8px; border:1px solid rgba(255,255,255,0.03); align-items:center;}
+.color-legend-title{ font-size:14px; font-weight:600; color: var(--fg); margin-right:8px; text-align:center }
+.color-legend-content{ display:flex; justify-content:center; align-items:center; gap:20px; flex-wrap:wrap }
+
+/* preserve original color scale appearance used by the scatter plot legend */
+.color-scale { display:flex; align-items:center; gap:10px }
+.color-scale-bar { width:200px; height:20px; border-radius:10px; border:1px solid #ddd; background: linear-gradient(to right, #ff9999, #87ceeb); }
+.color-scale-labels { display:flex; justify-content:space-between; font-size:10px; color:#666; margin-top:5px }
+
+.sector-legend { display:flex; flex-wrap:wrap; gap:10px; justify-content:center }
+.sector-item { display:flex; align-items:center; gap:5px; font-size:11px }
+.sector-color { width:12px; height:12px; border-radius:50% }
+
+.controls-scatter{
+    display:flex; justify-content:center; gap:16px;
+    background: var(--panel); padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03);
+}
+.control-group{ display:flex; flex-direction:column; gap:6px; align-items:center; justify-content:center}
+.control-group label{ font-size:12px; font-weight:600; color:var(--muted) }
+.control-group select{ padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.04); background:var(--control-bg); color:var(--fg) }
+
+/* buttons (if any) */
+button{ background: var(--accent); color:#022; padding:8px 12px; border-radius:6px; border:0; cursor:pointer }
+
+h2 {font-size: 1.75em; margin-bottom: 0; margin-top: 0;}
+
+/* .company-detail-container {
+    visibility: none;
+    max-width: 880px;
+    margin: 48px auto;
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    padding: 36px;
+    text-align: center;
+    color: var(--fg);
+} */
+
+.company-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent) 0%, #3b6fb8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    color: #06121a;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(255,255,255,0.03);
+}
+
+.back-button {
+    background: var(--accent);
+    color: #042;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: transform .08s ease, box-shadow .08s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+}
+
+/* ====== POPUPS ====== */
+
+/* Removes the default padding/margin from the dialog element itself */
+dialog {
+    min-width: 40vw;
+    position: absolute;
+    padding: 0;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg);
+}
+
+/* Styles the content inside the popup and adds padding */
+.popup-content-wrapper {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styles the overlay backdrop */
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#close-company-detail-popup, #close-guide-popup {
+    margin-top: 20px;
+}
+
+.company-info {
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+}
+
+.info-item { margin: 6px 0; font-size: 14px; color: var(--fg) }
+
+.info-label { font-weight: 700; color: var(--accent); margin-right:6px }
+
+.guide-container {
+    color: var(--fg);
+}

@@ -1,7 +1,7 @@
 // Set up dimensions and margins
 const margin = { top: 40, right: 40, bottom: 80, left: 80 };
 const width = 900 - margin.left - margin.right;
-const height = 600 - margin.top - margin.bottom;
+const height = 550 - margin.top - margin.bottom;
 
 // Create SVG
 const svg = d3.select("#scatterplot")
@@ -12,7 +12,7 @@ const g = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
 // Create tooltip
-const tooltip = d3.select("#tooltip");
+const tooltip = d3.select("#tooltip-scatter");
 
 // Color scales
 const colorScales = {
@@ -288,41 +288,7 @@ function updateVisualization(data, xAxis, yAxis, colorBy) {
         .style("cursor", "pointer");
 
     // Add interactions
-    circles
-        .on("mouseover", function(event, d) {
-            d3.select(this)
-                .attr("opacity", 1)
-                .attr("stroke-width", 2);
-
-            tooltip
-                .style("opacity", 1)
-                .html(`
-                    <strong>${d.name} (${d.ticker})</strong><br/>
-                    Sector: ${d.sector}<br/>
-                    CEO Approval: ${d.ceo_approval}%<br/>
-                    Employee Rating: ${d.employee_rating}/5<br/>
-                    Market Cap: $${(d.market_cap / 1e9).toFixed(1)}B<br/>
-                    Sentiment: ${d.sentiment.toFixed(3)}<br/>
-                    Employees: ${d.employee_count.toLocaleString()}
-                `);
-        })
-        .on("mousemove", function(event) {
-            tooltip
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 10) + "px");
-        })
-        .on("mouseout", function() {
-            d3.select(this)
-                .attr("opacity", 0.7)
-                .attr("stroke-width", 1);
-
-            tooltip.style("opacity", 0);
-        })
-                .on("click", function(event, d) {
-                    // Navigate to company detail page
-                    const companyData = encodeURIComponent(JSON.stringify(d));
-                    window.location.href = `company-detail.html?data=${companyData}`;
-                });
+    enableMouseover()
 }
 
 // Event listeners for controls
@@ -407,9 +373,12 @@ function focusTicker(ticker){
     if (!ticker) return;
     const t = (ticker||'').toString().toUpperCase();
     const sel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker||d.Ticker)||'').toString().toUpperCase() === t);
+    const nonSel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker||d.Ticker)||'').toString().toUpperCase() !== t);
     if (sel.empty()) return;
     const d = sel.datum();
-    sel.raise().attr('stroke', '#000').attr('stroke-width', 3).attr('opacity', 1);
+    sel.raise().transition().delay(250).duration(1000).attr('stroke-width', 3).attr('opacity', 1);
+    nonSel.transition().delay(250).duration(1000).attr('opacity', 0.1)
+    disableMouseover()
     tooltip.style('opacity', 1).html(`
         <strong>${d.name || d.ticker}</strong><br/>
         Sector: ${d.sector || ''}<br/>
@@ -419,9 +388,108 @@ function focusTicker(ticker){
         Sentiment: ${d.sentiment != null ? d.sentiment.toFixed(3) : 'n/a'}
     `);
     const rect = document.getElementById('scatterplot').getBoundingClientRect();
-    tooltip.style('left', (rect.left + 20) + 'px').style('top', (rect.top + 20) + 'px');
+    tooltip.style('left', '100px').style('top', '100px');
     setTimeout(() => {
-        sel.attr('stroke', '#fff').attr('stroke-width', 1).attr('opacity', 0.7);
+        enableMouseover()
+        sel.transition().duration(1000).attr('stroke-width', 1).attr('opacity', 0.7);
+        nonSel.transition().duration(1000).attr('opacity', 0.7);
         tooltip.style('opacity', 0);
     }, 3000);
+}
+
+
+function disableMouseover() {
+    d3.selectAll('#scatterplot circle')
+        .on("mouseover", null)
+        .on("mousemove", null)
+        .on("mouseout", null)
+}
+
+function enableMouseover() {
+    d3.selectAll('#scatterplot circle')
+        .on("mouseover", function(event, d) {
+            d3.select(this)
+                .attr("opacity", 1)
+                .attr("stroke-width", 2);
+
+            tooltip
+                .style("opacity", 1)
+                .html(`
+                    <strong>${d.name} (${d.ticker})</strong><br/>
+                    Sector: ${d.sector}<br/>
+                    CEO Approval: ${d.ceo_approval}%<br/>
+                    Employee Rating: ${d.employee_rating}/5<br/>
+                    Market Cap: $${(d.market_cap / 1e9).toFixed(1)}B<br/>
+                    Sentiment: ${d.sentiment.toFixed(3)}<br/>
+                    Employees: ${d.employee_count.toLocaleString()}
+                `);
+        })
+        .on("mousemove", function(event) {
+            tooltip
+                .style("left", (event.pageX - 250) + "px")
+                .style("top", (event.pageY - 200) + "px");
+        })
+        .on("mouseout", function() {
+            d3.select(this)
+                .attr("opacity", 0.7)
+                .attr("stroke-width", 1);
+
+            tooltip.style("opacity", 0);
+        })
+        .on("click", function(event, d) {
+            // Navigate to company detail page
+            displayCompanyInfo(d)
+            popupCompany.showModal();
+        });
+}
+
+
+// Company Details
+
+// Display company information
+function displayCompanyInfo(d) {
+    const company = d;
+    
+    if (!company) {
+        document.getElementById('company-circle').textContent = 'Company Not Found';
+        return;
+    }
+    
+    // Display company name in circle
+    document.getElementById('company-circle').textContent = company.name;
+    
+    // Display company details
+    const infoDiv = document.getElementById('company-info');
+    infoDiv.innerHTML = `
+        <div class="info-item">
+            <span class="info-label">Ticker:</span> ${company.ticker}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Sector:</span> ${company.sector}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Industry:</span> ${company.industry}
+        </div>
+        <div class="info-item">
+            <span class="info-label">CEO Approval:</span> ${company.ceo_approval}%
+        </div>
+        <div class="info-item">
+            <span class="info-label">Employee Rating:</span> ${company.employee_rating}/5
+        </div>
+        <div class="info-item">
+            <span class="info-label">Market Cap:</span> $${(company.market_cap / 1e9).toFixed(1)}B
+        </div>
+        <div class="info-item">
+            <span class="info-label">Revenue:</span> $${(company.revenue / 1e9).toFixed(1)}B
+        </div>
+        <div class="info-item">
+            <span class="info-label">P/E Ratio:</span> ${company.pe_ratio.toFixed(1)}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Sentiment:</span> ${company.sentiment.toFixed(3)}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Employees:</span> ${company.employee_count.toLocaleString()}
+        </div>
+    `;
 }

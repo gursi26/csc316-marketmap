@@ -1,127 +1,195 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MarketMap 📡</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Rubik+80s+Fade&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <script src="https://unpkg.com/d3@7"></script>
-  <script src="https://unpkg.com/topojson-client@3"></script>
-</head>
-<body>
-  <div class="snap-container">
-      <div class="section section-one">
-          <h1 class="rubik">MarketMap</h1>
-          <h4 class="major-mono">a gps for your career path</h4>
-          <div class="button-holder">
-            <button id="guideButton" class="work-sans-400">See Guide ⓘ</button>
-            <button id="scrollDownButton" class="work-sans-400">Get Started ↓</button>
-          </div>
-          
-      </div>
-      <div class="section section-two">
-        <div class="mapvis-wrapper">
-        <div class="app-header">
-          <h1>Company Atlas</h1>
-          <p class="subtitle">Entry-level salary or 2022→2025 return (height) · log(Market Cap) (width) · Rating / CEO approval (color)</p>
-        </div>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>MarketMap 📡</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Rubik+80s+Fade&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css">
+        <script src="https://unpkg.com/d3@7"></script>
+        <script src="https://unpkg.com/topojson-client@3"></script>
+    </head>
+    <body>
+        <div class="snap-container">
+            <div class="section section-one">
+                <!-- Popup windows -->
+                 <dialog id="guide-popup">
+                    <div class="popup-content-wrapper">
+                        <div class="guide-container">
+                            <h2>Hello, welcome!</h2>
+                        </div>
+                        <button id="close-guide-popup">Close</button>
+                    </div>
+                </dialog>
 
-        <main class="layout">
-          <aside class="sidebar">
-            <div class="instructions">
-              <p>Click a state on the map to zoom in</p>
-              <p>Click a company building to learn more</p>
-            </div>
+                <dialog id="company-detail-popup">
+                    <div class="popup-content-wrapper">
+                        <div class="company-detail-container">
+                            <div class="company-circle" id="company-circle"></div>
+                            <div class="company-info" id="company-info"></div> 
+                        </div>
+                        <button id="close-company-detail-popup">Close</button>
+                    </div>
+                </dialog>
 
-            <fieldset class="control">
-              <legend>Height metric</legend>
-              <label><input type="radio" name="heightMetric" value="salary" checked> Entry-level salary</label>
-              <label><input type="radio" name="heightMetric" value="return"> 2022→2025 Return (%)</label>
-            </fieldset>
-
-            <div class="control">
-              <label for="roleSelect">Role name</label>
-              <select id="roleSelect"></select>
-            </div>
-
-            <fieldset class="control">
-              <legend>Color metric</legend>
-              <label><input type="radio" name="colorMetric" value="employee_rating" checked> Employee rating</label>
-              <label><input type="radio" name="colorMetric" value="ceo_approval"> CEO approval</label>
-            </fieldset>
-
-            <div class="legend" id="legendColor">
-              <!-- created/updated by JS -->
-            </div>
-
-            <div class="company-list-section">
-              <div class="company-list-header">Companies</div>
-              <div id="companyList" class="company-list">
-                <!-- populated by JS -->
-              </div>
-            </div>
-          </aside>
-
-          <section class="viz">
-            <div id="tooltip" class="tooltip" style="display:none"></div>
-            <svg id="chart" viewBox="0 0 1200 680" preserveAspectRatio="xMidYMid meet"></svg>
-          </section>
-        </main>
-
-        <script>
-          window.APP_CONFIG = {
-            dataDir: "data",
-            files: {
-              info: "Company-info.csv",
-              financials: "Company-financials.csv",
-              salary: "Company-salary.csv",
-              prices: "nasdaq100_yearly_prices.csv"
-            }
-          };
-        </script>
-        <script src="js/mapvis.js"></script>
-
-        </div>
-      </div>
-      <div class="section section-three">
-          <div class="slope-chart-wrapper">
-          <!-- Ensure this navigates the top-level page (works even when the slope chart is shown inside an iframe) -->
-            <!-- <a id="backToMap" class="back-to-map" href="../index.html" target="_top" rel="noopener">← Back to Map</a> -->
-            <div id="controls">
-                <div class="control-row">
-                    <label for="view-mode-select">Select By:</label>
-                    <select id="view-mode-select">
-                        <option value="company">Company</option>
-                        <option value="role">Role</option>
-                    </select>
-                </div>
-                <div class="control-row">
-                    <label for="item-select" id="item-label">Company:</label>
-                    <select id="item-select"></select>
-                    <img id="company-logo" class="dropdown-logo" alt="">
+                <h1 class="rubik">MarketMap</h1>
+                <h4 class="major-mono">a gps for your career path</h4>
+                <div class="button-holder">
+                    <button id="guideButton" class="work-sans-400">See Guide ⓘ</button>
+                    <button id="scrollDownButton" class="work-sans-400">Get Started ↓</button>
                 </div>
             </div>
-            <div id="tooltip-slope"></div>
-            <div id="info-popup"></div>
-            <svg id="canvas"></svg>
-            <script src="https://d3js.org/d3.v7.min.js"></script>
-            <script src="js/constants.js"></script>
-            <script src="js/tooltipBarChart.js"></script>
-            <script src="js/utils.js"></script>
-            <script src="js/collisionDetection.js"></script>
-            <script src="js/bubbleRenderer.js"></script>
-            <script src="js/interactionHandler.js"></script>
-            <script src="js/slopeChart.js"></script>
-            <script src="js/main.js"></script>
-            <!-- Back link is an anchor so it works without JS -->
-          </div>
-      </div>
-      <div class="section section-four">
-          <h1>Scatter Plot Viz</h1>
-      </div>
-  </div>
-</body>
+            <div class="section section-two">
+                <div class="mapvis-wrapper">
+                    <div class="app-header">
+                        <h1>Company Atlas</h1>
+                        <p class="subtitle"><strong>Building Height: </strong>Entry-level salary | 2022→2025 return · <strong>Building Width: </strong>Market Cap (log) · <strong>Color: </strong>Rating | CEO approval</p>
+                    </div>
+                    <main class="layout">
+                        <aside class="sidebar">
+                            <div class="instructions">
+                                <p>Click a state on the map to zoom in</p>
+                                <p>Click a company building to learn more</p>
+                            </div>
+                            <fieldset class="control">
+                                <legend>Height metric</legend>
+                                <label><input type="radio" name="heightMetric" value="salary" checked> Entry-level salary</label>
+                                <label><input type="radio" name="heightMetric" value="return"> 2022→2025 Return (%)</label>
+                            </fieldset>
+                            <div class="control">
+                                <label for="roleSelect">Role name</label>
+                                <select id="roleSelect"></select>
+                            </div>
+                            <fieldset class="control">
+                                <legend>Color metric</legend>
+                                <label><input type="radio" name="colorMetric" value="employee_rating" checked> Employee rating</label>
+                                <label><input type="radio" name="colorMetric" value="ceo_approval"> CEO approval</label>
+                            </fieldset>
+                            <div class="legend" id="legendColor">
+                                <!-- created/updated by JS -->
+                            </div>
+                            <div class="company-list-section">
+                                <div class="company-list-header">Companies</div>
+                                <div id="companyList" class="company-list">
+                                    <!-- populated by JS -->
+                                </div>
+                            </div>
+                        </aside>
+                        <section class="viz">
+                            <div id="tooltip" class="tooltip" style="display:none"></div>
+                            <svg id="chart" viewBox="0 0 1200 680" preserveAspectRatio="xMidYMid meet"></svg>
+                        </section>
+                    </main>
+                    <script>
+                        window.APP_CONFIG = {
+                          dataDir: "data",
+                          files: {
+                            info: "Company-info.csv",
+                            financials: "Company-financials.csv",
+                            salary: "Company-salary.csv",
+                            prices: "nasdaq100_yearly_prices.csv"
+                          }
+                        };
+                    </script>
+                    <script src="js/mapvis.js"></script>
+                </div>
+            </div>
+            <div class="section section-three">
+                <div class="slope-chart-wrapper">
+                    <!-- Ensure this navigates the top-level page (works even when the slope chart is shown inside an iframe) -->
+                    <!-- <a id="backToMap" class="back-to-map" href="../index.html" target="_top" rel="noopener">← Back to Map</a> -->
+                    <div id="controls">
+                        <div class="control-row">
+                            <label for="view-mode-select">Select By:</label>
+                            <select id="view-mode-select">
+                                <option value="company">Company</option>
+                                <option value="role">Role</option>
+                            </select>
+                        </div>
+                        <div class="control-row">
+                            <label for="item-select" id="item-label">Company:</label>
+                            <select id="item-select"></select>
+                            <img id="company-logo" class="dropdown-logo" alt="">
+                        </div>
+                    </div>
+                    <div id="tooltip-slope"></div>
+                    <div id="info-popup"></div>
+                    <svg id="canvas"></svg>
+                    <script src="https://d3js.org/d3.v7.min.js"></script>
+                    <script src="js/constants.js"></script>
+                    <script src="js/tooltipBarChart.js"></script>
+                    <script src="js/utils.js"></script>
+                    <script src="js/collisionDetection.js"></script>
+                    <script src="js/bubbleRenderer.js"></script>
+                    <script src="js/interactionHandler.js"></script>
+                    <script src="js/slopeChart.js"></script>
+                    <script src="js/main.js"></script>
+                    <!-- Back link is an anchor so it works without JS -->
+                </div>
+            </div>
+            <div class="section section-four">
+                <div class="container-scatter">
+                    <h2>Company Scatter Visualization</h2>
+                    <p class="subtitle-scatter">Interactive scatterplot showing company relationships between leadership, employee satisfaction, and market performance</p>
+                    <div class="controls-and-legend">
+                        <div class="controls-scatter">
+                            <div class="control-group">
+                                <label for="x-axis">X-Axis:</label>
+                                <select id="x-axis">
+                                    <option value="ceo_approval">CEO Approval %</option>
+                                    <option value="employee_rating">Employee Rating</option>
+                                    <option value="sentiment">Sentiment Score</option>
+                                    <option value="pe_ratio">P/E Ratio</option>
+                                    <option value="revenue">Revenue</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="y-axis">Y-Axis:</label>
+                                <select id="y-axis">
+                                    <option value="employee_rating">Employee Rating</option>
+                                    <option value="ceo_approval">CEO Approval %</option>
+                                    <option value="sentiment">Sentiment Score</option>
+                                    <option value="pe_ratio">P/E Ratio</option>
+                                    <option value="revenue">Revenue</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="color-by">Color By:</label>
+                                <select id="color-by">
+                                    <option value="sentiment">Sentiment Score</option>
+                                    <option value="sector">Sector</option>
+                                    <option value="employee_rating">Employee Rating</option>
+                                    <option value="ceo_approval">CEO Approval</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="legend-scatter">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #333; border: thin solid #555;"></div>
+                                <span class="legend-text">Larger bubbles = Higher Market Cap</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #333; border: thin solid #555;"></div>
+                                <span class="legend-text">Click bubbles for company details</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container-scatter">
+                        <svg id="scatterplot"></svg>
+                        <div class="tooltip-scatter" id="tooltip-scatter"></div>
+                    </div>
+                    
+                    <div class="color-legend" id="color-legend">
+                        <!-- Color legend will be dynamically generated here -->
+                    </div>
+                </div>
+
+                <script src="js/scatter.js"></script>
+            </div>
+        </div>
+
+    </body>
 </html>

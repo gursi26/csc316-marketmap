@@ -573,7 +573,7 @@ class SlopeChart {
         const axisX = (leftX + rightX) / 2;
         
         // Draw the main chart title (static)
-        const mainTitleY = 22 + verticalOffset;
+        const mainTitleY = 10 + verticalOffset;
         const subtitleY = mainTitleY + c.chartTitleSpacing;
         
         const mainTitleText = this.svg.append("text")

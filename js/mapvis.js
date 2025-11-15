@@ -59,9 +59,11 @@ class MapVis {
 
       btnDetails.onclick = function(ev){
         ev.stopPropagation();
-        // navigate to scatter-plot index, pass ticker
-        const t = encodeURIComponent(company.Ticker || '');
-        window.location.href = `../scatter-plot%20vis/index.html?ticker=${t}`;
+        // const t = encodeURIComponent(company.Ticker || '');
+        // window.location.href = `../scatter-plot%20vis/index.html?ticker=${t}`;
+        hideCompanyPopup();
+        focusTicker(company.Ticker || '');
+        scrollToSection(3);
       };
       btnRoles.onclick = function(ev){
         ev.stopPropagation();
@@ -509,7 +511,7 @@ class MapVis {
 
       const pad = 6;
       const rect = tooltip.node().getBoundingClientRect();
-      let x = event.pageX + pad, y = event.pageY + pad;
+      let x = event.pageX - 300, y = event.pageY - 100;
       const vw = window.innerWidth, vh = window.innerHeight;
       if (x + rect.width > vw)  x = vw - rect.width - pad;
       if (y + rect.height > vh) y = vh - rect.height - pad;
@@ -523,7 +525,7 @@ class MapVis {
         .filter(c => !selectedCompanyTicker || c.Ticker === selectedCompanyTicker); // filter by selection
       const byCountry = d3.group(foreign, d=>d.Country);
       const countries = Array.from(byCountry.keys()).sort();
-      const centerX = 1000, startY = 60, vSpacing = 110;
+      const centerX = 1000, startY = 10, vSpacing = 110;
 
       const data = countries.map((c,i)=>({name:c, items:byCountry.get(c), i}));
       const groups = gForeign.selectAll("g.country").data(data, d=>d.name);

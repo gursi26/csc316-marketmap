@@ -1,4 +1,4 @@
-let viz, mapViz, sections, currentSectionIndex;
+let viz, mapViz, sections, currentSectionIndex, popupCompany, closeCompany, popupGuide, closeGuide;
 
 Promise.all([
     d3.csv("../dataset/cleaned/Company-salary.csv"),
@@ -42,6 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get all the sections that can be navigated
     sections = document.querySelectorAll('.section');
     currentSectionIndex = 0;
+    
+    popupGuide = document.getElementById('guide-popup');
+    closeGuide = document.getElementById('close-guide-popup');
+    popupCompany = document.getElementById('company-detail-popup');
+    closeCompany = document.getElementById('close-company-detail-popup');
 
     // Add keyboard event listener to the whole document
     document.addEventListener('keydown', (event) => {
@@ -56,6 +61,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('scrollDownButton').addEventListener('click', function() {
         scrollToSection(1);
+    });
+
+    document.getElementById('guideButton').addEventListener('click', function() {
+        popupGuide.showModal();
+    });
+
+    closeGuide.addEventListener('click', () => {
+        popupGuide.close();
+    });
+
+    popupGuide.addEventListener('click', (event) => {
+        // Check if the click target is the dialog element itself, not a child
+        if (event.target === popupGuide) {
+            popupGuide.close();
+        }
+    });
+
+    closeCompany.addEventListener('click', () => {
+        popupCompany.close();
+    });
+
+    popupCompany.addEventListener('click', (event) => {
+        // Check if the click target is the dialog element itself, not a child
+        if (event.target === popupCompany) {
+            popupCompany.close();
+        }
     });
 });
 
