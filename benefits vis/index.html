@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Office Benefits Explorer</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <aside id="sidebar">
+      <h1>Company Benefits – Office View</h1>
+      <label for="companySelect">Choose a company:</label>
+      <select id="companySelect"></select>
+      <p id="summary"></p>
+      <p class="hint">Hover items for details. Stars = unique benefits.</p>
+    </aside>
+
+    <main id="scene">
+      <div id="tooltip" class="tooltip hidden"></div>
+    </main>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
