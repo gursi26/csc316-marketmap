@@ -172,7 +172,7 @@ class SlopeChart {
             itemSelect.property("value", this.selectedCompany);
             
             // Update and show company logo
-            const logoPath = `../dataset/logos/images/${this.selectedCompany}.png`;
+            const logoPath = `dataset/logos/images/${this.selectedCompany}.png`;
             companyLogo
                 .attr("src", logoPath)
                 .classed("visible", true)

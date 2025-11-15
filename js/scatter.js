@@ -27,9 +27,9 @@ async function loadData() {
     try {
         // Load all CSV files
         const [companyInfo, companyFinancials, sentimentData] = await Promise.all([
-            d3.csv("../dataset/cleaned/Company-info.csv"),
-            d3.csv("../dataset/cleaned/Company-financials.csv"),
-            d3.csv("../dataset/raw-data/nasdaq100_monthly_s2024.csv")
+            d3.csv("dataset/cleaned/Company-info.csv"),
+            d3.csv("dataset/cleaned/Company-financials.csv"),
+            d3.csv("dataset/raw-data/nasdaq100_monthly_s2024.csv")
         ]);
 
         // Get latest sentiment for each company

@@ -1,8 +1,8 @@
 let viz, mapViz, sections, currentSectionIndex, popupCompany, closeCompany, popupGuide, closeGuide;
 
 Promise.all([
-    d3.csv("../dataset/cleaned/Company-salary.csv"),
-    d3.csv("../dataset/cleaned/Company-info.csv")
+    d3.csv("dataset/cleaned/Company-salary.csv"),
+    d3.csv("dataset/cleaned/Company-info.csv")
 ]).then(([salaryData, companyInfo]) => {
     viz = new SlopeChart("#canvas", salaryData, companyInfo);
     // expose for parent to control via postMessage

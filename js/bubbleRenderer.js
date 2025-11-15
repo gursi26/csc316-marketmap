@@ -80,7 +80,7 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
         if (isRoleView) {
             // For role view, show company logo
             const ticker = role.name; // In role view, role.name is the company ticker
-            const logoPath = `../dataset/logos/images/${ticker}.png`;
+            const logoPath = `dataset/logos/images/${ticker}.png`;
             
             // Add logo image
             bubbleGroup.append("image")

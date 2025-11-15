@@ -76,7 +76,7 @@ h1 {
         rgba(0, 0, 2, 0.8)
       ),
       /* bottom, image */
-      url('../dataset/city-bg.jpg');
+      url('city-bg.jpg');
     justify-content: center;
     align-items: center;
     font-size: 2rem;
