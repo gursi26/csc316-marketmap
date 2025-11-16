@@ -1,12 +1,14 @@
 let currentScreen = 0;
 const totalScreens = 4;
 
-const track = document.querySelector(".track"); // Fixed: was looking for #carouselWrapper
+const track = document.querySelector(".track");
 
 // Touch/swipe variables
 let touchStartX = 0;
 let touchEndX = 0;
 let isDragging = false;
+
+const benefitDescriptions = {};
 
 function goToScreen(index) {
   if (index < 0) index = 0;
@@ -43,12 +45,11 @@ track.addEventListener("touchend", () => {
   const swipeThreshold = 50;
   const diff = touchStartX - touchEndX;
 
+  // screen swiping
   if (Math.abs(diff) > swipeThreshold) {
     if (diff > 0) {
-      // Swiped left -> next screen
       goToScreen(currentScreen + 1);
     } else {
-      // Swiped right -> previous screen
       goToScreen(currentScreen - 1);
     }
   }
@@ -57,7 +58,7 @@ track.addEventListener("touchend", () => {
   touchEndX = 0;
 });
 
-// Mouse drag support (for desktop testing)
+// Mouse drag support
 let mouseStartX = 0;
 let mouseEndX = 0;
 let isMouseDragging = false;
@@ -109,7 +110,7 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") goToScreen(currentScreen - 1);
 });
 
-// Load CSV + populate dropdown
+// populate dropdown
 d3.csv(("../dataset/cleaned/Company-benefits.csv")).then(data => {
   const dropdown = document.getElementById("companySelect");
 
@@ -126,9 +127,7 @@ d3.csv(("../dataset/cleaned/Company-benefits.csv")).then(data => {
   document.getElementById("companyStatus").textContent = "⚠️ Could not load data";
 });
 
-// -----------------------------------------
-// LOAD AND CLASSIFY BENEFITS DATA
-// -----------------------------------------
+// CLASSIFY BENEFITS DATA
 
 let benefitData = {};
 let currentCompany = null;
@@ -140,7 +139,7 @@ const officeKeywords = {
   phone: ["phone"],
   tuition: ["tuition", "learning"],
   clinic: ["clinic"],
-  petwork: ["pet friendly workplace"] // EXACT phrase
+  petwork: ["pet friendly workplace"] 
 };
 
 const foodKeywords = {
@@ -169,9 +168,9 @@ const transportKeywords = {
   shuttle: ["shuttle"]
 };
 
-// --------------------------------
-// COUNT-BASED ICON RESOLUTION
-// --------------------------------
+
+// COUNT-BASED ICON RESOLUTION, (gym1,2, 3 etc)
+
 function resolveCountedIcon(count, base) {
   if (count >= 3) return `${base}3`;
   if (count === 2) return `${base}2`;
@@ -179,107 +178,160 @@ function resolveCountedIcon(count, base) {
   return null;
 }
 
-// --------------------------------
 // CLASSIFY COMPANY INTO ICONS
-// --------------------------------
+
 function classifyCompany(rows) {
-  const counts = {
-    gym: 0,
-    child: 0,
-    roth: 0,
-    phone: 0
-  };
 
-  let icons = {
-    // Office icons (counted)
-    gym: null,
-    child: null,
-    roth: null,
-    phone: null,
-
-    // Office additional
-    tuition: false,
-    clinic: false,
-    petwork: false,
-    //unique: false,
-
-    // Food
-    breakfast: false,
-    lunch: false,
-    dinner: false,
-    snack: false,
-    drink: false,
-
-    // Insurance
-    life: false,
-    vision: false,
-    dental: false,
-    health: false,
-    disability: false,
-    ADnD: false,
-    petins: false,
-    bustravel: false,
-
-    // Transport
-    transit: false,
-    transport: false,
-    bike: false,
-    shuttle: false
-  };
-
-  rows.forEach(r => {
-    const desc = r["Benefit Description"].toLowerCase().trim();
-    const category = r["Benefit Category"].toLowerCase();
-
-    // // UNIQUE CATEGORY
-    // if (category.startsWith("unique to")) {
-    //   icons.unique = true;
-    //   return;
-    // }
-
-    // OFFICE — count based
-    for (let base in counts) {
-      if (officeKeywords[base].some(key => desc.includes(key))) {
-        counts[base]++;
+    let descStore = {
+      gym: [],
+      child: [],
+      roth: [],
+      phone: [],
+      tuition: [],
+      clinic: [],
+      petwork: [],
+  
+      breakfast: [],
+      lunch: [],
+      dinner: [],
+      snack: [],
+      drink: [],
+  
+      life: [],
+      vision: [],
+      health: [],
+      dental: [],
+      disability: [],
+      ADnD: [],
+      petins: [],
+      bustravel: [],
+  
+      transit: [],
+      transport: [],
+      bike: [],
+      shuttle: []
+    };
+  
+    const counts = {
+      gym: 0,
+      child: 0,
+      roth: 0,
+      phone: 0
+    };
+  
+    let icons = {
+      gym: null,
+      child: null,
+      roth: null,
+      phone: null,
+  
+      tuition: false,
+      clinic: false,
+      petwork: false,
+  
+      breakfast: false,
+      lunch: false,
+      dinner: false,
+      snack: false,
+      drink: false,
+  
+      life: false,
+      vision: false,
+      dental: false,
+      health: false,
+      disability: false,
+      ADnD: false,
+      petins: false,
+      bustravel: false,
+  
+      transit: false,
+      transport: false,
+      bike: false,
+      shuttle: false
+    };
+  
+    rows.forEach(r => {
+      const desc = r["Benefit Description"].toLowerCase().trim();
+  
+      // COUNTED
+      for (let base in counts) {
+        if (officeKeywords[base].some(key => desc.includes(key))) {
+          counts[base]++;
+          descStore[base].push(r["Benefit Description"]);
+        }
+      }
+  
+      // OFFICE BOOL
+      if (officeKeywords.tuition.some(k => desc.includes(k))) {
+        icons.tuition = true;
+        descStore.tuition.push(r["Benefit Description"]);
+      }
+  
+      if (officeKeywords.clinic.some(k => desc.includes(k))) {
+        icons.clinic = true;
+        descStore.clinic.push(r["Benefit Description"]);
+      }
+  
+      if (officeKeywords.petwork.some(k => desc.includes(k))) {
+        icons.petwork = true;
+        descStore.petwork.push(r["Benefit Description"]);
+      }
+  
+      // FOOD
+      for (let f in foodKeywords) {
+        if (foodKeywords[f].some(k => desc.includes(k))) {
+          icons[f] = true;
+          descStore[f].push(r["Benefit Description"]);
+        }
+      }
+  
+      // INSURANCE
+      for (let iname in insuranceKeywords) {
+        if (insuranceKeywords[iname].some(k => desc.includes(k))) {
+          icons[iname] = true;
+          descStore[iname].push(r["Benefit Description"]);
+        }
+      }
+  
+      // TRANSPORT
+      for (let tname in transportKeywords) {
+        if (transportKeywords[tname].some(k => desc.includes(k))) {
+          icons[tname] = true;
+          descStore[tname].push(r["Benefit Description"]);
+        }
+      }
+    });
+  
+    // Resolve counted icons
+    icons.gym = resolveCountedIcon(counts.gym, "gym");
+    icons.child = resolveCountedIcon(counts.child, "child");
+    icons.roth = resolveCountedIcon(counts.roth, "roth");
+  
+    if (counts.phone >= 2) icons.phone = "phone2";
+    else if (counts.phone === 1) icons.phone = "phone1";
+  
+    // MAP FINAL ICON FILENAMES → tooltip store
+    for (let key in icons) {
+      const iconVal = icons[key];
+  
+      if (!iconVal) continue;
+  
+      // counted icons
+      if (typeof iconVal === "string" && ICON_FILES[iconVal]) {
+        benefitDescriptions[ICON_FILES[iconVal]] = descStore[key];
+      }
+  
+      // boolean icons
+      if (iconVal === true) {
+        benefitDescriptions[ICON_FILES[key]] = descStore[key];
       }
     }
+  
+    return icons;
+  }
+  
 
-    // OFFICE — simple booleans
-    if (officeKeywords.tuition.some(k => desc.includes(k))) icons.tuition = true;
-    if (officeKeywords.clinic.some(k => desc.includes(k))) icons.clinic = true;
-    if (officeKeywords.petwork.some(k => desc.includes(k))) icons.petwork = true;
-
-    // FOOD
-    for (let f in foodKeywords) {
-      if (foodKeywords[f].some(k => desc.includes(k))) icons[f] = true;
-    }
-
-    // INSURANCE
-    for (let iname in insuranceKeywords) {
-      if (insuranceKeywords[iname].some(k => desc.includes(k))) icons[iname] = true;
-    }
-
-    // TRANSPORT
-    for (let tname in transportKeywords) {
-      if (transportKeywords[tname].some(k => desc.includes(k))) icons[tname] = true;
-    }
-  });
-
-  // RESOLVE counted icons
-  icons.gym = resolveCountedIcon(counts.gym, "gym");
-  icons.child = resolveCountedIcon(counts.child, "child");
-  icons.roth = resolveCountedIcon(counts.roth, "roth");
-
-  // Phone is special: 1 or 2+ only
-  if (counts.phone >= 2) icons.phone = "phone2";
-  else if (counts.phone === 1) icons.phone = "phone1";
-
-  return icons;
-}
-
-// -------------------------------------------
-// LOAD CSV & CLASSIFY EACH COMPANY
-// -------------------------------------------
+// LOAD & CLASSIFY EACH COMPANY
 d3.csv("../dataset/cleaned/Company-benefits.csv").then(data => {
   const dropdown = document.getElementById("companySelect");
 
@@ -307,10 +359,10 @@ d3.csv("../dataset/cleaned/Company-benefits.csv").then(data => {
   currentCompany = tickers[0];
   renderIcons();
 });
-// ------------------------------------------------
-// RENDER ICONS INTO THE FOUR SCREENS (1–4)
-// ------------------------------------------------
-// Correct icon filenames based on your actual folder
+
+
+// RENDER ICONS INTO SCREENS
+
 const ICON_FILES = {
     "gym1": "gym1.png",
     "gym2": "gym2.png",
@@ -380,7 +432,7 @@ function renderIcons() {
   if (ico.bike) place(2, "bike");
   if (ico.shuttle) place(2, "shuttle");
 
-  // SCREEN 3 — FOOD
+  // SCREEN 3 — VENDING MACHINE/FOOD
   if (ico.breakfast) place(3, "breakfast");
   if (ico.lunch) place(3, "lunch");
   if (ico.dinner) place(3, "dinner");
@@ -399,7 +451,7 @@ function renderIcons() {
 }
 
 
-// Place icon into screen-1 ... screen-4
+// Place icon into screens
 function place(screenIndex, iconName) {
     if (!iconName) return;
   
@@ -414,8 +466,39 @@ function place(screenIndex, iconName) {
   
     const img = document.createElement("img");
     img.src = `../dataset/Icons/${file}`;
-    img.className = "icon-small";
-    img.title = iconName;
+    img.className = "benefitIcon";
+
+    // Hover events
+    img.addEventListener("mousemove", (e) => {
+    const desc = benefitDescriptions[file] || ["No details available"];
+
+    const html =
+        `<strong>${file.replace(".png", "").replace(".svg", "")}</strong>` +
+        desc.map(d => `<div>• ${d}</div>`).join("");
+
+    showTooltip(html, e.pageX, e.pageY);
+    });
+
+    img.addEventListener("mouseleave", hideTooltip);
+
     target.appendChild(img);
+
+  }
+  
+
+  // tooltip
+  const tooltip = document.getElementById("iconTooltip");
+
+  function showTooltip(html, x, y) {
+    tooltip.innerHTML = html;
+    tooltip.classList.remove("hidden");
+    tooltip.classList.add("visible");
+    tooltip.style.left = x + 12 + "px";
+    tooltip.style.top = y + 12 + "px";
+  }
+  
+  function hideTooltip() {
+    tooltip.classList.add("hidden");
+    tooltip.classList.remove("visible");
   }
   
