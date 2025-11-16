@@ -10,9 +10,9 @@
  * @param {number} leftX - X position of the role line
  * @param {Object} handlers - Object containing click and hover event handlers
  * @param {string} viewMode - Current view mode ('company' or 'role')
+ * @param {Object} c - Responsive constants object
  */
-function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handlers, viewMode = 'company') {
-    const c = SLOPE_CHART_CONSTANTS;
+function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handlers, viewMode = 'company', c = SLOPE_CHART_CONSTANTS) {
     const isRoleView = viewMode === 'role';
     const bubbleHeight = isRoleView ? c.logoBubbleSize : c.bubbleHeight;
     const bubblePadding = c.bubblePadding;
@@ -161,9 +161,9 @@ function renderRoleBubbles(svg, roles, roleScale, roleColorScale, leftX, handler
  * @param {Function} rankScale - D3 scale for positioning ranks by pay
  * @param {Function} roleColorScale - D3 color scale for roles
  * @param {number} rightX - X position of the rank line
+ * @param {Object} c - Responsive constants object
  */
-function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX, viewMode = 'company') {
-    const c = SLOPE_CHART_CONSTANTS;
+function renderRankBubbles(svg, ranks, rankScale, roleColorScale, rightX, viewMode = 'company', c = SLOPE_CHART_CONSTANTS) {
     const bubbleHeight = c.bubbleHeight;
     const bubblePadding = c.bubblePadding;
     const rankBubbleLeftEdge = rightX + c.bubbleConnectorGap;

@@ -14,6 +14,48 @@
 
 /* ====== OVERALL SITE ====== */
 
+/* Page navigation dots */
+.page-dots {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    pointer-events: auto;
+    padding: 20px 12px;
+    background: rgba(16, 24, 51, 0.75);
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.page-dots .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    pointer-events: auto;
+}
+
+.page-dots .dot:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(1.2);
+}
+
+.page-dots .dot.active {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 1);
+    transform: scale(1.3);
+}
+
 .rubik {
   font-family: "Rubik 80s Fade", system-ui;
   font-weight: 400;
@@ -37,7 +79,9 @@
 html, body {
     margin: 0;
     padding: 0;
-    scroll-behavior: smooth; 
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100vw;
 }
 
 h1 {
@@ -50,8 +94,16 @@ h1 {
     height: 100vh;
     /* Enable vertical scrolling within the container */
     overflow-y: scroll;
+    overflow-x: hidden;
     /* Define the snapping behavior */
     scroll-snap-type: y mandatory;
+    /* Hide scrollbar for all browsers */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.snap-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .section {
@@ -60,11 +112,11 @@ h1 {
     width: 100vw;
     /* Ensure the section snaps to the start of the viewport */
     scroll-snap-align: start;
+    overflow-x: hidden;
     
     display: flex;
     flex-direction: column;
     color: white;
-    overflow: hidden
 }
 
 /* Add different colors to distinguish sections (optional) */
@@ -77,6 +129,9 @@ h1 {
       ),
       /* bottom, image */
       url('city-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     justify-content: center;
     align-items: center;
     font-size: 2rem;
@@ -87,11 +142,11 @@ h1 {
 }
 
 .section-three {
-    background-color: var(--bg);
+    background-color: #409bf0;
 }
 
 .section-four {
-    background-color: #409bf0;
+    background-color: var(--bg);
 }
 
 .button-holder {
@@ -141,7 +196,7 @@ h1 {
 
 
 *{ box-sizing:border-box }
-body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial }
+body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; overflow-x:hidden; max-width:100vw }
 
 .app-header{ padding:16px 20px; border-bottom:1px solid var(--grid) }
 .app-header h1{ margin:0; font-size:22px; font-weight:700 }
@@ -223,7 +278,8 @@ button{ font-family:inherit }
 .state{ fill:#1a2447; stroke:#2a3357; stroke-width:.8; cursor:pointer }
 .state-active{ stroke:#7aa2ff; stroke-width:1.4 }
 
-.country-circle{ fill:#0f1835; stroke:#3a4a82 }
+.country-circle{ fill:#0f1835; stroke:#3a4a82; stroke-width:1; transition: stroke 0.3s ease }
+.country-circle-active{ stroke:#7aa2ff; stroke-width:2 }
 .country-label{ fill:#9aa7c7; font-size:12px; text-anchor:middle }
 
 /* Buildings */
@@ -363,6 +419,10 @@ button{ font-family:inherit }
     text-overflow: ellipsis;
     font-weight: 500;
     transition: all 0.2s;
+}
+
+#item-select {
+    width: 180px;
 }
 
 #view-mode-select:hover,
@@ -543,7 +603,20 @@ button{ font-family:inherit }
 /* h1 { text-align:center; color:var(--fg); margin-bottom:8px } */
 .subtitle-scatter { text-align:center; color:var(--muted); margin-bottom:24px; font-style:italic; }
 
-.chart-container-scatter { position:relative }
+.chart-container-scatter { 
+    position:relative;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 0;
+}
+
+#scatterplot {
+    max-width: 100%;
+    max-height: 100%;
+}
 
 .tooltip-scatter {
     position: absolute;
@@ -561,6 +634,23 @@ button{ font-family:inherit }
 }
 
 .axis-label { font-size: 14px; font-weight:600; fill:var(--muted) }
+
+/* Scatter plot axis styling */
+#scatterplot .x-axis line,
+#scatterplot .y-axis line {
+    stroke: rgba(255, 255, 255, 0.2);
+}
+
+#scatterplot .x-axis path.domain,
+#scatterplot .y-axis path.domain {
+    stroke: rgba(255, 255, 255, 0.6);
+    stroke-width: 2;
+}
+
+#scatterplot .x-axis text,
+#scatterplot .y-axis text {
+    fill: var(--muted);
+}
 
 .controls-and-legend {
     display: flex;
@@ -594,8 +684,17 @@ button{ font-family:inherit }
     background: var(--panel); padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03);
 }
 .control-group{ display:flex; flex-direction:column; gap:6px; align-items:center; justify-content:center}
-.control-group label{ font-size:12px; font-weight:600; color:var(--muted) }
-.control-group select{ padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.04); background:var(--control-bg); color:var(--fg) }
+.control-group label{ font-size:14px; font-weight:600; color:var(--muted) }
+.control-group select{ 
+    padding:10px 14px; 
+    border-radius:10px; 
+    border:1px solid var(--grid); 
+    background:#0c1430; 
+    color:var(--fg);
+    font-size:14px;
+    min-width:160px;
+}
+
 
 /* buttons (if any) */
 button{ background: var(--accent); color:#022; padding:8px 12px; border-radius:6px; border:0; cursor:pointer }
@@ -614,20 +713,16 @@ h2 {font-size: 1.75em; margin-bottom: 0; margin-top: 0;}
     color: var(--fg);
 } */
 
-.company-circle {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent) 0%, #3b6fb8 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.company-logo {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
     margin: 0 auto 24px;
-    color: #06121a;
-    font-size: 20px;
-    font-weight: 700;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 -6px 18px rgba(255,255,255,0.03);
+    display: block;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
 .back-button {
@@ -656,6 +751,13 @@ dialog {
     background: var(--card-bg);
 }
 
+#guide-popup {
+    max-width: 95vw;
+    max-height: 95vh;
+    min-width: 60vw;
+    background: rgba(12, 18, 37, 0.95);
+}
+
 /* Styles the content inside the popup and adds padding */
 .popup-content-wrapper {
     padding: 40px;
@@ -670,8 +772,20 @@ dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.7);
 }
 
-#close-company-detail-popup, #close-guide-popup {
+.popup-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
     margin-top: 20px;
+}
+
+#close-company-detail-popup, #close-guide-popup, #pay-progression-popup {
+    margin-top: 0;
+}
+
+#pay-progression-popup {
+    background: var(--accent);
+    color: #042;
 }
 
 .company-info {
@@ -689,4 +803,178 @@ dialog::backdrop {
 
 .guide-container {
     color: var(--fg);
+}
+
+/* Carousel styles */
+#guide-popup .popup-content-wrapper {
+    padding: 0;
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.carousel-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.carousel-close:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px 20px 20px;
+}
+
+.carousel-image-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 80vw;
+    max-height: 75vh;
+}
+
+.carousel-image-wrapper img {
+    max-width: 100%;
+    max-height: 75vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.carousel-arrow {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.2s;
+    flex-shrink: 0;
+}
+
+.carousel-arrow:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+}
+
+.carousel-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.carousel-arrow:disabled:hover {
+    transform: none;
+}
+
+.carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px;
+}
+
+.carousel-play-pause {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.3s;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.carousel-play-pause:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.carousel-play-pause .play-icon {
+    margin-left: 2px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.carousel-dot {
+    width: 60px;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    border: none;
+}
+
+.carousel-dot:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.carousel-dot-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: none;
+}
+
+.carousel-dot.active .carousel-dot-progress {
+    animation: progress-fill 3s linear forwards;
+}
+
+@keyframes progress-fill {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.carousel-dot.completed .carousel-dot-progress {
+    width: 100%;
+}
+
+.carousel-dot.inactive .carousel-dot-progress {
+    width: 0%;
 }

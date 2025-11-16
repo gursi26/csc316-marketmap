@@ -54,6 +54,11 @@ class MapVis {
       popup.style.top = y + 'px';
       popup.style.display = '';
 
+      // Prevent clicks on the popup from closing it
+      popup.onclick = function(ev){
+        ev.stopPropagation();
+      };
+
       // remove previous handlers
       btnDetails.onclick = null; btnRoles.onclick = null;
 
@@ -63,7 +68,7 @@ class MapVis {
         // window.location.href = `../scatter-plot%20vis/index.html?ticker=${t}`;
         hideCompanyPopup();
         focusTicker(company.Ticker || '');
-        scrollToSection(3);
+        scrollToSection(2);
       };
       btnRoles.onclick = function(ev){
         ev.stopPropagation();
@@ -294,7 +299,9 @@ class MapVis {
 
       const all = enter.merge(groups);
       all.select("circle.country-circle")
-        .attr("r", d => 26 + Math.sqrt(d.items.length)*3);
+        .attr("r", d => 26 + Math.sqrt(d.items.length)*3)
+        .style("cursor", "pointer")
+        .on("click", (event, d) => onCountryClick(event, d, centerX, startY, vSpacing));
       all.select("text.country-label")
         .attr("y", d => -(26 + Math.sqrt(d.items.length)*3) - 8)
         .text(d => d.name);
@@ -348,11 +355,12 @@ class MapVis {
     // ---- Zooming: map zooms, buildings keep original on-screen size & positions ----
     function onStateClick(event, d){
       event.stopPropagation();
+      hideCompanyPopup(); // Close popup when clicking on a state
       const id = `state:${d.id || d.properties.name}`;
       if (zoomTarget && zoomTarget.id===id) { resetView(); return; }
 
       gStates.selectAll(".state").classed("state-active", false);
-      d3.select(this).classed("state-active", true);
+      d3.select(this).classed("state-active", true).raise();
 
       const b = path.bounds(d);
       const dx = b[1][0] - b[0][0];
@@ -382,8 +390,53 @@ class MapVis {
         });
     }
 
+    function onCountryClick(event, d, centerX, startY, vSpacing){
+      event.stopPropagation();
+      hideCompanyPopup(); // Close popup when clicking on a country
+      const id = `country:${d.name}`;
+      if (zoomTarget && zoomTarget.id===id) { resetView(); return; }
+
+      // Remove state active class if any
+      gStates.selectAll(".state").classed("state-active", false);
+      
+      // Remove previous country active class and add to clicked circle
+      gForeign.selectAll("circle.country-circle").classed("country-circle-active", false);
+      d3.select(event.currentTarget).classed("country-circle-active", true);
+      
+      // Calculate country circle position and bounds
+      const cx = centerX;
+      const cy = startY + d.i * vSpacing;
+      const r = 26 + Math.sqrt(d.items.length) * 3;
+      
+      // Calculate zoom: center on circle with some padding
+      const padding = 80; // extra space around the circle
+      const s = Math.min(8, Math.min(mapW / (2*r + padding), mapH / (2*r + padding)));
+      const tx = mapW/2 - s * cx;
+      const ty = mapH/2 - s * cy;
+
+      currentZoom = s;
+      gRoot.transition().duration(750)
+        .attr("transform", `translate(${tx},${ty}) scale(${s})`)
+        .on("end", ()=>{ zoomTarget = {type:"country", id}; });
+
+      // Update building transforms to include counter-scale at their anchors
+      gBuildings.selectAll("g.building")
+        .transition().duration(750)
+        .attr("transform", function(d){ return `translate(${d.px},${d.py}) scale(${1/currentZoom})`; });
+
+      // Also keep mini buildings inside country circles readable during zoom
+      gForeign.selectAll("g.mini-building")
+        .transition().duration(750)
+        .attr("transform", function(){
+          const t = d3.select(this).attr("transform") || "";
+          const translated = t.replace(/scale\([^)]*\)/g,"");
+          return `${translated} scale(${1/currentZoom})`;
+        });
+    }
+
     function resetView(){
       gStates.selectAll(".state").classed("state-active", false);
+      gForeign.selectAll("circle.country-circle").classed("country-circle-active", false);
       currentZoom = 1;
       gRoot.transition().duration(600).attr("transform","translate(0,0) scale(1)");
       gBuildings.selectAll("g.building")
@@ -401,6 +454,7 @@ class MapVis {
 
     // Click empty space to reset zoom
     svg.on("click", function(){
+      hideCompanyPopup(); // Close the popup when clicking anywhere on the map
       if (zoomTarget) resetView();
     });
 
