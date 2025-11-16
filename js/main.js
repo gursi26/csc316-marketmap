@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sections = document.querySelectorAll('.section');
     currentSectionIndex = 0;
     
-    popup = document.getElementById('-popup');
-    close = document.getElementById('close--popup');
+    popupGuide = document.getElementById('guide-popup');
+    closeGuide = document.getElementById('close-guide-popup');
     popupCompany = document.getElementById('company-detail-popup');
     closeCompany = document.getElementById('close-company-detail-popup');
 
