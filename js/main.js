@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sections = document.querySelectorAll('.section');
     currentSectionIndex = 0;
     
-    popupGuide = document.getElementById('guide-popup');
-    closeGuide = document.getElementById('close-guide-popup');
+    popup = document.getElementById('-popup');
+    close = document.getElementById('close--popup');
     popupCompany = document.getElementById('company-detail-popup');
     closeCompany = document.getElementById('close-company-detail-popup');
 
@@ -66,7 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Carousel functionality
     const guideImages = [
         'dataset/guide-images/1.png',
-        'dataset/guide-images/2.png'
+        'dataset/guide-images/2.png',
+        'dataset/guide-images/3.png',
+        'dataset/guide-images/4.png'
     ].sort(); // Sort by filename to ensure correct order
     
     let currentImageIndex = 0;
