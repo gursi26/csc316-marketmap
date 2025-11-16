@@ -10,6 +10,56 @@ let isDragging = false;
 
 const benefitDescriptions = {};
 
+const FRIENDLY_LABELS = {
+    // GYM
+    "gym1": "Gym Access — Level 1",
+    "gym2": "Gym Access — Level 2",
+    "gym3": "Gym Access — Level 3",
+  
+    // CHILD
+    "child1": "Child Benefits — Level 1",
+    "child2": "Child Benefits — Level 2",
+    "child3": "Child Benefits — Level 3",
+  
+    // RETIREMENT
+    "roth1": "Retirement Benefits — Level 1",
+    "roth2": "Retirement Benefits — Level 2",
+    "roth3": "Retirement Benefits — Level 3",
+  
+    // PHONE
+    "phone1": "Phone Boost — Level 1",
+    "phone2": "Phone Boost — Level 2",
+  
+    // OFFICE
+    "clinic": "On-Site Clinic",
+    "tuition": "Tuition Support",
+    "pet friendly WORKPLACE": "Pet-Friendly Workplace",
+  
+    // FOOD
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "snack": "Snacks",
+    "drink": "Drinks",
+  
+    // INSURANCE
+    "life": "Life Insurance",
+    "vision": "Vision Coverage",
+    "dental": "Dental Insurance",
+    "health": "Health Insurance",
+    "disability": "Disability Insurance",
+    "AD&D": "AD&D Coverage",
+    "pet insurance": "Pet Insurance",
+    "business travel": "Business Travel Insurance",
+  
+    // TRANSPORT
+    "transit": "Transit Perks",
+    "transport": "Transport Benefits",
+    "bike": "Bike Program",
+    "shuttle": "Shuttle Service",
+  };
+  
+
 function goToScreen(index) {
   if (index < 0) index = 0;
   if (index >= totalScreens) index = totalScreens - 1;
@@ -470,11 +520,14 @@ function place(screenIndex, iconName) {
 
     // Hover events
     img.addEventListener("mousemove", (e) => {
-    const desc = benefitDescriptions[file] || ["No details available"];
+    const desc = benefitDescriptions[file] || ["No further details available"];
+
+    const iconKey = iconName;   // like "child3"
+    const label = FRIENDLY_LABELS[iconKey] || iconKey;
 
     const html =
-        `<strong>${file.replace(".png", "").replace(".svg", "")}</strong>` +
-        desc.map(d => `<div>• ${d}</div>`).join("");
+    `<strong>${label}</strong>` +
+    desc.map(d => `<div>• ${d}</div>`).join("");
 
     showTooltip(html, e.pageX, e.pageY);
     });

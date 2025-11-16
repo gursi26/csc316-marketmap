@@ -82,7 +82,7 @@ body {
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  background-color: #1a1a1a; /* ADDED: dark background */
+  background-color:  #F9FAFB; /* background for images */
   display: flex;
   align-items: center;
   justify-content: center;
