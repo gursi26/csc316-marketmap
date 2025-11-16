@@ -1,27 +1,244 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Combined Visualization</title>
-  <style>
-    /* Make the map iframe fill the whole page; remove right-side panel */
-    html,body{height:100%;margin:0}
-    body{font-family:system-ui,Segoe UI,Roboto,Arial;margin:0;height:100vh}
-    #left{position:fixed;inset:0;overflow:hidden}
-    iframe{border:0;width:100%;height:100%}
-  </style>
-</head>
-<body>
-  <div id="left">
-    <!-- map iframe fills the page -->
-    <iframe id="mapFrame" src="map%20vis/index.html"></iframe>
-  </div>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>MarketMap 📡</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Rubik+80s+Fade&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css">
+        <script src="https://unpkg.com/d3@7"></script>
+        <script src="https://unpkg.com/topojson-client@3"></script>
+    </head>
+    <body>
+        <!-- Page navigation dots -->
+        <nav class="page-dots">
+            <button class="dot active" data-section="0" aria-label="Go to landing page"></button>
+            <button class="dot" data-section="1" aria-label="Go to map visualization"></button>
+            <button class="dot" data-section="2" aria-label="Go to scatter chart"></button>
+            <button class="dot" data-section="3" aria-label="Go to slope chart"></button>
+        </nav>
 
-  <script>
-    // Combined view now only hosts the map iframe full-bleed. The map itself
-    // shows a small popup for details/roles and handles navigation. No right
-    // panel is used here to avoid the white area on the right.
-  </script>
-</body>
+        <div class="snap-container">
+            <div class="section section-one">
+                <!-- Popup windows -->
+                 <dialog id="guide-popup">
+                    <div class="popup-content-wrapper">
+                        <button id="close-guide-popup" class="carousel-close">✕</button>
+                        <div class="carousel-container">
+                            <button class="carousel-arrow carousel-prev" aria-label="Previous image">‹</button>
+                            <div class="carousel-image-wrapper">
+                                <img id="carousel-image" src="" alt="Guide image">
+                            </div>
+                            <button class="carousel-arrow carousel-next" aria-label="Next image">›</button>
+                        </div>
+                        <div class="carousel-controls">
+                            <button id="carousel-play-pause" class="carousel-play-pause" aria-label="Pause slideshow">
+                                <span class="pause-icon">❚❚</span>
+                                <span class="play-icon" style="display: none;">▶</span>
+                            </button>
+                            <div class="carousel-dots" id="carousel-dots"></div>
+                        </div>
+                    </div>
+                </dialog>
+
+                <dialog id="company-detail-popup">
+                    <div class="popup-content-wrapper">
+                        <div class="company-detail-container">
+                            <img class="company-logo" id="company-logo" alt="Company Logo">
+                            <div class="company-info" id="company-info"></div> 
+                        </div>
+                        <div class="popup-buttons">
+                            <button id="close-company-detail-popup">Close</button>
+                            <button id="pay-progression-popup">Pay Progression</button>
+                        </div>
+                    </div>
+                </dialog>
+
+                <h1 class="rubik">MarketMap</h1>
+                <h4 class="major-mono">a gps for your career path</h4>
+                <div class="button-holder">
+                    <button id="guideButton" class="work-sans-400">See Guide ⓘ</button>
+                    <button id="scrollDownButton" class="work-sans-400">Get Started ↓</button>
+                </div>
+            </div>
+            <div class="section section-two">
+                <div class="mapvis-wrapper">
+                    <div class="app-header">
+                        <h1>Company Atlas</h1>
+                        <p class="subtitle">Click a state to zoom in · Click a company icon to learn more · Icon size represents market cap</p>
+                    </div>
+                    <main class="layout">
+                        <section class="viz">
+                            <div id="state-label" class="state-label"></div>
+                            <div id="tooltip" class="tooltip" style="display:none"></div>
+                            <svg id="chart" viewBox="-100 -40 1250 700" preserveAspectRatio="xMidYMid meet"></svg>
+                        </section>
+                        <aside class="state-companies-panel">
+                            <div class="panel-header">
+                                <h3 id="state-panel-title">Select a State</h3>
+                            </div>
+                            <div id="companies-bar-chart" class="companies-bar-chart"></div>
+                        </aside>
+                    </main>
+                    <script>
+                        window.APP_CONFIG = {
+                          dataDir: "data",
+                          files: {
+                            info: "Company-info.csv",
+                            financials: "Company-financials.csv",
+                            salary: "Company-salary.csv",
+                            prices: "nasdaq100_yearly_prices.csv"
+                          }
+                        };
+                    </script>
+                    <script src="js/mapvis.js"></script>
+                </div>
+            </div>
+            <div class="section section-three">
+                <div class="container-scatter">
+                    <h2>Company Scatter Visualization</h2>
+                    <p class="subtitle-scatter">Interactive scatterplot showing company relationships between leadership, employee satisfaction, and market performance</p>
+                    <div class="controls-and-legend">
+                        <div class="controls-scatter">
+                            <div class="control-group">
+                                <label for="x-axis">X-Axis:</label>
+                                <select id="x-axis">
+                                    <option value="ceo_approval">CEO Approval %</option>
+                                    <option value="employee_rating">Employee Rating</option>
+                                    <option value="sentiment">Sentiment Score</option>
+                                    <option value="pe_ratio">P/E Ratio</option>
+                                    <option value="revenue">Revenue</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="y-axis">Y-Axis:</label>
+                                <select id="y-axis">
+                                    <option value="employee_rating">Employee Rating</option>
+                                    <option value="ceo_approval">CEO Approval %</option>
+                                    <option value="sentiment">Sentiment Score</option>
+                                    <option value="pe_ratio">P/E Ratio</option>
+                                    <option value="revenue">Revenue</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="color-by">Color By:</label>
+                                <select id="color-by">
+                                    <option value="sentiment">Sentiment Score</option>
+                                    <option value="sector">Sector</option>
+                                    <option value="employee_rating">Employee Rating</option>
+                                    <option value="ceo_approval">CEO Approval</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="legend-scatter">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #333; border: thin solid #555;"></div>
+                                <span class="legend-text">Larger bubbles = Higher Market Cap</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #333; border: thin solid #555;"></div>
+                                <span class="legend-text">Click bubbles for company details</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container-scatter">
+                        <svg id="scatterplot"></svg>
+                        <div class="tooltip-scatter" id="tooltip-scatter"></div>
+                    </div>
+                    
+                    <div class="color-legend" id="color-legend">
+                        <!-- Color legend will be dynamically generated here -->
+                    </div>
+                </div>
+
+                <script src="js/scatter.js"></script>
+            </div>
+            <div class="section section-four">
+                <div class="slope-chart-wrapper">
+                    <!-- Ensure this navigates the top-level page (works even when the slope chart is shown inside an iframe) -->
+                    <!-- <a id="backToMap" class="back-to-map" href="../index.html" target="_top" rel="noopener">← Back to Map</a> -->
+                    <div id="controls">
+                        <div class="control-row">
+                            <label for="view-mode-select">Select By:</label>
+                            <select id="view-mode-select" size="1">
+                                <option value="company">Company</option>
+                                <option value="role">Role</option>
+                            </select>
+                        </div>
+                        <div class="control-row">
+                            <label for="item-select" id="item-label">Company:</label>
+                            <select id="item-select" size="1"></select>
+                            <img id="company-logo" class="dropdown-logo" alt="">
+                        </div>
+                    </div>
+                    <div id="tooltip-slope"></div>
+                    <div id="info-popup"></div>
+                    <svg id="canvas"></svg>
+                    <script src="https://d3js.org/d3.v7.min.js"></script>
+                    <script src="js/constants.js"></script>
+                    <script src="js/tooltipBarChart.js"></script>
+                    <script src="js/utils.js"></script>
+                    <script src="js/collisionDetection.js"></script>
+                    <script src="js/bubbleRenderer.js"></script>
+                    <script src="js/interactionHandler.js"></script>
+                    <script src="js/slopeChart.js"></script>
+                    <script src="js/main.js"></script>
+                    <!-- Back link is an anchor so it works without JS -->
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Page navigation dots functionality
+            (function() {
+                const snapContainer = document.querySelector('.snap-container');
+                const sections = document.querySelectorAll('.section');
+                const dots = document.querySelectorAll('.page-dots .dot');
+                
+                // Update active dot based on scroll position
+                function updateActiveDot() {
+                    const scrollTop = snapContainer.scrollTop;
+                    const windowHeight = window.innerHeight;
+                    
+                    // Find which section is currently in view
+                    let currentSection = 0;
+                    sections.forEach((section, index) => {
+                        const sectionTop = section.offsetTop;
+                        const sectionBottom = sectionTop + section.offsetHeight;
+                        const scrollCenter = scrollTop + windowHeight / 2;
+                        
+                        if (scrollCenter >= sectionTop && scrollCenter < sectionBottom) {
+                            currentSection = index;
+                        }
+                    });
+                    
+                    // Update dot styles
+                    dots.forEach((dot, index) => {
+                        if (index === currentSection) {
+                            dot.classList.add('active');
+                        } else {
+                            dot.classList.remove('active');
+                        }
+                    });
+                }
+                
+                // Navigate to section when dot is clicked
+                dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        sections[index].scrollIntoView({ behavior: 'smooth' });
+                    });
+                });
+                
+                // Listen for scroll events
+                snapContainer.addEventListener('scroll', updateActiveDot);
+                
+                // Initial update
+                updateActiveDot();
+            })();
+        </script>
+
+    </body>
 </html>

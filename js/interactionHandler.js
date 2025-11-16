@@ -8,7 +8,7 @@
  * @param {Array} ranks - Array of all rank objects
  * @param {string} viewMode - Current view mode ('company' or 'role')
  */
-function highlightLeftItem(svg, itemName, ranks, viewMode) {
+function highlightLeftItem(svg, itemName, ranks, viewMode, c = null) {
     // Get the indices of ranks that belong to this item
     const itemRankIndices = new Set();
     ranks.forEach((rank, idx) => {
@@ -19,7 +19,7 @@ function highlightLeftItem(svg, itemName, ranks, viewMode) {
     });
     
     // Apply collision detection ONLY to rank bubbles for this item
-    const c = SLOPE_CHART_CONSTANTS;
+    if (!c) c = SLOPE_CHART_CONSTANTS;
     const bubbleHeight = c.bubbleHeight;
     const bubbleMinSpacing = c.bubbleMinSpacing;
     const visibleRankBubbles = applyRankBubbleCollisions(svg, itemName, bubbleHeight, bubbleMinSpacing, viewMode);
@@ -113,8 +113,8 @@ function highlightRole(svg, roleName, ranks) {
  * 
  * @param {Object} svg - D3 selection of the SVG element
  */
-function resetHighlight(svg) {
-    const c = SLOPE_CHART_CONSTANTS;
+function resetHighlight(svg, c = null) {
+    if (!c) c = SLOPE_CHART_CONSTANTS;
     
     // Reset all left dots
     svg.selectAll(".left-dot")

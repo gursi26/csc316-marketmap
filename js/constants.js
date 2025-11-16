@@ -33,7 +33,7 @@ const SLOPE_CHART_CONSTANTS = {
     yAxisOpacity: 0.5,  // Opacity for y-axis text (0.0 to 1.0)
     yAxisFontWeight: 'normal',  // Font weight for y-axis text ('normal', 'bold', etc.)
     // Main chart title
-    chartMainTitle: "Pay progression slope chart",
+    chartMainTitle: "Pay Progression Slope Chart",
     chartMainTitleFontSize: 26,  // Font size for main title
     chartSubtitleFontSize: 18,  // Font size for subtitle (company/role name)
     chartTitleSpacing: 27,  // Spacing between main title and subtitle
@@ -45,11 +45,9 @@ const SLOPE_CHART_CONSTANTS = {
     dropdownHeight: 32,  // Height of dropdown selects (px)
     dropdownLabelFontSize: 15,  // Font size for dropdown labels
     // Instructional text for company view (showing roles on left)
-    instructionalTextLine1Company: "Click a role to see ranks",
-    instructionalTextLine2Company: "Double-click a role to see breakdown by company",
+    instructionalTextLine1Company: "Click (or hover over) a role to see ranks, double-click to see breakdown by company",
     // Instructional text for role view (showing companies on left)
-    instructionalTextLine1Role: "Click a company to see ranks",
-    instructionalTextLine2Role: "Double-click a company to see breakdown by role"
+    instructionalTextLine1Role: "Click (or hover over) a company to see ranks, double-click to see breakdown by role",
 };
 
 const ANIMATION_DURATION = 800;
