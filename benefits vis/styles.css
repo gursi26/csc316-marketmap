@@ -95,15 +95,15 @@ body {
 }
 
 .screen-2 {
-  background-image: url("../dataset/backgrounds/template2.jpg");
+  background-image: url("../dataset/backgrounds/food-area.png");
 }
 
 .screen-3 {
-  background-image: url("../dataset/backgrounds/template3.jpg");
+  background-image: url("../dataset/backgrounds/transport-area.jpg");
 }
 
 .screen-4 {
-  background-image: url("../dataset/backgrounds/template4.jpg");
+  background-image: url("../dataset/backgrounds/insurance.png");
 }
 
 .overlayText {
