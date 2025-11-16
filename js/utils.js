@@ -72,7 +72,7 @@ function formatCurrency(value) {
  * @param {number} y - Y position for tooltip
  */
 function showRoleTooltip(role, x, y) {
-    const tooltip = document.getElementById('tooltip');
+    const tooltip = document.getElementById('tooltip-slope');
     const total = role.avgPay;
     
     // Title is always the company name
@@ -125,7 +125,7 @@ function showRoleTooltip(role, x, y) {
  * Hides the tooltip
  */
 function hideTooltip() {
-    const tooltip = document.getElementById('tooltip');
+    const tooltip = document.getElementById('tooltip-slope');
     tooltip.classList.remove('visible');
 }
 
@@ -136,7 +136,7 @@ function hideTooltip() {
  * @param {number} y - Y position for tooltip
  */
 function showRankTooltip(rank, x, y) {
-    const tooltip = document.getElementById('tooltip');
+    const tooltip = document.getElementById('tooltip-slope');
     const total = rank.totalPay;
     
     // Title is always company name
@@ -199,7 +199,7 @@ function updateTooltipPosition(x, y, side = null) {
         side = tooltipSide;
     }
     
-    const tooltip = document.getElementById('tooltip');
+    const tooltip = document.getElementById('tooltip-slope');
     const tooltipRect = tooltip.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;

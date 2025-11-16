@@ -1,18 +1,37 @@
 // Set up dimensions and margins
-const margin = { top: 40, right: 40, bottom: 80, left: 80 };
-const width = 900 - margin.left - margin.right;
-const height = 600 - margin.top - margin.bottom;
+const margin = { top: 120, right: 120, bottom: 120, left: 120 };
+
+// ===== TUNABLE CONSTANT: Circle Size Scaling =====
+// Adjust this value to control how large the bubbles appear relative to window size
+// Higher values = larger circles. Recommended range: 0.02 to 0.06
+const CIRCLE_SIZE_SCALE_FACTOR = 0.03;
+// =================================================
+
+let width, height;
+
+// Function to calculate dimensions based on container size
+function calculateDimensions() {
+    const container = document.querySelector('.chart-container-scatter');
+    const containerRect = container.getBoundingClientRect();
+    width = Math.max(600, containerRect.width - margin.left - margin.right - 40);
+    height = Math.max(400, containerRect.height - margin.top - margin.bottom - 40);
+    return { width, height };
+}
 
 // Create SVG
-const svg = d3.select("#scatterplot")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom);
+const svg = d3.select("#scatterplot");
+let g = svg.append("g");
 
-const g = svg.append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
+// Function to update SVG dimensions
+function updateSVGDimensions() {
+    calculateDimensions();
+    svg.attr("width", width + margin.left + margin.right)
+       .attr("height", height + margin.top + margin.bottom);
+    g.attr("transform", `translate(${margin.left},${margin.top})`);
+}
 
 // Create tooltip
-const tooltip = d3.select("#tooltip");
+const tooltip = d3.select("#tooltip-scatter");
 
 // Color scales
 const colorScales = {
@@ -27,9 +46,9 @@ async function loadData() {
     try {
         // Load all CSV files
         const [companyInfo, companyFinancials, sentimentData] = await Promise.all([
-            d3.csv("../dataset/cleaned/Company-info.csv"),
-            d3.csv("../dataset/cleaned/Company-financials.csv"),
-            d3.csv("../dataset/raw-data/nasdaq100_monthly_s2024.csv")
+            d3.csv("dataset/cleaned/Company-info.csv"),
+            d3.csv("dataset/cleaned/Company-financials.csv"),
+            d3.csv("dataset/raw-data/nasdaq100_monthly_s2024.csv")
         ]);
 
         // Get latest sentiment for each company
@@ -80,9 +99,14 @@ function createScales(data, xAxis, yAxis) {
         .range([height, 0])
         .nice();
 
+    // Make circle size responsive to window dimensions
+    const avgDimension = (width + height) / 2;
+    const minRadius = avgDimension * CIRCLE_SIZE_SCALE_FACTOR * 0.2;
+    const maxRadius = avgDimension * CIRCLE_SIZE_SCALE_FACTOR;
+    
     const sizeScale = d3.scaleSqrt()
         .domain(d3.extent(data, d => d.market_cap))
-        .range([3, 30]);
+        .range([minRadius, maxRadius]);
 
     return { xScale, yScale, sizeScale };
 }
@@ -94,10 +118,14 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
     const yFormat = getAxisFormatter(yAxis);
     
     const xAxisGenerator = d3.axisBottom(xScale)
-        .tickFormat(xFormat);
+        .tickFormat(xFormat)
+        .tickSize(6)
+        .tickPadding(10);
 
     const yAxisGenerator = d3.axisLeft(yScale)
-        .tickFormat(yFormat);
+        .tickFormat(yFormat)
+        .tickSize(6)
+        .tickPadding(10);
 
     // Remove existing axes
     g.selectAll(".x-axis").remove();
@@ -109,27 +137,35 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
     g.append("g")
         .attr("class", "x-axis")
         .attr("transform", `translate(0,${height})`)
-        .call(xAxisGenerator);
+        .call(xAxisGenerator)
+        .selectAll("text")
+        .style("font-size", "14px");
 
     // Add Y axis
     g.append("g")
         .attr("class", "y-axis")
-        .call(yAxisGenerator);
+        .call(yAxisGenerator)
+        .selectAll("text")
+        .style("font-size", "14px");
 
     // Add axis labels
     g.append("text")
         .attr("class", "x-label axis-label")
-        .attr("transform", `translate(${width/2}, ${height + 50})`)
+        .attr("transform", `translate(${width/2}, ${height + 60})`)
         .style("text-anchor", "middle")
+        .style("font-size", "18px")
+        .style("font-weight", "600")
         .text(getAxisLabel(xAxis));
 
     g.append("text")
         .attr("class", "y-label axis-label")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
+        .attr("y", 0 - margin.left + 35)
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
+        .style("font-size", "18px")
+        .style("font-weight", "600")
         .text(getAxisLabel(yAxis));
 }
 
@@ -264,65 +300,34 @@ function createColorLegend(data, colorBy) {
 
 // Update visualization
 function updateVisualization(data, xAxis, yAxis, colorBy) {
+    // Update dimensions first
+    updateSVGDimensions();
+    
     const { xScale, yScale, sizeScale } = createScales(data, xAxis, yAxis);
     const colorFunction = createColorFunction(data, colorBy);
     
     createAxes(xScale, yScale, xAxis, yAxis);
     createColorLegend(data, colorBy);
 
-    // Remove existing circles
-    g.selectAll("circle").remove();
-
-    // Add circles
+    // Use D3's join pattern for proper updates
     const circles = g.selectAll("circle")
-        .data(data)
-        .enter()
-        .append("circle")
+        .data(data, d => d.ticker)
+        .join(
+            enter => enter.append("circle")
+                .attr("opacity", 0.7)
+                .attr("stroke", "#fff")
+                .attr("stroke-width", 1)
+                .style("cursor", "pointer"),
+            update => update,
+            exit => exit.remove()
+        )
         .attr("cx", d => xScale(d[xAxis]))
         .attr("cy", d => yScale(d[yAxis]))
         .attr("r", d => sizeScale(d.market_cap))
-        .attr("fill", colorFunction)
-        .attr("opacity", 0.7)
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 1)
-        .style("cursor", "pointer");
+        .attr("fill", colorFunction);
 
     // Add interactions
-    circles
-        .on("mouseover", function(event, d) {
-            d3.select(this)
-                .attr("opacity", 1)
-                .attr("stroke-width", 2);
-
-            tooltip
-                .style("opacity", 1)
-                .html(`
-                    <strong>${d.name} (${d.ticker})</strong><br/>
-                    Sector: ${d.sector}<br/>
-                    CEO Approval: ${d.ceo_approval}%<br/>
-                    Employee Rating: ${d.employee_rating}/5<br/>
-                    Market Cap: $${(d.market_cap / 1e9).toFixed(1)}B<br/>
-                    Sentiment: ${d.sentiment.toFixed(3)}<br/>
-                    Employees: ${d.employee_count.toLocaleString()}
-                `);
-        })
-        .on("mousemove", function(event) {
-            tooltip
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 10) + "px");
-        })
-        .on("mouseout", function() {
-            d3.select(this)
-                .attr("opacity", 0.7)
-                .attr("stroke-width", 1);
-
-            tooltip.style("opacity", 0);
-        })
-                .on("click", function(event, d) {
-                    // Navigate to company detail page
-                    const companyData = encodeURIComponent(JSON.stringify(d));
-                    window.location.href = `company-detail.html?data=${companyData}`;
-                });
+    enableMouseover()
 }
 
 // Event listeners for controls
@@ -359,8 +364,21 @@ async function init() {
         return;
     }
 
+    // Initialize dimensions
+    calculateDimensions();
+    
+    // Set initial dropdown values
+    d3.select("#x-axis").property("value", "ceo_approval");
+    d3.select("#y-axis").property("value", "employee_rating");
+    d3.select("#color-by").property("value", "sentiment");
+    
     setupControls();
-    updateVisualization(data, "ceo_approval", "employee_rating", "sentiment");
+    
+    // Get current dropdown values and use them for initial visualization
+    const xAxis = d3.select("#x-axis").property("value");
+    const yAxis = d3.select("#y-axis").property("value");
+    const colorBy = d3.select("#color-by").property("value");
+    updateVisualization(data, xAxis, yAxis, colorBy);
 
     // If opened with ticker query param, focus that company
     const params = new URLSearchParams(window.location.search);
@@ -368,6 +386,18 @@ async function init() {
     if (qTicker) {
         focusTicker(qTicker);
     }
+    
+    // Add resize listener with debouncing
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            const xAxis = d3.select("#x-axis").property("value");
+            const yAxis = d3.select("#y-axis").property("value");
+            const colorBy = d3.select("#color-by").property("value");
+            updateVisualization(window.currentData, xAxis, yAxis, colorBy);
+        }, 250);
+    });
 }
 
 // Start the visualization when DOM is loaded
@@ -407,9 +437,12 @@ function focusTicker(ticker){
     if (!ticker) return;
     const t = (ticker||'').toString().toUpperCase();
     const sel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker||d.Ticker)||'').toString().toUpperCase() === t);
+    const nonSel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker||d.Ticker)||'').toString().toUpperCase() !== t);
     if (sel.empty()) return;
     const d = sel.datum();
-    sel.raise().attr('stroke', '#000').attr('stroke-width', 3).attr('opacity', 1);
+    sel.raise().transition().delay(250).duration(1000).attr('stroke-width', 3).attr('opacity', 1);
+    nonSel.transition().delay(250).duration(1000).attr('opacity', 0.1)
+    disableMouseover()
     tooltip.style('opacity', 1).html(`
         <strong>${d.name || d.ticker}</strong><br/>
         Sector: ${d.sector || ''}<br/>
@@ -418,10 +451,136 @@ function focusTicker(ticker){
         Market Cap: $${(d.market_cap || 0).toLocaleString()}<br/>
         Sentiment: ${d.sentiment != null ? d.sentiment.toFixed(3) : 'n/a'}
     `);
-    const rect = document.getElementById('scatterplot').getBoundingClientRect();
-    tooltip.style('left', (rect.left + 20) + 'px').style('top', (rect.top + 20) + 'px');
+    
+    // Position tooltip near the bubble
+    // Use a slight delay to ensure the scroll animation has settled
     setTimeout(() => {
-        sel.attr('stroke', '#fff').attr('stroke-width', 1).attr('opacity', 0.7);
+        const circleNode = sel.node();
+        if (circleNode) {
+            const circleBBox = circleNode.getBoundingClientRect();
+            
+            // Calculate page coordinates (similar to event.pageX/pageY)
+            const pageX = circleBBox.left + window.pageXOffset + circleBBox.width / 2;
+            const pageY = circleBBox.top + window.pageYOffset + circleBBox.height / 2;
+            
+            // Use same offsets as mousemove handler
+            tooltip.style('left', (pageX - 250) + 'px').style('top', (pageY - 200) + 'px');
+        }
+    }, 300);
+    
+    setTimeout(() => {
+        enableMouseover()
+        sel.transition().duration(1000).attr('stroke-width', 1).attr('opacity', 0.7);
+        nonSel.transition().duration(1000).attr('opacity', 0.7);
         tooltip.style('opacity', 0);
     }, 3000);
+}
+
+
+function disableMouseover() {
+    d3.selectAll('#scatterplot circle')
+        .on("mouseover", null)
+        .on("mousemove", null)
+        .on("mouseout", null)
+}
+
+function enableMouseover() {
+    d3.selectAll('#scatterplot circle')
+        .on("mouseover", function(event, d) {
+            d3.select(this)
+                .attr("opacity", 1)
+                .attr("stroke-width", 2);
+
+            tooltip
+                .style("opacity", 1)
+                .html(`
+                    <strong>${d.name} (${d.ticker})</strong><br/>
+                    Sector: ${d.sector}<br/>
+                    CEO Approval: ${d.ceo_approval}%<br/>
+                    Employee Rating: ${d.employee_rating}/5<br/>
+                    Market Cap: $${(d.market_cap / 1e9).toFixed(1)}B<br/>
+                    Sentiment: ${d.sentiment.toFixed(3)}<br/>
+                    Employees: ${d.employee_count.toLocaleString()}
+                `);
+        })
+        .on("mousemove", function(event) {
+            tooltip
+                .style("left", (event.pageX - 250) + "px")
+                .style("top", (event.pageY - 200) + "px");
+        })
+        .on("mouseout", function() {
+            d3.select(this)
+                .attr("opacity", 0.7)
+                .attr("stroke-width", 1);
+
+            tooltip.style("opacity", 0);
+        })
+        .on("click", function(event, d) {
+            // Navigate to company detail page
+            displayCompanyInfo(d)
+            popupCompany.showModal();
+        });
+}
+
+
+// Company Details
+
+// Display company information
+function displayCompanyInfo(d) {
+    const company = d;
+    
+    if (!company) {
+        document.getElementById('company-logo').style.display = 'none';
+        return;
+    }
+    
+    // Display company logo
+    const logoImg = document.getElementById('company-logo');
+    logoImg.src = `dataset/logos/images/${company.ticker}.png`;
+    logoImg.style.display = 'block';
+    logoImg.onerror = function() {
+        // Fallback if logo not found
+        this.style.display = 'none';
+    };
+    
+    // Display company details with name as first item
+    const infoDiv = document.getElementById('company-info');
+    infoDiv.innerHTML = `
+        <div class="info-item">
+            <span class="info-label">Company:</span> ${company.name}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Ticker:</span> ${company.ticker}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Sector:</span> ${company.sector}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Industry:</span> ${company.industry}
+        </div>
+        <div class="info-item">
+            <span class="info-label">CEO Approval:</span> ${company.ceo_approval}%
+        </div>
+        <div class="info-item">
+            <span class="info-label">Employee Rating:</span> ${company.employee_rating}/5
+        </div>
+        <div class="info-item">
+            <span class="info-label">Market Cap:</span> $${(company.market_cap / 1e9).toFixed(1)}B
+        </div>
+        <div class="info-item">
+            <span class="info-label">Revenue:</span> $${(company.revenue / 1e9).toFixed(1)}B
+        </div>
+        <div class="info-item">
+            <span class="info-label">P/E Ratio:</span> ${company.pe_ratio.toFixed(1)}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Sentiment:</span> ${company.sentiment.toFixed(3)}
+        </div>
+        <div class="info-item">
+            <span class="info-label">Employees:</span> ${company.employee_count.toLocaleString()}
+        </div>
+    `;
+    
+    // Store company ticker for the Pay Progression button
+    window.currentScatterCompany = company.ticker;
 }
