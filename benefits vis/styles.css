@@ -152,3 +152,8 @@ body {
 .nav:hover {
   background: rgba(255,255,255,0.9);
 }
+
+.screen-icons img {
+  width: 60px;
+  margin: 8px;
+}
