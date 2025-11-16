@@ -15,6 +15,7 @@ class MapVis {
     const gBuildings = gRoot.append("g").attr("id","gBuildings");
     const gForeign   = gRoot.append("g").attr("id","gForeign");
     const tooltip    = d3.select("#tooltip");
+    const stateLabel = d3.select("#state-label");
 
     // small floating menu for company options
     let companyPopup = null;
@@ -86,6 +87,29 @@ class MapVis {
     const mapW = 900, mapH = 650;
     const projection = d3.geoAlbersUsa().translate([mapW/2, mapH/2]).scale(1200);
     const path = d3.geoPath(projection);
+    
+    // Store state geometries for boundary checking
+    let stateGeometries = new Map();
+    
+    // Helper to constrain point within state boundaries
+    function constrainToState(longitude, latitude, stateName, padding = 0.15) {
+      let [x, y] = projection([longitude, latitude]) || [null, null];
+      if (x === null || y === null) return null;
+      
+      const stateGeom = stateGeometries.get(stateName);
+      if (!stateGeom) return [x, y]; // fallback if no geometry
+      
+      const bounds = path.bounds(stateGeom);
+      const [[x0, y0], [x1, y1]] = bounds;
+      const padX = (x1 - x0) * padding;
+      const padY = (y1 - y0) * padding;
+      
+      // Constrain within padded bounds
+      x = Math.max(x0 + padX, Math.min(x1 - padX, x));
+      y = Math.max(y0 + padY, Math.min(y1 - padY, y));
+      
+      return [x, y];
+    }
 
     // Data
     let companies = [], salaries = [], financials = [], prices = [];
@@ -95,6 +119,19 @@ class MapVis {
     // Zoom state
     let zoomTarget = null;   // {type:'state', id}
     let currentZoom = 1;     // scale factor applied to gRoot; buildings counter-scale by 1/currentZoom
+    
+    // State name to abbreviation mapping
+    const stateNameToAbbr = {
+      "Alabama":"AL","Alaska":"AK","Arizona":"AZ","Arkansas":"AR","California":"CA","Colorado":"CO",
+      "Connecticut":"CT","Delaware":"DE","District of Columbia":"DC","Florida":"FL","Georgia":"GA","Hawaii":"HI",
+      "Idaho":"ID","Illinois":"IL","Indiana":"IN","Iowa":"IA","Kansas":"KS","Kentucky":"KY","Louisiana":"LA",
+      "Maine":"ME","Maryland":"MD","Massachusetts":"MA","Michigan":"MI","Minnesota":"MN","Mississippi":"MS",
+      "Missouri":"MO","Montana":"MT","Nebraska":"NE","Nevada":"NV","New Hampshire":"NH","New Jersey":"NJ",
+      "New Mexico":"NM","New York":"NY","North Carolina":"NC","North Dakota":"ND","Ohio":"OH","Oklahoma":"OK",
+      "Oregon":"OR","Pennsylvania":"PA","Rhode Island":"RI","South Carolina":"SC","South Dakota":"SD",
+      "Tennessee":"TN","Texas":"TX","Utah":"UT","Vermont":"VT","Virginia":"VA","Washington":"WA",
+      "West Virginia":"WV","Wisconsin":"WI","Wyoming":"WY"
+    };
 
     // Load
     Promise.all([
@@ -120,6 +157,15 @@ class MapVis {
       });
 
       const states = topojson.feature(usTopo, usTopo.objects.states).features;
+      
+      // Store state geometries for boundary checking
+      states.forEach(s => {
+        const name = s.properties.name;
+        stateGeometries.set(name, s);
+        // Also store by common abbreviations
+        const abbr = stateNameToAbbr[name];
+        if (abbr) stateGeometries.set(abbr, s);
+      });
 
       // Fills
       gStates.selectAll("path.state")
@@ -127,7 +173,13 @@ class MapVis {
         .join("path")
         .attr("class","state")
         .attr("d", path)
-        .on("click", onStateClick);
+        .on("click", onStateClick)
+        .on("mouseenter", function(event, d) {
+          stateLabel.text(d.properties.name).classed("visible", true);
+        })
+        .on("mouseleave", function() {
+          stateLabel.classed("visible", false);
+        });
 
       // Borders BELOW buildings
       gBorders.append("path")
@@ -187,6 +239,79 @@ class MapVis {
       return null;
     }
 
+    // Collision detection and position adjustment
+    function resolveCollisions(data) {
+      // Group by state for more efficient collision detection
+      const byState = d3.group(data, d => pick(d, ["State"]));
+      const adjusted = [];
+      
+      byState.forEach((stateCompanies, stateName) => {
+        const positioned = [];
+        
+        // Sort by market cap descending so larger buildings get priority positioning
+        stateCompanies.sort((a, b) => (b.mc || 0) - (a.mc || 0));
+        
+        stateCompanies.forEach(company => {
+          const baseSize = 30;
+          const sizeMultiplier = company.mc && company.mc > 0 ? Math.log(company.mc) / 20 : 1;
+          const size = Math.max(20, Math.min(60, baseSize * sizeMultiplier));
+          const radius = size * 0.65; // collision radius
+          
+          let x = company.px;
+          let y = company.py;
+          let attempts = 0;
+          const maxAttempts = 150;
+          
+          // Check for collisions with already positioned buildings
+          while (attempts < maxAttempts) {
+            let hasCollision = false;
+            
+            for (const other of positioned) {
+              const dx = x - other.finalX;
+              const dy = y - other.finalY;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              const minDist = radius + other.radius + 5; // 5px padding between buildings
+              
+              if (dist < minDist) {
+                hasCollision = true;
+                // Push away from collision with stronger force
+                const angle = Math.atan2(dy, dx);
+                const pushDist = (minDist - dist) * 0.6 + 2;
+                x += Math.cos(angle) * pushDist;
+                y += Math.sin(angle) * pushDist;
+              }
+            }
+            
+            // Keep within state bounds with padding
+            const stateGeom = stateGeometries.get(stateName);
+            if (stateGeom) {
+              const bounds = path.bounds(stateGeom);
+              const [[x0, y0], [x1, y1]] = bounds;
+              const padX = Math.max(radius + 5, (x1 - x0) * 0.12);
+              const padY = Math.max(radius + 5, (y1 - y0) * 0.12);
+              x = Math.max(x0 + padX, Math.min(x1 - padX, x));
+              y = Math.max(y0 + padY, Math.min(y1 - padY, y));
+            }
+            
+            if (!hasCollision) break;
+            attempts++;
+          }
+          
+          positioned.push({
+            ...company,
+            finalX: x,
+            finalY: y,
+            radius: radius,
+            size: size
+          });
+        });
+        
+        adjusted.push(...positioned);
+      });
+      
+      return adjusted;
+    }
+
     // ---- Render orchestrators ----
     function render(){
       // width scale from market cap (log)
@@ -201,14 +326,22 @@ class MapVis {
     // ---- Buildings (icons for US companies) ----
     function renderBuildings(){
       const data = companies.map(c=>{
-        const proj = (isFinite(c.Longitude) && isFinite(c.Latitude)) ? projection([c.Longitude, c.Latitude]) : null;
+        let proj = null;
+        if (isFinite(c.Longitude) && isFinite(c.Latitude)) {
+          // Use constrained position to keep within state boundaries
+          const stateName = pick(c, ["State"]);
+          proj = constrainToState(c.Longitude, c.Latitude, stateName);
+        }
         const mc = c.market_cap;
         const industry = pick(c, ["Industry"]);
         const category = getIndustryCategory(industry);
         return { ...c, px: proj?proj[0]:null, py: proj?proj[1]:null, mc, category };
       }).filter(d=>d.px!=null && d.py!=null && d.category!=null);
 
-      const sel = gBuildings.selectAll("g.building").data(data, d=>d.Ticker);
+      // Apply collision detection to spread out buildings
+      const adjustedData = resolveCollisions(data);
+
+      const sel = gBuildings.selectAll("g.building").data(adjustedData, d=>d.Ticker);
       const enter = sel.enter().append("g").attr("class","building")
         .on("mousemove", (ev,d)=> showTip(ev, d))
         .on("mouseleave", hideTip)
@@ -223,22 +356,27 @@ class MapVis {
           ev.stopPropagation();
         });
 
+      enter.append("circle").attr("class","hover-ring");
       enter.append("image").attr("class","building-icon");
 
       const all = enter.merge(sel);
 
-      // Keep icons at same on-screen size during zoom
-      all.attr("transform", d => `translate(${d.px},${d.py}) scale(${1/currentZoom})`);
+      // Keep icons at same on-screen size during zoom, use adjusted positions
+      all.attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`);
 
       all.each(function(d){
         const g = d3.select(this);
         const icon = industryIcons[d.category];
         if (!icon) return;
         
-        // Size based on market cap (logarithmic scale)
-        const baseSize = 30;
-        const sizeMultiplier = d.mc && d.mc > 0 ? Math.log(d.mc) / 20 : 1;
-        const size = Math.max(20, Math.min(60, baseSize * sizeMultiplier));
+        // Use pre-calculated size from collision detection
+        const size = d.size || 30;
+        
+        // Hover ring (slightly larger than icon)
+        g.select("circle.hover-ring")
+          .attr("cx", 0)
+          .attr("cy", -size/2)
+          .attr("r", size * 0.65);
         
         g.select("image.building-icon")
           .attr("href", icon.src)
@@ -259,10 +397,13 @@ class MapVis {
       const ceo    = d.ceo_approval!=null ? d3.format(".0f")(d.ceo_approval) + "%" : "n/a";
       const industry = pick(d, ["Industry"]) || "n/a";
       const sector = pick(d, ["Sector"]) || "n/a";
+      const state = pick(d, ["State"]) || "";
+      const address = d.Address || "";
+      const fullAddress = address && state ? `${address}, ${state}` : (address || state);
 
       tooltip.html(`
         <div><strong>${d.Name || d.Ticker}</strong></div>
-        <div>${d.Address || ""}</div>
+        <div>${fullAddress}</div>
         <hr style="border:0;border-top:1px solid rgba(255,255,255,.12); margin:6px 0">
         <div>Industry: <b>${industry}</b></div>
         <div>Sector: <b>${sector}</b></div>
@@ -374,10 +515,10 @@ class MapVis {
         .attr("transform", `translate(${tx},${ty}) scale(${s})`)
         .on("end", ()=>{ zoomTarget = {type:"state", id}; });
 
-      // Update building transforms to include counter-scale at their anchors
+      // Buildings stay in their fixed positions, only adjust scale to maintain size
       gBuildings.selectAll("g.building")
         .transition().duration(750)
-        .attr("transform", function(d){ return `translate(${d.px},${d.py}) scale(${1/currentZoom})`; });
+        .attr("transform", function(d){ return `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`; });
 
       // Also keep mini buildings inside country circles readable during zoom
       gForeign.selectAll("g.mini-building")
@@ -441,7 +582,7 @@ class MapVis {
       gRoot.transition().duration(600).attr("transform","translate(0,0) scale(1)");
       gBuildings.selectAll("g.building")
         .transition().duration(600)
-        .attr("transform", d => `translate(${d.px},${d.py}) scale(1)`);
+        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(1)`);
       gForeign.selectAll("g.mini-building")
         .transition().duration(600)
         .attr("transform", function(){

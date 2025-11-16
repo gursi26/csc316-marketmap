@@ -6,7 +6,7 @@
         <title>MarketMap 📡</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Rubik+80s+Fade&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Rubik+80s+Fade&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
         <script src="https://unpkg.com/d3@7"></script>
         <script src="https://unpkg.com/topojson-client@3"></script>
@@ -80,6 +80,7 @@
                             </div>
                         </aside>
                         <section class="viz">
+                            <div id="state-label" class="state-label"></div>
                             <div id="tooltip" class="tooltip" style="display:none"></div>
                             <svg id="chart" viewBox="-100 -40 1250 700" preserveAspectRatio="xMidYMid meet"></svg>
                         </section>

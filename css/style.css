@@ -214,6 +214,34 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
         linear-gradient(to bottom, var(--panel-2) 1px, transparent 1px);
 }
 
+/* State label at top center of map */
+.state-label {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(16, 24, 51, 0.9);
+    color: var(--fg);
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 2px solid var(--accent);
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    image-rendering: pixelated;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
+
+.state-label.visible {
+    opacity: 1;
+}
+
 .instructions{ 
   margin-bottom:20px; 
   padding:12px; 
@@ -274,9 +302,14 @@ button{ font-family:inherit }
 .map-popup .btn-primary:active, .map-popup .btn-secondary:active{ transform:translateY(1px) }
 .map-popup [id^="cp-"]{ font-size:13px }
 
-#chart{ width:100%; height:100% }
-.state{ fill:#1a2447; stroke:#2a3357; stroke-width:.8; cursor:pointer }
+#chart{ width:100%; height:100%; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges }
+.state{ fill:#1a2447; stroke:#2a3357; stroke-width:.8; cursor:pointer; shape-rendering: crispEdges; transition: fill 0.2s ease, stroke 0.2s ease }
+.state:hover{ fill:#1f2d5f; stroke:#5ea8ff; stroke-width:1.2 }
 .state-active{ stroke:#7aa2ff; stroke-width:1.4 }
+
+/* Pixelated effect for the entire map */
+#gStates, #gBorders, #gBuildings, #gForeign { shape-rendering: crispEdges }
+#gBuildings image, #gForeign image { image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges }
 
 .country-circle{ fill:#0f1835; stroke:#3a4a82; stroke-width:1; transition: stroke 0.3s ease }
 .country-circle-active{ stroke:#7aa2ff; stroke-width:2 }
@@ -284,7 +317,11 @@ button{ font-family:inherit }
 
 /* Buildings */
 .building, .mini-building{ pointer-events:auto }
+.building .building-icon{ transition: filter 0.2s ease }
+.building:hover .building-icon{ filter: drop-shadow(0 0 8px rgba(94, 168, 255, 0.8)) drop-shadow(0 0 12px rgba(94, 168, 255, 0.4)) brightness(1.2) }
 .building .outline, .mini-building .outline{ fill:none; stroke:rgba(255,255,255,.14); stroke-width:.4 }
+.building .hover-ring{ fill:none; stroke:rgba(94, 168, 255, 0.6); stroke-width:2; opacity:0; transition: opacity 0.2s ease }
+.building:hover .hover-ring{ opacity:1 }
 
 /* Legend */
 .legend{ margin-top:12px }
