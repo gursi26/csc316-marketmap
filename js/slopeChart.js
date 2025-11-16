@@ -45,8 +45,7 @@ class SlopeChart {
      * Sets svg width/height and wires control dropdowns.
      */
     initVis() {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+        this.updateDimensions();
         
         this.svg = d3.select(this.parentElement)
             // .attr("width", this.width)
@@ -55,6 +54,80 @@ class SlopeChart {
         // Setup company dropdown
         // Populate and wire the control dropdowns
         this.setupDropdown();
+        
+        // Add resize listener with debouncing
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.updateDimensions();
+                this.wrangleData();
+            }, 250);
+        });
+    }
+    
+    /**
+     * Update dimensions based on current window size
+     */
+    updateDimensions() {
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+    }
+    
+    /**
+     * Get responsive constants scaled to current window size
+     */
+    getResponsiveConstants() {
+        const baseWidth = 1920;  // Base design width
+        const baseHeight = 1080; // Base design height
+        const scale = Math.min(this.width / baseWidth, this.height / baseHeight);
+        
+        const base = SLOPE_CHART_CONSTANTS;
+        return {
+            leftMargin: base.leftMargin * scale,
+            rightMargin: base.rightMargin * scale,
+            topMargin: base.topMargin * scale,
+            bottomMargin: base.bottomMargin * scale,
+            lineGap: base.lineGap * scale,
+            dotRadius: base.dotRadius * scale,
+            labelOffset: base.labelOffset * scale,
+            fontSize: base.fontSize * scale,
+            titleFontSize: base.titleFontSize * scale,
+            lineColor: base.lineColor,
+            lineOpacity: base.lineOpacity,
+            lineWidth: base.lineWidth * scale,
+            roleColor: base.roleColor,
+            rankColor: base.rankColor,
+            distributionBuckets: base.distributionBuckets,
+            bubbleHeight: base.bubbleHeight * scale,
+            bubblePadding: base.bubblePadding * scale,
+            bubbleVerticalPadding: base.bubbleVerticalPadding * scale,
+            bubbleFontSize: base.bubbleFontSize * scale,
+            bubbleConnectorGap: base.bubbleConnectorGap * scale,
+            bubbleMinSpacing: base.bubbleMinSpacing * scale,
+            logoBubbleSize: base.logoBubbleSize * scale,
+            logoSize: base.logoSize * scale,
+            logoPadding: base.logoPadding * scale,
+            tooltipStackedBarWidth: base.tooltipStackedBarWidth * scale,
+            tooltipIconSize: base.tooltipIconSize * scale,
+            instructionalTextFontSize: base.instructionalTextFontSize * scale,
+            instructionalTextLineSpacing: base.instructionalTextLineSpacing * scale,
+            yAxisFontSize: base.yAxisFontSize * scale,
+            yAxisOpacity: base.yAxisOpacity,
+            yAxisFontWeight: base.yAxisFontWeight,
+            chartMainTitle: base.chartMainTitle,
+            chartMainTitleFontSize: base.chartMainTitleFontSize * scale,
+            chartSubtitleFontSize: base.chartSubtitleFontSize * scale,
+            chartTitleSpacing: base.chartTitleSpacing * scale,
+            infoIconRadius: base.infoIconRadius * scale,
+            infoIconOffset: base.infoIconOffset * scale,
+            infoPopupText: base.infoPopupText,
+            dropdownWidth: base.dropdownWidth,
+            dropdownHeight: base.dropdownHeight,
+            dropdownLabelFontSize: base.dropdownLabelFontSize,
+            instructionalTextLine1Company: base.instructionalTextLine1Company,
+            instructionalTextLine1Role: base.instructionalTextLine1Role,
+        };
     }
 
     /**
@@ -121,10 +194,19 @@ class SlopeChart {
         // - viewMode === 'company' => item dropdown lists companies
         // - viewMode === 'role' => item dropdown lists roles
         const itemSelect = d3.select("#item-select");
+        const companyLogo = d3.select("#company-logo");
         itemSelect.on("change", function() {
             if (self.viewMode === 'company') {
                 self.selectedCompany = this.value;
                 self.selectedRole = null;
+                // Update company logo when company changes
+                const logoPath = `dataset/logos/images/${self.selectedCompany}.png`;
+                companyLogo
+                    .attr("src", logoPath)
+                    .classed("visible", true)
+                    .on("error", function() {
+                        d3.select(this).classed("visible", false);
+                    });
             } else {
                 self.selectedRole = this.value;
                 self.selectedCompany = null;
@@ -373,7 +455,7 @@ class SlopeChart {
         
         if (!leftItems.length || !rightItems.length) return;
         
-        const c = SLOPE_CHART_CONSTANTS;
+        const c = this.getResponsiveConstants();
         
         // Calculate vertical offset to center the chart
         // Total content height from title top (22) to instructional text bottom
@@ -429,7 +511,7 @@ class SlopeChart {
         this.drawRightDots(rightItems, rightScale, rightX, viewMode, c);
         
         // Render bubbles
-        this.renderBubbles(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode);
+        this.renderBubbles(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode, c);
         
         // Draw instructional text at the bottom
         this.drawInstructionalText(leftX, viewMode, c, verticalOffset);
@@ -764,10 +846,10 @@ class SlopeChart {
             .on("click", (event, d) => {
                 if (self.lockedItem === d.name) {
                     self.lockedItem = null;
-                    resetHighlight(self.svg);
+                    resetHighlight(self.svg, c);
                 } else {
                     self.lockedItem = d.name;
-                    highlightLeftItem(self.svg, d.name, self.displayData.rightItems, viewMode);
+                    highlightLeftItem(self.svg, d.name, self.displayData.rightItems, viewMode, c);
                 }
                 event.stopPropagation();
             })
@@ -789,7 +871,7 @@ class SlopeChart {
             })
             .on("mouseenter", (event, d) => {
                 if (!self.lockedItem) {
-                    highlightLeftItem(self.svg, d.name, self.displayData.rightItems, viewMode);
+                    highlightLeftItem(self.svg, d.name, self.displayData.rightItems, viewMode, c);
                 }
                 showRoleTooltip(d, event.clientX, event.clientY);
             })
@@ -798,7 +880,7 @@ class SlopeChart {
             })
             .on("mouseleave", () => {
                 if (!self.lockedItem) {
-                    resetHighlight(self.svg);
+                    resetHighlight(self.svg, c);
                 }
                 hideTooltip();
             });
@@ -821,7 +903,7 @@ class SlopeChart {
             .style("cursor", "pointer");
     }
 
-    renderBubbles(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode) {
+    renderBubbles(leftItems, rightItems, leftScale, rightScale, leftX, rightX, viewMode, c) {
         const self = this;
         
         // Create event handlers for left bubbles
@@ -829,10 +911,10 @@ class SlopeChart {
             onClick: (event, item) => {
                 if (self.lockedItem === item.name) {
                     self.lockedItem = null;
-                    resetHighlight(self.svg);
+                    resetHighlight(self.svg, c);
                 } else {
                     self.lockedItem = item.name;
-                    highlightLeftItem(self.svg, item.name, self.displayData.rightItems, viewMode);
+                    highlightLeftItem(self.svg, item.name, self.displayData.rightItems, viewMode, c);
                 }
                 event.stopPropagation();
             },
@@ -854,12 +936,12 @@ class SlopeChart {
             },
             onMouseEnter: (event, item) => {
                 if (!self.lockedItem) {
-                    highlightLeftItem(self.svg, item.name, self.displayData.rightItems, viewMode);
+                    highlightLeftItem(self.svg, item.name, self.displayData.rightItems, viewMode, c);
                 }
             },
             onMouseLeave: () => {
                 if (!self.lockedItem) {
-                    resetHighlight(self.svg);
+                    resetHighlight(self.svg, c);
                 }
             }
         };
@@ -872,7 +954,8 @@ class SlopeChart {
             this.roleColorScale,
             leftX,
             leftBubbleHandlers,
-            viewMode
+            viewMode,
+            c
         );
         
         // Render right bubbles (ranks)
@@ -882,7 +965,8 @@ class SlopeChart {
             rightScale,
             this.roleColorScale,
             rightX,
-            viewMode
+            viewMode,
+            c
         );
     }
 }
