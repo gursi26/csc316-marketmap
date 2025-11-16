@@ -70,20 +70,17 @@
                         <p class="subtitle">Click a state to zoom in · Click a company icon to learn more · Icon size represents market cap</p>
                     </div>
                     <main class="layout">
-                        <aside class="sidebar">
-                            <div class="instructions">
-                                <p><strong>How to use:</strong></p>
-                                <p>• Click a state on the map to zoom in</p>
-                                <p>• Click a company icon to view details</p>
-                                <p>• Icon size reflects market capitalization</p>
-                                <p>• Different icons represent industry sectors</p>
-                            </div>
-                        </aside>
                         <section class="viz">
                             <div id="state-label" class="state-label"></div>
                             <div id="tooltip" class="tooltip" style="display:none"></div>
                             <svg id="chart" viewBox="-100 -40 1250 700" preserveAspectRatio="xMidYMid meet"></svg>
                         </section>
+                        <aside class="state-companies-panel">
+                            <div class="panel-header">
+                                <h3 id="state-panel-title">Select a State</h3>
+                            </div>
+                            <div id="companies-bar-chart" class="companies-bar-chart"></div>
+                        </aside>
                     </main>
                     <script>
                         window.APP_CONFIG = {

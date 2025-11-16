@@ -8,14 +8,37 @@ class MapVis {
     const cfg = APP_CONFIG;
     const svg = d3.select("#chart");
 
+    // Add pixelation filter to SVG
+    const defs = svg.append("defs");
+    const pixelFilter = defs.append("filter")
+      .attr("id", "pixelate")
+      .attr("x", "0%")
+      .attr("y", "0%")
+      .attr("width", "100%")
+      .attr("height", "100%");
+    
+    // Reduce resolution for pixelation effect
+    pixelFilter.append("feGaussianBlur")
+      .attr("stdDeviation", "0.5");
+    
+    pixelFilter.append("feComponentTransfer")
+      .append("feFuncA")
+      .attr("type", "discrete")
+      .attr("tableValues", "0 1");
+
     // Draw order: states (fills + borders) → US buildings → foreign circles & buildings
     const gRoot      = svg.append("g").attr("id","gRoot");
-    const gStates    = gRoot.append("g").attr("id","gStates");
-    const gBorders   = gRoot.append("g").attr("id","gBorders");
+    const gStates    = gRoot.append("g").attr("id","gStates").style("filter", "url(#pixelate)");
+    const gBorders   = gRoot.append("g").attr("id","gBorders").style("filter", "url(#pixelate)");
     const gBuildings = gRoot.append("g").attr("id","gBuildings");
     const gForeign   = gRoot.append("g").attr("id","gForeign");
     const tooltip    = d3.select("#tooltip");
     const stateLabel = d3.select("#state-label");
+    const barChartContainer = d3.select("#companies-bar-chart");
+    const statePanelTitle = d3.select("#state-panel-title");
+
+    // Track current selected state
+    let currentSelectedState = null;
 
     // small floating menu for company options
     let companyPopup = null;
@@ -239,74 +262,134 @@ class MapVis {
       return null;
     }
 
-    // Collision detection and position adjustment
+    // Collision detection and position adjustment with force-directed layout
     function resolveCollisions(data) {
       // Group by state for more efficient collision detection
       const byState = d3.group(data, d => pick(d, ["State"]));
       const adjusted = [];
       
       byState.forEach((stateCompanies, stateName) => {
-        const positioned = [];
+        const stateGeom = stateGeometries.get(stateName);
+        if (!stateGeom) {
+          adjusted.push(...stateCompanies);
+          return;
+        }
         
-        // Sort by market cap descending so larger buildings get priority positioning
-        stateCompanies.sort((a, b) => (b.mc || 0) - (a.mc || 0));
+        const bounds = path.bounds(stateGeom);
+        const [[x0, y0], [x1, y1]] = bounds;
+        const stateWidth = x1 - x0;
+        const stateHeight = y1 - y0;
         
-        stateCompanies.forEach(company => {
+        // Calculate sizes first
+        const companies = stateCompanies.map(company => {
           const baseSize = 30;
           const sizeMultiplier = company.mc && company.mc > 0 ? Math.log(company.mc) / 20 : 1;
           const size = Math.max(20, Math.min(60, baseSize * sizeMultiplier));
-          const radius = size * 0.65; // collision radius
-          
-          let x = company.px;
-          let y = company.py;
-          let attempts = 0;
-          const maxAttempts = 150;
-          
-          // Check for collisions with already positioned buildings
-          while (attempts < maxAttempts) {
-            let hasCollision = false;
-            
-            for (const other of positioned) {
-              const dx = x - other.finalX;
-              const dy = y - other.finalY;
-              const dist = Math.sqrt(dx * dx + dy * dy);
-              const minDist = radius + other.radius + 5; // 5px padding between buildings
-              
-              if (dist < minDist) {
-                hasCollision = true;
-                // Push away from collision with stronger force
-                const angle = Math.atan2(dy, dx);
-                const pushDist = (minDist - dist) * 0.6 + 2;
-                x += Math.cos(angle) * pushDist;
-                y += Math.sin(angle) * pushDist;
-              }
-            }
-            
-            // Keep within state bounds with padding
-            const stateGeom = stateGeometries.get(stateName);
-            if (stateGeom) {
-              const bounds = path.bounds(stateGeom);
-              const [[x0, y0], [x1, y1]] = bounds;
-              const padX = Math.max(radius + 5, (x1 - x0) * 0.12);
-              const padY = Math.max(radius + 5, (y1 - y0) * 0.12);
-              x = Math.max(x0 + padX, Math.min(x1 - padX, x));
-              y = Math.max(y0 + padY, Math.min(y1 - padY, y));
-            }
-            
-            if (!hasCollision) break;
-            attempts++;
-          }
-          
-          positioned.push({
+          return {
             ...company,
-            finalX: x,
-            finalY: y,
-            radius: radius,
-            size: size
-          });
+            size: size,
+            radius: size * 0.7, // increased radius for better spacing
+            vx: 0,
+            vy: 0
+          };
         });
         
-        adjusted.push(...positioned);
+        // Sort by market cap descending
+        companies.sort((a, b) => (b.mc || 0) - (a.mc || 0));
+        
+        // Use force simulation for better distribution
+        const iterations = 200;
+        for (let iter = 0; iter < iterations; iter++) {
+          // Reset velocities
+          companies.forEach(c => { c.vx = 0; c.vy = 0; });
+          
+          // Collision forces between buildings
+          for (let i = 0; i < companies.length; i++) {
+            for (let j = i + 1; j < companies.length; j++) {
+              const a = companies[i];
+              const b = companies[j];
+              
+              const dx = b.px - a.px;
+              const dy = b.py - a.py;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              const minDist = a.radius + b.radius + 8; // 8px minimum spacing
+              
+              if (dist < minDist && dist > 0) {
+                const force = (minDist - dist) / dist * 0.5;
+                const fx = dx * force;
+                const fy = dy * force;
+                
+                a.vx -= fx;
+                a.vy -= fy;
+                b.vx += fx;
+                b.vy += fy;
+              }
+            }
+          }
+          
+          // Apply velocities and keep within bounds
+          companies.forEach(c => {
+            c.px += c.vx;
+            c.py += c.vy;
+            
+            // Strong boundary constraints with proper padding
+            const padX = Math.max(c.radius + 10, stateWidth * 0.08);
+            const padY = Math.max(c.radius + 10, stateHeight * 0.08);
+            
+            if (c.px < x0 + padX) c.px = x0 + padX;
+            if (c.px > x1 - padX) c.px = x1 - padX;
+            if (c.py < y0 + padY) c.py = y0 + padY;
+            if (c.py > y1 - padY) c.py = y1 - padY;
+          });
+          
+          // Damping
+          companies.forEach(c => {
+            c.vx *= 0.8;
+            c.vy *= 0.8;
+          });
+        }
+        
+        // Final pass: ensure no overlaps remain
+        for (let i = 0; i < companies.length; i++) {
+          const current = companies[i];
+          let moved = true;
+          let maxPushAttempts = 50;
+          
+          while (moved && maxPushAttempts > 0) {
+            moved = false;
+            
+            for (let j = 0; j < companies.length; j++) {
+              if (i === j) continue;
+              
+              const other = companies[j];
+              const dx = current.px - other.px;
+              const dy = current.py - other.py;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              const minDist = current.radius + other.radius + 8;
+              
+              if (dist < minDist && dist > 0) {
+                const angle = Math.atan2(dy, dx);
+                const pushDist = (minDist - dist) * 0.55;
+                current.px += Math.cos(angle) * pushDist;
+                current.py += Math.sin(angle) * pushDist;
+                moved = true;
+                
+                // Keep in bounds
+                const padX = Math.max(current.radius + 10, stateWidth * 0.08);
+                const padY = Math.max(current.radius + 10, stateHeight * 0.08);
+                current.px = Math.max(x0 + padX, Math.min(x1 - padX, current.px));
+                current.py = Math.max(y0 + padY, Math.min(y1 - padY, current.py));
+              }
+            }
+            maxPushAttempts--;
+          }
+          
+          adjusted.push({
+            ...current,
+            finalX: current.px,
+            finalY: current.py
+          });
+        }
       });
       
       return adjusted;
@@ -503,6 +586,10 @@ class MapVis {
       gStates.selectAll(".state").classed("state-active", false);
       d3.select(this).classed("state-active", true).raise();
 
+      const stateName = d.properties.name;
+      currentSelectedState = stateName;
+      updateStateCompaniesPanel(stateName);
+
       const b = path.bounds(d);
       const dx = b[1][0] - b[0][0];
       const dy = b[1][1] - b[0][1];
@@ -579,6 +666,9 @@ class MapVis {
       gStates.selectAll(".state").classed("state-active", false);
       gForeign.selectAll("circle.country-circle").classed("country-circle-active", false);
       currentZoom = 1;
+      currentSelectedState = null;
+      statePanelTitle.text("Select a State");
+      barChartContainer.html("");
       gRoot.transition().duration(600).attr("transform","translate(0,0) scale(1)");
       gBuildings.selectAll("g.building")
         .transition().duration(600)
@@ -591,6 +681,116 @@ class MapVis {
           return `${translated} scale(1)`;
         });
       zoomTarget = null;
+    }
+
+    // ---- Update State Companies Panel ----
+    function updateStateCompaniesPanel(stateName) {
+      statePanelTitle.text(stateName);
+      
+      // Get companies in this state
+      const stateAbbr = stateNameToAbbr[stateName] || stateName;
+      const stateCompanies = companies.filter(c => {
+        const cState = pick(c, ["State"]);
+        return cState === stateName || cState === stateAbbr;
+      }).map(c => ({
+        ...c,
+        mc: getMarketCap(c.Ticker)
+      })).filter(c => c.mc && c.mc > 0);
+      
+      if (stateCompanies.length === 0) {
+        barChartContainer.html('');
+        return;
+      }
+      
+      // Sort by market cap descending
+      stateCompanies.sort((a, b) => b.mc - a.mc);
+      
+      // Calculate max market cap for scaling
+      const maxMc = d3.max(stateCompanies, d => d.mc);
+      const minMc = d3.min(stateCompanies, d => d.mc);
+      
+      // Get actual available height for bars
+      const panelHeight = barChartContainer.node().parentElement.offsetHeight || 600;
+      const availableHeight = panelHeight - 180; // Reserve space for header, labels, etc
+      const maxBarHeight = Math.min(400, availableHeight); // Cap at 400px or available space
+      
+      // Dynamic scaling: use logarithmic scale for better visual distribution
+      const heightScale = d3.scaleLog()
+        .domain([Math.max(minMc, maxMc * 0.01), maxMc]) // Avoid zero
+        .range([50, maxBarHeight]) // Min 50px for visibility
+        .clamp(true);
+      
+      // Create bar chart items
+      const items = barChartContainer.selectAll(".company-bar-item")
+        .data(stateCompanies, d => d.Ticker);
+      
+      // Remove old items first
+      items.exit().remove();
+      
+      const itemsEnter = items.enter()
+        .append("div")
+        .attr("class", "company-bar-item");
+      
+      // Add logo (will be positioned on top)
+      itemsEnter.append("img")
+        .attr("class", "company-logo");
+      
+      // Add building bar
+      itemsEnter.append("div")
+        .attr("class", "bar-building");
+      
+      // Add company name
+      itemsEnter.append("div")
+        .attr("class", "company-name");
+      
+      // Add market cap label
+      itemsEnter.append("div")
+        .attr("class", "market-cap-label");
+      
+      // Update existing and new items
+      const allItems = itemsEnter.merge(items);
+      
+      // Set logo src and handle errors
+      allItems.select(".company-logo")
+        .attr("src", d => `dataset/logos/images/${d.Ticker}.png`)
+        .attr("alt", d => d.Name || d.Ticker)
+        .style("display", "block")
+        .on("error", function(event, d) {
+          // Create a simple colored square with ticker text as fallback
+          const canvas = document.createElement('canvas');
+          canvas.width = 32;
+          canvas.height = 32;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#2a73d6';
+          ctx.fillRect(0, 0, 32, 32);
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold 10px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(d.Ticker.substring(0, 4), 16, 16);
+          d3.select(this).attr("src", canvas.toDataURL());
+        });
+      
+      allItems.select(".company-name")
+        .text(d => d.Name || d.Ticker);
+      
+      // Animate buildings growing from bottom up with better scaling
+      allItems.select(".bar-building")
+        .style("height", "0px")
+        .transition()
+        .duration(1000)
+        .delay((d, i) => i * 60)
+        .ease(d3.easeCubicOut)
+        .style("height", d => `${heightScale(Math.max(d.mc, maxMc * 0.01))}px`);
+      
+      allItems.select(".market-cap-label")
+        .text(d => `$${d3.format(".2s")(d.mc)}`);
+      
+      // Add click handler
+      allItems.on("click", (event, d) => {
+        event.stopPropagation();
+        try { showCompanyPopup(event, d); } catch (e) {}
+      });
     }
 
     // Click empty space to reset zoom

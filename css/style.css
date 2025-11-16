@@ -202,8 +202,7 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
 .app-header h1{ margin:0; font-size:22px; font-weight:700 }
 .app-header .subtitle{ margin:.4rem 0 0; color:var(--muted); font-size:13px }
 
-.layout{ display:grid; grid-template-columns:320px 1fr; min-height:calc(100vh - 70px) }
-.sidebar{ padding:16px; border-right:1px solid var(--grid); background:var(--panel) }
+.layout{ display:grid; grid-template-columns:65% 35%; min-height:calc(100vh - 70px); gap:0 }
 .viz{
     position:relative;
     overflow:hidden;
@@ -212,6 +211,137 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
     background-image:
         linear-gradient(to right, var(--panel-2) 1px, transparent 1px),
         linear-gradient(to bottom, var(--panel-2) 1px, transparent 1px);
+}
+
+/* Right panel for state companies */
+.state-companies-panel {
+    background: var(--panel);
+    border-left: 2px solid var(--grid);
+    padding: 20px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    max-height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+}
+
+.state-companies-panel .panel-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--grid);
+}
+
+.state-companies-panel .panel-header h3 {
+    margin: 0;
+    color: var(--fg);
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.companies-bar-chart {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    align-items: flex-end;
+    justify-content: space-evenly;
+    flex: 1;
+    padding: 10px 5px 10px 5px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    max-height: 100%;
+}
+
+.company-bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+    max-width: none;
+    min-width: 25px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.company-bar-item:hover {
+    transform: scale(1.05);
+    z-index: 100;
+}
+
+.company-bar-item .company-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    margin-bottom: 3px;
+    image-rendering: auto;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    transition: transform 0.2s ease;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    padding: 2px;
+    flex-shrink: 0;
+}
+
+.company-bar-item:hover .company-logo {
+    transform: scale(1.15);
+}
+
+.company-bar-item .bar-building {
+    width: 100%;
+    min-height: 30px;
+    background: linear-gradient(180deg, #2a73d6, #1a4d8f);
+    border: 2px solid #5ea8ff;
+    border-bottom: 3px solid #0d2644;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: bottom;
+    flex-shrink: 0;
+}
+
+.company-bar-item .bar-building::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: calc(100% - 16px);
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 10px,
+        rgba(94, 168, 255, 0.3) 10px,
+        rgba(94, 168, 255, 0.3) 12px
+    );
+    pointer-events: none;
+}
+
+.company-bar-item .company-name {
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--fg);
+    text-align: center;
+    margin-top: 4px;
+    writing-mode: horizontal-tb;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.1;
+    flex-shrink: 0;
+}
+
+.company-bar-item .market-cap-label {
+    font-size: 8px;
+    color: var(--muted);
+    margin-top: 2px;
+    text-align: center;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* State label at top center of map */
@@ -303,12 +433,20 @@ button{ font-family:inherit }
 .map-popup [id^="cp-"]{ font-size:13px }
 
 #chart{ width:100%; height:100%; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges }
-.state{ fill:#1a2447; stroke:#2a3357; stroke-width:.8; cursor:pointer; shape-rendering: crispEdges; transition: fill 0.2s ease, stroke 0.2s ease }
-.state:hover{ fill:#1f2d5f; stroke:#5ea8ff; stroke-width:1.2 }
-.state-active{ stroke:#7aa2ff; stroke-width:1.4 }
+.state{ fill:#1a2447; stroke:#2a3357; stroke-width:1.5; cursor:pointer; shape-rendering: crispEdges; transition: fill 0.2s ease, stroke 0.2s ease }
+.state:hover{ fill:#1f2d5f; stroke:#5ea8ff; stroke-width:2 }
+.state-active{ stroke:#7aa2ff; stroke-width:2.5 }
 
 /* Pixelated effect for the entire map */
-#gStates, #gBorders, #gBuildings, #gForeign { shape-rendering: crispEdges }
+#gStates, #gBorders { 
+  shape-rendering: crispEdges;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+#gStates path, #gBorders path {
+  shape-rendering: crispEdges;
+}
 #gBuildings image, #gForeign image { image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges }
 
 .country-circle{ fill:#0f1835; stroke:#3a4a82; stroke-width:1; transition: stroke 0.3s ease }
