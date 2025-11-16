@@ -45,36 +45,16 @@
                 <div class="mapvis-wrapper">
                     <div class="app-header">
                         <h1>Company Atlas</h1>
-                        <p class="subtitle"><strong>Building Height: </strong>Entry-level salary | 2022→2025 return · <strong>Building Width: </strong>Market Cap (log) · <strong>Color: </strong>Rating | CEO approval</p>
+                        <p class="subtitle">Click a state to zoom in · Click a company icon to learn more · Icon size represents market cap</p>
                     </div>
                     <main class="layout">
                         <aside class="sidebar">
                             <div class="instructions">
-                                <p>Click a state on the map to zoom in</p>
-                                <p>Click a company building to learn more</p>
-                            </div>
-                            <fieldset class="control">
-                                <legend>Height metric</legend>
-                                <label><input type="radio" name="heightMetric" value="salary" checked> Entry-level salary</label>
-                                <label><input type="radio" name="heightMetric" value="return"> 2022→2025 Return (%)</label>
-                            </fieldset>
-                            <div class="control">
-                                <label for="roleSelect">Role name</label>
-                                <select id="roleSelect"></select>
-                            </div>
-                            <fieldset class="control">
-                                <legend>Color metric</legend>
-                                <label><input type="radio" name="colorMetric" value="employee_rating" checked> Employee rating</label>
-                                <label><input type="radio" name="colorMetric" value="ceo_approval"> CEO approval</label>
-                            </fieldset>
-                            <div class="legend" id="legendColor">
-                                <!-- created/updated by JS -->
-                            </div>
-                            <div class="company-list-section">
-                                <div class="company-list-header">Companies</div>
-                                <div id="companyList" class="company-list">
-                                    <!-- populated by JS -->
-                                </div>
+                                <p><strong>How to use:</strong></p>
+                                <p>• Click a state on the map to zoom in</p>
+                                <p>• Click a company icon to view details</p>
+                                <p>• Icon size reflects market capitalization</p>
+                                <p>• Different icons represent industry sectors</p>
                             </div>
                         </aside>
                         <section class="viz">
