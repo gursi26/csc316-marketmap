@@ -113,6 +113,10 @@ body {
 
 .screen-4 {
   background-image: url("../dataset/backgrounds/insurance.png");
+  height: 900px;
+  background-size: auto;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .overlayText {
