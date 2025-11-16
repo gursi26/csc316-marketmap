@@ -91,19 +91,19 @@ body {
 
 /* Different background for each screen */
 .screen-1 {
-  background-image: url("img/template1.jpg");
+  background-image: url("../dataset/backgrounds/template1.jpg");
 }
 
 .screen-2 {
-  background-image: url("img/template2.jpg");
+  background-image: url("../dataset/backgrounds/template2.jpg");
 }
 
 .screen-3 {
-  background-image: url("img/template3.jpg");
+  background-image: url("../dataset/backgrounds/template3.jpg");
 }
 
 .screen-4 {
-  background-image: url("img/template4.jpg");
+  background-image: url("../dataset/backgrounds/template4.jpg");
 }
 
 .overlayText {

@@ -110,7 +110,7 @@ window.addEventListener("keydown", (e) => {
 });
 
 // Load CSV + populate dropdown
-d3.csv("dataset/cleaned/Company-benefits.csv").then(data => {
+d3.csv(("../dataset/cleaned/Company-benefits.csv")).then(data => {
   const dropdown = document.getElementById("companySelect");
 
   const uniqueTickers = [...new Set(data.map(d => d.Ticker))];
