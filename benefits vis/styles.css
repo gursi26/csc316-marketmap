@@ -1,109 +1,266 @@
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  font-family: system-ui;
-  background: #e3e9f4;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f6fb;
+  color: #1d2535;
 }
 
-#app {
+/* MAIN WRAPPER */
+#benefits-carousel {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px 24px 28px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* HEADER */
+.bc-header {
   display: flex;
-  height: 100vh;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-end;
+  margin-bottom: 18px;
 }
 
-/* sidebar */
-#sidebar {
-  width: 270px;
-  padding: 18px 20px;
-  background: #fff;
-  border-right: 1px solid #cdd5e4;
+.bc-title-block h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.bc-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.bc-controls {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: flex-end;
+  gap: 8px;
 }
 
-#sidebar h1 { font-size: 18px; margin: 0; }
-
-#companySelect {
-  width: 100%;
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: 1px solid #c3cee0;
+#bc-company-select {
+  min-width: 130px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
   font-size: 13px;
 }
 
-.hint { font-size: 12px; color: #777; }
-
-/* scene */
-#scene {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-  background: url("img/office-bg.jpg") center/cover no-repeat;
+/* small pills for legend */
+.bc-legend {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
-/* tooltip */
-.tooltip {
-  position: absolute;
+.bc-pill {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.office-pill { border-color: #60a5fa; }
+.vending-pill { border-color: #fb923c; }
+.shield-pill { border-color: #34d399; }
+.road-pill { border-color: #facc15; }
+
+/* SLIDER */
+.bc-slider {
+  margin-top: 8px;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.bc-nav {
+  border: none;
+  background: #e5e7eb;
+  color: #111827;
+  width: 32px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.bc-nav:hover {
+  background: #d1d5db;
+  transform: translateY(-1px);
+}
+
+.bc-viewport {
+  overflow: hidden;
+  flex: 1;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  background: radial-gradient(circle at top left, #eef2ff 0, #f9fafb 60%);
+}
+
+.bc-track {
+  display: flex;
+  width: 400%;
+  transition: transform 0.35s ease;
+}
+
+/* SCREENS */
+.bc-screen {
+  width: 100%;
+  padding: 16px 18px 18px;
+}
+
+.bc-screen-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.bc-screen-title h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.bc-screen-caption {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* COMPANY LOGO AREA */
+.bc-logo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+#bc-company-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  background: #f3f4f6;
+  object-fit: contain;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+}
+
+.bc-logo-label {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* GRID + CARDS */
+.bc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.bc-card {
+  background: linear-gradient(135deg, #f9fafb, #eef2ff);
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bc-card-large {
+  grid-column: span 2;
+}
+
+.bc-card h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+
+.bc-count {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: #111827;
+}
+
+.bc-desc {
+  margin: 0;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* FOOTER */
+.bc-footer {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* TOOLTIP */
+.bc-tooltip {
+  position: fixed;
   max-width: 260px;
   padding: 8px 10px;
-  background: #1e2433;
-  color: #fff;
-  border-radius: 6px;
-  font-size: 12px;
+  background: #111827;
+  color: #f9fafb;
+  border-radius: 8px;
+  font-size: 11px;
   pointer-events: none;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-  z-index: 20;
-}
-.hidden { display: none; }
-
-/* benefit objects */
-.benefit-object {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  opacity: 0.15;
-  filter: grayscale(0.6);
-  transition: opacity 0.25s, filter 0.25s, transform 0.25s;
-  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+  z-index: 999;
 }
 
-.benefit-object img {
-  width: 90px;
-  height: 90px;
-  object-fit: contain;
+.bc-tooltip strong {
+  display: block;
+  margin-bottom: 4px;
 }
 
-.benefit-object.active {
-  opacity: 1;
-  filter: grayscale(0) drop-shadow(0 0 10px rgba(64,123,255,0.9));
-  transform: translate(-50%, -50%) scale(1.05);
+.hidden {
+  display: none;
 }
 
-.benefit-object.active:hover {
-  filter: grayscale(0) drop-shadow(0 0 16px rgba(64,123,255,1));
-  transform: translate(-50%, -50%) scale(1.08);
+/* RESPONSIVE */
+@media (max-width: 800px) {
+  .bc-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bc-controls {
+    align-items: flex-start;
+  }
+
+  .bc-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-/* unique icons */
-.unique-icon {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  width: 52px;
-  height: 52px;
-  cursor: pointer;
-  z-index: 10;
-  animation: pulse 2s infinite ease-in-out;
-}
+@media (max-width: 560px) {
+  .bc-grid {
+    grid-template-columns: 1fr;
+  }
 
-.unique-icon img {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 0 10px rgba(255,215,0,0.9));
-}
+  .bc-slider {
+    gap: 4px;
+  }
 
-/* pulse */
-@keyframes pulse {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.85; }
-  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 0.85; }
+  .bc-nav {
+    width: 26px;
+  }
 }

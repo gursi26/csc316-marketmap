@@ -2,25 +2,197 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Office Benefits Explorer</title>
+  <title>Benefits Carousel</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-  <div id="app">
-    <aside id="sidebar">
-      <h1>Company Benefits – Office View</h1>
-      <label for="companySelect">Choose a company:</label>
-      <select id="companySelect"></select>
-      <p id="summary"></p>
-      <p class="hint">Hover items for details. Stars = unique benefits.</p>
-    </aside>
+  <!-- You can place this section lower on the page so users scroll into it -->
+  <section id="benefits-carousel">
+    <header class="bc-header">
+      <div class="bc-title-block">
+        <h1>How Benefits Show Up in Your Day</h1>
+        <p class="bc-subtitle">
+          Choose a company, then flip through different views of their perks.
+        </p>
+      </div>
 
-    <main id="scene">
-      <div id="tooltip" class="tooltip hidden"></div>
-    </main>
-  </div>
+      <div class="bc-controls">
+        <label for="bc-company-select">Company:</label>
+        <select id="bc-company-select"></select>
 
-  <script src="main.js"></script>
+        <div class="bc-legend">
+          <span class="bc-pill office-pill">Office</span>
+          <span class="bc-pill vending-pill">Food & Drink</span>
+          <span class="bc-pill shield-pill">Insurance</span>
+          <span class="bc-pill road-pill">On the Road</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="bc-slider">
+      <button class="bc-nav bc-nav-left" aria-label="Previous view">&lsaquo;</button>
+
+      <div class="bc-viewport">
+        <div class="bc-track">
+          <!-- SCREEN 0: OFFICE -->
+          <div class="bc-screen" data-screen="office">
+            <div class="bc-screen-header">
+              <div class="bc-screen-title">
+                <h2>In the Office</h2>
+                <p class="bc-screen-caption">Fitness, learning, workspace, and more.</p>
+              </div>
+              <div class="bc-logo-wrap">
+                <img id="bc-company-logo" alt="Company logo" />
+                <span class="bc-logo-label">Hover for unique benefits</span>
+              </div>
+            </div>
+
+            <div class="bc-grid">
+              <div class="bc-card" id="office-fitness">
+                <h3>Physical Activity</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">Gyms, fitness classes, wellness reimbursements.</p>
+              </div>
+
+              <div class="bc-card" id="office-food">
+                <h3>Food & Drink</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">Free meals, snacks, drinks on-site.</p>
+              </div>
+
+              <div class="bc-card" id="office-learning">
+                <h3>Tuition & Learning</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">Tuition, courses, learning & development.</p>
+              </div>
+
+              <div class="bc-card" id="office-phone">
+                <h3>Phone & Devices</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">Phone bill reimbursements, company phones.</p>
+              </div>
+
+              <div class="bc-card" id="office-workspace">
+                <h3>Workspace Comfort</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">Custom workstations, on-site laundry, etc.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCREEN 1: VENDING / FOOD -->
+          <div class="bc-screen" data-screen="vending">
+            <div class="bc-screen-header">
+              <div class="bc-screen-title">
+                <h2>Vending Machine View</h2>
+                <p class="bc-screen-caption">Food and beverage-related benefits.</p>
+              </div>
+            </div>
+
+            <div class="bc-grid">
+              <div class="bc-card bc-card-large" id="vending-food">
+                <h3>Food & Beverage Perks</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">
+                  Free breakfast, lunch, dinner, snacks, coffee, and drinks.
+                </p>
+              </div>
+
+              <div class="bc-card" id="vending-other">
+                <h3>Other On-Site Treats</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">
+                  Any other benefits that mention food or drinks.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCREEN 2: SHIELD / INSURANCE -->
+          <div class="bc-screen" data-screen="shield">
+            <div class="bc-screen-header">
+              <div class="bc-screen-title">
+                <h2>Shield View</h2>
+                <p class="bc-screen-caption">Insurance and protection benefits.</p>
+              </div>
+            </div>
+
+            <div class="bc-grid">
+              <div class="bc-card" id="shield-health">
+                <h3>Health & Dental</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">Health, dental, vision insurance, HSA/FSA.</p>
+              </div>
+
+              <div class="bc-card" id="shield-life">
+                <h3>Life & Disability</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">Life, disability, and AD&D coverage.</p>
+              </div>
+
+              <div class="bc-card" id="shield-pet">
+                <h3>Pet & Extra Coverage</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">Pet insurance, accident insurance, extras.</p>
+              </div>
+
+              <div class="bc-card" id="shield-family">
+                <h3>Family & Parental</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">Maternity, paternity, fertility, adoption support.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SCREEN 3: ON THE ROAD -->
+          <div class="bc-screen" data-screen="road">
+            <div class="bc-screen-header">
+              <div class="bc-screen-title">
+                <h2>On the Road</h2>
+                <p class="bc-screen-caption">Transportation and life outside the office.</p>
+              </div>
+            </div>
+
+            <div class="bc-grid">
+              <div class="bc-card" id="road-transport">
+                <h3>Transportation</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">
+                  Shuttles, transit passes, bikes on campus, transport allowance.
+                </p>
+              </div>
+
+              <div class="bc-card" id="road-childcare">
+                <h3>Child & Family Care</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">
+                  Care-related benefits that support families on the go.
+                </p>
+              </div>
+
+              <div class="bc-card" id="road-remote">
+                <h3>Remote & Flexible</h3>
+                <p class="bc-count" data-role="count"></p>
+                <p class="bc-desc">
+                  Remote work, relocation, and flexible location benefits.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end bc-track -->
+      </div> <!-- end bc-viewport -->
+
+      <button class="bc-nav bc-nav-right" aria-label="Next view">&rsaquo;</button>
+    </div>
+
+    <footer class="bc-footer">
+      <p id="bc-summary"></p>
+    </footer>
+
+    <div id="bc-tooltip" class="bc-tooltip hidden"></div>
+  </section>
+
+  <script src="script.js"></script>
 </body>
 </html>
