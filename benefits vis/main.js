@@ -469,7 +469,7 @@ const POSITION_MAP = {
   // ---------- SCREEN 1: OFFICE ----------
   "gym1":  { screen: 1, x: 20,  y: 60 },
   "gym2":  { screen: 1, x: 20,  y: 60 },
-  "gym3":  { screen: 1, x: 20,  y: 60 },
+  "gym3":  { screen: 1, x: 41,  y: 83, rotate: -45, scale: 1.4 },
 
   "child1": { screen: 1, x: 35, y: 55 },
   "child2": { screen: 1, x: 35, y: 55 },
@@ -477,13 +477,13 @@ const POSITION_MAP = {
 
   "roth1": { screen: 1, x: 50, y: 60 },
   "roth2": { screen: 1, x: 50, y: 60 },
-  "roth3": { screen: 1, x: 42, y: 40 },
+  "roth3": { screen: 1, x: 40, y: 40, scale: 0.8},
 
-  "phone1": { screen: 1, x: 70, y: 65 },
+  "phone1": { screen: 1, x: 60, y: 40, scale: 1.2 },
   "phone2": { screen: 1, x: 70, y: 65 },
 
-  "tuition": { screen: 1, x: 60, y: 45 },
-  "clinic":  { screen: 1, x: 25, y: 35 },
+  "tuition": { screen: 1, x: 12, y: 22 },
+  "clinic":  { screen: 1, x: 27, y: 18 },
   "pet friendly WORKPLACE": { screen: 1, x: 75, y: 30 },
 
 
@@ -577,15 +577,16 @@ function place(screenIndex, iconName) {
 
   // --- NEW: positioning support ---
   const pos = POSITION_MAP[iconName];
-
   if (pos && pos.screen === screenIndex) {
     img.style.position = "absolute";
     img.style.left = pos.x + "%";
     img.style.top = pos.y + "%";
 
-    // SUPPORT ROTATION (default = 0 degrees)
-    const angle = pos.rotate ? pos.rotate : 0;
-    img.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+    const angle = pos.rotate ?? 0;   // degrees
+    const scale = pos.scale ?? 1;    // 1 = normal size
+
+    img.style.transform =
+      `translate(-50%, -50%) rotate(${angle}deg) scale(${scale})`;
   }
 
   // Hover tooltip events

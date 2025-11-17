@@ -139,14 +139,14 @@ body {
 /* ==========================================================
    ICON SIZING — RESPONSIVE
    ========================================================== */
+/* ICON SIZING — SCALE WITH BACKGROUND, NOT WINDOW */
 .screen-icons img.benefitIcon {
-  width: 4vw;        /* scales with viewport */
-  max-width: 80px;
-  min-width: 30px;
+  width: 6%;         /* icon is 6% of background width */
   position: absolute;
   margin: 0;
   transform-origin: center center;
 }
+
 
 
 /* ==========================================================
