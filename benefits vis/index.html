@@ -6,9 +6,10 @@
   <link rel="stylesheet" href="styles.css">
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
+
 <body>
 
-<!-- GLOBAL HEADER ON EVERY SCREEN -->
+<!-- GLOBAL HEADER -->
 <header id="globalHeader">
   <h1>How Benefits Show Up in Your Day</h1>
   <p class="subtitle">
@@ -23,39 +24,43 @@
 </header>
 
 
-
-<!-- 4-SCREEN CAROUSEL -->
+<!-- MAIN CAROUSEL -->
 <div id="carousel">
 
-  <!-- NAV ARROWS -->
+  <!-- NAV BUTTONS -->
   <button id="prevBtn" class="nav left">&#10094;</button>
 
   <div class="viewport">
     <div class="track">
 
-      <!-- SCREEN 1 -->
       <section class="screen screen-1">
-        <div class="screen-icons"></div>
-
+        <div class="ratio-box ratio-16-9">
+          <img class="screen-bg" src="../dataset/backgrounds/office-area.png">
+          <div class="screen-icons"></div>
+        </div>
       </section>
 
-      <!-- SCREEN 2 -->
       <section class="screen screen-2">
-        <div class="screen-icons"></div>
-
+        <div class="ratio-box ratio-2048-1147">
+          <img class="screen-bg" src="../dataset/backgrounds/transport-bg.jpg">
+          <div class="screen-icons"></div>
+        </div>
       </section>
 
-      <!-- SCREEN 3 -->
       <section class="screen screen-3">
-        <div class="screen-icons"></div>
-
+        <div class="ratio-box ratio-1-1">
+          <img class="screen-bg" src="../dataset/backgrounds/food-bg.png">
+          <div class="screen-icons"></div>
+        </div>
       </section>
 
-      <!-- SCREEN 4 -->
       <section class="screen screen-4">
-        <div class="screen-icons"></div>
-
+        <div class="ratio-box ratio-1-1">
+          <img class="screen-bg" src="../dataset/backgrounds/insurance.png">
+          <div class="screen-icons"></div>
+        </div>
       </section>
+
 
     </div>
   </div>
@@ -66,6 +71,7 @@
 
 <div id="iconTooltip" class="iconTooltip hidden"></div>
 
+<!-- JS -->
 <script src="main.js"></script>
 
 </body>

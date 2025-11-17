@@ -477,7 +477,7 @@ const POSITION_MAP = {
 
   "roth1": { screen: 1, x: 50, y: 60 },
   "roth2": { screen: 1, x: 50, y: 60 },
-  "roth3": { screen: 1, x: 50, y: 60 },
+  "roth3": { screen: 1, x: 42, y: 40 },
 
   "phone1": { screen: 1, x: 70, y: 65 },
   "phone2": { screen: 1, x: 70, y: 65 },
@@ -577,11 +577,15 @@ function place(screenIndex, iconName) {
 
   // --- NEW: positioning support ---
   const pos = POSITION_MAP[iconName];
+
   if (pos && pos.screen === screenIndex) {
     img.style.position = "absolute";
     img.style.left = pos.x + "%";
     img.style.top = pos.y + "%";
-    img.style.transform = "translate(-50%, -50%)";
+
+    // SUPPORT ROTATION (default = 0 degrees)
+    const angle = pos.rotate ? pos.rotate : 0;
+    img.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
   }
 
   // Hover tooltip events
