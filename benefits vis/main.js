@@ -467,24 +467,24 @@ const ICON_FILES = {
 
 const POSITION_MAP = {
   // ---------- SCREEN 1: OFFICE ----------
-  "gym1":  { screen: 1, x: 20,  y: 60 },
-  "gym2":  { screen: 1, x: 20,  y: 60 },
+  "gym1":  { screen: 1, x: 40,  y: 82 },
+  "gym2":  { screen: 1, x: 40,  y: 82, rotate: 45, scale: 1 },
   "gym3":  { screen: 1, x: 41,  y: 83, rotate: -45, scale: 1.4 },
 
   "child1": { screen: 1, x: 35, y: 55 },
   "child2": { screen: 1, x: 35, y: 55 },
-  "child3": { screen: 1, x: 35, y: 55 },
+  "child3": { screen: 1, x: 8.5, y: 55.5 },
 
   "roth1": { screen: 1, x: 50, y: 60 },
-  "roth2": { screen: 1, x: 50, y: 60 },
-  "roth3": { screen: 1, x: 40, y: 40, scale: 0.8},
+  "roth2": { screen: 1, x: 40, y: 42, scale: 0.7},
+  "roth3": { screen: 1, x: 40, y: 41.5, scale: 0.8},
 
   "phone1": { screen: 1, x: 60, y: 40, scale: 1.2 },
-  "phone2": { screen: 1, x: 70, y: 65 },
+  "phone2": { screen: 1, x: 60, y: 47, scale: 1.2 },
 
   "tuition": { screen: 1, x: 12, y: 22 },
   "clinic":  { screen: 1, x: 27, y: 18 },
-  "pet friendly WORKPLACE": { screen: 1, x: 75, y: 30 },
+  "pet friendly WORKPLACE": { screen: 1, x: 25, y: 90, scale: 1.5 },
 
 
   // ---------- SCREEN 2: TRANSPORT ----------
