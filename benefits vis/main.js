@@ -458,6 +458,62 @@ const ICON_FILES = {
     "transport": "transport.png",
     "shuttle": "shuttle.png"
   };
+
+/* ============================================================
+   ICON POSITION MAP
+   Each key corresponds to an iconName or counted icon (gym1/gym2/…)
+   Coordinates are relative to the screen (0–100).
+   ============================================================ */
+
+const POSITION_MAP = {
+  // ---------- SCREEN 1: OFFICE ----------
+  "gym1":  { screen: 1, x: 20,  y: 60 },
+  "gym2":  { screen: 1, x: 20,  y: 60 },
+  "gym3":  { screen: 1, x: 20,  y: 60 },
+
+  "child1": { screen: 1, x: 35, y: 55 },
+  "child2": { screen: 1, x: 35, y: 55 },
+  "child3": { screen: 1, x: 35, y: 55 },
+
+  "roth1": { screen: 1, x: 50, y: 60 },
+  "roth2": { screen: 1, x: 50, y: 60 },
+  "roth3": { screen: 1, x: 50, y: 60 },
+
+  "phone1": { screen: 1, x: 70, y: 65 },
+  "phone2": { screen: 1, x: 70, y: 65 },
+
+  "tuition": { screen: 1, x: 60, y: 45 },
+  "clinic":  { screen: 1, x: 25, y: 35 },
+  "pet friendly WORKPLACE": { screen: 1, x: 75, y: 30 },
+
+
+  // ---------- SCREEN 2: TRANSPORT ----------
+  "transit":   { screen: 2, x: 25, y: 60 },
+  "transport": { screen: 2, x: 45, y: 60 },
+  "bike":      { screen: 2, x: 60, y: 55 },
+  "shuttle":   { screen: 2, x: 75, y: 60 },
+
+
+  // ---------- SCREEN 3: FOOD / VENDING ----------
+  "breakfast": { screen: 3, x: 20, y: 55 },
+  "lunch":     { screen: 3, x: 36, y: 55 },
+  "dinner":    { screen: 3, x: 52, y: 55 },
+  "snack":     { screen: 3, x: 68, y: 55 },
+  "drink":     { screen: 3, x: 82, y: 55 },
+
+
+  // ---------- SCREEN 4: INSURANCE ----------
+  "life":           { screen: 4, x: 25, y: 55 },
+  "vision":         { screen: 4, x: 40, y: 55 },
+  "dental":         { screen: 4, x: 55, y: 55 },
+  "health":         { screen: 4, x: 70, y: 55 },
+
+  "disability":     { screen: 4, x: 25, y: 72 },
+  "AD&D":           { screen: 4, x: 40, y: 72 },
+  "pet insurance":  { screen: 4, x: 55, y: 72 },
+  "business travel":{ screen: 4, x: 70, y: 72 }
+};
+
   
 
 function renderIcons() {
@@ -503,46 +559,55 @@ function renderIcons() {
 
 // Place icon into screens
 function place(screenIndex, iconName) {
-    if (!iconName) return;
-  
-    const target = document.querySelector(`.screen-${screenIndex} .screen-icons`);
-    if (!target) return;
-  
-    const file = ICON_FILES[iconName];
-    if (!file) {
-      console.warn("Missing icon mapping for:", iconName);
-      return;
-    }
-  
-    const img = document.createElement("img");
-    img.src = `../dataset/Icons/${file}`;
-    img.className = "benefitIcon";
+  if (!iconName) return;
 
-    // Hover events
-    img.addEventListener("mousemove", (e) => {
+  const target = document.querySelector(`.screen-${screenIndex} .screen-icons`);
+  if (!target) return;
+
+  const file = ICON_FILES[iconName];
+  if (!file) {
+    console.warn("Missing icon mapping for:", iconName);
+    return;
+  }
+
+  // Create the icon element
+  const img = document.createElement("img");
+  img.src = `../dataset/Icons/${file}`;
+  img.className = "benefitIcon";
+
+  // --- NEW: positioning support ---
+  const pos = POSITION_MAP[iconName];
+  if (pos && pos.screen === screenIndex) {
+    img.style.position = "absolute";
+    img.style.left = pos.x + "%";
+    img.style.top = pos.y + "%";
+    img.style.transform = "translate(-50%, -50%)";
+  }
+
+  // Hover tooltip events
+  img.addEventListener("mousemove", (e) => {
     const desc = benefitDescriptions[file] || ["No further details available"];
 
-    const iconKey = iconName;   // like "child3"
-    const label = FRIENDLY_LABELS[iconKey] || iconKey;
+    const label = FRIENDLY_LABELS[iconName] || iconName;
 
     const html =
-    `<strong>${label}</strong>` +
-    desc.map(d => `<div>• ${d}</div>`).join("");
+      `<strong>${label}</strong>` +
+      desc.map(d => `<div>• ${d}</div>`).join("");
 
     showTooltip(html, e.pageX, e.pageY);
-    });
+  });
 
-    img.addEventListener("mouseleave", hideTooltip);
+  img.addEventListener("mouseleave", hideTooltip);
 
-    target.appendChild(img);
+  target.appendChild(img);
+}
 
-  }
   
 
-  // tooltip
-  const tooltip = document.getElementById("iconTooltip");
+// tooltip
+const tooltip = document.getElementById("iconTooltip");
 
-  function showTooltip(html, x, y) {
+function showTooltip(html, x, y) {
     tooltip.innerHTML = html;
     tooltip.classList.remove("hidden");
     tooltip.classList.add("visible");
@@ -550,7 +615,7 @@ function place(screenIndex, iconName) {
     tooltip.style.top = y + 12 + "px";
   }
   
-  function hideTooltip() {
+function hideTooltip() {
     tooltip.classList.add("hidden");
     tooltip.classList.remove("visible");
   }

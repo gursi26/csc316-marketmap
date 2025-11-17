@@ -187,3 +187,16 @@ body {
   margin-bottom: 4px;
 }
 
+.screen-icons {
+  position: relative;   /* IMPORTANT */
+  width: 100%;
+  height: 100%;
+}
+
+
+.benefitIcon {
+  width: 60px;
+  position: absolute;  /* allow custom placement */
+}
+
+
