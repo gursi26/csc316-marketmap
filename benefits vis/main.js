@@ -471,8 +471,8 @@ const POSITION_MAP = {
   "gym2":  { screen: 1, x: 40,  y: 82, rotate: 45, scale: 1 },
   "gym3":  { screen: 1, x: 41,  y: 83, rotate: -45, scale: 1.4 },
 
-  "child1": { screen: 1, x: 35, y: 55 },
-  "child2": { screen: 1, x: 35, y: 55 },
+  "child1": { screen: 1, x: 8.2, y: 58, rotate: -45 },
+  "child2": { screen: 1, x: 8.5, y: 56, scale: 0.9 },
   "child3": { screen: 1, x: 8.5, y: 55.5 },
 
   "roth1": { screen: 1, x: 50, y: 60 },
@@ -488,30 +488,34 @@ const POSITION_MAP = {
 
 
   // ---------- SCREEN 2: TRANSPORT ----------
-  "transit":   { screen: 2, x: 25, y: 60 },
-  "transport": { screen: 2, x: 45, y: 60 },
-  "bike":      { screen: 2, x: 60, y: 55 },
-  "shuttle":   { screen: 2, x: 75, y: 60 },
+  "transit":   { screen: 2, x: 25, y: 80, scale: 2 },
+  "transport": { screen: 2, x: 45, y: 65, scale: 2 },
+  "bike":      { screen: 2, x: 60, y: 55, scale: 1.2 },
+  "shuttle":   { screen: 2, x: 75, y: 80, scale: 2 },
 
 
   // ---------- SCREEN 3: FOOD / VENDING ----------
-  "breakfast": { screen: 3, x: 20, y: 55 },
-  "lunch":     { screen: 3, x: 36, y: 55 },
-  "dinner":    { screen: 3, x: 52, y: 55 },
-  "snack":     { screen: 3, x: 68, y: 55 },
-  "drink":     { screen: 3, x: 82, y: 55 },
+  "breakfast": { screen: 3, x: 25, y: 31, scale: 2 },
+  "lunch":     { screen: 3, x: 25, y: 50, scale: 2 },
+  "dinner":    { screen: 3, x: 25, y: 65, scale: 1.9 },
+  "snack":     { screen: 3, x: 50, y: 32, scale: 2 },
+  "drink":     { screen: 3, x: 50, y: 49, scale: 2 },
 
 
   // ---------- SCREEN 4: INSURANCE ----------
-  "life":           { screen: 4, x: 25, y: 55 },
-  "vision":         { screen: 4, x: 40, y: 55 },
-  "dental":         { screen: 4, x: 55, y: 55 },
-  "health":         { screen: 4, x: 70, y: 55 },
 
-  "disability":     { screen: 4, x: 25, y: 72 },
-  "AD&D":           { screen: 4, x: 40, y: 72 },
-  "pet insurance":  { screen: 4, x: 55, y: 72 },
-  "business travel":{ screen: 4, x: 70, y: 72 }
+  "life":           { screen: 4, x: 15.7, y: 32 },  // upper-left, closer to blue edge
+  "vision":         { screen: 4, x: 71, y: 15 },  // top-center
+  "dental":         { screen: 4, x: 84, y: 32 },  // upper-right
+  "health":         { screen: 4, x: 28, y: 15 },  // right shoulder
+
+  "disability":     { screen: 4, x: 18, y: 60 },  // mid-left band
+  "AD&D":           { screen: 4, x: 82, y: 60 },  // mid-right band
+
+  "pet insurance":  { screen: 4, x: 33, y: 84 },  // lower-left curve
+  "business travel":{ screen: 4, x: 67, y: 84 }   // lower-right curve
+
+
 };
 
   
