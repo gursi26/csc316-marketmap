@@ -4,9 +4,9 @@
 
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
-  background: #f9fafb;
-  color: #1f2937;
+  font-family: "Work Sans", system-ui, sans-serif;
+  background: #04060e;
+  color: #e6eefc;
   overflow: hidden;
 }
 
@@ -14,24 +14,26 @@ body {
 #globalHeader {
   text-align: center;
   padding: 24px 20px;
-  background: #ffffff;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  background: #101833;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 20;
+  border-bottom: 1px solid #2a3357;
 }
 
 #globalHeader h1 {
   margin: 0;
   font-size: 26px;
   font-weight: 600;
+  color: #e6eefc;
 }
 
 .subtitle {
   margin: 6px 0 16px;
   font-size: 14px;
-  color: #6b7280;
+  color: #9aa7c7;
 }
 
 .companyPicker {
@@ -39,15 +41,17 @@ body {
   align-items: center;
   gap: 10px;
   font-size: 14px;
+  color: #e6eefc;
 }
 
 #companySelect {
   padding: 6px 10px;
   font-size: 14px;
   border-radius: 8px;
-  border: 1px solid #cbd5e1;
+  border: 1px solid #2a3357;
+  background: #0e1530;
+  color: #e6eefc;
 }
-
 
 /* CAROUSEL */
 #carousel {
@@ -66,7 +70,7 @@ body {
 
 .track {
   display: flex;
-  width: 500vw; /* 5 screens */
+  width: 500vw;
   height: 100%;
   transition: transform 0.4s ease-in-out;
   cursor: grab;
@@ -76,17 +80,16 @@ body {
   cursor: grabbing;
 }
 
-
-/* SCREEN + LAYERING */
+/* SCREENS */
 .screen {
   flex: 0 0 100vw;
   width: 100vw;
   height: 100%;
   position: relative;
   overflow: hidden;
+  background: #0e1530;
 }
 
-/* Background image element */
 .screen-bg {
   position: absolute;
   width: 100%;
@@ -98,7 +101,6 @@ body {
   z-index: 1;
 }
 
-/* Icon container sits ABOVE background */
 .screen-icons {
   position: absolute;
   width: 100%;
@@ -108,24 +110,17 @@ body {
   z-index: 2;
 }
 
-
-/* ==========================================================
-   ASPECT RATIO MATCHING FOR EACH SCREEN
-   ========================================================== */
-
-/* Screen 1: 1920x1080 → 16:9 */
+/* ASPECT RATIOS */
 .screen-1 .screen-bg,
 .screen-1 .screen-icons {
   aspect-ratio: 16 / 9;
 }
 
-/* Screen 2: 2048x1147 (exact) */
 .screen-2 .screen-bg,
 .screen-2 .screen-icons {
   aspect-ratio: 2048 / 1147;
 }
 
-/* Screen 3 + 4 (and logo container uses ratio box) : 1:1 */
 .screen-3 .screen-bg,
 .screen-4 .screen-bg,
 .screen-3 .screen-icons,
@@ -133,39 +128,44 @@ body {
   aspect-ratio: 1 / 1;
 }
 
-
-/* ==========================================================
-   ICON SIZING — SCALE WITH BACKGROUND
-   ========================================================== */
-
+/* ICONS */
 .screen-icons img.benefitIcon {
-  width: 6%;         /* icon is 6% of background width */
+  width: 6%;
   position: absolute;
   margin: 0;
   transform-origin: center center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-/* Logo icon on screen 5 gets its width from inline style, this just keeps behavior consistent */
+.screen-icons img.benefitIcon:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 18px rgba(94, 168, 255, 0.9);
+  border-color: #5ea8ff;
+}
+
 .logoIcon {
-  /* inline width from JS overrides this if needed */
+  display: block;
 }
 
-
-/* ==========================================================
-   NAV BUTTONS
-   ========================================================== */
-
+/* NAV */
 .nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.7);
-  border: none;
+  background: rgba(16, 24, 51, 0.82);
+  border: 1px solid #2a3357;
   padding: 18px;
   font-size: 34px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 10px;
   z-index: 30;
+  color: #e6eefc;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.7);
 }
 
 .nav.left {
@@ -177,27 +177,25 @@ body {
 }
 
 .nav:hover {
-  background: rgba(255,255,255,0.9);
+  background: rgba(16, 24, 51, 0.96);
+  border-color: #5ea8ff;
 }
 
-
-/* ==========================================================
-   TOOLTIP
-   ========================================================== */
-
+/* TOOLTIP */
 .iconTooltip {
   position: absolute;
   padding: 10px 14px;
-  background: #1d1f27;
-  color: #fff;
-  border-radius: 8px;
+  background: rgba(9, 12, 24, 0.94);
+  color: #e6eefc;
+  border-radius: 10px;
   font-size: 13px;
   max-width: 260px;
   line-height: 1.4;
   pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
   z-index: 9999;
   opacity: 0;
+  border: 1px solid rgba(94, 168, 255, 0.35);
   transition: opacity 0.15s ease;
 }
 
@@ -209,13 +207,10 @@ body {
   font-size: 14px;
   display: block;
   margin-bottom: 4px;
+  color: #5ea8ff;
 }
 
-
-/* ==========================================================
-   ASPECT-RATIO CONTAINER
-   ========================================================== */
-
+/* RATIO BOX */
 .ratio-box {
   position: relative;
   height: 100%;
@@ -226,7 +221,6 @@ body {
   align-items: center;
 }
 
-/* Background fills exactly the ratio box */
 .ratio-box .screen-bg {
   position: absolute;
   width: 100%;
@@ -237,7 +231,6 @@ body {
   z-index: 1;
 }
 
-/* Icons aligned to exact pixel space of background */
 .ratio-box .screen-icons {
   position: absolute;
   width: 100%;
@@ -247,7 +240,6 @@ body {
   z-index: 2;
 }
 
-/* Required ratios */
 .ratio-16-9 {
   aspect-ratio: 16 / 9;
 }
