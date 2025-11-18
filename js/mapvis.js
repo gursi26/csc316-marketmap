@@ -115,11 +115,24 @@ class MapVis {
     let stateGeometries = new Map();
     
     // Helper to constrain point within state boundaries
-    function constrainToState(longitude, latitude, stateName, padding = 0.15) {
+    function constrainToState(longitude, latitude, stateName, padding = 0.08) {
       let [x, y] = projection([longitude, latitude]) || [null, null];
       if (x === null || y === null) return null;
       
-      const stateGeom = stateGeometries.get(stateName);
+      // Try to get state geometry with both full name and abbreviation
+      let stateGeom = stateGeometries.get(stateName);
+      if (!stateGeom) {
+        const stateAbbr = stateNameToAbbr[stateName];
+        if (stateAbbr) stateGeom = stateGeometries.get(stateAbbr);
+      }
+      if (!stateGeom) {
+        for (const [fullName, abbr] of Object.entries(stateNameToAbbr)) {
+          if (abbr === stateName) {
+            stateGeom = stateGeometries.get(fullName);
+            break;
+          }
+        }
+      }
       if (!stateGeom) return [x, y]; // fallback if no geometry
       
       const bounds = path.bounds(stateGeom);
@@ -262,6 +275,21 @@ class MapVis {
       return null;
     }
 
+    // Helper to check if a point is inside a state's actual polygon geometry
+    function isPointInState(x, y, stateGeom) {
+      if (!stateGeom) return false;
+      
+      // Use D3's geoContains which works with GeoJSON features
+      const coords = projection.invert([x, y]);
+      if (!coords) return false;
+      
+      try {
+        return d3.geoContains(stateGeom, coords);
+      } catch (e) {
+        return false;
+      }
+    }
+
     // Collision detection and position adjustment with force-directed layout
     function resolveCollisions(data) {
       // Group by state for more efficient collision detection
@@ -269,9 +297,35 @@ class MapVis {
       const adjusted = [];
       
       byState.forEach((stateCompanies, stateName) => {
-        const stateGeom = stateGeometries.get(stateName);
+        // Try to get state geometry with both full name and abbreviation
+        let stateGeom = stateGeometries.get(stateName);
         if (!stateGeom) {
-          adjusted.push(...stateCompanies);
+          const stateAbbr = stateNameToAbbr[stateName];
+          if (stateAbbr) {
+            stateGeom = stateGeometries.get(stateAbbr);
+          }
+        }
+        // Also try reverse lookup
+        if (!stateGeom) {
+          for (const [fullName, abbr] of Object.entries(stateNameToAbbr)) {
+            if (abbr === stateName) {
+              stateGeom = stateGeometries.get(fullName);
+              break;
+            }
+          }
+        }
+        
+        if (!stateGeom) {
+          // If no geometry found, just pass through with original positions
+          stateCompanies.forEach(c => {
+            adjusted.push({
+              ...c,
+              finalX: c.px,
+              finalY: c.py,
+              size: 30,
+              radius: 21
+            });
+          });
           return;
         }
         
@@ -279,31 +333,83 @@ class MapVis {
         const [[x0, y0], [x1, y1]] = bounds;
         const stateWidth = x1 - x0;
         const stateHeight = y1 - y0;
+        const stateCenterX = (x0 + x1) / 2;
+        const stateCenterY = (y0 + y1) / 2;
         
-        // Calculate sizes first
+        // Calculate sizes first and ensure initial positions are within actual state polygon
         const companies = stateCompanies.map(company => {
           const baseSize = 30;
           const sizeMultiplier = company.mc && company.mc > 0 ? Math.log(company.mc) / 20 : 1;
           const size = Math.max(20, Math.min(60, baseSize * sizeMultiplier));
+          
+          // Use tighter padding
+          const padX = stateWidth * 0.12;
+          const padY = stateHeight * 0.12;
+          
+          let px = company.px;
+          let py = company.py;
+          
+          // Verify position is within the actual state polygon, not just bounding box
+          if (!isPointInState(px, py, stateGeom) || 
+              px < x0 + padX || px > x1 - padX || 
+              py < y0 + padY || py > y1 - padY) {
+            // Start at center and verify it's in the polygon
+            px = stateCenterX;
+            py = stateCenterY;
+            
+            // If center is not in polygon, search for a valid point
+            if (!isPointInState(px, py, stateGeom)) {
+              let found = false;
+              for (let attempt = 0; attempt < 50; attempt++) {
+                const testX = x0 + padX + Math.random() * (stateWidth - 2 * padX);
+                const testY = y0 + padY + Math.random() * (stateHeight - 2 * padY);
+                if (isPointInState(testX, testY, stateGeom)) {
+                  px = testX;
+                  py = testY;
+                  found = true;
+                  break;
+                }
+              }
+              // If still not found, use centroid
+              if (!found) {
+                const centroid = path.centroid(stateGeom);
+                if (centroid && isFinite(centroid[0]) && isFinite(centroid[1])) {
+                  px = centroid[0];
+                  py = centroid[1];
+                }
+              }
+            }
+          }
+          
           return {
             ...company,
+            px: px,
+            py: py,
             size: size,
-            radius: size * 0.7, // increased radius for better spacing
+            radius: size * 0.8,
             vx: 0,
-            vy: 0
+            vy: 0,
+            originalState: stateName,
+            stateGeom: stateGeom,
+            stateBounds: { x0, y0, x1, y1, width: stateWidth, height: stateHeight, centerX: stateCenterX, centerY: stateCenterY }
           };
         });
         
         // Sort by market cap descending
         companies.sort((a, b) => (b.mc || 0) - (a.mc || 0));
         
-        // Use force simulation for better distribution
-        const iterations = 200;
+        // Use enhanced force simulation for better distribution
+        const iterations = 350; // Increased iterations
+        const minSpacing = 10; // Minimum spacing between companies
+        
         for (let iter = 0; iter < iterations; iter++) {
+          // Decay force strength over iterations for stability
+          const alpha = 0.4 * (1 - iter / iterations * 0.7);
+          
           // Reset velocities
           companies.forEach(c => { c.vx = 0; c.vy = 0; });
           
-          // Collision forces between buildings
+          // Collision forces between buildings (repulsion)
           for (let i = 0; i < companies.length; i++) {
             for (let j = i + 1; j < companies.length; j++) {
               const a = companies[i];
@@ -312,12 +418,14 @@ class MapVis {
               const dx = b.px - a.px;
               const dy = b.py - a.py;
               const dist = Math.sqrt(dx * dx + dy * dy);
-              const minDist = a.radius + b.radius + 8; // 8px minimum spacing
+              const minDist = a.radius + b.radius + minSpacing;
               
-              if (dist < minDist && dist > 0) {
-                const force = (minDist - dist) / dist * 0.5;
-                const fx = dx * force;
-                const fy = dy * force;
+              if (dist < minDist && dist > 0.1) {
+                // Moderate repulsion when close
+                const overlapRatio = (minDist - dist) / minDist;
+                const force = overlapRatio * alpha;
+                const fx = (dx / dist) * force * 15;
+                const fy = (dy / dist) * force * 15;
                 
                 a.vx -= fx;
                 a.vy -= fy;
@@ -327,36 +435,67 @@ class MapVis {
             }
           }
           
-          // Apply velocities and keep within bounds
+          // Apply velocities and strictly enforce state polygon boundaries
           companies.forEach(c => {
-            c.px += c.vx;
-            c.py += c.vy;
+            let newPx = c.px + c.vx;
+            let newPy = c.py + c.vy;
             
-            // Strong boundary constraints with proper padding
-            const padX = Math.max(c.radius + 10, stateWidth * 0.08);
-            const padY = Math.max(c.radius + 10, stateHeight * 0.08);
+            // Use tighter padding
+            const padX = c.stateBounds.width * 0.12;
+            const padY = c.stateBounds.height * 0.12;
             
-            if (c.px < x0 + padX) c.px = x0 + padX;
-            if (c.px > x1 - padX) c.px = x1 - padX;
-            if (c.py < y0 + padY) c.py = y0 + padY;
-            if (c.py > y1 - padY) c.py = y1 - padY;
+            // First, clamp to bounding box
+            newPx = Math.max(c.stateBounds.x0 + padX, Math.min(c.stateBounds.x1 - padX, newPx));
+            newPy = Math.max(c.stateBounds.y0 + padY, Math.min(c.stateBounds.y1 - padY, newPy));
+            
+            // Then verify it's inside the actual polygon
+            if (isPointInState(newPx, newPy, c.stateGeom)) {
+              c.px = newPx;
+              c.py = newPy;
+            } else {
+              // If new position is outside polygon, try smaller steps
+              const steps = 5;
+              let validFound = false;
+              for (let step = 1; step <= steps; step++) {
+                const testPx = c.px + (c.vx * step / steps);
+                const testPy = c.py + (c.vy * step / steps);
+                const clampedX = Math.max(c.stateBounds.x0 + padX, Math.min(c.stateBounds.x1 - padX, testPx));
+                const clampedY = Math.max(c.stateBounds.y0 + padY, Math.min(c.stateBounds.y1 - padY, testPy));
+                
+                if (isPointInState(clampedX, clampedY, c.stateGeom)) {
+                  c.px = clampedX;
+                  c.py = clampedY;
+                  validFound = true;
+                  break;
+                }
+              }
+              
+              // If no valid position found, stay at current position
+              if (!validFound) {
+                c.vx = 0;
+                c.vy = 0;
+              }
+            }
           });
           
           // Damping
           companies.forEach(c => {
-            c.vx *= 0.8;
-            c.vy *= 0.8;
+            c.vx *= 0.85;
+            c.vy *= 0.85;
           });
         }
         
-        // Final pass: ensure no overlaps remain
+        // Final pass: gently resolve remaining overlaps while ensuring polygon containment
+        const minSpacingFinal = 10;
         for (let i = 0; i < companies.length; i++) {
           const current = companies[i];
-          let moved = true;
-          let maxPushAttempts = 50;
+          let maxPushAttempts = 40; // Reduced attempts to avoid excessive pushing
           
-          while (moved && maxPushAttempts > 0) {
-            moved = false;
+          const padX = current.stateBounds.width * 0.12;
+          const padY = current.stateBounds.height * 0.12;
+          
+          for (let attempt = 0; attempt < maxPushAttempts; attempt++) {
+            let hasOverlap = false;
             
             for (let j = 0; j < companies.length; j++) {
               if (i === j) continue;
@@ -365,23 +504,71 @@ class MapVis {
               const dx = current.px - other.px;
               const dy = current.py - other.py;
               const dist = Math.sqrt(dx * dx + dy * dy);
-              const minDist = current.radius + other.radius + 8;
+              const minDist = current.radius + other.radius + minSpacingFinal;
               
-              if (dist < minDist && dist > 0) {
-                const angle = Math.atan2(dy, dx);
-                const pushDist = (minDist - dist) * 0.55;
-                current.px += Math.cos(angle) * pushDist;
-                current.py += Math.sin(angle) * pushDist;
-                moved = true;
+              if (dist < minDist && dist > 0.1) {
+                hasOverlap = true;
                 
-                // Keep in bounds
-                const padX = Math.max(current.radius + 10, stateWidth * 0.08);
-                const padY = Math.max(current.radius + 10, stateHeight * 0.08);
-                current.px = Math.max(x0 + padX, Math.min(x1 - padX, current.px));
-                current.py = Math.max(y0 + padY, Math.min(y1 - padY, current.py));
+                // Gentle push away from overlap
+                const angle = Math.atan2(dy, dx);
+                const pushDist = (minDist - dist) * 0.4; // Gentler push
+                let newPx = current.px + Math.cos(angle) * pushDist;
+                let newPy = current.py + Math.sin(angle) * pushDist;
+                
+                // Clamp to bounding box
+                newPx = Math.max(current.stateBounds.x0 + padX, Math.min(current.stateBounds.x1 - padX, newPx));
+                newPy = Math.max(current.stateBounds.y0 + padY, Math.min(current.stateBounds.y1 - padY, newPy));
+                
+                // Only apply push if it keeps us in the actual polygon
+                if (isPointInState(newPx, newPy, current.stateGeom)) {
+                  current.px = newPx;
+                  current.py = newPy;
+                } else {
+                  // Try moving only in X or Y direction
+                  const testPxOnly = Math.max(current.stateBounds.x0 + padX, 
+                                             Math.min(current.stateBounds.x1 - padX, newPx));
+                  if (isPointInState(testPxOnly, current.py, current.stateGeom)) {
+                    current.px = testPxOnly;
+                  } else {
+                    const testPyOnly = Math.max(current.stateBounds.y0 + padY, 
+                                               Math.min(current.stateBounds.y1 - padY, newPy));
+                    if (isPointInState(current.px, testPyOnly, current.stateGeom)) {
+                      current.py = testPyOnly;
+                    }
+                  }
+                }
               }
             }
-            maxPushAttempts--;
+            
+            if (!hasOverlap) break;
+          }
+          
+          // Final verification: ensure within polygon
+          if (!isPointInState(current.px, current.py, current.stateGeom)) {
+            // Try to find nearest valid point towards center
+            const centerX = current.stateBounds.centerX;
+            const centerY = current.stateBounds.centerY;
+            let found = false;
+            
+            for (let step = 0.1; step <= 1; step += 0.1) {
+              const testX = current.px + (centerX - current.px) * step;
+              const testY = current.py + (centerY - current.py) * step;
+              if (isPointInState(testX, testY, current.stateGeom)) {
+                current.px = testX;
+                current.py = testY;
+                found = true;
+                break;
+              }
+            }
+            
+            // If still not found, use centroid
+            if (!found) {
+              const centroid = path.centroid(current.stateGeom);
+              if (centroid && isFinite(centroid[0]) && isFinite(centroid[1])) {
+                current.px = centroid[0];
+                current.py = centroid[1];
+              }
+            }
           }
           
           adjusted.push({

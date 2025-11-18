@@ -66,13 +66,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Carousel functionality
     const guideImages = [
         'dataset/guide-images/1.png',
-        'dataset/guide-images/2.png'
+        'dataset/guide-images/2.png',
+        'dataset/guide-images/3.png',
+        'dataset/guide-images/4.png'
     ].sort(); // Sort by filename to ensure correct order
     
     let currentImageIndex = 0;
     let autoAdvanceTimer = null;
     let isPaused = false;
-    const AUTO_ADVANCE_DELAY = 3000; // 3 seconds
+    const AUTO_ADVANCE_DELAY = 7000; // 7 seconds
     const carouselImage = document.getElementById('carousel-image');
     const carouselDotsContainer = document.getElementById('carousel-dots');
     const prevButton = document.querySelector('.carousel-prev');
