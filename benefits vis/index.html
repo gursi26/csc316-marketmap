@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Benefits Carousel</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+
+<!-- GLOBAL HEADER -->
+<header id="globalHeader">
+  <h1>How Benefits Show Up in Your Day</h1>
+  <p class="subtitle">
+    Explore different parts of a workday and see how companies support employees.
+  </p>
+
+  <div class="companyPicker">
+    <label for="companySelect">Select a Company:</label>
+    <select id="companySelect"></select>
+    <span id="companyStatus"></span>
+  </div>
+</header>
+
+
+<!-- MAIN CAROUSEL -->
+<div id="carousel">
+
+  <!-- NAV BUTTONS -->
+  <button id="prevBtn" class="nav left">&#10094;</button>
+
+  <div class="viewport">
+    <div class="track">
+
+      <!-- SCREEN 1: OFFICE -->
+      <section class="screen screen-1">
+        <div class="ratio-box ratio-16-9">
+          <img class="screen-bg" src="../dataset/backgrounds/office-area.png" alt="Office background">
+          <div class="screen-icons"></div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: TRANSPORT -->
+      <section class="screen screen-2">
+        <div class="ratio-box ratio-2048-1147">
+          <img class="screen-bg" src="../dataset/backgrounds/transport-bg.jpg" alt="Transport background">
+          <div class="screen-icons"></div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: FOOD -->
+      <section class="screen screen-3">
+        <div class="ratio-box ratio-1-1">
+          <img class="screen-bg" src="../dataset/backgrounds/food-bg.png" alt="Food background">
+          <div class="screen-icons"></div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: INSURANCE -->
+      <section class="screen screen-4">
+        <div class="ratio-box ratio-1-1">
+          <img class="screen-bg" src="../dataset/backgrounds/insurance.png" alt="Insurance background">
+          <div class="screen-icons"></div>
+        </div>
+      </section>
+
+      <!-- SCREEN 5: COMPANY LOGO + EXTRA BENEFITS -->
+      <section class="screen screen-5">
+        <div class="ratio-box ratio-1-1">
+          <!-- No background image; logo is rendered into this container -->
+          <div class="screen-icons"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <button id="nextBtn" class="nav right">&#10095;</button>
+
+</div>
+
+<div id="iconTooltip" class="iconTooltip hidden"></div>
+
+<!-- JS -->
+<script src="main.js"></script>
+
+</body>
+</html>

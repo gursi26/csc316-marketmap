@@ -1,0 +1,253 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Work Sans", system-ui, sans-serif;
+  background: #04060e;
+  color: #e6eefc;
+  overflow: hidden;
+}
+
+/* HEADER */
+#globalHeader {
+  text-align: center;
+  padding: 24px 20px;
+  background: #101833;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 20;
+  border-bottom: 1px solid #2a3357;
+}
+
+#globalHeader h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  color: #e6eefc;
+}
+
+.subtitle {
+  margin: 6px 0 16px;
+  font-size: 14px;
+  color: #9aa7c7;
+}
+
+.companyPicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #e6eefc;
+}
+
+#companySelect {
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #2a3357;
+  background: #0e1530;
+  color: #e6eefc;
+}
+
+/* CAROUSEL */
+#carousel {
+  width: 100vw;
+  height: calc(100vh - 140px);
+  position: absolute;
+  top: 140px;
+  overflow: hidden;
+}
+
+.viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.track {
+  display: flex;
+  width: 500vw;
+  height: 100%;
+  transition: transform 0.4s ease-in-out;
+  cursor: grab;
+}
+
+.track:active {
+  cursor: grabbing;
+}
+
+/* SCREENS */
+.screen {
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #0e1530;
+}
+
+.screen-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.screen-icons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+/* ASPECT RATIOS */
+.screen-1 .screen-bg,
+.screen-1 .screen-icons {
+  aspect-ratio: 16 / 9;
+}
+
+.screen-2 .screen-bg,
+.screen-2 .screen-icons {
+  aspect-ratio: 2048 / 1147;
+}
+
+.screen-3 .screen-bg,
+.screen-4 .screen-bg,
+.screen-3 .screen-icons,
+.screen-4 .screen-icons {
+  aspect-ratio: 1 / 1;
+}
+
+/* ICONS */
+.screen-icons img.benefitIcon {
+  width: 6%;
+  position: absolute;
+  margin: 0;
+  transform-origin: center center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.screen-icons img.benefitIcon:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 18px rgba(94, 168, 255, 0.9);
+  border-color: #5ea8ff;
+}
+
+.logoIcon {
+  display: block;
+}
+
+/* NAV */
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(16, 24, 51, 0.82);
+  border: 1px solid #2a3357;
+  padding: 18px;
+  font-size: 34px;
+  cursor: pointer;
+  border-radius: 10px;
+  z-index: 30;
+  color: #e6eefc;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.7);
+}
+
+.nav.left {
+  left: 20px;
+}
+
+.nav.right {
+  right: 20px;
+}
+
+.nav:hover {
+  background: rgba(16, 24, 51, 0.96);
+  border-color: #5ea8ff;
+}
+
+/* TOOLTIP */
+.iconTooltip {
+  position: absolute;
+  padding: 10px 14px;
+  background: rgba(9, 12, 24, 0.94);
+  color: #e6eefc;
+  border-radius: 10px;
+  font-size: 13px;
+  max-width: 260px;
+  line-height: 1.4;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  z-index: 9999;
+  opacity: 0;
+  border: 1px solid rgba(94, 168, 255, 0.35);
+  transition: opacity 0.15s ease;
+}
+
+.iconTooltip.visible {
+  opacity: 1;
+}
+
+.iconTooltip strong {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+  color: #5ea8ff;
+}
+
+/* RATIO BOX */
+.ratio-box {
+  position: relative;
+  height: 100%;
+  width: auto;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ratio-box .screen-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.ratio-box .screen-icons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.ratio-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.ratio-2048-1147 {
+  aspect-ratio: 2048 / 1147;
+}
+
+.ratio-1-1 {
+  aspect-ratio: 1 / 1;
+}
