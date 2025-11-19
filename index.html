@@ -64,6 +64,7 @@
                     <button id="scrollDownButton" class="work-sans-400">Get Started ↓</button>
                 </div>
             </div>
+            <div class="section section-one-two"><h2>Sample</h2></div>
             <div class="section section-two">
                 <div class="mapvis-wrapper">
                     <div class="app-header">
@@ -97,7 +98,58 @@
                     <script src="js/mapvis.js"></script>
                 </div>
             </div>
+            <div class="section section-two-three"><h2>Sample</h2></div>
             <div class="section section-three">
+
+                <iframe 
+                    src="benefits vis/index.html" 
+                    style="
+                        width:100vw;
+                        height:100vh;
+                        border:none;
+                        overflow:hidden;
+                    "
+                    scrolling="no"
+                ></iframe>
+              
+            </div>
+            <div class="section section-three-four"><h2>Sample</h2></div>
+            <div class="section section-four">
+                <div class="slope-chart-wrapper">
+                    <!-- Ensure this navigates the top-level page (works even when the slope chart is shown inside an iframe) -->
+                    <!-- <a id="backToMap" class="back-to-map" href="../index.html" target="_top" rel="noopener">← Back to Map</a> -->
+                    <div id="controls">
+                        <div class="control-row">
+                            <label for="view-mode-select">Select By:</label>
+                            <select id="view-mode-select" size="1">
+                                <option value="company">Company</option>
+                                <option value="role">Role</option>
+                            </select>
+                        </div>
+                        <div class="control-row">
+                            <label for="item-select" id="item-label">Company:</label>
+                            <select id="item-select" size="1"></select>
+                            <img id="company-logo" class="dropdown-logo" alt="">
+                        </div>
+                    </div>
+                    <div id="tooltip-slope"></div>
+                    <div id="info-popup"></div>
+                    <svg id="canvas"></svg>
+                    <script src="https://d3js.org/d3.v7.min.js"></script>
+                    <script src="js/constants.js"></script>
+                    <script src="js/tooltipBarChart.js"></script>
+                    <script src="js/utils.js"></script>
+                    <script src="js/collisionDetection.js"></script>
+                    <script src="js/bubbleRenderer.js"></script>
+                    <script src="js/interactionHandler.js"></script>
+                    <script src="js/slopeChart.js"></script>
+                    <script src="js/main.js"></script>
+                    <!-- Back link is an anchor so it works without JS -->
+                </div>
+            </div>
+            <div class="section section-four-five"><h2>Sample</h2></div>
+            
+            <div class="section section-five">
                 <div class="container-scatter">
                     <h2>Company Scatter Visualization</h2>
                     <p class="subtitle-scatter">Interactive scatterplot showing company relationships between leadership, employee satisfaction, and market performance</p>
@@ -157,53 +209,7 @@
 
                 <script src="js/scatter.js"></script>
             </div>
-            <div class="section section-four">
-                <div class="slope-chart-wrapper">
-                    <!-- Ensure this navigates the top-level page (works even when the slope chart is shown inside an iframe) -->
-                    <!-- <a id="backToMap" class="back-to-map" href="../index.html" target="_top" rel="noopener">← Back to Map</a> -->
-                    <div id="controls">
-                        <div class="control-row">
-                            <label for="view-mode-select">Select By:</label>
-                            <select id="view-mode-select" size="1">
-                                <option value="company">Company</option>
-                                <option value="role">Role</option>
-                            </select>
-                        </div>
-                        <div class="control-row">
-                            <label for="item-select" id="item-label">Company:</label>
-                            <select id="item-select" size="1"></select>
-                            <img id="company-logo" class="dropdown-logo" alt="">
-                        </div>
-                    </div>
-                    <div id="tooltip-slope"></div>
-                    <div id="info-popup"></div>
-                    <svg id="canvas"></svg>
-                    <script src="https://d3js.org/d3.v7.min.js"></script>
-                    <script src="js/constants.js"></script>
-                    <script src="js/tooltipBarChart.js"></script>
-                    <script src="js/utils.js"></script>
-                    <script src="js/collisionDetection.js"></script>
-                    <script src="js/bubbleRenderer.js"></script>
-                    <script src="js/interactionHandler.js"></script>
-                    <script src="js/slopeChart.js"></script>
-                    <script src="js/main.js"></script>
-                    <!-- Back link is an anchor so it works without JS -->
-                </div>
-            </div>
-            <div class="section section-five">
-
-                <iframe 
-                    src="benefits vis/index.html" 
-                    style="
-                        width:100vw;
-                        height:100vh;
-                        border:none;
-                        overflow:hidden;
-                    "
-                    scrolling="no"
-                ></iframe>
-              
-            </div>              
+            <div class="section section-conclusion"><h2>Conclusion</h2></div>
         </div>
 
         <script>
