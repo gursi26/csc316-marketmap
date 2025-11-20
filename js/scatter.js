@@ -32,8 +32,8 @@ const tooltip = d3.select("#tooltip-scatter");
 const colorScales = {
     sentiment: d3.scaleSequential(d3.interpolateRdBu),
     sector: d3.scaleOrdinal(d3.schemeCategory10),
-    employee_rating: d3.scaleSequential(d3.interpolateViridis),
-    ceo_approval: d3.scaleSequential(d3.interpolateBlues)
+    employee_rating: d3.scaleSequential(d3.interpolateRdBu),
+    ceo_approval: d3.scaleSequential(d3.interpolateRdBu)
 };
 
 // Load and process data
@@ -320,8 +320,26 @@ function updateVisualization(data, xAxis, yAxis, colorBy) {
 }
 
 // Event listeners for controls
+
+function updateAxisDropdownStates() {
+    const xSelect = document.getElementById("x-axis");
+    const ySelect = document.getElementById("y-axis");
+
+    const xVal = xSelect.value;
+    const yVal = ySelect.value;
+
+    // Reset all options
+    [...xSelect.options].forEach(opt => opt.disabled = false);
+    [...ySelect.options].forEach(opt => opt.disabled = false);
+
+    // Disable same variable in opposite dropdown
+    ySelect.querySelector(`option[value="${xVal}"]`).disabled = true;
+    xSelect.querySelector(`option[value="${yVal}"]`).disabled = true;
+}
+
 function setupControls() {
     d3.select("#x-axis").on("change", function() {
+        updateAxisDropdownStates();
         const xAxis = this.value;
         const yAxis = d3.select("#y-axis").property("value");
         const colorBy = d3.select("#color-by").property("value");
@@ -329,6 +347,7 @@ function setupControls() {
     });
 
     d3.select("#y-axis").on("change", function() {
+        updateAxisDropdownStates();
         const xAxis = d3.select("#x-axis").property("value");
         const yAxis = this.value;
         const colorBy = d3.select("#color-by").property("value");
@@ -362,6 +381,8 @@ async function init() {
     d3.select("#color-by").property("value", "sentiment");
     
     setupControls();
+    updateAxisDropdownStates();
+
     
     // Get current dropdown values and use them for initial visualization
     const xAxis = d3.select("#x-axis").property("value");

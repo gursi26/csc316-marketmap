@@ -854,6 +854,11 @@ button{ font-family:inherit }
 .sector-item { display:flex; align-items:center; gap:5px; font-size:11px }
 .sector-color { width:12px; height:12px; border-radius:50% }
 
+select option:disabled {
+    color: #999;
+    background: #f2f2f2;
+}
+
 .controls-scatter{
     display:flex; justify-content:center; gap:16px;
     background: var(--panel); padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03);
