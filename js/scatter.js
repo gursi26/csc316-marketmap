@@ -3,13 +3,11 @@ const margin = { top: 120, right: 120, bottom: 120, left: 120 };
 
 // ===== TUNABLE CONSTANT: Circle Size Scaling =====
 // Adjust this value to control how large the bubbles appear relative to window size
-// Higher values = larger circles. Recommended range: 0.02 to 0.06
 const CIRCLE_SIZE_SCALE_FACTOR = 0.03;
-// =================================================
 
 let width, height;
 
-// Function to calculate dimensions based on container size
+// dimensions based on container size
 function calculateDimensions() {
     const container = document.querySelector('.chart-container-scatter');
     const containerRect = container.getBoundingClientRect();
@@ -18,11 +16,9 @@ function calculateDimensions() {
     return { width, height };
 }
 
-// Create SVG
 const svg = d3.select("#scatterplot");
 let g = svg.append("g");
 
-// Function to update SVG dimensions
 function updateSVGDimensions() {
     calculateDimensions();
     svg.attr("width", width + margin.left + margin.right)
@@ -30,7 +26,6 @@ function updateSVGDimensions() {
     g.attr("transform", `translate(${margin.left},${margin.top})`);
 }
 
-// Create tooltip
 const tooltip = d3.select("#tooltip-scatter");
 
 // Color scales
@@ -133,7 +128,6 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
     g.selectAll(".x-label").remove();
     g.selectAll(".y-label").remove();
 
-    // Add X axis
     g.append("g")
         .attr("class", "x-axis")
         .attr("transform", `translate(0,${height})`)
@@ -141,7 +135,6 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
         .selectAll("text")
         .style("font-size", "14px");
 
-    // Add Y axis
     g.append("g")
         .attr("class", "y-axis")
         .call(yAxisGenerator)
@@ -168,8 +161,6 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
         .style("font-weight", "600")
         .text(getAxisLabel(yAxis));
 }
-
-// Add this new function
 function getAxisFormatter(axis) {
     if (axis === 'revenue' || axis === 'market_cap') {
         // Format large numbers in billions with B suffix
@@ -309,7 +300,6 @@ function updateVisualization(data, xAxis, yAxis, colorBy) {
     createAxes(xScale, yScale, xAxis, yAxis);
     createColorLegend(data, colorBy);
 
-    // Use D3's join pattern for proper updates
     const circles = g.selectAll("circle")
         .data(data, d => d.ticker)
         .join(
@@ -326,7 +316,6 @@ function updateVisualization(data, xAxis, yAxis, colorBy) {
         .attr("r", d => sizeScale(d.market_cap))
         .attr("fill", colorFunction);
 
-    // Add interactions
     enableMouseover()
 }
 
@@ -380,7 +369,7 @@ async function init() {
     const colorBy = d3.select("#color-by").property("value");
     updateVisualization(data, xAxis, yAxis, colorBy);
 
-    // If opened with ticker query param, focus that company
+    // company focus
     const params = new URLSearchParams(window.location.search);
     const qTicker = params.get('ticker');
     if (qTicker) {
@@ -400,7 +389,6 @@ async function init() {
     });
 }
 
-// Start the visualization when DOM is loaded
 document.addEventListener('DOMContentLoaded', init);
 
 // allow parent frame to ask the scatter plot to focus/highlight a company
@@ -504,9 +492,17 @@ function enableMouseover() {
                 `);
         })
         .on("mousemove", function(event) {
-            tooltip
-                .style("left", (event.pageX - 250) + "px")
-                .style("top", (event.pageY - 200) + "px");
+            const tooltipWidth = tooltip.node().offsetWidth;
+            const tooltipHeight = tooltip.node().offsetHeight;
+        
+            // Desired position
+            let x = event.pageX + 1;
+            let y = event.pageY - 230;
+        
+
+            tooltip.style("left", x + "px")
+                .style("top", y + "px");
+
         })
         .on("mouseout", function() {
             d3.select(this)
