@@ -202,10 +202,16 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
 .app-header h1{ margin:0; font-size:22px; font-weight:700 }
 .app-header .subtitle{ margin:.4rem 0 0; color:var(--muted); font-size:13px }
 
-.layout{ display:grid; grid-template-columns:65% 35%; min-height:calc(100vh - 70px); gap:0 }
+.layout{ display:grid; grid-template-columns:1fr; min-height:calc(100vh - 70px); gap:0; position:relative; overflow:hidden }
+/* Keep single column always; panel overlays for smoother map zoom (no reflow) */
 .viz{
     position:relative;
     overflow:hidden;
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     
     background-size: 20px 20px;
     background-image:
@@ -223,7 +229,42 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
     max-height: calc(100vh - 70px);
     display: flex;
     flex-direction: column;
+        --panel-width: 560px; /* easily adjustable width */
+        width: var(--panel-width);
+    position:absolute;
+    top:0;
+    right:0;
+        transform:translateX(calc(var(--panel-width) + 20px)); /* off-screen */
+    opacity:0;
+    pointer-events:none;
+    transition:transform .55s cubic-bezier(.16,1,.3,1), opacity .4s ease;
+    will-change:transform, opacity;
+    backdrop-filter:blur(4px);
 }
+.layout.panel-open .state-companies-panel{ transform:translateX(0); opacity:1; pointer-events:auto }
+    .state-companies-panel {
+        --panel-width: 560px; /* width stays adjustable */
+        background: var(--panel);
+        border-left: 2px solid var(--grid);
+        padding: 24px 26px 20px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        height: 50vh; /* occupy bottom half of screen */
+        display: flex;
+        flex-direction: column;
+        width: var(--panel-width);
+        position:absolute;
+        top:0; /* start off-screen above */
+        right:0;
+        transform:translateY(-52vh); /* hidden above view */
+        opacity:0;
+        pointer-events:none;
+        transition:transform .65s cubic-bezier(.16,1,.3,1), opacity .45s ease;
+        will-change:transform, opacity;
+        backdrop-filter:blur(6px);
+        box-shadow: -6px -4px 24px rgba(0,0,0,0.55);
+    }
+    .layout.panel-open .state-companies-panel{ transform:translateY(50vh); opacity:1; pointer-events:auto }
 
 .state-companies-panel .panel-header {
     margin-bottom: 20px;
@@ -242,11 +283,11 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
 .companies-bar-chart {
     display: flex;
     flex-direction: row;
-    gap: 3px;
+    gap: 8px;
     align-items: flex-end;
     justify-content: space-evenly;
     flex: 1;
-    padding: 10px 5px 10px 5px;
+    padding: 14px 8px 12px 8px;
     overflow-x: hidden;
     overflow-y: hidden;
     max-height: 100%;
@@ -270,17 +311,17 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
 }
 
 .company-bar-item .company-logo {
-    width: 28px;
-    height: 28px;
+    width: 42px;
+    height: 42px;
     object-fit: contain;
-    margin-bottom: 3px;
+    margin-bottom: 6px;
     image-rendering: auto;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-    transition: transform 0.2s ease;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+    transition: transform 0.25s ease;
     z-index: 10;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    padding: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 4px;
     flex-shrink: 0;
 }
 
@@ -321,24 +362,24 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
 }
 
 .company-bar-item .company-name {
-    font-size: 8px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--fg);
     text-align: center;
-    margin-top: 4px;
+    margin-top: 6px;
     writing-mode: horizontal-tb;
     width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    line-height: 1.1;
+    line-height: 1.15;
     flex-shrink: 0;
 }
 
 .company-bar-item .market-cap-label {
-    font-size: 8px;
+    font-size: 10px;
     color: var(--muted);
-    margin-top: 2px;
+    margin-top: 4px;
     text-align: center;
     white-space: nowrap;
     flex-shrink: 0;
@@ -432,7 +473,7 @@ button{ font-family:inherit }
 .map-popup .btn-primary:active, .map-popup .btn-secondary:active{ transform:translateY(1px) }
 .map-popup [id^="cp-"]{ font-size:13px }
 
-#chart{ width:100%; height:100%; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges }
+#chart{ max-width:100%; max-height:100%; width:auto; height:auto; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges }
 .state{ fill:#1a2447; stroke:#2a3357; stroke-width:1.5; cursor:pointer; shape-rendering: crispEdges; transition: fill 0.2s ease, stroke 0.2s ease }
 .state:hover{ fill:#1f2d5f; stroke:#5ea8ff; stroke-width:2 }
 .state-active{ stroke:#7aa2ff; stroke-width:2.5 }
