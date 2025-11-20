@@ -192,23 +192,25 @@ h1 {
 .mapvis-wrapper {
     width: 100vw;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 
 *{ box-sizing:border-box }
 body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; overflow-x:hidden; max-width:100vw }
 
-.app-header{ padding:16px 20px; border-bottom:1px solid var(--grid) }
+.app-header{ padding:16px 20px; border-bottom:1px solid var(--grid); flex-shrink:0 }
 .app-header h1{ margin:0; font-size:22px; font-weight:700 }
 .app-header .subtitle{ margin:.4rem 0 0; color:var(--muted); font-size:13px }
 
-.layout{ display:grid; grid-template-columns:1fr; min-height:calc(100vh - 70px); gap:0; position:relative; overflow:hidden }
+.layout{ display:flex; flex-direction:column; height:100%; gap:0; position:relative; overflow:hidden }
 /* Keep single column always; panel overlays for smoother map zoom (no reflow) */
 .viz{
     position:relative;
     overflow:hidden;
     width:100%;
-    height:100%;
+    flex:1;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -221,50 +223,35 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
 
 /* Right panel for state companies */
 .state-companies-panel {
+    --panel-width: 30vw;
+    min-width: 400px;
     background: var(--panel);
-    border-left: 2px solid var(--grid);
-    padding: 20px;
-    overflow-y: hidden;
+    border-right: 2px solid var(--grid);
+    padding: 28px 32px;
+    overflow-y: auto;
     overflow-x: hidden;
-    max-height: calc(100vh - 70px);
+    height: 100%;
     display: flex;
     flex-direction: column;
-        --panel-width: 560px; /* easily adjustable width */
-        width: var(--panel-width);
-    position:absolute;
-    top:0;
-    right:0;
-        transform:translateX(calc(var(--panel-width) + 20px)); /* off-screen */
-    opacity:0;
-    pointer-events:none;
-    transition:transform .55s cubic-bezier(.16,1,.3,1), opacity .4s ease;
-    will-change:transform, opacity;
-    backdrop-filter:blur(4px);
+    width: var(--panel-width);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+    will-change: transform, opacity;
+    backdrop-filter: blur(8px);
+    box-shadow: 12px 0 32px rgba(0, 0, 0, 0.6);
+    z-index: 100;
 }
-.layout.panel-open .state-companies-panel{ transform:translateX(0); opacity:1; pointer-events:auto }
-    .state-companies-panel {
-        --panel-width: 560px; /* width stays adjustable */
-        background: var(--panel);
-        border-left: 2px solid var(--grid);
-        padding: 24px 26px 20px;
-        overflow-y: hidden;
-        overflow-x: hidden;
-        height: 50vh; /* occupy bottom half of screen */
-        display: flex;
-        flex-direction: column;
-        width: var(--panel-width);
-        position:absolute;
-        top:0; /* start off-screen above */
-        right:0;
-        transform:translateY(-52vh); /* hidden above view */
-        opacity:0;
-        pointer-events:none;
-        transition:transform .65s cubic-bezier(.16,1,.3,1), opacity .45s ease;
-        will-change:transform, opacity;
-        backdrop-filter:blur(6px);
-        box-shadow: -6px -4px 24px rgba(0,0,0,0.55);
-    }
-    .layout.panel-open .state-companies-panel{ transform:translateY(50vh); opacity:1; pointer-events:auto }
+
+.layout.panel-open .state-companies-panel { 
+    transform: translateX(0); 
+    opacity: 1; 
+    pointer-events: auto;
+}
 
 .state-companies-panel .panel-header {
     margin-bottom: 20px;
@@ -473,7 +460,7 @@ button{ font-family:inherit }
 .map-popup .btn-primary:active, .map-popup .btn-secondary:active{ transform:translateY(1px) }
 .map-popup [id^="cp-"]{ font-size:13px }
 
-#chart{ max-width:100%; max-height:100%; width:auto; height:auto; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges }
+#chart{ width:100%; height:100%; image-rendering: pixelated; image-rendering: -moz-crisp-edges; image-rendering: crisp-edges }
 .state{ fill:#1a2447; stroke:#2a3357; stroke-width:1.5; cursor:pointer; shape-rendering: crispEdges; transition: fill 0.2s ease, stroke 0.2s ease }
 .state:hover{ fill:#1f2d5f; stroke:#5ea8ff; stroke-width:2 }
 .state-active{ stroke:#7aa2ff; stroke-width:2.5 }

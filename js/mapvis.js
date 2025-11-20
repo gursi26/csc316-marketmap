@@ -1007,12 +1007,6 @@ class MapVis {
       
       allItems.select(".market-cap-label")
         .text(d => `$${d3.format(".2s")(d.mc)}`);
-      
-      // Add click handler
-      allItems.on("click", (event, d) => {
-        event.stopPropagation();
-        try { showCompanyPopup(event, d); } catch (e) {}
-      });
     }
 
     // Click empty space to reset zoom
