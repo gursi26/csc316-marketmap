@@ -36,9 +36,11 @@ class MapVis {
     const stateLabel = d3.select("#state-label");
     const barChartContainer = d3.select("#companies-bar-chart");
     const statePanelTitle = d3.select("#state-panel-title");
+    const layoutEl = document.querySelector('.layout');
 
     // Track current selected state
     let currentSelectedState = null;
+    let isStateZoomed = false; // Track if we're zoomed into a state
 
     // small floating menu for company options
     let companyPopup = null;
@@ -108,7 +110,8 @@ class MapVis {
     }
 
     const mapW = 900, mapH = 650;
-    const projection = d3.geoAlbersUsa().translate([mapW/2, mapH/2]).scale(1200);
+    // Reduced initial scale so full US + side foreign circles fit without pre-zoom feel
+    const projection = d3.geoAlbersUsa().translate([mapW/2, mapH/2]).scale(950);
     const path = d3.geoPath(projection);
     
     // Store state geometries for boundary checking
@@ -612,24 +615,28 @@ class MapVis {
       const adjustedData = resolveCollisions(data);
 
       const sel = gBuildings.selectAll("g.building").data(adjustedData, d=>d.Ticker);
-      const enter = sel.enter().append("g").attr("class","building")
-        .on("mousemove", (ev,d)=> showTip(ev, d))
-        .on("mouseleave", hideTip)
-        .on("click", (ev, d) => {
-          try { showCompanyPopup(ev, d); } catch (e) {}
-          try {
-            const payload = { Ticker: d.Ticker, Name: d.Name, Address: d.Address, State: d.State };
-            if (window.parent && window.parent !== window) {
-              window.parent.postMessage({ type: 'companyClick', data: payload }, '*');
-            }
-          } catch (e) {}
-          ev.stopPropagation();
-        });
-
-      enter.append("circle").attr("class","hover-ring");
+      const enter = sel.enter().append("g").attr("class","building");
       enter.append("image").attr("class","building-icon");
 
       const all = enter.merge(sel);
+
+      // Update event handlers based on zoom state
+      all.on("mousemove", isStateZoomed ? (ev,d)=> showTip(ev, d) : null)
+         .on("mouseleave", isStateZoomed ? hideTip : null)
+         .on("click", isStateZoomed ? (ev, d) => {
+           try { showCompanyPopup(ev, d); } catch (e) {}
+           try {
+             const payload = { Ticker: d.Ticker, Name: d.Name, Address: d.Address, State: d.State };
+             if (window.parent && window.parent !== window) {
+               window.parent.postMessage({ type: 'companyClick', data: payload }, '*');
+             }
+           } catch (e) {}
+           ev.stopPropagation();
+         } : null);
+
+      // Disable pointer events & hover visuals when not zoomed
+      all.style("pointer-events", isStateZoomed ? "auto" : "none")
+         .classed("building-interactive", isStateZoomed);
 
       // Keep icons at same on-screen size during zoom, use adjusted positions
       all.attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`);
@@ -642,12 +649,6 @@ class MapVis {
         // Use pre-calculated size from collision detection
         const size = d.size || 30;
         
-        // Hover ring (slightly larger than icon)
-        g.select("circle.hover-ring")
-          .attr("cx", 0)
-          .attr("cy", -size/2)
-          .attr("r", size * 0.65);
-        
         g.select("image.building-icon")
           .attr("href", icon.src)
           .attr("x", -size/2)
@@ -658,6 +659,25 @@ class MapVis {
       });
 
       sel.exit().remove();
+    }
+
+    // Lightweight toggle of interactivity without recomputing positions (avoids delay on zoom)
+    function updateBuildingInteractivity(enabled){
+      gBuildings.selectAll("g.building")
+        .on("mousemove", enabled ? (ev,d)=> showTip(ev, d) : null)
+        .on("mouseleave", enabled ? hideTip : null)
+        .on("click", enabled ? (ev, d) => {
+          try { showCompanyPopup(ev, d); } catch (e) {}
+          try {
+            const payload = { Ticker: d.Ticker, Name: d.Name, Address: d.Address, State: d.State };
+            if (window.parent && window.parent !== window) {
+              window.parent.postMessage({ type: 'companyClick', data: payload }, '*');
+            }
+          } catch (e) {}
+          ev.stopPropagation();
+        } : null)
+        .style("pointer-events", enabled ? "auto" : "none")
+        .classed("building-interactive", enabled);
     }
 
     // ---- Tooltip (closer + clamped) ----
@@ -694,10 +714,11 @@ class MapVis {
 
     // ---- Foreign (country circles + mini buildings) ----
     function renderForeign(){
-      const foreign = companies.filter(c => (c.Country||"").trim().toLowerCase() !== "united states" && (c.Country||"").trim()!=="");
+      const foreign = companies.filter(c => (c.Country||"").trim().toLowerCase() !== "united states" && (c.Country||"").trim()!="");
       const byCountry = d3.group(foreign, d=>d.Country);
       const countries = Array.from(byCountry.keys()).sort();
-      const centerX = 1000, startY = 10, vSpacing = 110;
+      // Position foreign country circles just inside right edge of 900px width
+      const centerX = mapW - 60, startY = 10, vSpacing = 110;
 
       const data = countries.map((c,i)=>({name:c, items:byCountry.get(c), i}));
       const groups = gForeign.selectAll("g.country").data(data, d=>d.name);
@@ -724,19 +745,7 @@ class MapVis {
         const R = 26 + Math.sqrt(n)*3;
 
         const bSel = g.selectAll("g.mini-building").data(d.items, dd=>dd.Ticker);
-        const bEnter = bSel.enter().append("g").attr("class","mini-building")
-          .on("mousemove", (ev,dd)=> showTip(ev, dd))
-          .on("mouseleave", hideTip)
-          .on("click", (ev, dd) => {
-            try { showCompanyPopup(ev, dd); } catch (e) {}
-            try {
-              const payload = { Ticker: dd.Ticker, Name: dd.Name, Address: dd.Address, State: dd.State };
-              if (window.parent && window.parent !== window) {
-                window.parent.postMessage({ type: 'companyClick', data: payload }, '*');
-              }
-            } catch (e) {}
-            ev.stopPropagation();
-          });
+        const bEnter = bSel.enter().append("g").attr("class","mini-building");
 
         bEnter.append("circle").attr("class","mini-marker");
 
@@ -775,7 +784,11 @@ class MapVis {
 
       const stateName = d.properties.name;
       currentSelectedState = stateName;
+      isStateZoomed = true; // Enable company interactions
       updateStateCompaniesPanel(stateName);
+      // Just toggle handlers; avoid expensive re-render to remove delay
+      updateBuildingInteractivity(true);
+      showStatePanel();
 
       const b = path.bounds(d);
       const dx = b[1][0] - b[0][0];
@@ -784,23 +797,25 @@ class MapVis {
       const tx = mapW/2 - s * (b[0][0] + b[1][0]) / 2;
       const ty = mapH/2 - s * (b[0][1] + b[1][1]) / 2;
 
-      currentZoom = s;                         // update zoom factor used by building transforms
-      gRoot.transition().duration(750)
-        .attr("transform", `translate(${tx},${ty}) scale(${s})`)
+      // Smooth animated zoom using interpolated transforms
+      const endTransform = `translate(${tx},${ty}) scale(${s})`;
+      currentZoom = s;
+
+      // Smooth zoom using single transform interpolation (shorter duration, easing out)
+      gRoot.transition().duration(680).ease(d3.easeCubicOut)
+        .attrTween("transform", () => d3.interpolateString(gRoot.attr("transform") || "translate(0,0) scale(1)", endTransform))
         .on("end", ()=>{ zoomTarget = {type:"state", id}; });
 
-      // Buildings stay in their fixed positions, only adjust scale to maintain size
+      // Counter-scale buildings (no expensive interpolation needed)
       gBuildings.selectAll("g.building")
-        .transition().duration(750)
-        .attr("transform", function(d){ return `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`; });
+        .transition().duration(680).ease(d3.easeCubicOut)
+        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`);
 
-      // Also keep mini buildings inside country circles readable during zoom
       gForeign.selectAll("g.mini-building")
-        .transition().duration(750)
+        .transition().duration(680).ease(d3.easeCubicOut)
         .attr("transform", function(){
-          // preserve existing translate; append counter-scale
-          const t = d3.select(this).attr("transform") || "";
-          const translated = t.replace(/scale\([^)]*\)/g,""); // remove prior scale
+          const tStr = d3.select(this).attr("transform") || "";
+          const translated = tStr.replace(/scale\([^)]*\)/g,"");
           return `${translated} scale(${1/currentZoom})`;
         });
     }
@@ -830,22 +845,30 @@ class MapVis {
       const ty = mapH/2 - s * cy;
 
       currentZoom = s;
-      gRoot.transition().duration(750)
-        .attr("transform", `translate(${tx},${ty}) scale(${s})`)
+      const startTransform = gRoot.attr("transform") || "translate(0,0) scale(1)";
+      const endTransform = `translate(${tx},${ty}) scale(${s})`;
+      const tr = d3.transition().duration(950).ease(d3.easeCubicInOut);
+
+      gRoot.transition(tr)
+        .attrTween("transform", () => d3.interpolateString(startTransform, endTransform))
         .on("end", ()=>{ zoomTarget = {type:"country", id}; });
 
-      // Update building transforms to include counter-scale at their anchors
       gBuildings.selectAll("g.building")
-        .transition().duration(750)
-        .attr("transform", function(d){ return `translate(${d.px},${d.py}) scale(${1/currentZoom})`; });
+        .transition(tr)
+        .attrTween("transform", function(d){
+          const start = d3.select(this).attr("transform") || `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`;
+          const target = `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`;
+          return d3.interpolateString(start, target);
+        });
 
-      // Also keep mini buildings inside country circles readable during zoom
       gForeign.selectAll("g.mini-building")
-        .transition().duration(750)
-        .attr("transform", function(){
-          const t = d3.select(this).attr("transform") || "";
-          const translated = t.replace(/scale\([^)]*\)/g,"");
-          return `${translated} scale(${1/currentZoom})`;
+        .transition(tr)
+        .attrTween("transform", function(){
+          const raw = d3.select(this).attr("transform") || "";
+          const translated = raw.replace(/scale\([^)]*\)/g,"");
+          const start = raw;
+          const target = `${translated} scale(${1/currentZoom})`;
+          return d3.interpolateString(start, target);
         });
     }
 
@@ -854,21 +877,33 @@ class MapVis {
       gForeign.selectAll("circle.country-circle").classed("country-circle-active", false);
       currentZoom = 1;
       currentSelectedState = null;
+      isStateZoomed = false; // Disable company interactions
       statePanelTitle.text("Select a State");
       barChartContainer.html("");
-      gRoot.transition().duration(600).attr("transform","translate(0,0) scale(1)");
+      
+      // Toggle handlers off (no full re-render for performance)
+      updateBuildingInteractivity(false);
+      hideStatePanel();
+      gRoot.transition().duration(600).ease(d3.easeCubicOut)
+        .attrTween("transform", ()=> d3.interpolateString(gRoot.attr("transform") || "translate(0,0) scale(1)", "translate(0,0) scale(1)"));
+
       gBuildings.selectAll("g.building")
-        .transition().duration(600)
+        .transition().duration(600).ease(d3.easeCubicOut)
         .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(1)`);
+
       gForeign.selectAll("g.mini-building")
-        .transition().duration(600)
+        .transition().duration(600).ease(d3.easeCubicOut)
         .attr("transform", function(){
-          const t = d3.select(this).attr("transform") || "";
-          const translated = t.replace(/scale\([^)]*\)/g,"");
+          const tStr = d3.select(this).attr("transform") || "";
+          const translated = tStr.replace(/scale\([^)]*\)/g,"");
           return `${translated} scale(1)`;
         });
       zoomTarget = null;
     }
+
+    // Panel show/hide helpers
+    function showStatePanel(){ if(layoutEl) layoutEl.classList.add('panel-open'); }
+    function hideStatePanel(){ if(layoutEl) layoutEl.classList.remove('panel-open'); }
 
     // ---- Update State Companies Panel ----
     function updateStateCompaniesPanel(stateName) {
@@ -897,14 +932,14 @@ class MapVis {
       const minMc = d3.min(stateCompanies, d => d.mc);
       
       // Get actual available height for bars
-      const panelHeight = barChartContainer.node().parentElement.offsetHeight || 600;
-      const availableHeight = panelHeight - 180; // Reserve space for header, labels, etc
-      const maxBarHeight = Math.min(400, availableHeight); // Cap at 400px or available space
-      
-      // Dynamic scaling: use logarithmic scale for better visual distribution
+      const panelHeight = barChartContainer.node().parentElement.offsetHeight || window.innerHeight || 800;
+      const availableHeight = panelHeight - 120; // less reserved space to allow taller bars
+      const maxBarHeight = Math.min(650, availableHeight); // higher cap for longer bars
+
+      // Dynamic scaling: log scale with expanded range for taller appearance
       const heightScale = d3.scaleLog()
-        .domain([Math.max(minMc, maxMc * 0.01), maxMc]) // Avoid zero
-        .range([50, maxBarHeight]) // Min 50px for visibility
+        .domain([Math.max(minMc, maxMc * 0.01), maxMc])
+        .range([70, maxBarHeight]) // raise minimum height and extend max
         .clamp(true);
       
       // Create bar chart items
@@ -972,12 +1007,6 @@ class MapVis {
       
       allItems.select(".market-cap-label")
         .text(d => `$${d3.format(".2s")(d.mc)}`);
-      
-      // Add click handler
-      allItems.on("click", (event, d) => {
-        event.stopPropagation();
-        try { showCompanyPopup(event, d); } catch (e) {}
-      });
     }
 
     // Click empty space to reset zoom
