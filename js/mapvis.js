@@ -110,8 +110,8 @@ class MapVis {
     }
 
     const mapW = 900, mapH = 650;
-    // Reduced initial scale so full US + side foreign circles fit without pre-zoom feel
-    const projection = d3.geoAlbersUsa().translate([mapW/2, mapH/2]).scale(950);
+    // Shift map vis to the left by 60 pixels and make it bigger
+    const projection = d3.geoAlbersUsa().translate([mapW/2.5, mapH/2]).scale(1300);
     const path = d3.geoPath(projection);
     
     // Store state geometries for boundary checking
@@ -726,8 +726,8 @@ class MapVis {
       const colWidth = 120;
       const rowHeight = 110;
       const gridHeight = numRows * rowHeight;
-      // Move circles closer to the map
-      const startX = mapW; // reduced from +40 to +10
+      // Always display foreign section to the right of the map
+      const startX = mapW;
       const startY = Math.max(40, (mapH - gridHeight) / 2) + 30;
       
       // Compute positions for each country
@@ -762,7 +762,63 @@ class MapVis {
       all.select("circle.country-circle")
         .attr("r", d => 26 + Math.sqrt(d.items.length)*3)
         .style("cursor", "pointer")
+        .on("mouseenter", function(event, d) {
+          stateLabel.text(d.name).classed("visible", true);
+        })
+        .on("mouseleave", function() {
+          stateLabel.classed("visible", false);
+        })
         .on("click", (event, d) => onCountryClick(event, d, startX, startY, rowHeight));
+
+      // Mini buildings inside circle (update on every control change)
+      all.each(function(d){
+        const g = d3.select(this);
+        const n = d.items.length;
+        const R = 26 + Math.sqrt(n)*3;
+        const bSel = g.selectAll("g.mini-building").data(d.items, dd=>dd.Ticker);
+        const bEnter = bSel.enter().append("g").attr("class","mini-building");
+        bEnter.append("image")
+          .attr("class","mini-marker")
+          .attr("width", 24)
+          .attr("height", 24)
+          .attr("x", -12)
+          .attr("y", -12);
+        bEnter.merge(bSel).each(function(dd, i){
+          // arrange around circle
+          const a = (i / Math.max(1,n)) * 2*Math.PI;
+          const cx = Math.cos(a) * (R-10) * 0.7;
+          const cy = Math.sin(a) * (R-10) * 0.7;
+          const gB = d3.select(this).attr("transform", `translate(${cx},${cy}) scale(${1/currentZoom})`);
+          // Building icon marker for foreign companies
+          const category = getIndustryCategory(dd.Industry);
+          const icon = industryIcons[category];
+          gB.select("image.mini-marker")
+            .attr("href", icon ? icon.src : "")
+            .attr("width", 24)
+            .attr("height", 24)
+            .attr("x", -12)
+            .attr("y", -12)
+            .style("filter", "")
+            .style("stroke", "#fff")
+            .style("stroke-width", "0px")
+            .on("mouseenter", function(event) {
+              // Only show company details if zoomed into country
+              if (zoomTarget && zoomTarget.id === `country:${d.name}`) {
+                showTip(event, dd);
+                d3.select(this)
+                  .style("filter", "drop-shadow(0 0 6px #5ea8ff)")
+                  .style("stroke-width", "2px");
+              }
+            })
+            .on("mouseleave", function() {
+              hideTip();
+              d3.select(this)
+                .style("filter", "")
+                .style("stroke-width", "0px");
+            });
+        });
+        bSel.exit().remove();
+      });
       all.select("text.country-label")
         .attr("y", d => -(26 + Math.sqrt(d.items.length)*3) - 8)
         .text(d => d.name);
