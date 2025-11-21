@@ -1,8 +1,6 @@
 // Set up dimensions and margins
 const margin = { top: 120, right: 120, bottom: 120, left: 120 };
 
-// ===== TUNABLE CONSTANT: Circle Size Scaling =====
-// Adjust this value to control how large the bubbles appear relative to window size
 const CIRCLE_SIZE_SCALE_FACTOR = 0.03;
 
 let width, height;
@@ -82,23 +80,29 @@ async function loadData() {
     }
 }
 
-// Create scales
+// scales -- change for cutom tick range
 function createScales(data, xAxis, yAxis) {
+    function customDomain(axis) {
+        if (axis === "employee_rating") return [0, 5];
+        if (axis === "ceo_approval") return [0, 100];
+        return d3.extent(data, d => d[axis]);
+    }
+
     const xScale = d3.scaleLinear()
-        .domain(d3.extent(data, d => d[xAxis]))
+        .domain(customDomain(xAxis))
         .range([0, width])
         .nice();
 
     const yScale = d3.scaleLinear()
-        .domain(d3.extent(data, d => d[yAxis]))
+        .domain(customDomain(yAxis))
         .range([height, 0])
         .nice();
 
-    // Make circle size responsive to window dimensions
+    // circle scaling stays
     const avgDimension = (width + height) / 2;
     const minRadius = avgDimension * CIRCLE_SIZE_SCALE_FACTOR * 0.2;
     const maxRadius = avgDimension * CIRCLE_SIZE_SCALE_FACTOR;
-    
+
     const sizeScale = d3.scaleSqrt()
         .domain(d3.extent(data, d => d.market_cap))
         .range([minRadius, maxRadius]);
@@ -106,7 +110,8 @@ function createScales(data, xAxis, yAxis) {
     return { xScale, yScale, sizeScale };
 }
 
-// Create axes
+
+// axes
 function createAxes(xScale, yScale, xAxis, yAxis) {
     // Custom formatters for different axes
     const xFormat = getAxisFormatter(xAxis);
@@ -362,6 +367,16 @@ function setupControls() {
     });
 }
 
+// INFO PANEL CONTROLS
+document.getElementById("scatter-info-btn").onclick = () => {
+    document.getElementById("scatter-info-panel").classList.remove("hidden");
+};
+
+document.getElementById("scatter-info-close").onclick = () => {
+    document.getElementById("scatter-info-panel").classList.add("hidden");
+};
+
+
 // Initialize visualization
 async function init() {
     const data = await loadData();
@@ -427,7 +442,7 @@ window.addEventListener('message', (ev) => {
     tooltip.style('opacity', 1).html(`
         <strong>${d.name || d.ticker}</strong><br/>
         Sector: ${d.sector || ''}<br/>
-        CEO Approval: ${d.ceo_approval || 'n/a'}%<br/>
+        CEO Approval: ${d.ceo_approval > 0 ? d.ceo_approval + "%" : "N/A"}
         Employee Rating: ${d.employee_rating || 'n/a'}<br/>
         Market Cap: $${(d.market_cap || 0).toLocaleString()}<br/>
         Sentiment: ${d.sentiment != null ? d.sentiment.toFixed(3) : 'n/a'}
@@ -505,7 +520,7 @@ function enableMouseover() {
                 .html(`
                     <strong>${d.name} (${d.ticker})</strong><br/>
                     Sector: ${d.sector}<br/>
-                    CEO Approval: ${d.ceo_approval}%<br/>
+                    CEO Approval: ${d.ceo_approval > 0 ? d.ceo_approval + "%" : "N/A"}<br/>
                     Employee Rating: ${d.employee_rating}/5<br/>
                     Market Cap: $${(d.market_cap / 1e9).toFixed(1)}B<br/>
                     Sentiment: ${d.sentiment.toFixed(3)}<br/>
@@ -544,60 +559,37 @@ function enableMouseover() {
 
 // Display company information
 function displayCompanyInfo(d) {
-    const company = d;
-    
-    if (!company) {
-        document.getElementById('company-logo').style.display = 'none';
-        return;
-    }
-    
-    // Display company logo
-    const logoImg = document.getElementById('company-logo');
-    logoImg.src = `dataset/logos/images/${company.ticker}.png`;
-    logoImg.style.display = 'block';
-    logoImg.onerror = function() {
-        // Fallback if logo not found
-        this.style.display = 'none';
-    };
-    
-    // Display company details with name as first item
-    const infoDiv = document.getElementById('company-info');
-    infoDiv.innerHTML = `
-        <div class="info-item">
-            <span class="info-label">Company:</span> ${company.name}
-        </div>
-        <div class="info-item">
-            <span class="info-label">Ticker:</span> ${company.ticker}
-        </div>
-        <div class="info-item">
-            <span class="info-label">Sector:</span> ${company.sector}
-        </div>
-        <div class="info-item">
-            <span class="info-label">Industry:</span> ${company.industry}
-        </div>
-        <div class="info-item">
-            <span class="info-label">CEO Approval:</span> ${company.ceo_approval}%
-        </div>
-        <div class="info-item">
-            <span class="info-label">Employee Rating:</span> ${company.employee_rating}/5
-        </div>
-        <div class="info-item">
-            <span class="info-label">Market Cap:</span> $${(company.market_cap / 1e9).toFixed(1)}B
-        </div>
-        <div class="info-item">
-            <span class="info-label">Revenue:</span> $${(company.revenue / 1e9).toFixed(1)}B
-        </div>
-        <div class="info-item">
-            <span class="info-label">P/E Ratio:</span> ${company.pe_ratio.toFixed(1)}
-        </div>
-        <div class="info-item">
-            <span class="info-label">Sentiment:</span> ${company.sentiment.toFixed(3)}
-        </div>
-        <div class="info-item">
-            <span class="info-label">Employees:</span> ${company.employee_count.toLocaleString()}
-        </div>
-    `;
-    
-    // Store company ticker for the Pay Progression button
-    window.currentScatterCompany = company.ticker;
+    // Show popup
+    const popup = document.getElementById("scatter-company-popup");
+    popup.classList.remove("hidden");
+
+    // Set logo
+    const logo = document.getElementById("scatter-company-logo");
+    logo.src = `dataset/logos/images/${d.ticker}.png`;
+    logo.onerror = () => logo.style.display = "none";
+    logo.style.display = "block";
+
+    // Fill fields
+    document.getElementById("info-company-name").textContent = d.name;
+    document.getElementById("info-company-ticker").textContent = d.ticker;
+    document.getElementById("info-company-sector").textContent = d.sector;
+    document.getElementById("info-company-industry").textContent = d.industry;
+    document.getElementById("info-company-ceo").textContent =
+    d.ceo_approval > 0 ? d.ceo_approval + "%" : "N/A";
+    document.getElementById("info-company-rating").textContent = d.employee_rating + "/5";
+
+    document.getElementById("info-company-cap").textContent = 
+        (d.market_cap / 1e9).toFixed(1) + "B";
+
+    document.getElementById("info-company-revenue").textContent = 
+        (d.revenue / 1e9).toFixed(1) + "B";
+
+    document.getElementById("info-company-pe").textContent = d.pe_ratio.toFixed(1);
+    document.getElementById("info-company-sent").textContent = d.sentiment.toFixed(3);
+    document.getElementById("info-company-emp").textContent = 
+        d.employee_count.toLocaleString();
 }
+
+document.getElementById("scatter-popup-close").onclick = () => {
+    document.getElementById("scatter-company-popup").classList.add("hidden");
+};

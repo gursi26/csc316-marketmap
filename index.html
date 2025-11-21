@@ -153,6 +153,7 @@
                 <div class="container-scatter">
                     <h2>Company Correlations</h2>
                     <p class="subtitle-scatter">Interactive scatterplot showing company relationships between leadership, employee satisfaction, and market performance</p>
+
                     <div class="controls-and-legend">
                         <div class="controls-scatter">
                             <div class="control-group">
@@ -186,6 +187,17 @@
                             </div>
                         </div>
                         <div class="legend-scatter">
+                            <button id="scatter-info-btn" class="info-btn"> Usage Instructions </button>
+
+                            <div id="scatter-info-panel" class="info-panel hidden">
+                                <h3>How to use the Scatter Chart</h3>
+                                <p>• Hover over bubbles to see details.</p>
+                                <p>• Click a bubble to open the company popup.</p>
+                                <p>• Use the dropdowns to change axes and colours.</p>
+                                <p>• Bubble size represents market cap.</p>
+                                <button id="scatter-info-close" class="close-btn">Close</button>
+                            </div>
+        
                             <div class="legend-item">
                                 <div class="legend-color" style="background: #333; border: thin solid #555;"></div>
                                 <span class="legend-text">Larger bubbles = Higher Market Cap</span>
@@ -198,6 +210,26 @@
                     </div>
                     
                     <div class="chart-container-scatter">
+                        <div id="scatter-company-popup" class="company-popup hidden">
+                            <img id="scatter-company-logo" class="company-logo" alt="Company Logo">
+                        
+                            <div id="scatter-company-info" class="company-info">
+                                <div class="info-item"><span class="info-label">Company:</span> <span id="info-company-name">—</span></div>
+                                <div class="info-item"><span class="info-label">Ticker:</span> <span id="info-company-ticker">—</span></div>
+                                <div class="info-item"><span class="info-label">Sector:</span> <span id="info-company-sector">—</span></div>
+                                <div class="info-item"><span class="info-label">Industry:</span> <span id="info-company-industry">—</span></div>
+                                <div class="info-item"><span class="info-label">CEO Approval:</span> <span id="info-company-ceo">—</span></div>
+                                <div class="info-item"><span class="info-label">Employee Rating:</span> <span id="info-company-rating">—</span></div>
+                                <div class="info-item"><span class="info-label">Market Cap:</span> <span id="info-company-cap">—</span></div>
+                                <div class="info-item"><span class="info-label">Revenue:</span> <span id="info-company-revenue">—</span></div>
+                                <div class="info-item"><span class="info-label">P/E Ratio:</span> <span id="info-company-pe">—</span></div>
+                                <div class="info-item"><span class="info-label">Sentiment:</span> <span id="info-company-sent">—</span></div>
+                                <div class="info-item"><span class="info-label">Employees:</span> <span id="info-company-emp">—</span></div>
+                            </div>
+                        
+                            <button id="scatter-popup-close">Close</button>
+                        </div>
+                        
                         <svg id="scatterplot"></svg>
                         <div class="tooltip-scatter" id="tooltip-scatter"></div>
                     </div>

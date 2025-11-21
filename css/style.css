@@ -878,6 +878,32 @@ select option:disabled {
 
 /* buttons (if any) */
 button{ background: var(--accent); color:#022; padding:8px 12px; border-radius:6px; border:0; cursor:pointer }
+.info-btn {
+    margin-left: 12px;
+    padding: 6px 12px;
+    background: #4b4bff;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.info-panel {
+    position: fixed;
+    top: 20vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    background: #222;
+    color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    z-index: 9999;
+}
+
+.hidden { display: none; }
+.close-btn { margin-top: 10px; }
 
 h2 {font-size: 1.75em; margin-bottom: 0; margin-top: 0;}
 
@@ -961,6 +987,31 @@ dialog::backdrop {
 
 #close-company-detail-popup, #close-guide-popup, #pay-progression-popup {
     margin-top: 0;
+}
+
+.company-popup {
+    position: fixed;
+    top: 15vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--tooltip-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    width: 320px;
+    z-index: 999999;
+    text-align: center;
+}
+
+.company-popup.hidden {
+    display: none;
+}
+
+.company-popup .company-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin: 0 auto 10px;
 }
 
 #pay-progression-popup {
