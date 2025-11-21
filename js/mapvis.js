@@ -598,7 +598,9 @@ class MapVis {
 
     // ---- Buildings (icons for US companies) ----
     function renderBuildings(){
-      const data = companies.map(c=>{
+      // Only US companies
+      const usCompanies = companies.filter(c => (c.Country||"").trim().toLowerCase() === "united states");
+      const data = usCompanies.map(c=>{
         let proj = null;
         if (isFinite(c.Longitude) && isFinite(c.Latitude)) {
           // Use constrained position to keep within state boundaries
@@ -610,6 +612,7 @@ class MapVis {
         const category = getIndustryCategory(industry);
         return { ...c, px: proj?proj[0]:null, py: proj?proj[1]:null, mc, category };
       }).filter(d=>d.px!=null && d.py!=null && d.category!=null);
+      console.log(`US companies in dataset: ${usCompanies.length}, rendered: ${data.length}`);
 
       // Apply collision detection to spread out buildings
       const adjustedData = resolveCollisions(data);
@@ -717,49 +720,70 @@ class MapVis {
       const foreign = companies.filter(c => (c.Country||"").trim().toLowerCase() !== "united states" && (c.Country||"").trim()!="");
       const byCountry = d3.group(foreign, d=>d.Country);
       const countries = Array.from(byCountry.keys()).sort();
-      // Position foreign country circles just inside right edge of 900px width
-      const centerX = mapW - 60, startY = 10, vSpacing = 110;
-
-      const data = countries.map((c,i)=>({name:c, items:byCountry.get(c), i}));
+      // 2-column grid layout for country circles
+      const numCols = 2;
+      const numRows = Math.ceil(countries.length / numCols);
+      const colWidth = 120;
+      const rowHeight = 110;
+      const gridHeight = numRows * rowHeight;
+      // Move circles closer to the map
+      const startX = mapW; // reduced from +40 to +10
+      const startY = Math.max(40, (mapH - gridHeight) / 2) + 30;
+      
+      // Compute positions for each country
+      const data = countries.map((c, i) => {
+        let col = i % numCols;
+        let row = Math.floor(i / numCols);
+        // If odd number and last item, center it
+        if (countries.length % 2 === 1 && i === countries.length - 1) {
+          col = 0.5; // center between columns
+        }
+        return {
+          name: c,
+          items: byCountry.get(c),
+          i,
+          col,
+          row,
+        };
+      });
+      
       const groups = gForeign.selectAll("g.country").data(data, d=>d.name);
-      const enter = groups.enter().append("g").attr("class","country")
-        .attr("transform", d => `translate(${centerX}, ${startY + d.i*vSpacing})`);
-
-      // circle & label always visible
+      const enter = groups.enter().append("g").attr("class","country");
       enter.append("circle").attr("class","country-circle");
       enter.append("text").attr("class","country-label");
-
+      
       const all = enter.merge(groups);
+      all.attr("transform", d => {
+        let x = startX + (d.col === 0.5 ? colWidth/2 : d.col * colWidth);
+        let y = startY + d.row * rowHeight;
+        return `translate(${x}, ${y})`;
+      });
+      
       all.select("circle.country-circle")
         .attr("r", d => 26 + Math.sqrt(d.items.length)*3)
         .style("cursor", "pointer")
-        .on("click", (event, d) => onCountryClick(event, d, centerX, startY, vSpacing));
+        .on("click", (event, d) => onCountryClick(event, d, startX, startY, rowHeight));
       all.select("text.country-label")
         .attr("y", d => -(26 + Math.sqrt(d.items.length)*3) - 8)
         .text(d => d.name);
-
+      
       // Mini buildings inside circle (update on every control change)
       all.each(function(d){
         const g = d3.select(this);
         const n = d.items.length;
         const R = 26 + Math.sqrt(n)*3;
-
         const bSel = g.selectAll("g.mini-building").data(d.items, dd=>dd.Ticker);
         const bEnter = bSel.enter().append("g").attr("class","mini-building");
-
         bEnter.append("circle").attr("class","mini-marker");
-
         bEnter.merge(bSel).each(function(dd, i){
           // arrange around circle
           const a = (i / Math.max(1,n)) * 2*Math.PI;
           const cx = Math.cos(a) * (R-10) * 0.7;
           const cy = Math.sin(a) * (R-10) * 0.7;
           const gB = d3.select(this).attr("transform", `translate(${cx},${cy}) scale(${1/currentZoom})`); // keep size constant during state zoom
-
           // Simple circle marker for foreign companies
           const mc = getMarketCap(dd.Ticker);
           const radius = mc && mc > 0 ? Math.max(3, Math.min(8, Math.log(mc) / 3)) : 4;
-          
           gB.select("circle.mini-marker")
             .attr("r", radius)
             .attr("fill", "#4a9eff")
@@ -768,7 +792,6 @@ class MapVis {
         });
         bSel.exit().remove();
       });
-
       groups.exit().remove();
     }
 
@@ -828,31 +851,26 @@ class MapVis {
 
       // Remove state active class if any
       gStates.selectAll(".state").classed("state-active", false);
-      
       // Remove previous country active class and add to clicked circle
       gForeign.selectAll("circle.country-circle").classed("country-circle-active", false);
       d3.select(event.currentTarget).classed("country-circle-active", true);
-      
+
       // Calculate country circle position and bounds
       const cx = centerX;
-      const cy = startY + d.i * vSpacing;
+      const cy = startY + d.row * vSpacing;
       const r = 26 + Math.sqrt(d.items.length) * 3;
-      
       // Calculate zoom: center on circle with some padding
       const padding = 80; // extra space around the circle
       const s = Math.min(8, Math.min(mapW / (2*r + padding), mapH / (2*r + padding)));
       const tx = mapW/2 - s * cx;
       const ty = mapH/2 - s * cy;
-
       currentZoom = s;
       const startTransform = gRoot.attr("transform") || "translate(0,0) scale(1)";
       const endTransform = `translate(${tx},${ty}) scale(${s})`;
       const tr = d3.transition().duration(950).ease(d3.easeCubicInOut);
-
       gRoot.transition(tr)
         .attrTween("transform", () => d3.interpolateString(startTransform, endTransform))
         .on("end", ()=>{ zoomTarget = {type:"country", id}; });
-
       gBuildings.selectAll("g.building")
         .transition(tr)
         .attrTween("transform", function(d){
@@ -860,7 +878,6 @@ class MapVis {
           const target = `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`;
           return d3.interpolateString(start, target);
         });
-
       gForeign.selectAll("g.mini-building")
         .transition(tr)
         .attrTween("transform", function(){
@@ -870,6 +887,9 @@ class MapVis {
           const target = `${translated} scale(${1/currentZoom})`;
           return d3.interpolateString(start, target);
         });
+      // Show company bar chart for selected country
+      updateStateCompaniesPanel(d.name);
+      showStatePanel();
     }
 
     function resetView(){
@@ -909,12 +929,24 @@ class MapVis {
     function updateStateCompaniesPanel(stateName) {
       statePanelTitle.text(stateName);
       
-      // Get companies in this state
+      // Get companies in this state or country
+      let stateCompanies = [];
+      // If the name matches a US state or abbreviation, filter by state
       const stateAbbr = stateNameToAbbr[stateName] || stateName;
-      const stateCompanies = companies.filter(c => {
-        const cState = pick(c, ["State"]);
-        return cState === stateName || cState === stateAbbr;
-      }).map(c => ({
+      const isState = Object.keys(stateNameToAbbr).includes(stateName) || Object.values(stateNameToAbbr).includes(stateName);
+      if (isState) {
+        stateCompanies = companies.filter(c => {
+          const cState = pick(c, ["State"]);
+          return cState === stateName || cState === stateAbbr;
+        });
+      } else {
+        // Otherwise, treat as country
+        stateCompanies = companies.filter(c => {
+          const cCountry = pick(c, ["Country"]);
+          return cCountry === stateName;
+        });
+      }
+      stateCompanies = stateCompanies.map(c => ({
         ...c,
         mc: getMarketCap(c.Ticker)
       })).filter(c => c.mc && c.mc > 0);
@@ -923,62 +955,54 @@ class MapVis {
         barChartContainer.html('');
         return;
       }
-      
-      // Sort by market cap descending
-      stateCompanies.sort((a, b) => b.mc - a.mc);
-      
-      // Calculate max market cap for scaling
-      const maxMc = d3.max(stateCompanies, d => d.mc);
-      const minMc = d3.min(stateCompanies, d => d.mc);
-      
-      // Get actual available height for bars
-      const panelHeight = barChartContainer.node().parentElement.offsetHeight || window.innerHeight || 800;
-      const availableHeight = panelHeight - 120; // less reserved space to allow taller bars
-      const maxBarHeight = Math.min(650, availableHeight); // higher cap for longer bars
 
-      // Dynamic scaling: log scale with expanded range for taller appearance
-      const heightScale = d3.scaleLog()
-        .domain([Math.max(minMc, maxMc * 0.01), maxMc])
-        .range([70, maxBarHeight]) // raise minimum height and extend max
-        .clamp(true);
-      
-      // Create bar chart items
+      // Bar chart scaling for market cap
+      const mcValues = stateCompanies.map(d => d.mc).filter(v => v > 0);
+      const maxMc = mcValues.length ? d3.max(mcValues) : 1;
+      const heightScale = d3.scaleLinear()
+        .domain([0, maxMc])
+        .range([20, 260]); // Increased range for more prominent bars
+
+      // Create bar chart items (declare and use only once)
       const items = barChartContainer.selectAll(".company-bar-item")
         .data(stateCompanies, d => d.Ticker);
-      
-      // Remove old items first
       items.exit().remove();
-      
       const itemsEnter = items.enter()
         .append("div")
         .attr("class", "company-bar-item");
-      
-      // Add logo (will be positioned on top)
-      itemsEnter.append("img")
-        .attr("class", "company-logo");
-      
-      // Add building bar
-      itemsEnter.append("div")
-        .attr("class", "bar-building");
-      
-      // Add company name
-      itemsEnter.append("div")
-        .attr("class", "company-name");
-      
-      // Add market cap label
-      itemsEnter.append("div")
-        .attr("class", "market-cap-label");
-      
-      // Update existing and new items
+      itemsEnter.append("img").attr("class", "company-logo");
+      itemsEnter.append("div").attr("class", "bar-building");
+      itemsEnter.append("div").attr("class", "company-name");
+      itemsEnter.append("div").attr("class", "market-cap-label");
       const allItems = itemsEnter.merge(items);
-      
+
       // Set logo src and handle errors
+      // Calculate dynamic bar width based on number of companies and container width
+      const minBarWidth = 32;
+      const maxBarWidth = 80;
+      const containerW = barChartContainer.node().offsetWidth || 800;
+      let barWidth = Math.max(minBarWidth, Math.min(maxBarWidth, Math.floor(containerW / stateCompanies.length)));
+
+      allItems.style("display", "inline-block")
+        .style("vertical-align", "bottom")
+        .style("width", `${barWidth}px`);
+
       allItems.select(".company-logo")
         .attr("src", d => `dataset/logos/images/${d.Ticker}.png`)
         .attr("alt", d => d.Name || d.Ticker)
         .style("display", "block")
+        .style("height", "auto")
+        .each(function(d, i) {
+          // Scale logo width to match bar width
+          const minLogo = 18;
+          const maxLogo = 48;
+          let logoW = Math.max(minLogo, Math.min(maxLogo, barWidth * 0.8));
+          d3.select(this)
+            .style("width", `${logoW}px`)
+            .style("max-width", `${maxLogo}px`)
+            .style("margin", "0 auto");
+        })
         .on("error", function(event, d) {
-          // Create a simple colored square with ticker text as fallback
           const canvas = document.createElement('canvas');
           canvas.width = 32;
           canvas.height = 32;
@@ -992,11 +1016,8 @@ class MapVis {
           ctx.fillText(d.Ticker.substring(0, 4), 16, 16);
           d3.select(this).attr("src", canvas.toDataURL());
         });
-      
       allItems.select(".company-name")
         .text(d => d.Name || d.Ticker);
-      
-      // Animate buildings growing from bottom up with better scaling
       allItems.select(".bar-building")
         .style("height", "0px")
         .transition()
@@ -1004,9 +1025,29 @@ class MapVis {
         .delay((d, i) => i * 60)
         .ease(d3.easeCubicOut)
         .style("height", d => `${heightScale(Math.max(d.mc, maxMc * 0.01))}px`);
-      
       allItems.select(".market-cap-label")
         .text(d => `$${d3.format(".2s")(d.mc)}`);
+
+      // Always show companies horizontally, with scroll if needed
+      barChartContainer.style("white-space", "nowrap")
+        .style("overflow-x", "auto")
+        .style("overflow-y", "hidden")
+        .style("display", "flex")
+        .style("flex-direction", "row")
+        .style("align-items", "flex-end")
+        .style("max-width", barChartContainer.node().offsetWidth + "px");
+      allItems.style("display", "inline-block")
+        .style("vertical-align", "bottom")
+        .style("width", "80px");
+
+      // Slide in animation for bar chart
+      barChartContainer.style("transform", "translateX(60px)").style("opacity", "0");
+      setTimeout(() => {
+        barChartContainer.transition()
+          .duration(400)
+          .style("transform", "translateX(0)")
+          .style("opacity", "1");
+      }, 50);
     }
 
     // Click empty space to reset zoom
