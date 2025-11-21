@@ -949,7 +949,8 @@ class MapVis {
       stateCompanies = stateCompanies.map(c => ({
         ...c,
         mc: getMarketCap(c.Ticker)
-      })).filter(c => c.mc && c.mc > 0);
+      })).filter(c => c.mc && c.mc > 0)
+        .sort((a, b) => b.mc - a.mc); // Sort descending by market cap
       
       if (stateCompanies.length === 0) {
         barChartContainer.html('');
@@ -959,9 +960,20 @@ class MapVis {
       // Bar chart scaling for market cap
       const mcValues = stateCompanies.map(d => d.mc).filter(v => v > 0);
       const maxMc = mcValues.length ? d3.max(mcValues) : 1;
-      const heightScale = d3.scaleLinear()
+      // Use the actual height of the .companies-bar-chart container for scaling
+      let chartHeight = 260;
+      const chartEl = document.querySelector('.companies-bar-chart');
+      if (chartEl) {
+        chartHeight = chartEl.getBoundingClientRect().height;
+      }
+      // Subtract a larger top margin and logo height for guaranteed visibility
+      const topMargin = 32; // space from top edge
+      const logoHeight = 48; // max logo height
+      const marginForLabels = 40; // space for company name and market cap label
+      const availableHeight = Math.max(0, chartHeight - topMargin - logoHeight - marginForLabels);
+      const heightScale = d3.scaleSqrt()
         .domain([0, maxMc])
-        .range([20, 260]); // Increased range for more prominent bars
+        .range([0, availableHeight]);
 
       // Create bar chart items (declare and use only once)
       const items = barChartContainer.selectAll(".company-bar-item")
@@ -1035,10 +1047,12 @@ class MapVis {
         .style("display", "flex")
         .style("flex-direction", "row")
         .style("align-items", "flex-end")
-        .style("max-width", barChartContainer.node().offsetWidth + "px");
+        .style("max-width", barChartContainer.node().offsetWidth + "px")
+        .style("margin-top", "16px"); // Add top margin to prevent overflow
       allItems.style("display", "inline-block")
         .style("vertical-align", "bottom")
-        .style("width", "80px");
+        .style("width", "80px")
+        .style("margin-top", "8px"); // Add margin to each bar for logo visibility
 
       // Slide in animation for bar chart
       barChartContainer.style("transform", "translateX(60px)").style("opacity", "0");
