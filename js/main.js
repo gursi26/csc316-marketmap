@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sections = document.querySelectorAll('.section');
     currentSectionIndex = 0;
     
-    popupGuide = document.getElementById('guide-popup');
-    closeGuide = document.getElementById('close-guide-popup');
+    // popupGuide = document.getElementById('guide-popup');
+    // closeGuide = document.getElementById('close-guide-popup');
     popupCompany = document.getElementById('company-detail-popup');
     closeCompany = document.getElementById('close-company-detail-popup');
 
@@ -63,234 +63,234 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollToSection(1);
     });
 
-    // Carousel functionality
-    const guideImages = [
-        'dataset/guide-images/1.png',
-        'dataset/guide-images/2.png',
-        'dataset/guide-images/3.png',
-        'dataset/guide-images/4.png'
-    ].sort(); // Sort by filename to ensure correct order
+    // // Carousel functionality
+    // const guideImages = [
+    //     'dataset/guide-images/1.png',
+    //     'dataset/guide-images/2.png',
+    //     'dataset/guide-images/3.png',
+    //     'dataset/guide-images/4.png'
+    // ].sort(); // Sort by filename to ensure correct order
     
-    let currentImageIndex = 0;
-    let autoAdvanceTimer = null;
-    let isPaused = false;
-    const AUTO_ADVANCE_DELAY = 7000; // 7 seconds
-    const carouselImage = document.getElementById('carousel-image');
-    const carouselDotsContainer = document.getElementById('carousel-dots');
-    const prevButton = document.querySelector('.carousel-prev');
-    const nextButton = document.querySelector('.carousel-next');
-    const playPauseButton = document.getElementById('carousel-play-pause');
-    const pauseIcon = playPauseButton.querySelector('.pause-icon');
-    const playIcon = playPauseButton.querySelector('.play-icon');
+    // let currentImageIndex = 0;
+    // let autoAdvanceTimer = null;
+    // let isPaused = false;
+    // const AUTO_ADVANCE_DELAY = 7000; // 7 seconds
+    // const carouselImage = document.getElementById('carousel-image');
+    // const carouselDotsContainer = document.getElementById('carousel-dots');
+    // const prevButton = document.querySelector('.carousel-prev');
+    // const nextButton = document.querySelector('.carousel-next');
+    // const playPauseButton = document.getElementById('carousel-play-pause');
+    // const pauseIcon = playPauseButton.querySelector('.pause-icon');
+    // const playIcon = playPauseButton.querySelector('.play-icon');
 
-    function startAutoAdvance() {
-        // Don't auto-advance if only one image or if paused
-        if (guideImages.length <= 1 || isPaused) {
-            return;
-        }
+    // function startAutoAdvance() {
+    //     // Don't auto-advance if only one image or if paused
+    //     if (guideImages.length <= 1 || isPaused) {
+    //         return;
+    //     }
         
-        // Clear any existing timer
-        if (autoAdvanceTimer) {
-            clearTimeout(autoAdvanceTimer);
-        }
+    //     // Clear any existing timer
+    //     if (autoAdvanceTimer) {
+    //         clearTimeout(autoAdvanceTimer);
+    //     }
         
-        // Set up next auto-advance
-        autoAdvanceTimer = setTimeout(() => {
-            // Move to next slide, or loop back to start
-            if (currentImageIndex < guideImages.length - 1) {
-                currentImageIndex++;
-            } else {
-                currentImageIndex = 0;
-            }
-            updateCarousel();
-        }, AUTO_ADVANCE_DELAY);
-    }
+    //     // Set up next auto-advance
+    //     autoAdvanceTimer = setTimeout(() => {
+    //         // Move to next slide, or loop back to start
+    //         if (currentImageIndex < guideImages.length - 1) {
+    //             currentImageIndex++;
+    //         } else {
+    //             currentImageIndex = 0;
+    //         }
+    //         updateCarousel();
+    //     }, AUTO_ADVANCE_DELAY);
+    // }
 
-    function stopAutoAdvance() {
-        if (autoAdvanceTimer) {
-            clearTimeout(autoAdvanceTimer);
-            autoAdvanceTimer = null;
-        }
-    }
+    // function stopAutoAdvance() {
+    //     if (autoAdvanceTimer) {
+    //         clearTimeout(autoAdvanceTimer);
+    //         autoAdvanceTimer = null;
+    //     }
+    // }
 
-    function togglePlayPause() {
-        isPaused = !isPaused;
+    // function togglePlayPause() {
+    //     isPaused = !isPaused;
         
-        // Update button appearance
-        if (isPaused) {
-            pauseIcon.style.display = 'none';
-            playIcon.style.display = 'block';
-            playPauseButton.setAttribute('aria-label', 'Play slideshow');
-            stopAutoAdvance();
-        } else {
-            pauseIcon.style.display = 'block';
-            playIcon.style.display = 'none';
-            playPauseButton.setAttribute('aria-label', 'Pause slideshow');
-        }
+    //     // Update button appearance
+    //     if (isPaused) {
+    //         pauseIcon.style.display = 'none';
+    //         playIcon.style.display = 'block';
+    //         playPauseButton.setAttribute('aria-label', 'Play slideshow');
+    //         stopAutoAdvance();
+    //     } else {
+    //         pauseIcon.style.display = 'block';
+    //         playIcon.style.display = 'none';
+    //         playPauseButton.setAttribute('aria-label', 'Pause slideshow');
+    //     }
         
-        // Update the carousel to reflect the new pause state
-        updateCarousel();
-    }
+    //     // Update the carousel to reflect the new pause state
+    //     updateCarousel();
+    // }
 
-    function updateCarousel() {
-        // Update image
-        carouselImage.src = guideImages[currentImageIndex];
+    // function updateCarousel() {
+    //     // Update image
+    //     carouselImage.src = guideImages[currentImageIndex];
         
-        // Add error handling for image loading
-        carouselImage.onerror = function() {
-            console.error('Failed to load image:', guideImages[currentImageIndex]);
-            carouselImage.alt = 'Image failed to load: ' + guideImages[currentImageIndex];
-        };
+    //     // Add error handling for image loading
+    //     carouselImage.onerror = function() {
+    //         console.error('Failed to load image:', guideImages[currentImageIndex]);
+    //         carouselImage.alt = 'Image failed to load: ' + guideImages[currentImageIndex];
+    //     };
         
-        carouselImage.onload = function() {
-            console.log('Successfully loaded image:', guideImages[currentImageIndex]);
-        };
+    //     carouselImage.onload = function() {
+    //         console.log('Successfully loaded image:', guideImages[currentImageIndex]);
+    //     };
         
-        // Update dots and their progress bars
-        const dots = carouselDotsContainer.querySelectorAll('.carousel-dot');
-        dots.forEach((dot, index) => {
-            // Remove all state classes
-            dot.classList.remove('active', 'completed', 'inactive');
-            const progress = dot.querySelector('.carousel-dot-progress');
+    //     // Update dots and their progress bars
+    //     const dots = carouselDotsContainer.querySelectorAll('.carousel-dot');
+    //     dots.forEach((dot, index) => {
+    //         // Remove all state classes
+    //         dot.classList.remove('active', 'completed', 'inactive');
+    //         const progress = dot.querySelector('.carousel-dot-progress');
             
-            if (index < currentImageIndex) {
-                dot.classList.add('completed');
-                progress.style.animation = 'none';
-                progress.style.width = '100%';
-            } else if (index === currentImageIndex) {
-                dot.classList.add('active');
+    //         if (index < currentImageIndex) {
+    //             dot.classList.add('completed');
+    //             progress.style.animation = 'none';
+    //             progress.style.width = '100%';
+    //         } else if (index === currentImageIndex) {
+    //             dot.classList.add('active');
                 
-                if (isPaused) {
-                    // If paused, don't animate - show empty progress bar
-                    progress.style.animation = 'none';
-                    progress.style.width = '0%';
-                } else {
-                    // If not paused, restart the animation
-                    progress.style.width = '0%';
-                    progress.style.animation = 'none';
-                    void progress.offsetWidth; // Trigger reflow
-                    progress.style.animation = null;
-                }
-            } else {
-                dot.classList.add('inactive');
-                progress.style.animation = 'none';
-                progress.style.width = '0%';
-            }
-        });
+    //             if (isPaused) {
+    //                 // If paused, don't animate - show empty progress bar
+    //                 progress.style.animation = 'none';
+    //                 progress.style.width = '0%';
+    //             } else {
+    //                 // If not paused, restart the animation
+    //                 progress.style.width = '0%';
+    //                 progress.style.animation = 'none';
+    //                 void progress.offsetWidth; // Trigger reflow
+    //                 progress.style.animation = null;
+    //             }
+    //         } else {
+    //             dot.classList.add('inactive');
+    //             progress.style.animation = 'none';
+    //             progress.style.width = '0%';
+    //         }
+    //     });
         
-        // Update arrow states (keep enabled for looping)
-        prevButton.disabled = false;
-        nextButton.disabled = false;
+    //     // Update arrow states (keep enabled for looping)
+    //     prevButton.disabled = false;
+    //     nextButton.disabled = false;
         
-        // Restart auto-advance timer only if not paused
-        if (!isPaused) {
-            startAutoAdvance();
-        }
-    }
+    //     // Restart auto-advance timer only if not paused
+    //     if (!isPaused) {
+    //         startAutoAdvance();
+    //     }
+    // }
 
-    function initCarousel() {
-        // Create dots with progress bars
-        carouselDotsContainer.innerHTML = '';
-        guideImages.forEach((_, index) => {
-            const dot = document.createElement('button');
-            dot.className = 'carousel-dot';
-            dot.setAttribute('aria-label', `Go to image ${index + 1}`);
+    // function initCarousel() {
+    //     // Create dots with progress bars
+    //     carouselDotsContainer.innerHTML = '';
+    //     guideImages.forEach((_, index) => {
+    //         const dot = document.createElement('button');
+    //         dot.className = 'carousel-dot';
+    //         dot.setAttribute('aria-label', `Go to image ${index + 1}`);
             
-            // Create progress bar inside dot
-            const progress = document.createElement('div');
-            progress.className = 'carousel-dot-progress';
-            dot.appendChild(progress);
+    //         // Create progress bar inside dot
+    //         const progress = document.createElement('div');
+    //         progress.className = 'carousel-dot-progress';
+    //         dot.appendChild(progress);
             
-            dot.addEventListener('click', () => {
-                currentImageIndex = index;
-                updateCarousel();
-            });
-            carouselDotsContainer.appendChild(dot);
-        });
+    //         dot.addEventListener('click', () => {
+    //             currentImageIndex = index;
+    //             updateCarousel();
+    //         });
+    //         carouselDotsContainer.appendChild(dot);
+    //     });
         
-        // Hide navigation if only one image
-        const hasMultipleImages = guideImages.length > 1;
-        prevButton.style.display = hasMultipleImages ? 'flex' : 'none';
-        nextButton.style.display = hasMultipleImages ? 'flex' : 'none';
-        carouselDotsContainer.style.display = hasMultipleImages ? 'flex' : 'none';
-        playPauseButton.style.display = hasMultipleImages ? 'flex' : 'none';
+    //     // Hide navigation if only one image
+    //     const hasMultipleImages = guideImages.length > 1;
+    //     prevButton.style.display = hasMultipleImages ? 'flex' : 'none';
+    //     nextButton.style.display = hasMultipleImages ? 'flex' : 'none';
+    //     carouselDotsContainer.style.display = hasMultipleImages ? 'flex' : 'none';
+    //     playPauseButton.style.display = hasMultipleImages ? 'flex' : 'none';
         
-        // Reset pause state
-        isPaused = false;
-        pauseIcon.style.display = 'block';
-        playIcon.style.display = 'none';
-        playPauseButton.setAttribute('aria-label', 'Pause slideshow');
+    //     // Reset pause state
+    //     isPaused = false;
+    //     pauseIcon.style.display = 'block';
+    //     playIcon.style.display = 'none';
+    //     playPauseButton.setAttribute('aria-label', 'Pause slideshow');
         
-        // Set initial state
-        currentImageIndex = 0;
-        updateCarousel();
-    }
+    //     // Set initial state
+    //     currentImageIndex = 0;
+    //     updateCarousel();
+    // }
 
-    document.getElementById('guideButton').addEventListener('click', function() {
-        initCarousel();
-        popupGuide.showModal();
-    });
+    // document.getElementById('guideButton').addEventListener('click', function() {
+    //     initCarousel();
+    //     popupGuide.showModal();
+    // });
 
-    // Play/Pause button handler
-    playPauseButton.addEventListener('click', () => {
-        togglePlayPause();
-    });
+    // // Play/Pause button handler
+    // playPauseButton.addEventListener('click', () => {
+    //     togglePlayPause();
+    // });
 
-    closeGuide.addEventListener('click', () => {
-        stopAutoAdvance();
-        popupGuide.close();
-    });
+    // closeGuide.addEventListener('click', () => {
+    //     stopAutoAdvance();
+    //     popupGuide.close();
+    // });
 
-    popupGuide.addEventListener('click', (event) => {
-        // Check if the click target is the dialog element itself, not a child
-        if (event.target === popupGuide) {
-            stopAutoAdvance();
-            popupGuide.close();
-        }
-    });
+    // popupGuide.addEventListener('click', (event) => {
+    //     // Check if the click target is the dialog element itself, not a child
+    //     if (event.target === popupGuide) {
+    //         stopAutoAdvance();
+    //         popupGuide.close();
+    //     }
+    // });
 
-    // Stop auto-advance when modal closes
-    popupGuide.addEventListener('close', () => {
-        stopAutoAdvance();
-    });
+    // // Stop auto-advance when modal closes
+    // popupGuide.addEventListener('close', () => {
+    //     stopAutoAdvance();
+    // });
 
-    prevButton.addEventListener('click', () => {
-        // Loop to end if at start
-        if (currentImageIndex > 0) {
-            currentImageIndex--;
-        } else {
-            currentImageIndex = guideImages.length - 1;
-        }
-        updateCarousel();
-    });
+    // prevButton.addEventListener('click', () => {
+    //     // Loop to end if at start
+    //     if (currentImageIndex > 0) {
+    //         currentImageIndex--;
+    //     } else {
+    //         currentImageIndex = guideImages.length - 1;
+    //     }
+    //     updateCarousel();
+    // });
 
-    nextButton.addEventListener('click', () => {
-        // Loop to start if at end
-        if (currentImageIndex < guideImages.length - 1) {
-            currentImageIndex++;
-        } else {
-            currentImageIndex = 0;
-        }
-        updateCarousel();
-    });
+    // nextButton.addEventListener('click', () => {
+    //     // Loop to start if at end
+    //     if (currentImageIndex < guideImages.length - 1) {
+    //         currentImageIndex++;
+    //     } else {
+    //         currentImageIndex = 0;
+    //     }
+    //     updateCarousel();
+    // });
 
     // Note: Removed hover-to-pause functionality since users can now use the play/pause button
     // This simplifies the interaction model and avoids conflicts
 
-    // Keyboard navigation
-    popupGuide.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowLeft') {
-            prevButton.click();
-        } else if (event.key === 'ArrowRight') {
-            nextButton.click();
-        } else if (event.key === ' ' || event.key === 'Spacebar') {
-            event.preventDefault(); // Prevent page scroll
-            togglePlayPause();
-        } else if (event.key === 'Escape') {
-            stopAutoAdvance();
-            popupGuide.close();
-        }
-    });
+    // // Keyboard navigation
+    // popupGuide.addEventListener('keydown', (event) => {
+    //     if (event.key === 'ArrowLeft') {
+    //         prevButton.click();
+    //     } else if (event.key === 'ArrowRight') {
+    //         nextButton.click();
+    //     } else if (event.key === ' ' || event.key === 'Spacebar') {
+    //         event.preventDefault(); // Prevent page scroll
+    //         togglePlayPause();
+    //     } else if (event.key === 'Escape') {
+    //         stopAutoAdvance();
+    //         popupGuide.close();
+    //     }
+    // });
 
     closeCompany.addEventListener('click', () => {
         popupCompany.close();

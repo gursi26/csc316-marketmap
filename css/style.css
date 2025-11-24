@@ -23,6 +23,7 @@
     z-index: 10000;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 16px;
     pointer-events: auto;
     padding: 20px 12px;
@@ -34,8 +35,6 @@
 }
 
 .page-dots .dot {
-    width: 12px;
-    height: 12px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.3);
     border: 2px solid rgba(255, 255, 255, 0.5);
@@ -43,6 +42,16 @@
     transition: all 0.3s ease;
     padding: 0;
     pointer-events: auto;
+}
+
+.big-dot {
+    width: 12px;
+    height: 12px;
+}
+
+.small-dot {
+    width: 8px;
+    height: 8px;
 }
 
 .page-dots .dot:hover {
@@ -135,6 +144,78 @@ h1 {
     justify-content: center;
     align-items: center;
     font-size: 2rem;
+}
+
+.transition-page {
+    padding: 200px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    text-align: center;
+    line-height: 1.6;
+}
+
+.section-one-transition {
+        background:
+      /* top, transparent black, faked with gradient */ 
+      linear-gradient(
+        rgba(0, 0, 2, 0.8), 
+        rgba(0, 0, 2, 0.8)
+      ),
+      /* bottom, image */
+      url('aerial-bg.jpg');
+      background-position: center bottom
+}
+
+.section-two-transition {
+        background:
+      /* top, transparent black, faked with gradient */ 
+      linear-gradient(
+        rgba(0, 0, 2, 0.85), 
+        rgba(0, 0, 2, 0.85)
+      ),
+      /* bottom, image */
+      url('beach-bg.jpg');
+      background-position: center bottom
+}
+
+.section-three-transition {
+        background:
+      /* top, transparent black, faked with gradient */ 
+      linear-gradient(
+        rgba(0, 0, 2, 0.85), 
+        rgba(0, 0, 2, 0.85)
+      ),
+      /* bottom, image */
+      url('building-bg.jpg');
+      background-position: center bottom
+}
+
+.section-four-transition {
+        background:
+      /* top, transparent black, faked with gradient */ 
+      linear-gradient(
+        rgba(0, 0, 2, 0.85), 
+        rgba(0, 0, 2, 0.85)
+      ),
+      /* bottom, image */
+      url('graph-bg.jpg');
+      background-position: center center
+}
+
+.section-five-transition {
+        background:
+      /* top, transparent black, faked with gradient */ 
+      linear-gradient(
+        rgba(0, 0, 2, 0.9), 
+        rgba(0, 0, 2, 0.9)
+      ),
+      /* bottom, image */
+      url('map-bg.jpg');
+      background-position: center center
 }
 
 .section-two {
@@ -985,12 +1066,12 @@ dialog {
     background: var(--card-bg);
 }
 
-#guide-popup {
+/* #guide-popup {
     max-width: 95vw;
     max-height: 95vh;
     min-width: 60vw;
     background: rgba(12, 18, 37, 0.95);
-}
+} */
 
 /* Styles the content inside the popup and adds padding */
 .popup-content-wrapper {
