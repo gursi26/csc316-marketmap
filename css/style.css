@@ -137,7 +137,7 @@ h1 {
         rgba(0, 0, 2, 0.8)
       ),
       /* bottom, image */
-      url('city-bg.jpg');
+      url('city-bg.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -166,7 +166,7 @@ h1 {
         rgba(0, 0, 2, 0.8)
       ),
       /* bottom, image */
-      url('aerial-bg.jpg');
+      url('aerial-bg.webp');
       background-position: center bottom
 }
 
@@ -178,7 +178,7 @@ h1 {
         rgba(0, 0, 2, 0.85)
       ),
       /* bottom, image */
-      url('beach-bg.jpg');
+      url('beach-bg.webp');
       background-position: center bottom
 }
 
@@ -190,7 +190,7 @@ h1 {
         rgba(0, 0, 2, 0.85)
       ),
       /* bottom, image */
-      url('building-bg.jpg');
+      url('building-bg.webp');
       background-position: center bottom
 }
 
@@ -198,11 +198,11 @@ h1 {
         background:
       /* top, transparent black, faked with gradient */ 
       linear-gradient(
-        rgba(0, 0, 2, 0.85), 
-        rgba(0, 0, 2, 0.85)
+        rgba(0, 0, 2, 0.8), 
+        rgba(0, 0, 2, 0.8)
       ),
       /* bottom, image */
-      url('graph-bg.jpg');
+      url('graph-bg.webp');
       background-position: center center
 }
 
@@ -210,11 +210,11 @@ h1 {
         background:
       /* top, transparent black, faked with gradient */ 
       linear-gradient(
-        rgba(0, 0, 2, 0.9), 
-        rgba(0, 0, 2, 0.9)
+        rgba(0, 0, 2, 0.75), 
+        rgba(0, 0, 2, 0.75)
       ),
       /* bottom, image */
-      url('map-bg.jpg');
+      url('map-bg.webp');
       background-position: center center
 }
 
@@ -235,7 +235,7 @@ h1 {
     margin-bottom: 1em;
 }
 
-#scrollDownButton, #guideButton {
+#scrollDownButton, #sourcesButton {
   /* position: absolute;
   bottom: 20px;
   right: 20px; */
@@ -261,7 +261,7 @@ h1 {
     /* font-weight: 400; */
 }
 
-#guideButton:hover {
+#sourcesButton:hover {
     color: black;
     background-color: #ffffffbd;
     /* font-weight: 400; */
@@ -1066,12 +1066,21 @@ dialog {
     background: var(--card-bg);
 }
 
-/* #guide-popup {
+#sources-popup {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--tooltip-bg);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    width: 320px;
+    z-index: 999999;
+    text-align: center;
     max-width: 95vw;
     max-height: 95vh;
     min-width: 60vw;
-    background: rgba(12, 18, 37, 0.95);
-} */
+}
 
 /* Styles the content inside the popup and adds padding */
 .popup-content-wrapper {
@@ -1094,8 +1103,13 @@ dialog::backdrop {
     margin-top: 20px;
 }
 
-#close-company-detail-popup, #close-guide-popup, #pay-progression-popup {
-    margin-top: 0;
+#close-company-detail-popup, #pay-progression-popup {
+    margin-top: 0px;
+}
+
+#close-sources-popup {
+    margin-top: 24px;
+    margin-bottom: 24px;
 }
 
 .company-popup {
@@ -1141,12 +1155,14 @@ dialog::backdrop {
 
 .info-label { font-weight: 700; color: var(--accent); margin-right:6px }
 
-.guide-container {
+.sources-container {
+    /* width: 60%; */
     color: var(--fg);
+    white-space: nowrap;
 }
 
 /* Carousel styles */
-#guide-popup .popup-content-wrapper {
+#sources-popup .popup-content-wrapper {
     padding: 0;
     position: relative;
     max-width: 90vw;
@@ -1317,4 +1333,40 @@ dialog::backdrop {
 
 .carousel-dot.inactive .carousel-dot-progress {
     width: 0%;
+}
+
+.credit {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-size: 0.5em;
+    /* line-height:0.4em; */
+}
+
+.credit:link, .credit:visited {
+  color: var(--accent);
+  background-color: transparent;
+  /* text-decoration: none; */
+}
+
+.credit:hover, .credit:active {
+  color: var(--fg);
+  background-color: transparent;
+  /* text-decoration: none; */
+}
+
+.links-row {
+  display: flex;
+  width: 100%;
+  margin-bottom: -10px;
+}
+
+/* Create two equal columns that sits next to each other */
+.links-column {
+  flex: 100%;
+  padding: 10px;
+}
+
+.sources-header {
+    margin-top: 24px;
+    margin-bottom: 2px;
 }

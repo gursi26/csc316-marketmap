@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sections = document.querySelectorAll('.section');
     currentSectionIndex = 0;
     
-    // popupGuide = document.getElementById('guide-popup');
-    // closeGuide = document.getElementById('close-guide-popup');
+    popupGuide = document.getElementById('sources-popup');
+    closeGuide = document.getElementById('close-sources-popup');
     popupCompany = document.getElementById('company-detail-popup');
     closeCompany = document.getElementById('close-company-detail-popup');
 
@@ -226,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //     updateCarousel();
     // }
 
-    // document.getElementById('guideButton').addEventListener('click', function() {
+    // document.getElementById('sourcesButton').addEventListener('click', function() {
     //     initCarousel();
     //     popupGuide.showModal();
     // });
@@ -291,6 +291,21 @@ document.addEventListener('DOMContentLoaded', () => {
     //         popupGuide.close();
     //     }
     // });
+
+    document.getElementById('sourcesButton').addEventListener('click', function() {
+        popupGuide.showModal();
+    });
+
+    closeGuide.addEventListener('click', () => {
+        popupGuide.close();
+    });
+
+    popupGuide.addEventListener('click', (event) => {
+        // Check if the click target is the dialog element itself, not a child
+        if (event.target === popupGuide) {
+            popupGuide.close();
+        }
+    });
 
     closeCompany.addEventListener('click', () => {
         popupCompany.close();

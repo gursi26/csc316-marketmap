@@ -29,9 +29,9 @@
         <div class="snap-container">
             <div class="section section-one">
                 <!-- Popup windows -->
-                 <!-- <dialog id="guide-popup">
+                 <!-- <dialog id="sources-popup">
                     <div class="popup-content-wrapper">
-                        <button id="close-guide-popup" class="carousel-close">✕</button>
+                        <button id="close-sources-popup" class="carousel-close">✕</button>
                         <div class="carousel-container">
                             <button class="carousel-arrow carousel-prev" aria-label="Previous image">‹</button>
                             <div class="carousel-image-wrapper">
@@ -65,7 +65,7 @@
                 <h1 class="rubik">MarketMap</h1>
                 <h4 class="major-mono">a gps for your career path</h4>
                 <div class="button-holder">
-                    <!-- <button id="guideButton" class="work-sans-400">See Guide ⓘ</button> -->
+                    <!-- <button id="sourcesButton" class="work-sans-400">See Guide ⓘ</button> -->
                     <button id="scrollDownButton" class="work-sans-400">Get Started ↓</button>
                 </div>
             </div>
@@ -245,7 +245,50 @@
 
                 <script src="js/scatter.js"></script>
             </div>
-            <div class="section transition-page section-five-transition"><h3>We hope that you were able to better <em>map-out</em> your career with our visualizations. Good luck, from the MarketMap team!</h3></div>
+            <div class="section transition-page section-five-transition">
+                <h3>We hope that you were able to better <em>map-out</em> your career with our visualizations.<br>Good luck, from the MarketMap team!</h3>
+                <div class="button-holder">
+                    <!-- <button id="sourcesButton" class="work-sans-400">See Guide ⓘ</button> -->
+                    <button id="sourcesButton" class="work-sans-400"><em>Sources</em></button>
+                    <dialog id="sources-popup">
+                        <div class="popup-content-wrapper">
+                            <div class="sources-container">
+                                <h4 class="sources-header">Image Credits</h4>
+                                <div class="links-row">
+                                    <div class="links-column">
+                                        <a href="https://unsplash.com/photos/a-view-of-the-earth-from-an-airplane-zVNU8WC1ino" class="credit">Dembee Tsogoo (Unsplash)<br></a>
+                                        <a href="https://unsplash.com/photos/brown-glass-bottle-beside-white-book-on-blue-and-white-textile-oj0zeY2Ltk4" class="credit">S'well (Unsplash)<br></a>
+                                        <a href="https://unsplash.com/photos/photo-of-outer-space-Q1p7bh3SHj8" class="credit">NASA (Unsplash)<br></a>
+                                    </div>
+                                    <div class="links-column">
+                                        <a href="https://unsplash.com/photos/high-angle-photography-of-black-high-rise-buildings-_jFDQJfCTyA" class="credit">CHUTTERSNAP (Unsplash)<br></a>
+                                        <a href="https://unsplash.com/photos/crowd-of-people-sitting-on-chairs-inside-room-F2KRf_QfCqw" class="credit">Headway (Unsplash)<br></a>
+                                        <a href="https://www.pexels.com/photo/high-rise-buildings-during-nighttime-2224789/" class="credit">Chait Goli (Pexels)<br></a>
+                                    </div>
+                                </div>
+                                <!-- <h3>MarketMap Sources</h3> -->
+                                
+                                
+                                <h4 class="sources-header">Data Sources</h4>
+                                <div class="links-row">
+                                    <div class="links-column">
+                                        <a href="https://pypi.org/project/yfinance/" class="credit">Yahoo Finance API</a>
+                                        <a href="https://www.levels.fyi/?tab=levels" class="credit">Levels.fyi</a>
+                                        <a href="https://www.marketaux.com/" class="credit">Marketaux API</a>
+                                        <a href="https://www.glassdoor.ca/Community/index.htm" class="credit">Glassdoor<br></a>
+                                    </div>
+                                    <!-- <div class="links-column">
+                                        
+                                    </div> -->
+                                </div>
+                                <a href="https://site.financialmodelingprep.com/developer/docs/historical-numer-of-employees-api" class="credit">FMP Historical Employee API<br></a>
+
+                            </div>
+                            <button id="close-sources-popup">Close</button>
+                        </div>
+                    </dialog>
+                </div>
+            </div>
         </div>
 
         <script>
