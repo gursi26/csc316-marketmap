@@ -117,36 +117,36 @@ track.addEventListener("touchend", () => {
 });
 
 // Mouse drag support
-track.addEventListener("mousedown", (e) => {
-  mouseStartX = e.clientX;
-  isMouseDragging = true;
-  track.style.cursor = "grabbing";
-});
+// track.addEventListener("mousedown", (e) => {
+//   mouseStartX = e.clientX;
+//   isMouseDragging = true;
+//   track.style.cursor = "grabbing";
+// });
 
-track.addEventListener("mousemove", (e) => {
-  if (!isMouseDragging) return;
-  mouseEndX = e.clientX;
-});
+// track.addEventListener("mousemove", (e) => {
+//   if (!isMouseDragging) return;
+//   mouseEndX = e.clientX;
+// });
 
-track.addEventListener("mouseup", () => {
-  if (!isMouseDragging) return;
-  isMouseDragging = false;
-  track.style.cursor = "grab";
+// track.addEventListener("mouseup", () => {
+//   if (!isMouseDragging) return;
+//   isMouseDragging = false;
+//   track.style.cursor = "grab";
 
-  const swipeThreshold = 50;
-  const diff = mouseStartX - mouseEndX;
+//   const swipeThreshold = 50;
+//   const diff = mouseStartX - mouseEndX;
 
-  if (Math.abs(diff) > swipeThreshold) {
-    if (diff > 0) {
-      goToScreen(currentScreen + 1);
-    } else {
-      goToScreen(currentScreen - 1);
-    }
-  }
+//   if (Math.abs(diff) > swipeThreshold) {
+//     if (diff > 0) {
+//       goToScreen(currentScreen + 1);
+//     } else {
+//       goToScreen(currentScreen - 1);
+//     }
+//   }
 
-  mouseStartX = 0;
-  mouseEndX = 0;
-});
+//   mouseStartX = 0;
+//   mouseEndX = 0;
+// });
 
 track.addEventListener("mouseleave", () => {
   if (isMouseDragging) {
@@ -703,26 +703,41 @@ function hideTooltip() {
 
 
 /* ============================================================
-   LOAD & CLASSIFY EACH COMPANY
+   LOAD & CLASSIFY EACH COMPANY (with full name mapping)
    ============================================================ */
 
-d3.csv("../dataset/cleaned/Company-benefits.csv").then(data => {
+Promise.all([
+  d3.csv("../dataset/cleaned/Company-benefits.csv"),
+  d3.csv("../dataset/cleaned/Company-info.csv")
+]).then(([benefitCSV, infoCSV]) => {
+
   const dropdown = document.getElementById("companySelect");
   const statusSpan = document.getElementById("companyStatus");
 
-  const tickers = [...new Set(data.map(d => d.Ticker))];
+  // Build ticker → full name look-up
+  const tickerToName = {};
+  infoCSV.forEach(row => {
+    tickerToName[row.Ticker] = row.Name;
+  });
 
-  tickers.forEach(t => {
+  // Extract tickers
+  const tickers = [...new Set(benefitCSV.map(d => d.Ticker))];
+
+  // Build dropdown options using FULL names
+  tickers.forEach(ticker => {
     const op = document.createElement("option");
-    op.value = t;
-    op.textContent = t;
+    op.value = ticker;
+
+    // Show full name if available, else fallback to ticker
+    op.textContent = tickerToName[ticker] || ticker;
+
     dropdown.appendChild(op);
   });
 
-  // group rows per company
-  tickers.forEach(t => {
-    const rows = data.filter(r => r.Ticker === t);
-    benefitData[t] = classifyCompany(rows);
+  // Classify benefits for each ticker
+  tickers.forEach(ticker => {
+    const rows = benefitCSV.filter(r => r.Ticker === ticker);
+    benefitData[ticker] = classifyCompany(rows);
   });
 
   dropdown.addEventListener("change", () => {
@@ -730,10 +745,11 @@ d3.csv("../dataset/cleaned/Company-benefits.csv").then(data => {
     renderIcons();
   });
 
-  // set default
+  // Set the default company automatically
   currentCompany = tickers[0];
   statusSpan.textContent = "";
   renderIcons();
+
 }).catch(err => {
   console.error("Error loading CSV:", err);
   const statusSpan = document.getElementById("companyStatus");
@@ -741,3 +757,4 @@ d3.csv("../dataset/cleaned/Company-benefits.csv").then(data => {
     statusSpan.textContent = "⚠️ Could not load data";
   }
 });
+
