@@ -32,6 +32,9 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    opacity: 0; /* Ensures it starts invisible */
+    animation: fadeIn 1s ease-in forwards; /* 1s duration, ease-in timing, maintains final state */
+    animation-delay: 2s; /* Starts after a 2-second delay */
 }
 
 .page-dots .dot {
@@ -69,12 +72,18 @@
   font-family: "Rubik 80s Fade", system-ui;
   font-weight: 400;
   font-style: normal;
+  opacity: 0; /* Ensures it starts invisible */
+  animation: fadeIn 1s ease-in forwards; /* 1s duration, ease-in timing, maintains final state */
+  animation-delay: 1s; /* Starts after a 2-second delay */
 }
 
 .major-mono {
   font-family: "Major Mono Display", sans-serif;
   font-weight: 100;
   font-style: normal;
+  opacity: 0; /* Ensures it starts invisible */
+  animation: fadeIn 1s ease-in forwards; /* 1s duration, ease-in timing, maintains final state */
+  animation-delay: 1.5s; /* Starts after a 2-second delay */
 }
 
 .work-sans-400 {
@@ -109,6 +118,9 @@ h1 {
     /* Hide scrollbar for all browsers */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
+    overflow-y: hidden;
+    animation: enableScroll 0.2s ease-in forwards; /* 1s duration, ease-in timing, maintains final state */
+    animation-delay: 1.9s; /* Starts after a 2-second delay */
 }
 
 .snap-container::-webkit-scrollbar {
@@ -253,6 +265,12 @@ h1 {
   cursor: pointer;
   font-size: 16px;
   transition-duration: 0.4s;
+}
+
+#scrollDownButton {
+    opacity: 0; /* Ensures it starts invisible */
+    animation: fadeIn 1s ease-in forwards; /* 1s duration, ease-in timing, maintains final state */
+    animation-delay: 1.7s; /* Starts after a 2-second delay */
 }
 
 #scrollDownButton:hover {
@@ -1103,7 +1121,7 @@ dialog::backdrop {
     margin-top: 20px;
 }
 
-#close-company-detail-popup, #pay-progression-popup {
+#pay-progression-popup {
     margin-top: 0px;
 }
 
@@ -1369,4 +1387,23 @@ dialog::backdrop {
 .sources-header {
     margin-top: 24px;
     margin-bottom: 2px;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes enableScroll {
+  from {
+    overflow-y: hidden;
+  }
+  to {
+    overflow-y: scroll;
+  }
 }

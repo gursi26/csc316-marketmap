@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     popupGuide = document.getElementById('sources-popup');
     closeGuide = document.getElementById('close-sources-popup');
-    popupCompany = document.getElementById('company-detail-popup');
-    closeCompany = document.getElementById('close-company-detail-popup');
+    // popupCompany = document.getElementById('company-detail-popup');
+    // closeCompany = document.getElementById('close-company-detail-popup');
 
     // Add keyboard event listener to the whole document
     document.addEventListener('keydown', (event) => {
@@ -307,23 +307,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    closeCompany.addEventListener('click', () => {
-        popupCompany.close();
-    });
+    // closeCompany.addEventListener('click', () => {
+    //     popupCompany.close();
+    // });
 
-    document.getElementById('pay-progression-popup').addEventListener('click', () => {
-        if (window.currentScatterCompany) {
-            popupCompany.close();
-            navigateToSlopeMap(window.currentScatterCompany);
-        }
-    });
+    // document.getElementById('pay-progression-popup').addEventListener('click', () => {
+    //     if (window.currentScatterCompany) {
+    //         popupCompany.close();
+    //         navigateToSlopeMap(window.currentScatterCompany);
+    //     }
+    // });
 
-    popupCompany.addEventListener('click', (event) => {
-        // Check if the click target is the dialog element itself, not a child
-        if (event.target === popupCompany) {
-            popupCompany.close();
-        }
-    });
+    // popupCompany.addEventListener('click', (event) => {
+    //     // Check if the click target is the dialog element itself, not a child
+    //     if (event.target === popupCompany) {
+    //         popupCompany.close();
+    //     }
+    // });
 });
 
 function navigateToSlopeMap(ticker) {

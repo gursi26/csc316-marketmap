@@ -21,7 +21,7 @@ function updateSVGDimensions() {
     calculateDimensions();
     svg.attr("width", width + margin.left + margin.right)
        .attr("height", height + margin.top + margin.bottom);
-    g.attr("transform", `translate(${margin.left},${margin.top})`);
+    g.attr("transform", `translate(${margin.left},${margin.top - 60})`);
 }
 
 const tooltip = d3.select("#tooltip-scatter");
