@@ -947,6 +947,8 @@ function renderBeeswarm(data) {
         .delay((_, i) => i * 18)
         .style("opacity", 1);
     });
+  
+    
 
   // Hover behavior (applies in both locked & unlocked modes)
   beeswarmNodes
@@ -959,70 +961,82 @@ function renderBeeswarm(data) {
       g.moveToFront();
 
       if (!highlightedTicker) {
-        // UNLOCKED: hover → enlarge + glow + square
+        // UNLOCKED MODE: hover gives enlarge + glow + tooltip
         glow.style("opacity", 1);
         box.style("opacity", 1);
-        g.transition()
-         .duration(120)
-         .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+        g.transition().duration(120)
+          .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+
+        positionTooltipLeftOfIcon(this, d);
       } else {
-        // LOCKED:
+        // LOCKED MODE:
         if (isSelected) {
-          // Hovering the selected icon: keep it as is (already enlarged + glow+box)
-          g.transition()
-           .duration(120)
-           .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+          // Selected stays enlarged
+          g.transition().duration(120)
+            .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+          
+          // Tooltip stays on selected (do NOT change tooltip)
+          pinTooltipForTicker(highlightedTicker);
         } else {
-          // Hovering a non-selected icon: temporarily enlarge ONLY
-          g.transition()
-           .duration(120)
-           .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
-          // no glow, no square
+          // Hovering other icons in locked mode:
+          // enlarge ONLY, NO tooltip, NO glow
+          glow.style("opacity", 0);
+          box.style("opacity", 0);
+
+          g.transition().duration(120)
+            .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+
+          // no tooltip change
+          pinTooltipForTicker(highlightedTicker);
         }
       }
+    })
 
-      positionTooltipLeftOfIcon(this, d);
-    })
+
+
     .on("mousemove", function(event, d) {
-      positionTooltipLeftOfIcon(this, d);
+      if (!highlightedTicker) {
+        positionTooltipLeftOfIcon(this, d);
+      } else {
+        // LOCKED MODE — tooltip stays on selected only
+        pinTooltipForTicker(highlightedTicker);
+      }
     })
+
     .on("mouseleave", function(event, d) {
       const g = d3.select(this);
       const glow = g.select(".beeGlow");
       const box  = g.select(".beeBox");
       const isSelected = (highlightedTicker && d.ticker === highlightedTicker);
 
-      hideTooltip();
-
       if (!highlightedTicker) {
-        // UNLOCKED: revert hover effects
+        // UNLOCKED — normal revert
         glow.style("opacity", 0);
         box.style("opacity", 0);
-        g.transition()
-         .duration(120)
-         .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+        g.transition().duration(120)
+          .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+        hideTooltip();
       } else {
-        // LOCKED:
-        if (isSelected) {
-          // Selected icon stays enlarged + glow + box
-          glow.style("opacity", 1);
-          box.style("opacity", 1);
-          g.transition()
-           .duration(120)
-           .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
-        } else {
-          // Non-selected icon returns to locked baseline: scale(1), dimmed
-          glow.style("opacity", 0);
-          box.style("opacity", 0);
-          g.transition()
-           .duration(120)
-           .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+        // LOCKED MODE — tooltip MUST remain visible on selected icon
+        if (!isSelected) {
+          // returning from other icons
+          g.transition().duration(120)
+            .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
         }
+
+        // Do NOT hide tooltip, EVER, in locked mode
+        updateHighlighting();
+        pinTooltipForTicker(highlightedTicker);
       }
     })
+
+
+
     .on("click", function(event, d) {
       handleLogoClick(d.ticker);
+      event.stopPropagation(); // ⭐ IMPORTANT
     });
+
 
   // Vertical-only beeswarm simulation with slightly tighter spacing
   const simulation = d3.forceSimulation(data)
@@ -1039,6 +1053,26 @@ function renderBeeswarm(data) {
       beeswarmNodes
         .attr("transform", d => `translate(${d.x}, ${d.y})`);
     });
+
+  simulation.on("end", () => {
+    updateHighlighting();
+    if (highlightedTicker) {
+      pinTooltipForTicker(highlightedTicker);
+    }
+  });
+
+  // Clicking background unlocks the view
+  svg.on("click", function(event) {
+    // If the click hit the background (not an icon group)
+    if (event.target.tagName === "svg") {
+      highlightedTicker = null;
+      updateHighlighting();
+      hideTooltip();
+      updateResetButtonVisibility();
+    }
+  });
+
+  
 }
 
 
@@ -1104,9 +1138,13 @@ Promise.all([
   // Start in "highlight selected" mode
   highlightedTicker = dropdownSelected;
   hoverEnabled = false;
-  updateHighlighting();
-  pinTooltipForTicker(dropdownSelected);
-  updateResetButtonVisibility();
+  // wait until SVG nodes actually exist (in next event loop turn)
+  // behave exactly like the user clicked the first company
+  setTimeout(() => {
+    highlightedTicker = null;  // ensure fresh lock
+    handleLogoClick(dropdownSelected);
+  }, 80);
+
 
   // Dropdown change -> change company AND highlight in beeswarm
   dropdown.addEventListener("change", () => {
