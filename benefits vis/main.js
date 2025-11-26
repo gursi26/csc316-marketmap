@@ -180,6 +180,9 @@ let hoverEnabled = true;        // hover tooltips enabled only when no highlight
 let beeswarmNodes = null;       // d3 selection of logo nodes
 let beeswarmDataGlobal = null;  // raw data used in beeswarm
 let beeswarmXScale = null;      // x scale for extra benefits
+const BEE_ENLARGE = 2; // how much logos enlarge on hover / selection
+
+
 
 // D3 utility: bring element to front (SVG has no z-index)
 d3.selection.prototype.moveToFront = function() {
@@ -737,7 +740,7 @@ function extraTooltipHtml(d) {
   return html;
 }
 
-// Position LEFT of the icon (center-aligned vertically)
+// Position tooltip LEFT of the icon, vertically centered
 function positionTooltipLeftOfIcon(domNode, d) {
   const rect = domNode.getBoundingClientRect();
   const iconX = rect.left + rect.width / 2 + window.scrollX;
@@ -748,7 +751,7 @@ function positionTooltipLeftOfIcon(domNode, d) {
   tooltip.classList.add("visible");
 
   const tRect = tooltip.getBoundingClientRect();
-  const offset = 40;
+  const offset = 40; // extra space to the left
 
   const left = iconX - tRect.width - offset;
   const top = iconY - tRect.height / 2;
@@ -766,22 +769,42 @@ function pinTooltipForTicker(ticker) {
   positionTooltipLeftOfIcon(dom, d);
 }
 
+// Update visuals when highlight changes
+// Behavior:
+//  - Unlocked (highlightedTicker == null):
+//      * All icons: scale(1), opacity 1, no glow/square
+//  - Locked:
+//      * Selected icon: scale(2), opacity 1, glow+square visible
+//      * Others: scale(1), opacity 0.4, no glow/square
 function updateHighlighting() {
   if (!beeswarmNodes) return;
 
   beeswarmNodes.each(function(d) {
     const g = d3.select(this);
-    const glow = g.select(".glow");
+    const glow = g.select(".beeGlow");
+    const box  = g.select(".beeBox");
 
     if (!highlightedTicker) {
-      // unlocked mode → no highlight
+      // Unlocked mode
       glow.style("opacity", 0);
-      g.style("opacity", 1);
+      box.style("opacity", 0);
+      g.style("opacity", 1)
+       .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
     } else {
-      // locked mode
       const isSelected = (d.ticker === highlightedTicker);
-      glow.style("opacity", isSelected ? 1 : 0);
-      g.style("opacity", isSelected ? 1 : 0.4);
+
+      if (isSelected) {
+        glow.style("opacity", 1);
+        box.style("opacity", 1);
+        g.style("opacity", 1)
+         .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+        g.moveToFront();
+      } else {
+        glow.style("opacity", 0);
+        box.style("opacity", 0);
+        g.style("opacity", 0.4)
+         .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+      }
     }
   });
 }
@@ -805,39 +828,26 @@ function updateResetButtonVisibility() {
   }
 }
 
-// Click behavior
+// Click behavior:
+//  - If clicking the selected (highlighted) icon → unlock
+//  - Otherwise → lock to that ticker (selected)
 function handleLogoClick(ticker) {
   if (highlightedTicker === ticker) {
     // unlock
     highlightedTicker = null;
     hoverEnabled = true;
     hideTooltip();
-
-    // shrink the formerly enlarged node
-    beeswarmNodes
-      .filter(d => d.ticker === ticker)
-      .transition()
-      .duration(120)
-      .attr("transform", d => `translate(${d.x}, ${d.y}) scale(1)`);
   } else {
     // lock to this ticker
     highlightedTicker = ticker;
-    hoverEnabled = false;
-
-    // enlarge & keep glow on
-    beeswarmNodes
-      .filter(d => d.ticker === ticker)
-      .moveToFront()
-      .transition()
-      .duration(120)
-      .attr("transform", d => `translate(${d.x}, ${d.y}) scale(1.2)`);
-
+    hoverEnabled = true; // still allow hover in locked mode
     pinTooltipForTicker(ticker);
   }
 
   updateHighlighting();
   updateResetButtonVisibility();
 }
+
 
 
 
@@ -882,6 +892,7 @@ function renderBeeswarm(data) {
     .attr("fill", "#e6eefc")
     .text("Number of Additional Benefits");
 
+  // Reset button roughly above right end of axis (CSS mainly controls this)
   const logoSize = 34;
 
   // Initialize each node at its fixed x position
@@ -901,76 +912,122 @@ function renderBeeswarm(data) {
     .each(function(d) {
       const g = d3.select(this);
 
-      // Glow rect (hidden initially)
+      // Ambient glow circle (hidden initially)
+      g.append("circle")
+        .attr("class", "beeGlow")
+        .attr("r", logoSize * 0.9)
+        .attr("cx", 0)
+        .attr("cy", 0)
+        .style("fill", "rgba(94, 168, 255, 0.28)")
+        .style("filter", "blur(18px)")
+        .style("opacity", 0);
+
+      // Tight blue square box (hidden initially)
       g.append("rect")
-        .attr("class", "glow")
-        .attr("width", logoSize + 10)
-        .attr("height", logoSize + 10)
-        .attr("x", -(logoSize + 10)/2)
-        .attr("y", -(logoSize + 10)/2)
-        .attr("rx", 6)
-        .attr("ry", 6)
+        .attr("class", "beeBox")
+        .attr("x", -logoSize / 2)
+        .attr("y", -logoSize / 2)
+        .attr("width", logoSize)
+        .attr("height", logoSize)
         .style("fill", "none")
         .style("stroke", "#5ea8ff")
         .style("stroke-width", 2)
-        .style("opacity", 0)
-        .style("filter", "drop-shadow(0 0 6px #5ea8ff)");
+        .style("opacity", 0);
 
       // Logo image
       g.append("image")
         .attr("href", d.logo)
-        .attr("x", -logoSize/2)
-        .attr("y", -logoSize/2)
+        .attr("x", -logoSize / 2)
+        .attr("y", -logoSize / 2)
         .attr("width", logoSize)
-        .attr("height", logoSize);
+        .attr("height", logoSize)
+        .style("opacity", 0)
+        .transition()
+        .duration(550)
+        .delay((_, i) => i * 18)
+        .style("opacity", 1);
     });
 
-  // Hover behavior (only in unlocked mode)
+  // Hover behavior (applies in both locked & unlocked modes)
   beeswarmNodes
     .on("mouseenter", function(event, d) {
-      if (!hoverEnabled) return;
+      const g = d3.select(this);
+      const glow = g.select(".beeGlow");
+      const box  = g.select(".beeBox");
+      const isSelected = (highlightedTicker && d.ticker === highlightedTicker);
 
-      d3.select(this).moveToFront();
+      g.moveToFront();
 
-      d3.select(this)
-        .transition()
-        .duration(120)
-        .attr("transform", `translate(${d.x}, ${d.y}) scale(1.2)`);
-
-      d3.select(this).select(".glow")
-        .transition()
-        .duration(120)
-        .style("opacity", 1);
+      if (!highlightedTicker) {
+        // UNLOCKED: hover → enlarge + glow + square
+        glow.style("opacity", 1);
+        box.style("opacity", 1);
+        g.transition()
+         .duration(120)
+         .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+      } else {
+        // LOCKED:
+        if (isSelected) {
+          // Hovering the selected icon: keep it as is (already enlarged + glow+box)
+          g.transition()
+           .duration(120)
+           .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+        } else {
+          // Hovering a non-selected icon: temporarily enlarge ONLY
+          g.transition()
+           .duration(120)
+           .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+          // no glow, no square
+        }
+      }
 
       positionTooltipLeftOfIcon(this, d);
     })
     .on("mousemove", function(event, d) {
-      if (!hoverEnabled) return;
       positionTooltipLeftOfIcon(this, d);
     })
     .on("mouseleave", function(event, d) {
-      if (!hoverEnabled) return;
-
-      d3.select(this)
-        .transition()
-        .duration(120)
-        .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
-
-      d3.select(this).select(".glow")
-        .transition()
-        .duration(120)
-        .style("opacity", 0);
+      const g = d3.select(this);
+      const glow = g.select(".beeGlow");
+      const box  = g.select(".beeBox");
+      const isSelected = (highlightedTicker && d.ticker === highlightedTicker);
 
       hideTooltip();
+
+      if (!highlightedTicker) {
+        // UNLOCKED: revert hover effects
+        glow.style("opacity", 0);
+        box.style("opacity", 0);
+        g.transition()
+         .duration(120)
+         .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+      } else {
+        // LOCKED:
+        if (isSelected) {
+          // Selected icon stays enlarged + glow + box
+          glow.style("opacity", 1);
+          box.style("opacity", 1);
+          g.transition()
+           .duration(120)
+           .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
+        } else {
+          // Non-selected icon returns to locked baseline: scale(1), dimmed
+          glow.style("opacity", 0);
+          box.style("opacity", 0);
+          g.transition()
+           .duration(120)
+           .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+        }
+      }
     })
     .on("click", function(event, d) {
       handleLogoClick(d.ticker);
     });
 
-  // Vertical-only beeswarm simulation
+  // Vertical-only beeswarm simulation with slightly tighter spacing
   const simulation = d3.forceSimulation(data)
     .force("y", d3.forceY(height / 2).strength(0.4))
-    .force("collide", d3.forceCollide(logoSize * 0.75))
+    .force("collide", d3.forceCollide(logoSize * 0.65))  // slightly less spacing
     .alpha(1)
     .alphaDecay(0.03)
     .on("tick", () => {
@@ -982,7 +1039,6 @@ function renderBeeswarm(data) {
       beeswarmNodes
         .attr("transform", d => `translate(${d.x}, ${d.y})`);
     });
-
 }
 
 
