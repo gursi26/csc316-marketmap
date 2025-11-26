@@ -172,6 +172,24 @@ window.addEventListener("keydown", (e) => {
 let benefitData = {};
 let currentCompany = null;
 
+// Beeswarm globals
+let highlightedTicker = null;   // currently locked/highlighted in beeswarm
+let dropdownSelected = null;    // ticker selected in dropdown
+let hoverEnabled = true;        // hover tooltips enabled only when no highlight
+
+let beeswarmNodes = null;       // d3 selection of logo nodes
+let beeswarmDataGlobal = null;  // raw data used in beeswarm
+let beeswarmXScale = null;      // x scale for extra benefits
+
+// D3 utility: bring element to front (SVG has no z-index)
+d3.selection.prototype.moveToFront = function() {
+  return this.each(function() {
+    this.parentNode.appendChild(this);
+  });
+};
+
+
+
 // OFFICE / HR KEYWORDS
 const officeKeywords = {
   gym: ["gym", "fitness"],
@@ -640,45 +658,45 @@ function place(screenIndex, iconName) {
  * Render Screen 5: Company logo sized by number of uncategorized benefits
  */
 function renderLogo() {
-  const companyData = benefitData[currentCompany];
-  if (!companyData) return;
+  // const companyData = benefitData[currentCompany];
+  // if (!companyData) return;
 
-  const extra = companyData.uncategorized || [];
-  const extraCount = extra.length;
+  // const extra = companyData.uncategorized || [];
+  // const extraCount = extra.length;
 
-  const container = document.querySelector(".screen-5 .screen-icons");
-  if (!container) return;
+  // const container = document.querySelector(".screen-5 .screen-icons");
+  // if (!container) return;
 
-  container.innerHTML = "";
+  // container.innerHTML = "";
 
-  const img = document.createElement("img");
-  img.src = `../dataset/logos/images/${currentCompany}.png`;
-  img.alt = `${currentCompany} logo`;
-  img.className = "benefitIcon logoIcon";
+  // const img = document.createElement("img");
+  // img.src = `../dataset/logos/images/${currentCompany}.png`;
+  // img.alt = `${currentCompany} logo`;
+  // img.className = "benefitIcon logoIcon";
 
-  const baseWidth = 15; // 30% width
-  const scale = 1 + 0.15 * extraCount; // +5% per uncategorized benefit
-  const widthPercent = Math.min(baseWidth * scale, 80); // cap at 80%
+  // const baseWidth = 15; // 30% width
+  // const scale = 1 + 0.15 * extraCount; // +5% per uncategorized benefit
+  // const widthPercent = Math.min(baseWidth * scale, 80); // cap at 80%
 
-  img.style.position = "absolute";
-  img.style.left = "50%";
-  img.style.top = "50%";
-  img.style.transform = "translate(-50%, -50%)";
-  img.style.width = widthPercent + "%";
+  // img.style.position = "absolute";
+  // img.style.left = "50%";
+  // img.style.top = "50%";
+  // img.style.transform = "translate(-50%, -50%)";
+  // img.style.width = widthPercent + "%";
 
-  img.addEventListener("mousemove", (e) => {
-    let html = `<strong>${currentCompany} — Additional Benefits</strong>`;
-    if (extraCount === 0) {
-      html += `<div>• All benefits are represented in the scenes.</div>`;
-    } else {
-      html += extra.map(d => `<div>• ${d}</div>`).join("");
-    }
-    showTooltip(html, e.pageX, e.pageY);
-  });
+  // img.addEventListener("mousemove", (e) => {
+  //   let html = `<strong>${currentCompany} — Additional Benefits</strong>`;
+  //   if (extraCount === 0) {
+  //     html += `<div>• All benefits are represented in the scenes.</div>`;
+  //   } else {
+  //     html += extra.map(d => `<div>• ${d}</div>`).join("");
+  //   }
+  //   showTooltip(html, e.pageX, e.pageY);
+  // });
 
-  img.addEventListener("mouseleave", hideTooltip);
+  // img.addEventListener("mouseleave", hideTooltip);
 
-  container.appendChild(img);
+  // container.appendChild(img);
 }
 
 
@@ -702,56 +720,366 @@ function hideTooltip() {
 }
 
 
+
 /* ============================================================
-   LOAD & CLASSIFY EACH COMPANY (with full name mapping)
+   BEESWARM HELPERS
+   ============================================================ */
+
+function extraTooltipHtml(d) {
+  const title = d.name || d.ticker;
+  let html = `<strong>${title} — Additional Benefits</strong>`;
+
+  if (!d.desc || d.desc.length === 0) {
+    html += `<div>• All benefits are represented in Screens 1–4.</div>`;
+  } else {
+    html += d.desc.map(b => `<div>• ${b}</div>`).join("");
+  }
+  return html;
+}
+
+// Position LEFT of the icon (center-aligned vertically)
+function positionTooltipLeftOfIcon(domNode, d) {
+  const rect = domNode.getBoundingClientRect();
+  const iconX = rect.left + rect.width / 2 + window.scrollX;
+  const iconY = rect.top + rect.height / 2 + window.scrollY;
+
+  tooltip.innerHTML = extraTooltipHtml(d);
+  tooltip.classList.remove("hidden");
+  tooltip.classList.add("visible");
+
+  const tRect = tooltip.getBoundingClientRect();
+  const offset = 40;
+
+  const left = iconX - tRect.width - offset;
+  const top = iconY - tRect.height / 2;
+
+  tooltip.style.left = `${Math.max(left, 10)}px`;
+  tooltip.style.top = `${Math.max(top, 10)}px`;
+}
+
+function pinTooltipForTicker(ticker) {
+  if (!beeswarmNodes) return;
+  const nodeSel = beeswarmNodes.filter(d => d.ticker === ticker);
+  if (nodeSel.empty()) { hideTooltip(); return; }
+  const dom = nodeSel.node();
+  const d = nodeSel.datum();
+  positionTooltipLeftOfIcon(dom, d);
+}
+
+function updateHighlighting() {
+  if (!beeswarmNodes) return;
+
+  beeswarmNodes.each(function(d) {
+    const g = d3.select(this);
+    const glow = g.select(".glow");
+
+    if (!highlightedTicker) {
+      // unlocked mode → no highlight
+      glow.style("opacity", 0);
+      g.style("opacity", 1);
+    } else {
+      // locked mode
+      const isSelected = (d.ticker === highlightedTicker);
+      glow.style("opacity", isSelected ? 1 : 0);
+      g.style("opacity", isSelected ? 1 : 0.4);
+    }
+  });
+}
+
+function updateResetButtonVisibility() {
+  const btn = document.getElementById("resetToSelected");
+  if (!btn) return;
+
+  if (!dropdownSelected) {
+    btn.style.display = "none";
+    return;
+  }
+
+  // Show when:
+  // - no highlight
+  // - OR highlight ≠ dropdownSelected
+  if (!highlightedTicker || highlightedTicker !== dropdownSelected) {
+    btn.style.display = "block";
+  } else {
+    btn.style.display = "none";
+  }
+}
+
+// Click behavior
+function handleLogoClick(ticker) {
+  if (highlightedTicker === ticker) {
+    // unlock
+    highlightedTicker = null;
+    hoverEnabled = true;
+    hideTooltip();
+
+    // shrink the formerly enlarged node
+    beeswarmNodes
+      .filter(d => d.ticker === ticker)
+      .transition()
+      .duration(120)
+      .attr("transform", d => `translate(${d.x}, ${d.y}) scale(1)`);
+  } else {
+    // lock to this ticker
+    highlightedTicker = ticker;
+    hoverEnabled = false;
+
+    // enlarge & keep glow on
+    beeswarmNodes
+      .filter(d => d.ticker === ticker)
+      .moveToFront()
+      .transition()
+      .duration(120)
+      .attr("transform", d => `translate(${d.x}, ${d.y}) scale(1.2)`);
+
+    pinTooltipForTicker(ticker);
+  }
+
+  updateHighlighting();
+  updateResetButtonVisibility();
+}
+
+
+
+/* ============================================================
+   RENDER BEESWARM (SCREEN 5)
+   ============================================================ */
+
+function renderBeeswarm(data) {
+  beeswarmDataGlobal = data;
+
+  const svg = d3.select("#beeswarmPlot");
+  svg.selectAll("*").remove();
+
+  const width = svg.node().clientWidth || 600;
+  const height = svg.node().clientHeight || 400;
+
+  const margin = { top: 40, right: 40, bottom: 70, left: 60 };
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
+
+  const maxExtra = d3.max(data, d => d.extra) || 0;
+
+  // fixed-x axis: 0 → max+0.5
+  beeswarmXScale = d3.scaleLinear()
+    .domain([0, maxExtra + 0.5])
+    .range([margin.left, width - margin.right])
+    .nice();
+
+  const xAxis = d3.axisBottom(beeswarmXScale)
+    .ticks(Math.min(maxExtra + 1, 8))
+    .tickFormat(d3.format("d"));
+
+  svg.append("g")
+    .attr("class", "axis axis-x")
+    .attr("transform", `translate(0, ${height - margin.bottom})`)
+    .call(xAxis);
+
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", height - 30)
+    .attr("text-anchor", "middle")
+    .attr("fill", "#e6eefc")
+    .text("Number of Additional Benefits");
+
+  const logoSize = 34;
+
+  // Initialize each node at its fixed x position
+  data.forEach(d => {
+    d.x = beeswarmXScale(d.extra);
+    d.y = height / 2;
+  });
+
+  // Build nodes
+  beeswarmNodes = svg.append("g")
+    .attr("class", "bee-nodes")
+    .selectAll("g.company-node")
+    .data(data, d => d.ticker)
+    .join("g")
+    .attr("class", "company-node")
+    .attr("transform", d => `translate(${d.x}, ${d.y})`)
+    .each(function(d) {
+      const g = d3.select(this);
+
+      // Glow rect (hidden initially)
+      g.append("rect")
+        .attr("class", "glow")
+        .attr("width", logoSize + 10)
+        .attr("height", logoSize + 10)
+        .attr("x", -(logoSize + 10)/2)
+        .attr("y", -(logoSize + 10)/2)
+        .attr("rx", 6)
+        .attr("ry", 6)
+        .style("fill", "none")
+        .style("stroke", "#5ea8ff")
+        .style("stroke-width", 2)
+        .style("opacity", 0)
+        .style("filter", "drop-shadow(0 0 6px #5ea8ff)");
+
+      // Logo image
+      g.append("image")
+        .attr("href", d.logo)
+        .attr("x", -logoSize/2)
+        .attr("y", -logoSize/2)
+        .attr("width", logoSize)
+        .attr("height", logoSize);
+    });
+
+  // Hover behavior (only in unlocked mode)
+  beeswarmNodes
+    .on("mouseenter", function(event, d) {
+      if (!hoverEnabled) return;
+
+      d3.select(this).moveToFront();
+
+      d3.select(this)
+        .transition()
+        .duration(120)
+        .attr("transform", `translate(${d.x}, ${d.y}) scale(1.2)`);
+
+      d3.select(this).select(".glow")
+        .transition()
+        .duration(120)
+        .style("opacity", 1);
+
+      positionTooltipLeftOfIcon(this, d);
+    })
+    .on("mousemove", function(event, d) {
+      if (!hoverEnabled) return;
+      positionTooltipLeftOfIcon(this, d);
+    })
+    .on("mouseleave", function(event, d) {
+      if (!hoverEnabled) return;
+
+      d3.select(this)
+        .transition()
+        .duration(120)
+        .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+
+      d3.select(this).select(".glow")
+        .transition()
+        .duration(120)
+        .style("opacity", 0);
+
+      hideTooltip();
+    })
+    .on("click", function(event, d) {
+      handleLogoClick(d.ticker);
+    });
+
+  // Vertical-only beeswarm simulation
+  const simulation = d3.forceSimulation(data)
+    .force("y", d3.forceY(height / 2).strength(0.4))
+    .force("collide", d3.forceCollide(logoSize * 0.75))
+    .alpha(1)
+    .alphaDecay(0.03)
+    .on("tick", () => {
+      // lock x back to the scale every tick
+      data.forEach(d => {
+        d.x = beeswarmXScale(d.extra);
+      });
+
+      beeswarmNodes
+        .attr("transform", d => `translate(${d.x}, ${d.y})`);
+    });
+
+}
+
+
+
+/* ============================================================
+   LOAD & CLASSIFY EACH COMPANY (with beeswarm)
    ============================================================ */
 
 Promise.all([
   d3.csv("../dataset/cleaned/Company-benefits.csv"),
   d3.csv("../dataset/cleaned/Company-info.csv")
 ]).then(([benefitCSV, infoCSV]) => {
-
   const dropdown = document.getElementById("companySelect");
   const statusSpan = document.getElementById("companyStatus");
 
-  // Build ticker → full name look-up
+  // Build ticker -> full name lookup
   const tickerToName = {};
   infoCSV.forEach(row => {
     tickerToName[row.Ticker] = row.Name;
   });
 
-  // Extract tickers
+  // Unique tickers present in the benefits file
   const tickers = [...new Set(benefitCSV.map(d => d.Ticker))];
 
-  // Build dropdown options using FULL names
+  // Populate dropdown with full names (fallback to ticker)
   tickers.forEach(ticker => {
     const op = document.createElement("option");
     op.value = ticker;
-
-    // Show full name if available, else fallback to ticker
     op.textContent = tickerToName[ticker] || ticker;
-
     dropdown.appendChild(op);
   });
 
-  // Classify benefits for each ticker
+  // Classify each company and build benefitData as before
   tickers.forEach(ticker => {
     const rows = benefitCSV.filter(r => r.Ticker === ticker);
     benefitData[ticker] = classifyCompany(rows);
   });
 
-  dropdown.addEventListener("change", () => {
-    currentCompany = dropdown.value;
-    renderIcons();
+  // Build beeswarm data: one point per company
+  const beeswarmData = tickers.map(ticker => {
+    const companyData = benefitData[ticker];
+    const extra = companyData.uncategorized || [];
+    return {
+      ticker,
+      name: tickerToName[ticker] || ticker,
+      logo: `../dataset/logos/images/${ticker}.png`,
+      extra: extra.length,
+      desc: extra
+    };
   });
 
-  // Set the default company automatically
+  // Render beeswarm once
+  renderBeeswarm(beeswarmData);
+
+  // Default selection: first ticker
   currentCompany = tickers[0];
+  dropdownSelected = tickers[0];
+  dropdown.value = tickers[0];
+
   statusSpan.textContent = "";
   renderIcons();
 
+  // Start in "highlight selected" mode
+  highlightedTicker = dropdownSelected;
+  hoverEnabled = false;
+  updateHighlighting();
+  pinTooltipForTicker(dropdownSelected);
+  updateResetButtonVisibility();
+
+  // Dropdown change -> change company AND highlight in beeswarm
+  dropdown.addEventListener("change", () => {
+    currentCompany = dropdown.value;
+    dropdownSelected = dropdown.value;
+
+    renderIcons();
+
+    highlightedTicker = dropdownSelected;
+    hoverEnabled = false;
+    updateHighlighting();
+    pinTooltipForTicker(dropdownSelected);
+    updateResetButtonVisibility();
+  });
+
+  // "Show Selected Company" button behavior
+  const resetBtn = document.getElementById("resetToSelected");
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      if (!dropdownSelected) return;
+      highlightedTicker = dropdownSelected;
+      hoverEnabled = false;
+      updateHighlighting();
+      pinTooltipForTicker(dropdownSelected);
+      updateResetButtonVisibility();
+    });
+  }
 }).catch(err => {
-  console.error("Error loading CSV:", err);
+  console.error("Error loading CSVs:", err);
   const statusSpan = document.getElementById("companyStatus");
   if (statusSpan) {
     statusSpan.textContent = "⚠️ Could not load data";

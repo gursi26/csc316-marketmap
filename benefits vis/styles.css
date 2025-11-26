@@ -251,3 +251,44 @@ body {
 .ratio-1-1 {
   aspect-ratio: 1 / 1;
 }
+
+
+.screen-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.beelogo {
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.beelogo {
+  transform-box: fill-box;
+  transform-origin: center center;
+}
+
+.beelogo:hover {
+  transform: scale(2);
+}
+
+.resetButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(16, 24, 51, 0.85);
+  border: 1px solid #5ea8ff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #e6eefc;
+  cursor: pointer;
+  z-index: 20;
+  display: none; /* will be controlled by JS */
+}
+
+.resetButton:hover {
+  background: rgba(16, 24, 51, 1);
+}
+
+
