@@ -589,6 +589,7 @@ button{ font-family:inherit }
 .building, .mini-building{ pointer-events:auto }
 .building .building-icon{ transition: filter 0.2s ease }
 .building:hover .building-icon{ filter: drop-shadow(0 0 8px rgba(94, 168, 255, 0.8)) drop-shadow(0 0 12px rgba(94, 168, 255, 0.4)) brightness(1.2) }
+.building-highlight .building-icon{ filter: drop-shadow(0 0 8px rgba(94, 168, 255, 0.8)) drop-shadow(0 0 12px rgba(94, 168, 255, 0.4)) brightness(1.2) }
 .building .outline, .mini-building .outline{ fill:none; stroke:rgba(255,255,255,.14); stroke-width:.4 }
 .building .hover-ring{ fill:none; stroke:rgba(94, 168, 255, 0.6); stroke-width:2; opacity:0; transition: opacity 0.2s ease }
 .building:hover .hover-ring{ opacity:1 }

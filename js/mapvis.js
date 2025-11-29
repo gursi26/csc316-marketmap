@@ -775,6 +775,33 @@ class MapVis {
       sel.exit().remove();
     }
 
+    // Helper: highlight a company's building on the map
+    function highlightCompanyBuilding(ticker, enabled){
+      if (!ticker) return;
+      const sel = gBuildings.selectAll("g.building").filter(d => d.Ticker === ticker);
+      sel.classed("building-highlight", !!enabled);
+    }
+
+    // Helper: compute screen position for a company's building (center of icon)
+    function getBuildingScreenPosition(ticker){
+      if (!ticker) return null;
+      const node = gBuildings.selectAll("g.building").filter(d => d.Ticker === ticker).node();
+      const svgNode = document.getElementById('chart');
+      if (!node || !svgNode || !svgNode.createSVGPoint) return null;
+      try {
+        const bbox = node.getBBox();
+        const pt = svgNode.createSVGPoint();
+        pt.x = bbox.x + bbox.width / 2;
+        pt.y = bbox.y + bbox.height / 2;
+        const ctm = node.getScreenCTM() || svgNode.getScreenCTM();
+        if (!ctm) return null;
+        const screenPt = pt.matrixTransform(ctm);
+        return { pageX: screenPt.x, pageY: screenPt.y };
+      } catch (e) {
+        return null;
+      }
+    }
+
     // Lightweight toggle of interactivity without recomputing positions (avoids delay on zoom)
     function updateBuildingInteractivity(enabled){
       gBuildings.selectAll("g.building")
@@ -795,7 +822,7 @@ class MapVis {
     }
 
     // ---- Tooltip (closer + clamped) ----
-    function showTip(event, d){
+    function showTip(eventOrPos, d){
       const mc = d.mc ? d3.format(".2s")(d.mc) : "n/a";
       const rating = d.employee_rating!=null ? d3.format(".2f")(d.employee_rating) : "n/a";
       const ceo    = d.ceo_approval!=null ? d3.format(".0f")(d.ceo_approval) + "%" : "n/a";
@@ -818,8 +845,36 @@ class MapVis {
 
       const pad = 6;
       const rect = tooltip.node().getBoundingClientRect();
-      let x = event.pageX - 300, y = event.pageY - 100;
+      // Derive page coordinates from a MouseEvent-like object or a plain {pageX,pageY}
+      let pageX, pageY;
+      if (eventOrPos) {
+        if (typeof eventOrPos.pageX === 'number' && typeof eventOrPos.pageY === 'number') {
+          pageX = eventOrPos.pageX;
+          pageY = eventOrPos.pageY;
+        } else if (typeof eventOrPos.clientX === 'number' && typeof eventOrPos.clientY === 'number') {
+          pageX = eventOrPos.clientX + window.scrollX;
+          pageY = eventOrPos.clientY + window.scrollY;
+        }
+      }
+      if (pageX == null || pageY == null) {
+        pageX = window.innerWidth / 2;
+        pageY = window.innerHeight / 2;
+      }
+
+      // Default: place tooltip to the right of the cursor/building, slightly above center
+      const offsetX = 18;
+      const offsetY = -20;
+      let x = pageX + offsetX;
+      let y = pageY + offsetY;
       const vw = window.innerWidth, vh = window.innerHeight;
+      // If the left state panel is open, keep tooltip to the right of it
+      if (layoutEl && layoutEl.classList.contains('panel-open')) {
+        const panelEl = document.querySelector('.state-companies-panel');
+        if (panelEl) {
+          const pr = panelEl.getBoundingClientRect().right;
+          if (x < pr + pad) x = pr + pad;
+        }
+      }
       if (x + rect.width > vw)  x = vw - rect.width - pad;
       if (y + rect.height > vh) y = vh - rect.height - pad;
       tooltip.style("left", x + "px").style("top", y + "px");
@@ -1230,6 +1285,20 @@ class MapVis {
         .style("vertical-align", "bottom")
         .style("width", "80px")
         .style("margin-top", "8px"); // Add margin to each bar for logo visibility
+
+      // Hovering over a bar highlights the corresponding building and shows its tooltip
+      allItems
+        .on("mouseenter", function(event, d) {
+          highlightCompanyBuilding(d.Ticker, true);
+          const pos = getBuildingScreenPosition(d.Ticker);
+          if (pos) {
+            showTip(pos, d);
+          }
+        })
+        .on("mouseleave", function(event, d) {
+          highlightCompanyBuilding(d.Ticker, false);
+          hideTip();
+        });
 
       // Slide in animation for bar chart
       barChartContainer.style("transform", "translateX(60px)").style("opacity", "0");
