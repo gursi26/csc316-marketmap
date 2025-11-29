@@ -370,6 +370,12 @@ body{ margin:0; background:var(--bg); color:var(--fg); font-family: "Work Sans",
     font-weight: 600;
     text-align: center;
 }
+.state-companies-panel .panel-header .panel-subtitle {
+    margin: 6px 0 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+}
 
 .companies-bar-chart {
     display: flex;
