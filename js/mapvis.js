@@ -290,6 +290,28 @@ class MapVis {
       return isFinite(mc) ? mc : null;
     }
     
+    // Market cap formatter: uses M (millions), B (billions), T (trillions)
+    function formatMarketCap(v){
+      if (v == null || !isFinite(v)) return "n/a";
+      const abs = Math.abs(v);
+      let value, suffix;
+      if (abs >= 1e12) {
+        value = v / 1e12;
+        suffix = "T";
+      } else if (abs >= 1e9) {
+        value = v / 1e9;
+        suffix = "B";
+      } else if (abs >= 1e6) {
+        value = v / 1e6;
+        suffix = "M";
+      } else {
+        value = v;
+        suffix = "";
+      }
+      const formatted = value >= 10 ? value.toFixed(0) : value.toFixed(2);
+      return suffix ? `${formatted}${suffix}` : formatted;
+    }
+    
     // How much to locally scale building icons given the current zoom
     function getBuildingIconScale(){
       const s = currentZoom || 1;
@@ -853,7 +875,7 @@ class MapVis {
 
     // ---- Tooltip (closer + clamped) ----
     function showTip(eventOrPos, d){
-      const mc = d.mc ? d3.format(".2s")(d.mc) : "n/a";
+      const mc = d.mc ? formatMarketCap(d.mc) : "n/a";
       const rating = d.employee_rating!=null ? d3.format(".2f")(d.employee_rating) : "n/a";
       const ceo    = d.ceo_approval!=null ? d3.format(".0f")(d.ceo_approval) + "%" : "n/a";
       const industry = pick(d, ["Industry"]) || "n/a";
@@ -1300,7 +1322,7 @@ class MapVis {
         .ease(d3.easeCubicOut)
         .style("height", d => `${heightScale(Math.max(d.mc, maxMc * 0.01))}px`);
       allItems.select(".market-cap-label")
-        .text(d => `$${d3.format(".2s")(d.mc)}`);
+        .text(d => `$${formatMarketCap(d.mc)}`);
 
       // Always show companies horizontally, with scroll if needed
       barChartContainer.style("white-space", "nowrap")
