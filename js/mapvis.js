@@ -195,6 +195,9 @@ class MapVis {
         industryIcons[cat] = img;
       });
 
+      // Build legend overlay panel (collapsed by default from HTML)
+      renderLegend();
+
       const states = topojson.feature(usTopo, usTopo.objects.states).features;
       
       // Store state geometries for boundary checking
@@ -276,6 +279,114 @@ class MapVis {
         }
       }
       return null;
+    }
+    
+    // ---- Legend Panel (over map) ----
+    let baseViewBox = null;
+    function getBaseViewBox(){
+      const svgEl = document.getElementById('chart');
+      if (!svgEl) return { x:-50, y:-20, width:1000, height:680 };
+      if (baseViewBox) return baseViewBox;
+      const vb = svgEl.viewBox && svgEl.viewBox.baseVal
+        ? svgEl.viewBox.baseVal
+        : { x:-50, y:-20, width:1000, height:680 };
+      baseViewBox = { x: vb.x, y: vb.y, width: vb.width, height: vb.height };
+      return baseViewBox;
+    }
+    function getSvgPxPerUnit(){
+      const svgEl = document.getElementById('chart');
+      if (!svgEl) return 1;
+      const vb = svgEl.viewBox && svgEl.viewBox.baseVal ? svgEl.viewBox.baseVal : { width: 1000 };
+      const rect = svgEl.getBoundingClientRect();
+      return rect.width / (vb.width || 1000);
+    }
+    function getRightUiPaddingPx(){
+      // width of page dots + a small safety margin
+      const dots = document.querySelector('.page-dots');
+      if (!dots) return 20;
+      const r = dots.getBoundingClientRect();
+      // right is 30px (per CSS) + shadow breathing room
+      return Math.ceil(r.width) + 40;
+    }
+    function adjustSvgViewBoxForUi(){
+      const svgEl = document.getElementById('chart');
+      if (!svgEl) return;
+      const vbBase = getBaseViewBox();
+      const rect = svgEl.getBoundingClientRect();
+      if (!rect.width) return;
+      const padPx = getRightUiPaddingPx();
+      const m = Math.max(0, Math.min(0.4, padPx / rect.width));
+      if (m <= 0.001){
+        svgEl.setAttribute('viewBox', `${vbBase.x} ${vbBase.y} ${vbBase.width} ${vbBase.height}`);
+        return;
+      }
+      const newWidth = vbBase.width / (1 - m);
+      svgEl.setAttribute('viewBox', `${vbBase.x} ${vbBase.y} ${newWidth} ${vbBase.height}`);
+    }
+    function positionLegendPanel(){
+      // Keep legend anchored to the top-right of the canvas; width fixed via CSS.
+      const panel = document.getElementById('legend-panel');
+      if (!panel) return;
+      panel.style.right = '24px';
+    }
+    function renderLegend(){
+      try {
+        const panel = document.getElementById('legend-panel');
+        if (!panel) return;
+        const collapsed = panel.classList.contains('collapsed');
+        panel.innerHTML = '';
+        const headerRow = document.createElement('div');
+        headerRow.className = 'legend-header-row';
+        const title = document.createElement('div');
+        title.className = 'legend-panel-title';
+        title.textContent = 'Legend';
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'legend-toggle';
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'legend-toggle-icon';
+        iconSpan.textContent = '▾';
+        toggle.appendChild(iconSpan);
+        headerRow.appendChild(title);
+        headerRow.appendChild(toggle);
+        const grid = document.createElement('div');
+        grid.className = 'legend-grid';
+        const cats = Object.keys(industryMapping || {});
+        cats.forEach(cat => {
+          const item = document.createElement('div');
+          item.className = 'legend-item';
+          const img = document.createElement('img');
+          img.className = 'legend-item-icon';
+          const icon = industryIcons[cat];
+          img.src = icon ? icon.src : `dataset/building-icons/${cat}.png`;
+          img.alt = cat;
+          const label = document.createElement('span');
+          label.className = 'legend-item-label';
+          label.textContent = cat;
+          item.appendChild(img);
+          item.appendChild(label);
+          grid.appendChild(item);
+        });
+        panel.appendChild(headerRow);
+        panel.appendChild(grid);
+        if (collapsed) {
+          panel.classList.add('collapsed');
+        }
+        // Prevent clicks inside the panel from triggering global click handlers
+        panel.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+        });
+        // Allow clicking anywhere on the header (including collapsed state) to toggle the legend
+        headerRow.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          panel.classList.toggle('collapsed');
+        });
+        toggle.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          panel.classList.toggle('collapsed');
+        });
+        positionLegendPanel();
+      } catch (e) {}
     }
 
     // Helper to check if a point is inside a state's actual polygon geometry
@@ -855,6 +966,11 @@ class MapVis {
     function onStateClick(event, d){
       event.stopPropagation();
       hideCompanyPopup(); // Close popup when clicking on a state
+      // Collapse legend when interacting with a state
+      try {
+        const panel = document.getElementById('legend-panel');
+        if (panel) panel.classList.add('collapsed');
+      } catch (e) {}
       const id = `state:${d.id || d.properties.name}`;
       if (zoomTarget && zoomTarget.id===id) { resetView(); return; }
 
@@ -902,6 +1018,11 @@ class MapVis {
     function onCountryClick(event, d, centerX, startY, vSpacing){
       event.stopPropagation();
       hideCompanyPopup(); // Close popup when clicking on a country
+      // Collapse legend when interacting with a country bubble
+      try {
+        const panel = document.getElementById('legend-panel');
+        if (panel) panel.classList.add('collapsed');
+      } catch (e) {}
       const id = `country:${d.name}`;
       if (zoomTarget && zoomTarget.id===id) { resetView(); return; }
 
@@ -1127,7 +1248,16 @@ class MapVis {
     });
 
     // hide popup when clicking outside
-    document.addEventListener('click', () => { hideCompanyPopup(); });
+    document.addEventListener('click', (ev) => {
+      hideCompanyPopup();
+      // Collapse legend if click is outside the legend panel
+      try {
+        const panel = document.getElementById('legend-panel');
+        if (panel && !panel.classList.contains('collapsed') && !panel.contains(ev.target)) {
+          panel.classList.add('collapsed');
+        }
+      } catch (e) {}
+    });
 
     // allow parent to request view reset
     window.addEventListener('message', (ev) => {
@@ -1137,6 +1267,14 @@ class MapVis {
         try { resetView(); } catch (e) {}
       }
     }, false);
+    
+    // Recompute layout on resize to maintain legend placement
+    window.addEventListener('resize', () => {
+      try {
+        positionLegendPanel();
+        renderForeign();
+      } catch (e) {}
+    });
 
   }
 
