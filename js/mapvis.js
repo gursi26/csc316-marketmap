@@ -56,7 +56,6 @@ class MapVis {
           <div id="cp-title" class="map-popup-title"></div>
           <div class="map-popup-actions">
             <button id="cp-details" class="btn-primary">Details</button>
-            <button id="cp-roles" class="btn-primary">Pay Progression</button>
           </div>
         </div>
       `;
@@ -70,7 +69,6 @@ class MapVis {
       const popup = createCompanyPopup();
       const title = popup.querySelector('#cp-title');
       const btnDetails = popup.querySelector('#cp-details');
-      const btnRoles = popup.querySelector('#cp-roles');
       title.textContent = (company.Name || company.Ticker || 'Company');
 
       // position near mouse
@@ -86,22 +84,22 @@ class MapVis {
       };
 
       // remove previous handlers
-      btnDetails.onclick = null; btnRoles.onclick = null;
+      btnDetails.onclick = null;
 
       btnDetails.onclick = function(ev){
         ev.stopPropagation();
-        // const t = encodeURIComponent(company.Ticker || '');
-        // window.location.href = `../scatter-plot%20vis/index.html?ticker=${t}`;
         hideCompanyPopup();
-        focusTicker(company.Ticker || '');
-        scrollToSection(2);
-      };
-      btnRoles.onclick = function(ev){
-        ev.stopPropagation();
-        // const t = encodeURIComponent(company.Ticker || '');
-        // window.location.href = `../slope-chart%20vis/index.html?ticker=${t}`;
-        hideCompanyPopup();
-        navigateToSlopeMap(company.Ticker || '');
+        const ticker = company.Ticker || '';
+        // Navigate to bubble chart / scatter slide (section-five, index 8 in .section NodeList)
+        try {
+          scrollToSection(8);
+          if (ticker && typeof focusTicker === 'function') {
+            // Wait a bit so the scatter plot is in view and rendered
+            setTimeout(() => {
+              try { focusTicker(ticker); } catch (e) {}
+            }, 800);
+          }
+        } catch (e) {}
       };
     }
 
