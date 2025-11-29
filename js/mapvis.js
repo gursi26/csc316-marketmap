@@ -56,6 +56,7 @@ class MapVis {
           <div id="cp-title" class="map-popup-title"></div>
           <div class="map-popup-actions">
             <button id="cp-details" class="btn-primary">Details</button>
+            <button id="cp-benefits" class="btn-primary">Benefits</button>
           </div>
         </div>
       `;
@@ -69,6 +70,7 @@ class MapVis {
       const popup = createCompanyPopup();
       const title = popup.querySelector('#cp-title');
       const btnDetails = popup.querySelector('#cp-details');
+      const btnBenefits = popup.querySelector('#cp-benefits');
       title.textContent = (company.Name || company.Ticker || 'Company');
 
       // position near mouse
@@ -85,6 +87,7 @@ class MapVis {
 
       // remove previous handlers
       btnDetails.onclick = null;
+      if (btnBenefits) btnBenefits.onclick = null;
 
       btnDetails.onclick = function(ev){
         ev.stopPropagation();
@@ -101,6 +104,21 @@ class MapVis {
           }
         } catch (e) {}
       };
+      if (btnBenefits) {
+        btnBenefits.onclick = function(ev){
+          ev.stopPropagation();
+          hideCompanyPopup();
+          const ticker = company.Ticker || '';
+          try {
+            // Navigate to benefits visualization section (section-three, index 4)
+            scrollToSection(4);
+            const iframe = document.querySelector('.section-three iframe');
+            if (iframe && iframe.contentWindow && ticker) {
+              iframe.contentWindow.postMessage({ type: 'selectCompany', ticker }, '*');
+            }
+          } catch (e) {}
+        };
+      }
     }
 
     function hideCompanyPopup(){

@@ -1191,6 +1191,23 @@ Promise.all([
       updateResetButtonVisibility();
     });
   }
+  
+  // Allow parent page to programmatically select a company by ticker
+  window.addEventListener('message', (ev) => {
+    const msg = ev && ev.data;
+    if (!msg || msg.type !== 'selectCompany' || !msg.ticker) return;
+    const t = (msg.ticker || '').toString().toUpperCase();
+    if (!tickers.includes(t)) return;
+    currentCompany = t;
+    dropdownSelected = t;
+    dropdown.value = t;
+    renderIcons();
+    highlightedTicker = dropdownSelected;
+    hoverEnabled = false;
+    updateHighlighting();
+    pinTooltipForTicker(dropdownSelected);
+    updateResetButtonVisibility();
+  }, false);
 }).catch(err => {
   console.error("Error loading CSVs:", err);
   const statusSpan = document.getElementById("companyStatus");
