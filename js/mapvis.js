@@ -56,7 +56,7 @@ class MapVis {
           <div id="cp-title" class="map-popup-title"></div>
           <div class="map-popup-actions">
             <button id="cp-details" class="btn-primary">Details</button>
-            <button id="cp-roles" class="btn-primary">Pay Progression</button>
+            <button id="cp-benefits" class="btn-primary">Benefits</button>
           </div>
         </div>
       `;
@@ -70,7 +70,7 @@ class MapVis {
       const popup = createCompanyPopup();
       const title = popup.querySelector('#cp-title');
       const btnDetails = popup.querySelector('#cp-details');
-      const btnRoles = popup.querySelector('#cp-roles');
+      const btnBenefits = popup.querySelector('#cp-benefits');
       title.textContent = (company.Name || company.Ticker || 'Company');
 
       // position near mouse
@@ -86,23 +86,39 @@ class MapVis {
       };
 
       // remove previous handlers
-      btnDetails.onclick = null; btnRoles.onclick = null;
+      btnDetails.onclick = null;
+      if (btnBenefits) btnBenefits.onclick = null;
 
       btnDetails.onclick = function(ev){
         ev.stopPropagation();
-        // const t = encodeURIComponent(company.Ticker || '');
-        // window.location.href = `../scatter-plot%20vis/index.html?ticker=${t}`;
         hideCompanyPopup();
-        focusTicker(company.Ticker || '');
-        scrollToSection(2);
+        const ticker = company.Ticker || '';
+        // Navigate to bubble chart / scatter slide (section-five, index 8 in .section NodeList)
+        try {
+          scrollToSection(8);
+          if (ticker && typeof focusTicker === 'function') {
+            // Wait a bit so the scatter plot is in view and rendered
+            setTimeout(() => {
+              try { focusTicker(ticker); } catch (e) {}
+            }, 800);
+          }
+        } catch (e) {}
       };
-      btnRoles.onclick = function(ev){
-        ev.stopPropagation();
-        // const t = encodeURIComponent(company.Ticker || '');
-        // window.location.href = `../slope-chart%20vis/index.html?ticker=${t}`;
-        hideCompanyPopup();
-        navigateToSlopeMap(company.Ticker || '');
-      };
+      if (btnBenefits) {
+        btnBenefits.onclick = function(ev){
+          ev.stopPropagation();
+          hideCompanyPopup();
+          const ticker = company.Ticker || '';
+          try {
+            // Navigate to benefits visualization section (section-three, index 4)
+            scrollToSection(4);
+            const iframe = document.querySelector('.section-three iframe');
+            if (iframe && iframe.contentWindow && ticker) {
+              iframe.contentWindow.postMessage({ type: 'selectCompany', ticker }, '*');
+            }
+          } catch (e) {}
+        };
+      }
     }
 
     function hideCompanyPopup(){
@@ -157,7 +173,11 @@ class MapVis {
 
     // Zoom state
     let zoomTarget = null;   // {type:'state', id}
-    let currentZoom = 1;     // scale factor applied to gRoot; buildings counter-scale by 1/currentZoom
+    let currentZoom = 1;     // scale factor applied to gRoot
+    // How strongly building icons grow when zoomed in:
+    // 0  -> icons stay constant size on-screen
+    // 1  -> icons grow fully with the map zoom
+    const BUILDING_ZOOM_FACTOR = 0.6;
     
     // State name to abbreviation mapping
     const stateNameToAbbr = {
@@ -194,6 +214,9 @@ class MapVis {
         img.src = `dataset/building-icons/${cat}.png`;
         industryIcons[cat] = img;
       });
+
+      // Build legend overlay panel (collapsed by default from HTML)
+      renderLegend();
 
       const states = topojson.feature(usTopo, usTopo.objects.states).features;
       
@@ -266,6 +289,38 @@ class MapVis {
       const mc = row ? (+pick(row, ["market cap","marketcap","mkt cap"])) : null;
       return isFinite(mc) ? mc : null;
     }
+    
+    // Market cap formatter: uses M (millions), B (billions), T (trillions)
+    function formatMarketCap(v){
+      if (v == null || !isFinite(v)) return "n/a";
+      const abs = Math.abs(v);
+      let value, suffix;
+      if (abs >= 1e12) {
+        value = v / 1e12;
+        suffix = "T";
+      } else if (abs >= 1e9) {
+        value = v / 1e9;
+        suffix = "B";
+      } else if (abs >= 1e6) {
+        value = v / 1e6;
+        suffix = "M";
+      } else {
+        value = v;
+        suffix = "";
+      }
+      const formatted = value >= 10 ? value.toFixed(0) : value.toFixed(2);
+      return suffix ? `${formatted}${suffix}` : formatted;
+    }
+    
+    // How much to locally scale building icons given the current zoom
+    function getBuildingIconScale(){
+      const s = currentZoom || 1;
+      const f = BUILDING_ZOOM_FACTOR;
+      if (s <= 1 || f <= 0) return 1;
+      // total on-screen scale = s * localScale = 1 + (s-1)*f
+      const total = 1 + (s - 1) * f;
+      return total / s;
+    }
 
     // Helper function to map industry to icon category
     function getIndustryCategory(industry) {
@@ -276,6 +331,114 @@ class MapVis {
         }
       }
       return null;
+    }
+    
+    // ---- Legend Panel (over map) ----
+    let baseViewBox = null;
+    function getBaseViewBox(){
+      const svgEl = document.getElementById('chart');
+      if (!svgEl) return { x:-50, y:-20, width:1000, height:680 };
+      if (baseViewBox) return baseViewBox;
+      const vb = svgEl.viewBox && svgEl.viewBox.baseVal
+        ? svgEl.viewBox.baseVal
+        : { x:-50, y:-20, width:1000, height:680 };
+      baseViewBox = { x: vb.x, y: vb.y, width: vb.width, height: vb.height };
+      return baseViewBox;
+    }
+    function getSvgPxPerUnit(){
+      const svgEl = document.getElementById('chart');
+      if (!svgEl) return 1;
+      const vb = svgEl.viewBox && svgEl.viewBox.baseVal ? svgEl.viewBox.baseVal : { width: 1000 };
+      const rect = svgEl.getBoundingClientRect();
+      return rect.width / (vb.width || 1000);
+    }
+    function getRightUiPaddingPx(){
+      // width of page dots + a small safety margin
+      const dots = document.querySelector('.page-dots');
+      if (!dots) return 20;
+      const r = dots.getBoundingClientRect();
+      // right is 30px (per CSS) + shadow breathing room
+      return Math.ceil(r.width) + 40;
+    }
+    function adjustSvgViewBoxForUi(){
+      const svgEl = document.getElementById('chart');
+      if (!svgEl) return;
+      const vbBase = getBaseViewBox();
+      const rect = svgEl.getBoundingClientRect();
+      if (!rect.width) return;
+      const padPx = getRightUiPaddingPx();
+      const m = Math.max(0, Math.min(0.4, padPx / rect.width));
+      if (m <= 0.001){
+        svgEl.setAttribute('viewBox', `${vbBase.x} ${vbBase.y} ${vbBase.width} ${vbBase.height}`);
+        return;
+      }
+      const newWidth = vbBase.width / (1 - m);
+      svgEl.setAttribute('viewBox', `${vbBase.x} ${vbBase.y} ${newWidth} ${vbBase.height}`);
+    }
+    function positionLegendPanel(){
+      // Keep legend anchored to the top-right of the canvas; width fixed via CSS.
+      const panel = document.getElementById('legend-panel');
+      if (!panel) return;
+      panel.style.right = '24px';
+    }
+    function renderLegend(){
+      try {
+        const panel = document.getElementById('legend-panel');
+        if (!panel) return;
+        const collapsed = panel.classList.contains('collapsed');
+        panel.innerHTML = '';
+        const headerRow = document.createElement('div');
+        headerRow.className = 'legend-header-row';
+        const title = document.createElement('div');
+        title.className = 'legend-panel-title';
+        title.textContent = 'Legend';
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'legend-toggle';
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'legend-toggle-icon';
+        iconSpan.textContent = '▾';
+        toggle.appendChild(iconSpan);
+        headerRow.appendChild(title);
+        headerRow.appendChild(toggle);
+        const grid = document.createElement('div');
+        grid.className = 'legend-grid';
+        const cats = Object.keys(industryMapping || {});
+        cats.forEach(cat => {
+          const item = document.createElement('div');
+          item.className = 'legend-item';
+          const img = document.createElement('img');
+          img.className = 'legend-item-icon';
+          const icon = industryIcons[cat];
+          img.src = icon ? icon.src : `dataset/building-icons/${cat}.png`;
+          img.alt = cat;
+          const label = document.createElement('span');
+          label.className = 'legend-item-label';
+          label.textContent = cat;
+          item.appendChild(img);
+          item.appendChild(label);
+          grid.appendChild(item);
+        });
+        panel.appendChild(headerRow);
+        panel.appendChild(grid);
+        if (collapsed) {
+          panel.classList.add('collapsed');
+        }
+        // Prevent clicks inside the panel from triggering global click handlers
+        panel.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+        });
+        // Allow clicking anywhere on the header (including collapsed state) to toggle the legend
+        headerRow.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          panel.classList.toggle('collapsed');
+        });
+        toggle.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          panel.classList.toggle('collapsed');
+        });
+        positionLegendPanel();
+      } catch (e) {}
     }
 
     // Helper to check if a point is inside a state's actual polygon geometry
@@ -641,8 +804,8 @@ class MapVis {
       all.style("pointer-events", isStateZoomed ? "auto" : "none")
          .classed("building-interactive", isStateZoomed);
 
-      // Keep icons at same on-screen size during zoom, use adjusted positions
-      all.attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`);
+      // Position buildings by their resolved map coordinates and apply local icon scaling
+      all.attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`);
 
       all.each(function(d){
         const g = d3.select(this);
@@ -662,6 +825,33 @@ class MapVis {
       });
 
       sel.exit().remove();
+    }
+
+    // Helper: highlight a company's building on the map
+    function highlightCompanyBuilding(ticker, enabled){
+      if (!ticker) return;
+      const sel = gBuildings.selectAll("g.building").filter(d => d.Ticker === ticker);
+      sel.classed("building-highlight", !!enabled);
+    }
+
+    // Helper: compute screen position for a company's building (center of icon)
+    function getBuildingScreenPosition(ticker){
+      if (!ticker) return null;
+      const node = gBuildings.selectAll("g.building").filter(d => d.Ticker === ticker).node();
+      const svgNode = document.getElementById('chart');
+      if (!node || !svgNode || !svgNode.createSVGPoint) return null;
+      try {
+        const bbox = node.getBBox();
+        const pt = svgNode.createSVGPoint();
+        pt.x = bbox.x + bbox.width / 2;
+        pt.y = bbox.y + bbox.height / 2;
+        const ctm = node.getScreenCTM() || svgNode.getScreenCTM();
+        if (!ctm) return null;
+        const screenPt = pt.matrixTransform(ctm);
+        return { pageX: screenPt.x, pageY: screenPt.y };
+      } catch (e) {
+        return null;
+      }
     }
 
     // Lightweight toggle of interactivity without recomputing positions (avoids delay on zoom)
@@ -684,8 +874,8 @@ class MapVis {
     }
 
     // ---- Tooltip (closer + clamped) ----
-    function showTip(event, d){
-      const mc = d.mc ? d3.format(".2s")(d.mc) : "n/a";
+    function showTip(eventOrPos, d){
+      const mc = d.mc ? formatMarketCap(d.mc) : "n/a";
       const rating = d.employee_rating!=null ? d3.format(".2f")(d.employee_rating) : "n/a";
       const ceo    = d.ceo_approval!=null ? d3.format(".0f")(d.ceo_approval) + "%" : "n/a";
       const industry = pick(d, ["Industry"]) || "n/a";
@@ -707,8 +897,36 @@ class MapVis {
 
       const pad = 6;
       const rect = tooltip.node().getBoundingClientRect();
-      let x = event.pageX - 300, y = event.pageY - 100;
+      // Derive page coordinates from a MouseEvent-like object or a plain {pageX,pageY}
+      let pageX, pageY;
+      if (eventOrPos) {
+        if (typeof eventOrPos.pageX === 'number' && typeof eventOrPos.pageY === 'number') {
+          pageX = eventOrPos.pageX;
+          pageY = eventOrPos.pageY;
+        } else if (typeof eventOrPos.clientX === 'number' && typeof eventOrPos.clientY === 'number') {
+          pageX = eventOrPos.clientX + window.scrollX;
+          pageY = eventOrPos.clientY + window.scrollY;
+        }
+      }
+      if (pageX == null || pageY == null) {
+        pageX = window.innerWidth / 2;
+        pageY = window.innerHeight / 2;
+      }
+
+      // Default: place tooltip to the right of the cursor/building, slightly above center
+      const offsetX = 18;
+      const offsetY = -20;
+      let x = pageX + offsetX;
+      let y = pageY + offsetY;
       const vw = window.innerWidth, vh = window.innerHeight;
+      // If the left state panel is open, keep tooltip to the right of it
+      if (layoutEl && layoutEl.classList.contains('panel-open')) {
+        const panelEl = document.querySelector('.state-companies-panel');
+        if (panelEl) {
+          const pr = panelEl.getBoundingClientRect().right;
+          if (x < pr + pad) x = pr + pad;
+        }
+      }
       if (x + rect.width > vw)  x = vw - rect.width - pad;
       if (y + rect.height > vh) y = vh - rect.height - pad;
       tooltip.style("left", x + "px").style("top", y + "px");
@@ -788,7 +1006,7 @@ class MapVis {
           const a = (i / Math.max(1,n)) * 2*Math.PI;
           const cx = Math.cos(a) * (R-10) * 0.7;
           const cy = Math.sin(a) * (R-10) * 0.7;
-          const gB = d3.select(this).attr("transform", `translate(${cx},${cy}) scale(${1/currentZoom})`);
+          const gB = d3.select(this).attr("transform", `translate(${cx},${cy})`);
           // Building icon marker for foreign companies
           const category = getIndustryCategory(dd.Industry);
           const icon = industryIcons[category];
@@ -836,7 +1054,7 @@ class MapVis {
           const a = (i / Math.max(1,n)) * 2*Math.PI;
           const cx = Math.cos(a) * (R-10) * 0.7;
           const cy = Math.sin(a) * (R-10) * 0.7;
-          const gB = d3.select(this).attr("transform", `translate(${cx},${cy}) scale(${1/currentZoom})`); // keep size constant during state zoom
+          const gB = d3.select(this).attr("transform", `translate(${cx},${cy})`); // scale with map zoom
           // Simple circle marker for foreign companies
           const mc = getMarketCap(dd.Ticker);
           const radius = mc && mc > 0 ? Math.max(3, Math.min(8, Math.log(mc) / 3)) : 4;
@@ -855,6 +1073,11 @@ class MapVis {
     function onStateClick(event, d){
       event.stopPropagation();
       hideCompanyPopup(); // Close popup when clicking on a state
+      // Collapse legend when interacting with a state
+      try {
+        const panel = document.getElementById('legend-panel');
+        if (panel) panel.classList.add('collapsed');
+      } catch (e) {}
       const id = `state:${d.id || d.properties.name}`;
       if (zoomTarget && zoomTarget.id===id) { resetView(); return; }
 
@@ -885,23 +1108,28 @@ class MapVis {
         .attrTween("transform", () => d3.interpolateString(gRoot.attr("transform") || "translate(0,0) scale(1)", endTransform))
         .on("end", ()=>{ zoomTarget = {type:"state", id}; });
 
-      // Counter-scale buildings (no expensive interpolation needed)
+      // Buildings now scale with a moderated factor so they grow when zoomed, but not as much as the map
       gBuildings.selectAll("g.building")
         .transition().duration(680).ease(d3.easeCubicOut)
-        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`);
+        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`);
 
       gForeign.selectAll("g.mini-building")
         .transition().duration(680).ease(d3.easeCubicOut)
         .attr("transform", function(){
           const tStr = d3.select(this).attr("transform") || "";
           const translated = tStr.replace(/scale\([^)]*\)/g,"");
-          return `${translated} scale(${1/currentZoom})`;
+          return translated;
         });
     }
 
     function onCountryClick(event, d, centerX, startY, vSpacing){
       event.stopPropagation();
       hideCompanyPopup(); // Close popup when clicking on a country
+      // Collapse legend when interacting with a country bubble
+      try {
+        const panel = document.getElementById('legend-panel');
+        if (panel) panel.classList.add('collapsed');
+      } catch (e) {}
       const id = `country:${d.name}`;
       if (zoomTarget && zoomTarget.id===id) { resetView(); return; }
 
@@ -930,8 +1158,8 @@ class MapVis {
       gBuildings.selectAll("g.building")
         .transition(tr)
         .attrTween("transform", function(d){
-          const start = d3.select(this).attr("transform") || `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`;
-          const target = `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`;
+          const start = d3.select(this).attr("transform") || `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`;
+          const target = `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`;
           return d3.interpolateString(start, target);
         });
       gForeign.selectAll("g.mini-building")
@@ -940,7 +1168,7 @@ class MapVis {
           const raw = d3.select(this).attr("transform") || "";
           const translated = raw.replace(/scale\([^)]*\)/g,"");
           const start = raw;
-          const target = `${translated} scale(${1/currentZoom})`;
+          const target = translated;
           return d3.interpolateString(start, target);
         });
       // Show company bar chart for selected country
@@ -965,14 +1193,14 @@ class MapVis {
 
       gBuildings.selectAll("g.building")
         .transition().duration(600).ease(d3.easeCubicOut)
-        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(1)`);
+        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`);
 
       gForeign.selectAll("g.mini-building")
         .transition().duration(600).ease(d3.easeCubicOut)
         .attr("transform", function(){
           const tStr = d3.select(this).attr("transform") || "";
           const translated = tStr.replace(/scale\([^)]*\)/g,"");
-          return `${translated} scale(1)`;
+          return translated;
         });
       zoomTarget = null;
     }
@@ -1094,7 +1322,7 @@ class MapVis {
         .ease(d3.easeCubicOut)
         .style("height", d => `${heightScale(Math.max(d.mc, maxMc * 0.01))}px`);
       allItems.select(".market-cap-label")
-        .text(d => `$${d3.format(".2s")(d.mc)}`);
+        .text(d => `$${formatMarketCap(d.mc)}`);
 
       // Always show companies horizontally, with scroll if needed
       barChartContainer.style("white-space", "nowrap")
@@ -1109,6 +1337,20 @@ class MapVis {
         .style("vertical-align", "bottom")
         .style("width", "80px")
         .style("margin-top", "8px"); // Add margin to each bar for logo visibility
+
+      // Hovering over a bar highlights the corresponding building and shows its tooltip
+      allItems
+        .on("mouseenter", function(event, d) {
+          highlightCompanyBuilding(d.Ticker, true);
+          const pos = getBuildingScreenPosition(d.Ticker);
+          if (pos) {
+            showTip(pos, d);
+          }
+        })
+        .on("mouseleave", function(event, d) {
+          highlightCompanyBuilding(d.Ticker, false);
+          hideTip();
+        });
 
       // Slide in animation for bar chart
       barChartContainer.style("transform", "translateX(60px)").style("opacity", "0");
@@ -1127,7 +1369,16 @@ class MapVis {
     });
 
     // hide popup when clicking outside
-    document.addEventListener('click', () => { hideCompanyPopup(); });
+    document.addEventListener('click', (ev) => {
+      hideCompanyPopup();
+      // Collapse legend if click is outside the legend panel
+      try {
+        const panel = document.getElementById('legend-panel');
+        if (panel && !panel.classList.contains('collapsed') && !panel.contains(ev.target)) {
+          panel.classList.add('collapsed');
+        }
+      } catch (e) {}
+    });
 
     // allow parent to request view reset
     window.addEventListener('message', (ev) => {
@@ -1137,6 +1388,14 @@ class MapVis {
         try { resetView(); } catch (e) {}
       }
     }, false);
+    
+    // Recompute layout on resize to maintain legend placement
+    window.addEventListener('resize', () => {
+      try {
+        positionLegendPanel();
+        renderForeign();
+      } catch (e) {}
+    });
 
   }
 
