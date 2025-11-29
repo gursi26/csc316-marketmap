@@ -326,8 +326,8 @@ body {
 
 .resetButton {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 35px;
+  right: 250px;
   background: rgba(16, 24, 51, 0.85);
   border: 1px solid #5ea8ff;
   padding: 8px 14px;
@@ -342,3 +342,31 @@ body {
 .resetButton:hover {
   background: rgba(16, 24, 51, 1);
 }
+
+#screenTitle {
+  position: absolute;
+  top: 160px;          /* your custom position */
+  left: 220px;         /* your custom position */
+  z-index: 15;         /* below header (20) but above carousel */
+
+  font-size: 20px;
+  font-weight: 600;
+  color: #e6eefc;
+
+  padding: 6px 18px;
+  border-radius: 12px;
+
+  /* darker pink → purple → blue gradient (reduced lightness) */
+  background: linear-gradient(
+    180deg,
+    #732064 0%,   /* dark pink */
+    #34256c 50%,  /* purple */
+    #163267 100%  /* deep blue */
+  );
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  pointer-events: none;  /* don’t block clicks/hover on icons */
+}
+
+
+

@@ -1,6 +1,20 @@
 let currentScreen = 0;
 const totalScreens = 5; // now 5 screens
 
+const SCREEN_TITLES = [
+  "General Work Benefits",
+  "Transportation Benefits",
+  "Food Benefits",
+  "Insurance Benefits",
+  "Additional Benefits"
+];
+
+window.addEventListener("DOMContentLoaded", () => {
+    const screenTitleEl = document.getElementById("screenTitle");
+    screenTitleEl.textContent = SCREEN_TITLES[0];
+});
+
+
 const track = document.querySelector(".track");
 
 // Touch/swipe variables
@@ -75,7 +89,12 @@ function goToScreen(index) {
 
   currentScreen = index;
   track.style.transform = `translateX(-${currentScreen * 100}vw)`;
+
+  document.getElementById("screenTitle").textContent =
+    SCREEN_TITLES[currentScreen];
 }
+
+
 
 // Button listeners
 document.getElementById("nextBtn").addEventListener("click", () => {
