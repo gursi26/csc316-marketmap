@@ -173,7 +173,11 @@ class MapVis {
 
     // Zoom state
     let zoomTarget = null;   // {type:'state', id}
-    let currentZoom = 1;     // scale factor applied to gRoot; buildings counter-scale by 1/currentZoom
+    let currentZoom = 1;     // scale factor applied to gRoot
+    // How strongly building icons grow when zoomed in:
+    // 0  -> icons stay constant size on-screen
+    // 1  -> icons grow fully with the map zoom
+    const BUILDING_ZOOM_FACTOR = 0.6;
     
     // State name to abbreviation mapping
     const stateNameToAbbr = {
@@ -284,6 +288,16 @@ class MapVis {
       const row = financials.find(f => canon(f.Ticker)===canon(ticker));
       const mc = row ? (+pick(row, ["market cap","marketcap","mkt cap"])) : null;
       return isFinite(mc) ? mc : null;
+    }
+    
+    // How much to locally scale building icons given the current zoom
+    function getBuildingIconScale(){
+      const s = currentZoom || 1;
+      const f = BUILDING_ZOOM_FACTOR;
+      if (s <= 1 || f <= 0) return 1;
+      // total on-screen scale = s * localScale = 1 + (s-1)*f
+      const total = 1 + (s - 1) * f;
+      return total / s;
     }
 
     // Helper function to map industry to icon category
@@ -768,8 +782,8 @@ class MapVis {
       all.style("pointer-events", isStateZoomed ? "auto" : "none")
          .classed("building-interactive", isStateZoomed);
 
-      // Keep icons at same on-screen size during zoom, use adjusted positions
-      all.attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`);
+      // Position buildings by their resolved map coordinates and apply local icon scaling
+      all.attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`);
 
       all.each(function(d){
         const g = d3.select(this);
@@ -970,7 +984,7 @@ class MapVis {
           const a = (i / Math.max(1,n)) * 2*Math.PI;
           const cx = Math.cos(a) * (R-10) * 0.7;
           const cy = Math.sin(a) * (R-10) * 0.7;
-          const gB = d3.select(this).attr("transform", `translate(${cx},${cy}) scale(${1/currentZoom})`);
+          const gB = d3.select(this).attr("transform", `translate(${cx},${cy})`);
           // Building icon marker for foreign companies
           const category = getIndustryCategory(dd.Industry);
           const icon = industryIcons[category];
@@ -1018,7 +1032,7 @@ class MapVis {
           const a = (i / Math.max(1,n)) * 2*Math.PI;
           const cx = Math.cos(a) * (R-10) * 0.7;
           const cy = Math.sin(a) * (R-10) * 0.7;
-          const gB = d3.select(this).attr("transform", `translate(${cx},${cy}) scale(${1/currentZoom})`); // keep size constant during state zoom
+          const gB = d3.select(this).attr("transform", `translate(${cx},${cy})`); // scale with map zoom
           // Simple circle marker for foreign companies
           const mc = getMarketCap(dd.Ticker);
           const radius = mc && mc > 0 ? Math.max(3, Math.min(8, Math.log(mc) / 3)) : 4;
@@ -1072,17 +1086,17 @@ class MapVis {
         .attrTween("transform", () => d3.interpolateString(gRoot.attr("transform") || "translate(0,0) scale(1)", endTransform))
         .on("end", ()=>{ zoomTarget = {type:"state", id}; });
 
-      // Counter-scale buildings (no expensive interpolation needed)
+      // Buildings now scale with a moderated factor so they grow when zoomed, but not as much as the map
       gBuildings.selectAll("g.building")
         .transition().duration(680).ease(d3.easeCubicOut)
-        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`);
+        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`);
 
       gForeign.selectAll("g.mini-building")
         .transition().duration(680).ease(d3.easeCubicOut)
         .attr("transform", function(){
           const tStr = d3.select(this).attr("transform") || "";
           const translated = tStr.replace(/scale\([^)]*\)/g,"");
-          return `${translated} scale(${1/currentZoom})`;
+          return translated;
         });
     }
 
@@ -1122,8 +1136,8 @@ class MapVis {
       gBuildings.selectAll("g.building")
         .transition(tr)
         .attrTween("transform", function(d){
-          const start = d3.select(this).attr("transform") || `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`;
-          const target = `translate(${d.finalX},${d.finalY}) scale(${1/currentZoom})`;
+          const start = d3.select(this).attr("transform") || `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`;
+          const target = `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`;
           return d3.interpolateString(start, target);
         });
       gForeign.selectAll("g.mini-building")
@@ -1132,7 +1146,7 @@ class MapVis {
           const raw = d3.select(this).attr("transform") || "";
           const translated = raw.replace(/scale\([^)]*\)/g,"");
           const start = raw;
-          const target = `${translated} scale(${1/currentZoom})`;
+          const target = translated;
           return d3.interpolateString(start, target);
         });
       // Show company bar chart for selected country
@@ -1157,14 +1171,14 @@ class MapVis {
 
       gBuildings.selectAll("g.building")
         .transition().duration(600).ease(d3.easeCubicOut)
-        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(1)`);
+        .attr("transform", d => `translate(${d.finalX},${d.finalY}) scale(${getBuildingIconScale()})`);
 
       gForeign.selectAll("g.mini-building")
         .transition().duration(600).ease(d3.easeCubicOut)
         .attr("transform", function(){
           const tStr = d3.select(this).attr("transform") || "";
           const translated = tStr.replace(/scale\([^)]*\)/g,"");
-          return `${translated} scale(1)`;
+          return translated;
         });
       zoomTarget = null;
     }
