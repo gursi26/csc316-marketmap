@@ -605,7 +605,7 @@ class SlopeChart {
     }
 
     drawTitles(leftX, rightX, title, viewMode, c, verticalOffset = 0) {
-        const rightLabel = 'Ranks (Total Comp)';
+        const rightLabel = 'Role Ranks (Total Comp)';
         
         // Handle left label with potential wrapping for role view
         if (viewMode === 'company') {
