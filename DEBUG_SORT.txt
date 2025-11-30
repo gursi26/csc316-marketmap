@@ -1,0 +1,41 @@
+DEBUGGING THE SORT FILTER
+==========================
+
+Add these console.log statements to debug the issue:
+
+1. At line 1284 (inside the change event), REPLACE with:
+```javascript
+sortSelect.addEventListener('change', (ev) => {
+  console.log('Sort dropdown changed to:', ev.target.value);
+  console.log('currentSelectedState:', currentSelectedState);
+  // Re-render with new sort order
+  updateStateCompaniesPanel(currentSelectedState);
+});
+```
+
+2. At line 1327, ADD this line AFTER it:
+```javascript
+const sortBy = sortSelect ? sortSelect.value : 'marketcap';
+console.log('Sorting by:', sortBy, 'Found dropdown:', !!sortSelect);
+```
+
+3. At line 1336, ADD this line AFTER the sorting:
+```javascript
+  stateCompanies.sort((a, b) => b.mc - a.mc);
+}
+console.log('After sorting, first 3 companies:', stateCompanies.slice(0, 3).map(c => ({name: c.Name, mc: c.mc, employees: c.employees, rating: c.employee_rating})));
+```
+
+Then:
+1. Open the browser
+2. Open DevTools Console (F12)  
+3. Click on a state
+4. Change the Sort By dropdown
+5. Check what appears in the console
+
+This will tell us:
+- Is the event firing?
+- Is currentSelectedState defined?
+- Is the dropdown element found?
+- What value is being read?
+- Is the array actually being re-sorted?
