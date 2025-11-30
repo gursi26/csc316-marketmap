@@ -1285,7 +1285,7 @@ class MapVis {
                 </div>
                 <div class="chart-legend-item">
                   <div class="chart-legend-color-gradient"></div>
-                  <span class="chart-legend-label">Color = Employee Rating (Red→Green)</span>
+                  <span id="rating-legend-label" class="chart-legend-label">Color = Employee Rating</span>
                 </div>
               </div>
             </div>
@@ -1418,10 +1418,18 @@ class MapVis {
       const ratingDomain = ratingVals.length ? d3.extent(ratingVals) : [0, 5];
       const midRating = (ratingDomain[0] + ratingDomain[1]) / 2;
 
+      const minRatingStr = d3.format(".1f")(ratingDomain[0]);
+      const maxRatingStr = d3.format(".1f")(ratingDomain[1]);
+      const labelEl = document.getElementById('rating-legend-label');
+      if (labelEl) {
+        labelEl.textContent = `Color = Employee Rating (${minRatingStr} - ${maxRatingStr})`;
+      }
+
       const colorScale = d3
         .scaleLinear()
         .domain([ratingDomain[0], midRating, ratingDomain[1]])
-        .range(["#d64d4d", "#f0d34a", "#36b37e"]);
+        // Changed start color from Red (#d64d4d) to Orange (#ff7b00)
+        .range(["#ff7b00", "#f0d34a", "#36b37e"]);
 
       // Window grid constants
       const WINDOW_COLS_MAX = 5;     // max columns in grid
@@ -1504,6 +1512,18 @@ class MapVis {
           // darker bottom for depth
           const bottom = d3.interpolateRgb(base, "#0b2648")(0.7);
           return `linear-gradient(180deg, ${base}, ${bottom})`;
+        })
+        .style("opacity", d => {
+          const r = d.employee_rating;
+          if (r == null || !isFinite(r)) return 0.5;
+          // Map rating to opacity: Min rating = 0.4 opacity, Max rating = 1.0 opacity
+          const min = ratingDomain[0] || 0;
+          const max = ratingDomain[1] || 5;
+          if (max === min) return 1;
+          // Normalize rating between 0 and 1
+          const t = (r - min) / (max - min);
+          // Scale to 0.4 - 1.0 range
+          return 0.4 + (t * 0.6);
         })
         .style("border", "2px solid #5ea8ff")
         .style("border-bottom", "3px solid #0d2644")
