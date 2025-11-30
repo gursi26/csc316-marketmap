@@ -1281,6 +1281,8 @@ class MapVis {
         const sortSelect = document.getElementById('chart-sort-select');
         sortSelect.addEventListener('change', (ev) => {
           // Re-render with new sort order
+          console.log('Sort dropdown changed to:', ev.target.value);
+          console.log('currentSelectedState:', currentSelectedState);
           updateStateCompaniesPanel(currentSelectedState);
         });
       }
@@ -1325,6 +1327,7 @@ class MapVis {
       // Apply sort order based on filter selection
       const sortSelect = document.getElementById('chart-sort-select');
       const sortBy = sortSelect ? sortSelect.value : 'marketcap';
+      console.log('Sorting by:', sortBy, 'Found dropdown:', !!sortSelect);
 
       if (sortBy === 'employees') {
         stateCompanies.sort((a, b) => b.employees - a.employees);
@@ -1334,6 +1337,7 @@ class MapVis {
         // Default: market cap descending
         stateCompanies.sort((a, b) => b.mc - a.mc);
       }
+      console.log('After sorting, first 3 companies:', stateCompanies.slice(0, 3).map(c => ({ name: c.Name, mc: c.mc, employees: c.employees, rating: c.employee_rating })));
 
       // If no companies, clear panel
       if (!stateCompanies.length) {
@@ -1397,7 +1401,7 @@ class MapVis {
       // -------- JOIN DOM ELEMENTS --------
       const items = barChartContainer
         .selectAll(".company-bar-item")
-        .data(stateCompanies, d => d.Ticker);
+        .data(stateCompanies);
 
       items.exit().remove();
 
