@@ -982,7 +982,17 @@ class MapVis {
 
     // ---- Foreign (country circles + mini buildings) ----
     function renderForeign() {
-      const foreign = companies.filter(c => (c.Country || "").trim().toLowerCase() !== "united states" && (c.Country || "").trim() != "");
+      // 1. Change 'const' to 'let' so we can filter it
+      let foreign = companies.filter(c => (c.Country || "").trim().toLowerCase() !== "united states" && (c.Country || "").trim() != "");
+
+      // 2. Apply the Industry Filter
+      if (selectedIndustryFilter !== 'all') {
+        foreign = foreign.filter(c => {
+          const industry = pick(c, ["Industry"]);
+          const category = getIndustryCategory(industry);
+          return category === selectedIndustryFilter;
+        });
+      }
       const byCountry = d3.group(foreign, d => d.Country);
       const countries = Array.from(byCountry.keys()).sort();
       // 2-column grid layout for country circles
