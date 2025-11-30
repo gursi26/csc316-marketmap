@@ -1513,18 +1513,17 @@ class MapVis {
           const bottom = d3.interpolateRgb(base, "#0b2648")(0.7);
           return `linear-gradient(180deg, ${base}, ${bottom})`;
         })
-        .style("opacity", d => {
+        .style("background", d => {
           const r = d.employee_rating;
-          if (r == null || !isFinite(r)) return 0.5;
-          // Map rating to opacity: Min rating = 0.4 opacity, Max rating = 1.0 opacity
-          const min = ratingDomain[0] || 0;
-          const max = ratingDomain[1] || 5;
-          if (max === min) return 1;
-          // Normalize rating between 0 and 1
-          const t = (r - min) / (max - min);
-          // Scale to 0.4 - 1.0 range
-          return 0.4 + (t * 0.6);
+          const base =
+            r != null && isFinite(r)
+              ? colorScale(r)
+              : colorScale(midRating);
+          // darker bottom for depth
+          const bottom = d3.interpolateRgb(base, "#0b2648")(0.7);
+          return `linear-gradient(180deg, ${base}, ${bottom})`;
         })
+        .style("opacity", "1")
         .style("border", "2px solid #5ea8ff")
         .style("border-bottom", "3px solid #0d2644")
         .style("border-radius", "4px 4px 0 0")
