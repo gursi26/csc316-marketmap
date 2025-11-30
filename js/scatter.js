@@ -1,7 +1,7 @@
 // Set up dimensions and margins
 const margin = { top: 120, right: 120, bottom: 120, left: 120 };
 
-const CIRCLE_SIZE_SCALE_FACTOR = 0.03;
+const CIRCLE_SIZE_SCALE_FACTOR = 0.025;
 
 let width, height;
 
@@ -28,10 +28,10 @@ const tooltip = d3.select("#tooltip-scatter");
 
 // Color scales
 const colorScales = {
-    sentiment: d3.scaleSequential(d3.interpolateRdBu),
-    sector: d3.scaleOrdinal(d3.schemeCategory10),
-    employee_rating: d3.scaleSequential(d3.interpolateRdBu),
-    ceo_approval: d3.scaleSequential(d3.interpolateRdBu)
+    sentiment: d3.scaleSequential(d3.interpolateRdYlGn),
+    sector: d3.scaleOrdinal(d3.schemeTableau10),
+    employee_rating: d3.scaleSequential(d3.interpolateRdYlGn),
+    ceo_approval: d3.scaleSequential(d3.interpolateRdYlGn)
 };
 
 // Load and process data
@@ -80,12 +80,18 @@ async function loadData() {
     }
 }
 
-// scales -- change for cutom tick range
-function createScales(data, xAxis, yAxis) {
+// scales -- change for custom tick range
+function createScales(data, xAxis, yAxis, sizeMetric) {
     function customDomain(axis) {
         if (axis === "employee_rating") return [0, 5];
         if (axis === "ceo_approval") return [0, 100];
-        return d3.extent(data, d => d[axis]);
+        if (axis === "sentiment") {
+            const extent = d3.extent(data, d => +d.sentiment);
+            return extent;
+        }
+        const ext = d3.extent(data, d => +d[axis]);
+        if (!isFinite(ext[0]) || !isFinite(ext[1])) return [0, 1];
+        return ext;
     }
 
     const xScale = d3.scaleLinear()
@@ -103,11 +109,14 @@ function createScales(data, xAxis, yAxis) {
     const minRadius = avgDimension * CIRCLE_SIZE_SCALE_FACTOR * 0.2;
     const maxRadius = avgDimension * CIRCLE_SIZE_SCALE_FACTOR;
 
+    const sizeValues = data.map(d => +d[sizeMetric]).filter(v => isFinite(v) && v > 0);
+    const sizeDomain = sizeValues.length ? d3.extent(sizeValues) : [1, 1];
+
     const sizeScale = d3.scaleSqrt()
-        .domain(d3.extent(data, d => d.market_cap))
+        .domain(sizeDomain)
         .range([minRadius, maxRadius]);
 
-    return { xScale, yScale, sizeScale };
+    return { xScale, yScale, sizeScale, sizeDomain };
 }
 
 
@@ -167,41 +176,73 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
         .text(getAxisLabel(yAxis));
 }
 function getAxisFormatter(axis) {
-    if (axis === 'revenue' || axis === 'market_cap') {
-        // Format large numbers in billions with B suffix
-        return d => {
-            if (d >= 1e9) return (d / 1e9).toFixed(1) + 'B';
-            if (d >= 1e6) return (d / 1e6).toFixed(1) + 'M';
-            return d.toFixed(0);
-        };
+    if (axis === 'revenue' || axis === 'market_cap' || axis === 'employee_count') {
+        return d => formatLargeNumber(d, axis !== 'employee_count');
     }
-    return d3.format(".1f");
+    if (axis === 'ceo_approval') return d => `${d.toFixed(0)}%`;
+    if (axis === 'employee_rating') return d => d.toFixed(1);
+    if (axis === 'sentiment') return d3.format(".2f");
+    return d3.format(".2f");
 }
 
 function getAxisLabel(axis) {
     const labels = {
         ceo_approval: "CEO Approval (%)",
-        employee_rating: "Employee Rating (out of 5)",
+        employee_rating: "Employee Rating (0-5)",
         sentiment: "Sentiment Score",
         pe_ratio: "P/E Ratio",
-        revenue: "Revenue ($B)",
-        market_cap: "Market Cap"
+        revenue: "Revenue ($)",
+        market_cap: "Market Cap ($)",
+        employee_count: "Employee Count"
     };
     return labels[axis] || axis;
+}
+
+function formatLargeNumber(value, includeCurrency = false) {
+    if (!isFinite(value)) return "N/A";
+    const abs = Math.abs(value);
+    const fmt = (val, suffix) => `${includeCurrency ? '$' : ''}${Math.round(val)}${suffix}`;
+    if (abs >= 1e12) return fmt(value / 1e12, "T");
+    if (abs >= 1e9) return fmt(value / 1e9, "B");
+    if (abs >= 1e6) return fmt(value / 1e6, "M");
+    if (abs >= 1e3) return fmt(value / 1e3, "K");
+    return `${includeCurrency ? '$' : ''}${Math.round(value)}`;
+}
+
+function formatLegendValue(metric, value) {
+    if (!isFinite(value)) return "N/A";
+    if (metric === 'sentiment') return value.toFixed(2);
+    if (metric === 'employee_rating') return value.toFixed(1);
+    if (metric === 'ceo_approval') return value.toFixed(0) + "%";
+    if (metric === 'market_cap' || metric === 'revenue') return formatLargeNumber(value, true);
+    if (metric === 'employee_count') return formatLargeNumber(value, false);
+    if (metric === 'pe_ratio') return value.toFixed(1);
+    return value.toFixed(2);
 }
 
 // Create color function
 function createColorFunction(data, colorBy) {
     if (colorBy === 'sector') {
-        const sectors = [...new Set(data.map(d => d.sector))];
-        const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+        const sectors = [...new Set(data.map(d => d.sector))].filter(Boolean).sort();
+        const colorScale = colorScales.sector;
+        colorScale.domain(sectors);
         return d => colorScale(d.sector);
     } else {
         const colorScale = colorScales[colorBy];
-        const domain = d3.extent(data, d => d[colorBy]);
+        const domain = getColorDomain(data, colorBy);
         colorScale.domain(domain);
         return d => colorScale(d[colorBy]);
     }
+}
+
+function getColorDomain(data, colorBy) {
+    if (colorBy === 'sentiment') {
+        const ext = d3.extent(data, d => +d.sentiment);
+        if (!isFinite(ext[0]) || !isFinite(ext[1])) return [0, 1];
+        if (ext[0] === ext[1]) return [ext[0] - 0.1, ext[1] + 0.1];
+        return ext;
+    }
+    return d3.extent(data, d => +d[colorBy]);
 }
 
 // Create color legend
@@ -211,15 +252,16 @@ function createColorLegend(data, colorBy) {
 
     const title = legendContainer.append("div")
         .attr("class", "color-legend-title")
-        .text(`Colour represents: ${getAxisLabel(colorBy)}`);
+        .text(`Colour: ${getAxisLabel(colorBy)}`);
 
     const content = legendContainer.append("div")
         .attr("class", "color-legend-content");
 
     if (colorBy === 'sector') {
         // Create sector legend
-        const sectors = [...new Set(data.map(d => d.sector))].sort();
-        const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
+        const sectors = [...new Set(data.map(d => d.sector))].filter(Boolean).sort();
+        const colorScale = colorScales.sector;
+        colorScale.domain(sectors);
         
         const sectorLegend = content.append("div")
             .attr("class", "sector-legend");
@@ -234,9 +276,10 @@ function createColorLegend(data, colorBy) {
         });
     } else {
         // Create gradient legend for continuous scales
-        const domain = d3.extent(data, d => d[colorBy]);
+        const domain = getColorDomain(data, colorBy);
         const colorScale = colorScales[colorBy];
         colorScale.domain(domain);
+        const formatLabel = (value) => formatLegendValue(colorBy, value);
         
         const colorScaleDiv = content.append("div")
             .attr("class", "color-scale");
@@ -282,7 +325,7 @@ function createColorLegend(data, colorBy) {
             .attr("text-anchor", "end")
             .style("font-size", "11px")
             .style("fill", "#666")
-            .text(domain[0].toFixed(1));
+            .text(formatLabel(domain[0]));
 
         gradientSvg.append("text")
             .attr("x", 175)
@@ -290,20 +333,84 @@ function createColorLegend(data, colorBy) {
             .attr("text-anchor", "start")
             .style("font-size", "11px")
             .style("fill", "#666")
-            .text(domain[1].toFixed(1));
+            .text(formatLabel(domain[1]));
     }
 }
 
+function createSizeLegend(sizeScale, sizeMetric, sizeDomain, data) {
+    const legendContainer = d3.select("#size-legend");
+    legendContainer.selectAll("*").remove();
+
+    const values = data.map(d => +d[sizeMetric]).filter(v => isFinite(v) && v > 0).sort((a, b) => a - b);
+    if (!values.length) return;
+
+    const minVal = values[0];
+    const maxVal = values[values.length - 1];
+    const midVal = values[Math.floor(values.length * 0.55)];
+
+    legendContainer.append("div")
+        .attr("class", "size-legend-title")
+        .text(`Bubble size: ${getAxisLabel(sizeMetric)}`);
+
+    const svgWidth = 360;
+    const svgHeight = 100;
+    const svg = legendContainer.append("svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
+    const markers = [
+        { label: "Smaller", value: minVal },
+        { label: "Typical", value: midVal },
+        { label: "Larger", value: maxVal }
+    ];
+
+    const positions = [svgWidth * 0.2, svgWidth * 0.5, svgWidth * 0.8];
+    const baseline = 55;
+
+    markers.forEach((marker, i) => {
+        const radius = sizeScale(marker.value);
+        const cx = positions[i];
+
+        svg.append("circle")
+            .attr("cx", cx)
+            .attr("cy", baseline)
+            .attr("r", radius)
+            .attr("fill", "rgba(255,255,255,0.08)")
+            .attr("stroke", "#9aa4ff")
+            .attr("stroke-width", 1.4);
+
+        svg.append("text")
+            .attr("x", cx)
+            .attr("y", baseline - radius - 10)
+            .attr("text-anchor", "middle")
+            .attr("class", "size-legend-label")
+            .text(marker.label);
+
+        svg.append("text")
+            .attr("x", cx)
+            .attr("y", baseline + radius + 14)
+            .attr("text-anchor", "middle")
+            .attr("class", "size-legend-value")
+            .text(formatLegendValue(sizeMetric, marker.value));
+    });
+}
+
 // Update visualization
-function updateVisualization(data, xAxis, yAxis, colorBy) {
+function updateVisualization(data, xAxis, yAxis, colorBy, sizeMetric) {
     // Update dimensions first
     updateSVGDimensions();
     
-    const { xScale, yScale, sizeScale } = createScales(data, xAxis, yAxis);
+    const { xScale, yScale, sizeScale, sizeDomain } = createScales(data, xAxis, yAxis, sizeMetric);
     const colorFunction = createColorFunction(data, colorBy);
     
     createAxes(xScale, yScale, xAxis, yAxis);
     createColorLegend(data, colorBy);
+    createSizeLegend(sizeScale, sizeMetric, sizeDomain, data);
+
+    window.currentSizeMetric = sizeMetric;
+    window.currentColorBy = colorBy;
+    window.currentXAxis = xAxis;
+    window.currentYAxis = yAxis;
 
     const circles = g.selectAll("circle")
         .data(data, d => d.ticker)
@@ -318,7 +425,10 @@ function updateVisualization(data, xAxis, yAxis, colorBy) {
         )
         .attr("cx", d => xScale(d[xAxis]))
         .attr("cy", d => yScale(d[yAxis]))
-        .attr("r", d => sizeScale(d.market_cap))
+        .attr("r", d => {
+            const val = d[sizeMetric] > 0 ? d[sizeMetric] : sizeDomain[0];
+            return sizeScale(val);
+        })
         .attr("fill", colorFunction);
 
     enableMouseover()
@@ -337,9 +447,11 @@ function updateAxisDropdownStates() {
     [...xSelect.options].forEach(opt => opt.disabled = false);
     [...ySelect.options].forEach(opt => opt.disabled = false);
 
-    // Disable same variable in opposite dropdown
-    ySelect.querySelector(`option[value="${xVal}"]`).disabled = true;
-    xSelect.querySelector(`option[value="${yVal}"]`).disabled = true;
+    // Disable same variable in opposite dropdown if it exists
+    const yMatch = ySelect.querySelector(`option[value="${xVal}"]`);
+    if (yMatch) yMatch.disabled = true;
+    const xMatch = xSelect.querySelector(`option[value="${yVal}"]`);
+    if (xMatch) xMatch.disabled = true;
 }
 
 function setupControls() {
@@ -348,7 +460,8 @@ function setupControls() {
         const xAxis = this.value;
         const yAxis = d3.select("#y-axis").property("value");
         const colorBy = d3.select("#color-by").property("value");
-        updateVisualization(window.currentData, xAxis, yAxis, colorBy);
+        const sizeBy = d3.select("#size-by").property("value");
+        updateVisualization(window.currentData, xAxis, yAxis, colorBy, sizeBy);
     });
 
     d3.select("#y-axis").on("change", function() {
@@ -356,27 +469,28 @@ function setupControls() {
         const xAxis = d3.select("#x-axis").property("value");
         const yAxis = this.value;
         const colorBy = d3.select("#color-by").property("value");
-        updateVisualization(window.currentData, xAxis, yAxis, colorBy);
+        const sizeBy = d3.select("#size-by").property("value");
+        updateVisualization(window.currentData, xAxis, yAxis, colorBy, sizeBy);
     });
 
     d3.select("#color-by").on("change", function() {
         const xAxis = d3.select("#x-axis").property("value");
         const yAxis = d3.select("#y-axis").property("value");
         const colorBy = this.value;
-        updateVisualization(window.currentData, xAxis, yAxis, colorBy);
+        const sizeBy = d3.select("#size-by").property("value");
+        updateVisualization(window.currentData, xAxis, yAxis, colorBy, sizeBy);
+    });
+
+    d3.select("#size-by").on("change", function() {
+        const xAxis = d3.select("#x-axis").property("value");
+        const yAxis = d3.select("#y-axis").property("value");
+        const colorBy = d3.select("#color-by").property("value");
+        const sizeBy = this.value;
+        updateVisualization(window.currentData, xAxis, yAxis, colorBy, sizeBy);
     });
 }
 
 // INFO PANEL CONTROLS
-document.getElementById("scatter-info-btn").onclick = () => {
-    document.getElementById("scatter-info-panel").classList.remove("hidden");
-};
-
-document.getElementById("scatter-info-close").onclick = () => {
-    document.getElementById("scatter-info-panel").classList.add("hidden");
-};
-
-
 // Initialize visualization
 async function init() {
     const data = await loadData();
@@ -391,9 +505,10 @@ async function init() {
     calculateDimensions();
     
     // Set initial dropdown values
-    d3.select("#x-axis").property("value", "ceo_approval");
-    d3.select("#y-axis").property("value", "employee_rating");
+    d3.select("#x-axis").property("value", "sentiment");
+    d3.select("#y-axis").property("value", "market_cap");
     d3.select("#color-by").property("value", "sentiment");
+    d3.select("#size-by").property("value", "market_cap");
     
     setupControls();
     updateAxisDropdownStates();
@@ -403,7 +518,8 @@ async function init() {
     const xAxis = d3.select("#x-axis").property("value");
     const yAxis = d3.select("#y-axis").property("value");
     const colorBy = d3.select("#color-by").property("value");
-    updateVisualization(data, xAxis, yAxis, colorBy);
+    const sizeBy = d3.select("#size-by").property("value");
+    updateVisualization(data, xAxis, yAxis, colorBy, sizeBy);
 
     // company focus
     const params = new URLSearchParams(window.location.search);
@@ -420,7 +536,8 @@ async function init() {
             const xAxis = d3.select("#x-axis").property("value");
             const yAxis = d3.select("#y-axis").property("value");
             const colorBy = d3.select("#color-by").property("value");
-            updateVisualization(window.currentData, xAxis, yAxis, colorBy);
+            const sizeBy = d3.select("#size-by").property("value");
+            updateVisualization(window.currentData, xAxis, yAxis, colorBy, sizeBy);
         }, 250);
     });
 }
@@ -439,14 +556,7 @@ window.addEventListener('message', (ev) => {
     // visually highlight
     sel.raise().attr('stroke', '#000').attr('stroke-width', 3).attr('opacity', 1);
     // show tooltip similar to mouseover
-    tooltip.style('opacity', 1).html(`
-        <strong>${d.name || d.ticker}</strong><br/>
-        Sector: ${d.sector || ''}<br/>
-        CEO Approval: ${d.ceo_approval > 0 ? d.ceo_approval + "%" : "N/A"}
-        Employee Rating: ${d.employee_rating || 'n/a'}<br/>
-        Market Cap: $${(d.market_cap || 0).toLocaleString()}<br/>
-        Sentiment: ${d.sentiment != null ? d.sentiment.toFixed(3) : 'n/a'}
-    `);
+    tooltip.style('opacity', 1).html(getTooltipHtml(d));
     // position tooltip near top-right of the scatter area
     const rect = document.getElementById('scatterplot').getBoundingClientRect();
     tooltip.style('left', (rect.left + 20) + 'px').style('top', (rect.top + 20) + 'px');
@@ -467,14 +577,7 @@ function focusTicker(ticker){
     sel.raise().transition().delay(250).duration(1000).attr('stroke-width', 3).attr('opacity', 1);
     nonSel.transition().delay(250).duration(1000).attr('opacity', 0.1)
     disableMouseover()
-    tooltip.style('opacity', 1).html(`
-        <strong>${d.name || d.ticker}</strong><br/>
-        Sector: ${d.sector || ''}<br/>
-        CEO Approval: ${d.ceo_approval || 'n/a'}%<br/>
-        Employee Rating: ${d.employee_rating || 'n/a'}<br/>
-        Market Cap: $${(d.market_cap || 0).toLocaleString()}<br/>
-        Sentiment: ${d.sentiment != null ? d.sentiment.toFixed(3) : 'n/a'}
-    `);
+    tooltip.style('opacity', 1).html(getTooltipHtml(d));
     
     // Position tooltip near the bubble
     // Use a slight delay to ensure the scroll animation has settled
@@ -508,6 +611,24 @@ function disableMouseover() {
         .on("mouseout", null)
 }
 
+function getTooltipHtml(d) {
+    const sizeMetric = window.currentSizeMetric || 'market_cap';
+    const sizeLabel = getAxisLabel(sizeMetric);
+    const sizeValue = formatLegendValue(sizeMetric, d[sizeMetric]);
+
+    return `
+        <strong>${d.name || d.ticker}</strong><br/>
+        Sector: ${d.sector || 'N/A'}<br/>
+        CEO Approval: ${formatLegendValue('ceo_approval', d.ceo_approval)}<br/>
+        Employee Rating: ${formatLegendValue('employee_rating', d.employee_rating)}<br/>
+        Sentiment: ${formatLegendValue('sentiment', d.sentiment)}<br/>
+        Market Cap: ${formatLegendValue('market_cap', d.market_cap)}<br/>
+        Revenue: ${formatLegendValue('revenue', d.revenue)}<br/>
+        Employees: ${formatLegendValue('employee_count', d.employee_count)}<br/>
+        Bubble Size (${sizeLabel}): ${sizeValue}
+    `;
+}
+
 function enableMouseover() {
     d3.selectAll('#scatterplot circle')
         .on("mouseover", function(event, d) {
@@ -517,24 +638,21 @@ function enableMouseover() {
 
             tooltip
                 .style("opacity", 1)
-                .html(`
-                    <strong>${d.name} (${d.ticker})</strong><br/>
-                    Sector: ${d.sector}<br/>
-                    CEO Approval: ${d.ceo_approval > 0 ? d.ceo_approval + "%" : "N/A"}<br/>
-                    Employee Rating: ${d.employee_rating}/5<br/>
-                    Market Cap: $${(d.market_cap / 1e9).toFixed(1)}B<br/>
-                    Sentiment: ${d.sentiment.toFixed(3)}<br/>
-                    Employees: ${d.employee_count.toLocaleString()}
-                `);
+                .html(getTooltipHtml(d));
         })
         .on("mousemove", function(event) {
             const tooltipWidth = tooltip.node().offsetWidth;
             const tooltipHeight = tooltip.node().offsetHeight;
         
-            // Desired position
-            let x = event.pageX + 1;
-            let y = event.pageY - 230;
-        
+            // Desired position near cursor
+            let x = event.clientX + 12;
+            let y = event.clientY - 30;
+
+            // Keep tooltip on screen
+            const maxX = window.innerWidth - tooltipWidth - 10;
+            const maxY = window.innerHeight - tooltipHeight - 10;
+            x = Math.min(Math.max(10, x), maxX);
+            y = Math.min(Math.max(10, y), maxY);
 
             tooltip.style("left", x + "px")
                 .style("top", y + "px");
@@ -574,20 +692,15 @@ function displayCompanyInfo(d) {
     document.getElementById("info-company-ticker").textContent = d.ticker;
     document.getElementById("info-company-sector").textContent = d.sector;
     document.getElementById("info-company-industry").textContent = d.industry;
-    document.getElementById("info-company-ceo").textContent =
-    d.ceo_approval > 0 ? d.ceo_approval + "%" : "N/A";
-    document.getElementById("info-company-rating").textContent = d.employee_rating + "/5";
+    document.getElementById("info-company-ceo").textContent = formatLegendValue('ceo_approval', d.ceo_approval);
+    document.getElementById("info-company-rating").textContent = formatLegendValue('employee_rating', d.employee_rating);
 
-    document.getElementById("info-company-cap").textContent = 
-        (d.market_cap / 1e9).toFixed(1) + "B";
+    document.getElementById("info-company-cap").textContent = formatLegendValue('market_cap', d.market_cap);
+    document.getElementById("info-company-revenue").textContent = formatLegendValue('revenue', d.revenue);
 
-    document.getElementById("info-company-revenue").textContent = 
-        (d.revenue / 1e9).toFixed(1) + "B";
-
-    document.getElementById("info-company-pe").textContent = d.pe_ratio.toFixed(1);
-    document.getElementById("info-company-sent").textContent = d.sentiment.toFixed(3);
-    document.getElementById("info-company-emp").textContent = 
-        d.employee_count.toLocaleString();
+    document.getElementById("info-company-pe").textContent = formatLegendValue('pe_ratio', d.pe_ratio);
+    document.getElementById("info-company-sent").textContent = formatLegendValue('sentiment', d.sentiment);
+    document.getElementById("info-company-emp").textContent = formatLegendValue('employee_count', d.employee_count);
 }
 
 document.getElementById("scatter-popup-close").onclick = () => {

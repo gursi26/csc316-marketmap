@@ -1519,10 +1519,31 @@ button {
 #scatterplot {
     max-width: 100%;
     max-height: 100%;
+    overflow: visible;
+}
+
+.scatter-hint-badge {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 7px 12px;
+    background: rgba(12, 20, 48, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    color: var(--fg);
+    font-size: 11px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    z-index: 20;
+    pointer-events: none;
+}
+
+@keyframes hintFade {
+    to { opacity: 0; }
 }
 
 .tooltip-scatter {
-    position: absolute;
+    position: fixed;
     background: var(--tooltip-bg);
     color: var(--fg);
     padding: 10px;
@@ -1562,18 +1583,67 @@ button {
 .controls-and-legend {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .legend-scatter {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 10px;
+    gap: 6px;
     background: var(--panel);
-    padding: 8px 12px;
+    padding: 10px 16px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.03);
+    max-width: 520px;
+}
+
+.interaction-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    background: var(--panel);
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    max-width: 520px;
+}
+
+.interaction-card, .interaction-panel {
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 12px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.interaction-row {
+    font-size: 12px;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.controls-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--fg);
+    text-align: center;
+    width: 100%;
+}
+
+.controls-hint {
+    margin: 0 0 6px;
+    color: var(--muted);
+    font-size: 12px;
+    width: 100%;
+    text-align: center;
 }
 
 .legend-item {
@@ -1593,13 +1663,55 @@ button {
     color: var(--fg)
 }
 
+.legend-top-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.legend-title {
+    margin: 0;
+    font-size: 16px;
+    text-align: center;
+    width: 100%;
+}
+
+.size-legend {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+.size-legend svg {
+    overflow: visible;
+}
+
+.size-legend-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: 4px;
+}
+
+.size-legend-label {
+    fill: var(--muted);
+    font-size: 11px;
+}
+
+.size-legend-value {
+    fill: var(--fg);
+    font-size: 11px;
+}
+
 .color-legend {
     display: flex;
     flex-direction: row;
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
     background: var(--panel);
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.03);
@@ -1672,20 +1784,44 @@ select option:disabled {
 
 .controls-scatter {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 16px;
+    align-items: center;
+    gap: 6px;
     background: var(--panel);
-    padding: 8px 12px;
+    padding: 14px 22px 16px;
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.controls-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.controls-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--fg);
 }
 
 .control-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
     align-items: center;
     justify-content: center
+}
+
+.control-groups-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .control-group label {
@@ -1695,7 +1831,7 @@ select option:disabled {
 }
 
 .control-group select {
-    padding: 10px 14px;
+    padding: 8px 18px;
     border-radius: 10px;
     border: 1px solid var(--grid);
     background: #0c1430;

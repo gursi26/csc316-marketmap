@@ -159,65 +159,68 @@
             <div class="section transition-page section-four-transition"><h3>Now it's time to zoom out a little, and see how different companies stack up against the competition!</h3></div>
             <div class="section section-five">
                 <div class="container-scatter">
-                    <h2>Company Correlations</h2>
-                    <p class="subtitle-scatter">Interactive scatterplot showing company relationships between leadership, employee satisfaction, and market performance</p>
+                    <h2>Company Trade-offs Explorer</h2>
+                    <p class="subtitle-scatter">Mix and match axes, colours, and bubble size to see how sentiment, leadership, and company scale intersect.</p>
 
                     <div class="controls-and-legend">
                         <div class="controls-scatter">
-                            <div class="control-group">
-                                <label for="x-axis">X-Axis:</label>
-                                <select id="x-axis">
-                                    <option value="ceo_approval">CEO Approval %</option>
-                                    <option value="employee_rating">Employee Rating</option>
-                                    <option value="sentiment">Sentiment Score</option>
-                                    <option value="pe_ratio">P/E Ratio</option>
-                                    <option value="revenue">Revenue</option>
-                                </select>
+                            <div class="controls-header">
+                                <span class="controls-title">Plot controls</span>
                             </div>
-                            <div class="control-group">
-                                <label for="y-axis">Y-Axis:</label>
-                                <select id="y-axis">
-                                    <option value="employee_rating">Employee Rating</option>
-                                    <option value="ceo_approval">CEO Approval %</option>
-                                    <option value="sentiment">Sentiment Score</option>
-                                    <option value="pe_ratio">P/E Ratio</option>
-                                    <option value="revenue">Revenue</option>
-                                </select>
-                            </div>
-                            <div class="control-group">
-                                <label for="color-by">Color By:</label>
-                                <select id="color-by">
-                                    <option value="sentiment">Sentiment Score</option>
-                                    <option value="sector">Sector</option>
-                                    <option value="employee_rating">Employee Rating</option>
-                                    <option value="ceo_approval">CEO Approval</option>
-                                </select>
+                            <div class="control-groups-row">
+                                <div class="control-group">
+                                    <label for="x-axis">X-Axis:</label>
+                                    <select id="x-axis">
+                                        <option value="ceo_approval">CEO Approval %</option>
+                                        <option value="employee_rating">Employee Rating</option>
+                                        <option value="sentiment">Sentiment Score</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="y-axis">Y-Axis:</label>
+                                    <select id="y-axis">
+                                        <option value="pe_ratio">P/E Ratio</option>
+                                        <option value="revenue">Revenue ($)</option>
+                                        <option value="market_cap">Market Cap ($)</option>
+                                        <option value="employee_count">Employee Count</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="color-by">Colour:</label>
+                                    <select id="color-by">
+                                        <option value="sentiment">Sentiment Score</option>
+                                        <option value="sector">Sector</option>
+                                        <option value="ceo_approval">CEO Approval</option>
+                                        <option value="employee_rating">Employee Rating</option>
+                                    </select>
+                                </div>
+                                <div class="control-group">
+                                    <label for="size-by">Bubble Size:</label>
+                                    <select id="size-by">
+                                        <option value="market_cap">Market Cap</option>
+                                        <option value="revenue">Revenue</option>
+                                        <option value="employee_count">Employee Count</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="legend-scatter">
-                            <button id="scatter-info-btn" class="info-btn"> Usage Instructions </button>
-
-                            <div id="scatter-info-panel" class="info-panel hidden">
-                                <h3>How to use the Scatter Chart</h3>
-                                <p>• Hover over bubbles to see details.</p>
-                                <p>• Click a bubble to open the company popup.</p>
-                                <p>• Use the dropdowns to change axes and colours.</p>
-                                <p>• Bubble size represents market cap.</p>
-                                <button id="scatter-info-close" class="close-btn">Close</button>
+                            <div class="legend-top-row">
+                                <h4 class="legend-title">Legends</h4>
                             </div>
-        
-                            <div class="legend-item">
-                                <div class="legend-color" style="background: #333; border: thin solid #555;"></div>
-                                <span class="legend-text">Larger bubbles = Higher Market Cap</span>
+                            <div id="size-legend" class="size-legend"></div>
+                            <div class="color-legend" id="color-legend"></div>
+                        </div>
+                        <div class="interaction-panel">
+                            <div class="legend-top-row">
+                                <h4 class="legend-title">Interactions</h4>
                             </div>
-                            <div class="legend-item">
-                                <div class="legend-color" style="background: #333; border: thin solid #555;"></div>
-                                <span class="legend-text">Click bubbles for company details</span>
-                            </div>
+                            <div class="interaction-row">👆 Hover bubbles for quick stats</div>
+                            <div class="interaction-row">🖱️ Click for the detailed card</div>
                         </div>
                     </div>
-                    
                     <div class="chart-container-scatter">
+                        <div class="scatter-hint-badge">Hover for stats · Click for details</div>
                         <div id="scatter-company-popup" class="company-popup hidden">
                             <img id="scatter-company-logo" class="company-logo" alt="Company Logo">
                         
@@ -240,10 +243,6 @@
                         
                         <svg id="scatterplot"></svg>
                         <div class="tooltip-scatter" id="tooltip-scatter"></div>
-                    </div>
-                    
-                    <div class="color-legend" id="color-legend">
-                        <!-- Color legend will be dynamically generated here -->
                     </div>
                 </div>
 
