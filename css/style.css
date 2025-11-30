@@ -1506,3 +1506,37 @@ dialog::backdrop {
     overflow-y: scroll;
   }
 }
+
+
+/* ==== BAR CHART OVERRIDES (MAP VIS) ==== */
+
+/* Remove old stripe overlay */
+.company-bar-item .bar-building::before {
+    content: none !important;
+    background: none !important;
+}
+
+/* Let JS control background color, but keep sharp, flat buildings */
+.company-bar-item .bar-building {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    /* NOTE: no background: ... !important here,
+       so JS can set the color */
+}
+
+/* Prevent flex shrinking so width stays constant */
+.company-bar-item {
+    flex: 0 0 auto !important;
+}
+
+/* Container should scroll if there are many buildings */
+.companies-bar-chart {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 16px !important;
+    justify-content: flex-start !important;
+    align-items: flex-end !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+}

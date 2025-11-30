@@ -1210,157 +1210,283 @@ class MapVis {
     function hideStatePanel(){ if(layoutEl) layoutEl.classList.remove('panel-open'); }
 
     // ---- Update State Companies Panel ----
+    // ---- Update State Companies Panel ----
     function updateStateCompaniesPanel(stateName) {
+      // Title at top of panel
       statePanelTitle.text(stateName);
-      
-      // Get companies in this state or country
+
+      // Figure out if this is a US state or a foreign country
       let stateCompanies = [];
-      // If the name matches a US state or abbreviation, filter by state
       const stateAbbr = stateNameToAbbr[stateName] || stateName;
-      const isState = Object.keys(stateNameToAbbr).includes(stateName) || Object.values(stateNameToAbbr).includes(stateName);
+      const isState =
+        Object.keys(stateNameToAbbr).includes(stateName) ||
+        Object.values(stateNameToAbbr).includes(stateName);
+
       if (isState) {
         stateCompanies = companies.filter(c => {
           const cState = pick(c, ["State"]);
           return cState === stateName || cState === stateAbbr;
         });
       } else {
-        // Otherwise, treat as country
         stateCompanies = companies.filter(c => {
           const cCountry = pick(c, ["Country"]);
           return cCountry === stateName;
         });
       }
-      stateCompanies = stateCompanies.map(c => ({
-        ...c,
-        mc: getMarketCap(c.Ticker)
-      })).filter(c => c.mc && c.mc > 0)
-        .sort((a, b) => b.mc - a.mc); // Sort descending by market cap
-      
-      if (stateCompanies.length === 0) {
-        barChartContainer.html('');
+
+      // Attach market cap + employee count for this panel
+      stateCompanies = stateCompanies
+        .map(c => {
+          const mc = getMarketCap(c.Ticker);
+          const employees = +pick(c, [
+            "Employee Count",
+            "employee count",
+            "Employees",
+            "employees"
+          ]) || 0;
+          return {
+            ...c,
+            mc,
+            employees
+          };
+        })
+        .filter(c => c.mc && c.mc > 0)
+        .sort((a, b) => b.mc - a.mc); // largest first
+
+      // If no companies, clear panel
+      if (!stateCompanies.length) {
+        barChartContainer.html("");
         return;
       }
 
-      // Bar chart scaling for market cap
-      const mcValues = stateCompanies.map(d => d.mc).filter(v => v > 0);
-      const maxMc = mcValues.length ? d3.max(mcValues) : 1;
-      // Use the actual height of the .companies-bar-chart container for scaling
-      let chartHeight = 260;
-      const chartEl = document.querySelector('.companies-bar-chart');
-      if (chartEl) {
-        chartHeight = chartEl.getBoundingClientRect().height;
-      }
-      // Subtract a larger top margin and logo height for guaranteed visibility
-      const topMargin = 32; // space from top edge
-      const logoHeight = 48; // max logo height
-      const marginForLabels = 40; // space for company name and market cap label
-      const availableHeight = Math.max(0, chartHeight - topMargin - logoHeight - marginForLabels);
-      const heightScale = d3.scaleSqrt()
-        .domain([0, maxMc])
-        .range([0, availableHeight]);
+      // -------- SCALES --------
+      const mcValues = stateCompanies.map(d => d.mc);
+      const maxMc = d3.max(mcValues);
 
-      // Create bar chart items (declare and use only once)
-      const items = barChartContainer.selectAll(".company-bar-item")
+      // Panel height for bars
+      let chartHeight = 260;
+      const chartEl = document.querySelector(".companies-bar-chart");
+      if (chartEl) {
+        chartHeight = chartEl.getBoundingClientRect().height || chartHeight;
+      }
+      const topMargin = 32;      // space from top
+      const logoHeight = 48;     // space for logo
+      const labelMargin = 40;    // space for labels
+      const minBarHeight = 40;   // minimum visible bar height
+
+      const availableHeight = Math.max(
+        0,
+        chartHeight - topMargin - logoHeight - labelMargin
+      );
+
+      // Height based on market cap (square-root for nicer spread)
+      const heightScale = d3
+        .scaleSqrt()
+        .domain([0, maxMc])
+        .range([minBarHeight, availableHeight || minBarHeight + 40]);
+
+      // Employee → number of windows (square root compresses Amazon)
+      const maxEmp = d3.max(stateCompanies, d => d.employees || 0) || 1;
+      const windowCountScale = d3
+        .scaleSqrt()
+        .domain([0, maxEmp])
+        .range([0, 18]); // up to 18 windows (3 rows × 6 cols)
+
+      // Employee rating → color (red → yellow → green)
+      const ratingVals = stateCompanies
+        .map(d => d.employee_rating)
+        .filter(v => v != null && isFinite(v));
+      const ratingDomain = ratingVals.length ? d3.extent(ratingVals) : [0, 5];
+      const midRating = (ratingDomain[0] + ratingDomain[1]) / 2;
+
+      const colorScale = d3
+        .scaleLinear()
+        .domain([ratingDomain[0], midRating, ratingDomain[1]])
+        .range(["#d64d4d", "#f0d34a", "#36b37e"]);
+
+      // Window grid constants
+      const WINDOW_COLS_MAX = 5;     // max columns in grid
+      const WINDOW_ROWS = 10;         // exactly 3 rows
+      const WINDOW_W = 10;
+      const WINDOW_H = 10;
+      const WINDOW_GAP_X = 4;
+      const WINDOW_GAP_Y = 6;
+
+      // -------- JOIN DOM ELEMENTS --------
+      const items = barChartContainer
+        .selectAll(".company-bar-item")
         .data(stateCompanies, d => d.Ticker);
+
       items.exit().remove();
-      const itemsEnter = items.enter()
+
+      const itemsEnter = items
+        .enter()
         .append("div")
         .attr("class", "company-bar-item");
+
       itemsEnter.append("img").attr("class", "company-logo");
       itemsEnter.append("div").attr("class", "bar-building");
       itemsEnter.append("div").attr("class", "company-name");
       itemsEnter.append("div").attr("class", "market-cap-label");
+
       const allItems = itemsEnter.merge(items);
 
-      // Set logo src and handle errors
-      // Calculate dynamic bar width based on number of companies and container width
-      const minBarWidth = 32;
-      const maxBarWidth = 80;
-      const containerW = barChartContainer.node().offsetWidth || 800;
-      let barWidth = Math.max(minBarWidth, Math.min(maxBarWidth, Math.floor(containerW / stateCompanies.length)));
+      // Fixed building width across all states + scroll if needed
+      const fixedWidth = 80; // px
+      allItems
+        .style("display", "flex")
+        .style("flex-direction", "column")
+        .style("align-items", "center")
+        .style("flex", `0 0 ${fixedWidth}px`)
+        .style("width", `${fixedWidth}px`)
+        .style("margin", "0 6px");
 
-      allItems.style("display", "inline-block")
-        .style("vertical-align", "bottom")
-        .style("width", `${barWidth}px`);
-
-      allItems.select(".company-logo")
+      // Logo
+      allItems
+        .select(".company-logo")
         .attr("src", d => `dataset/logos/images/${d.Ticker}.png`)
         .attr("alt", d => d.Name || d.Ticker)
         .style("display", "block")
         .style("height", "auto")
-        .each(function(d, i) {
-          // Scale logo width to match bar width
-          const minLogo = 18;
-          const maxLogo = 48;
-          let logoW = Math.max(minLogo, Math.min(maxLogo, barWidth * 0.8));
+        .each(function (d) {
+          const logoSize = 42;
           d3.select(this)
-            .style("width", `${logoW}px`)
-            .style("max-width", `${maxLogo}px`)
-            .style("margin", "0 auto");
+            .style("width", `${logoSize}px`)
+            .style("height", `${logoSize}px`)
+            .style("margin", "0 auto 6px");
         })
-        .on("error", function(event, d) {
-          const canvas = document.createElement('canvas');
+        .on("error", function (event, d) {
+          // fallback ticker square if logo missing
+          const canvas = document.createElement("canvas");
           canvas.width = 32;
           canvas.height = 32;
-          const ctx = canvas.getContext('2d');
-          ctx.fillStyle = '#2a73d6';
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#2a73d6";
           ctx.fillRect(0, 0, 32, 32);
-          ctx.fillStyle = '#fff';
-          ctx.font = 'bold 10px sans-serif';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
+          ctx.fillStyle = "#fff";
+          ctx.font = "bold 10px sans-serif";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
           ctx.fillText(d.Ticker.substring(0, 4), 16, 16);
           d3.select(this).attr("src", canvas.toDataURL());
         });
-      allItems.select(".company-name")
-        .text(d => d.Name || d.Ticker);
-      allItems.select(".bar-building")
-        .style("height", "0px")
+
+      // Building (bar) — height + color
+      allItems
+        .select(".bar-building")
+        .style("position", "relative")
+        .style("width", "100%")
+        .style("background", d => {
+          const r = d.employee_rating;
+          const base =
+            r != null && isFinite(r)
+              ? colorScale(r)
+              : colorScale(midRating);
+          // darker bottom for depth
+          const bottom = d3.interpolateRgb(base, "#0b2648")(0.7);
+          return `linear-gradient(180deg, ${base}, ${bottom})`;
+        })
+        .style("border", "2px solid #5ea8ff")
+        .style("border-bottom", "3px solid #0d2644")
+        .style("border-radius", "4px 4px 0 0")
+        .style("box-shadow", "0 -4px 8px rgba(0,0,0,0.3)")
+        .style("overflow", "hidden")
         .transition()
-        .duration(1000)
-        .delay((d, i) => i * 60)
+        .duration(800)
         .ease(d3.easeCubicOut)
-        .style("height", d => `${heightScale(Math.max(d.mc, maxMc * 0.01))}px`);
-      allItems.select(".market-cap-label")
+        .style("height", d => `${heightScale(d.mc)}px`);
+
+      // Company name + market cap labels
+      allItems
+        .select(".company-name")
+        .text(d => d.Name || d.Ticker);
+
+      allItems
+        .select(".market-cap-label")
         .text(d => `$${formatMarketCap(d.mc)}`);
 
-      // Always show companies horizontally, with scroll if needed
-      barChartContainer.style("white-space", "nowrap")
-        .style("overflow-x", "auto")
-        .style("overflow-y", "hidden")
+      // -------- WINDOWS (skyscraper grid) --------
+      allItems.each(function (d) {
+        const barSel = d3.select(this).select(".bar-building");
+        const barNode = barSel.node();
+        if (!barNode) return;
+
+        // remove any previous windows
+        while (barNode.firstChild) barNode.removeChild(barNode.firstChild);
+
+        const totalWindows = Math.round(
+          windowCountScale(d.employees || 0)
+        );
+        if (totalWindows <= 0) return;
+
+        const maxWindows = WINDOW_COLS_MAX * WINDOW_ROWS;
+        const nWindows = Math.min(totalWindows, maxWindows);
+
+        // Center grid horizontally inside bar
+        const gridWidth =
+          WINDOW_COLS_MAX * (WINDOW_W + WINDOW_GAP_X) - WINDOW_GAP_X;
+        const barWidth = barNode.clientWidth || fixedWidth;
+        const leftStart = Math.max(4, (barWidth - gridWidth) / 2);
+
+        for (let i = 0; i < nWindows; i++) {
+          const row = Math.floor(i / WINDOW_COLS_MAX);
+          const col = i % WINDOW_COLS_MAX;
+
+          const win = document.createElement("div");
+          win.style.position = "absolute";
+          win.style.width = `${WINDOW_W}px`;
+          win.style.height = `${WINDOW_H}px`;
+          win.style.left = `${leftStart + col * (WINDOW_W + WINDOW_GAP_X)}px`;
+          // from top downward
+          win.style.top = `${8 + row * (WINDOW_H + WINDOW_GAP_Y)}px`;
+          win.style.background =
+            "linear-gradient(180deg,#e0e4ef,#b8bfd3)";
+          win.style.borderRadius = "3px";
+          win.style.boxShadow = "0 1px 3px rgba(0,0,0,0.4)";
+
+          barNode.appendChild(win);
+        }
+      });
+
+      // -------- container behavior (scroll, layout) --------
+      barChartContainer
         .style("display", "flex")
         .style("flex-direction", "row")
         .style("align-items", "flex-end")
-        .style("max-width", barChartContainer.node().offsetWidth + "px")
-        .style("margin-top", "16px"); // Add top margin to prevent overflow
-      allItems.style("display", "inline-block")
-        .style("vertical-align", "bottom")
-        .style("width", "80px")
-        .style("margin-top", "8px"); // Add margin to each bar for logo visibility
+        .style("justify-content", "flex-start")
+        .style("gap", "12px")
+        .style("padding", "14px 8px 12px 8px")
+        .style("white-space", "nowrap")
+        .style("overflow-x", "auto")
+        .style("overflow-y", "hidden")
+        .style("margin-top", "16px");
 
-      // Hovering over a bar highlights the corresponding building and shows its tooltip
+      // Hover: highlight building on map + show tooltip near map building
       allItems
-        .on("mouseenter", function(event, d) {
+        .on("mouseenter", function (event, d) {
           highlightCompanyBuilding(d.Ticker, true);
           const pos = getBuildingScreenPosition(d.Ticker);
-          if (pos) {
-            showTip(pos, d);
-          }
+          if (pos) showTip(pos, d);
         })
-        .on("mouseleave", function(event, d) {
+        .on("mouseleave", function (event, d) {
           highlightCompanyBuilding(d.Ticker, false);
           hideTip();
         });
 
-      // Slide in animation for bar chart
-      barChartContainer.style("transform", "translateX(60px)").style("opacity", "0");
+      // Slide-in animation for the whole chart
+      barChartContainer
+        .style("transform", "translateX(60px)")
+        .style("opacity", "0");
+
       setTimeout(() => {
-        barChartContainer.transition()
+        barChartContainer
+          .transition()
           .duration(400)
           .style("transform", "translateX(0)")
           .style("opacity", "1");
       }, 50);
     }
+
 
     // Click empty space to reset zoom
     svg.on("click", function(){
