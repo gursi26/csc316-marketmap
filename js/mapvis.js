@@ -179,6 +179,8 @@ class MapVis {
     // 1  -> icons grow fully with the map zoom
     const BUILDING_ZOOM_FACTOR = 0.6;
 
+    let selectedIndustryFilter = 'all';
+
     // State name to abbreviation mapping
     const stateNameToAbbr = {
       "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Colorado": "CO",
@@ -387,11 +389,13 @@ class MapVis {
         if (!panel) return;
         const collapsed = panel.classList.contains('collapsed');
         panel.innerHTML = '';
+
+        // Header
         const headerRow = document.createElement('div');
         headerRow.className = 'legend-header-row';
         const title = document.createElement('div');
         title.className = 'legend-panel-title';
-        title.textContent = 'Legend';
+        title.textContent = 'Industry Filter';
         const toggle = document.createElement('button');
         toggle.type = 'button';
         toggle.className = 'legend-toggle';
@@ -401,9 +405,37 @@ class MapVis {
         toggle.appendChild(iconSpan);
         headerRow.appendChild(title);
         headerRow.appendChild(toggle);
+
+        // Filter Dropdown
+        const filterContent = document.createElement('div');
+        filterContent.className = 'legend-filter-content';
+
+        const select = document.createElement('select');
+        select.id = 'industry-filter-select';
+        select.className = 'industry-filter-select';
+
+        // "All Industries" option
+        const allOption = document.createElement('option');
+        allOption.value = 'all';
+        allOption.textContent = 'All Industries';
+        if (selectedIndustryFilter === 'all') allOption.selected = true;
+        select.appendChild(allOption);
+
+        // Industry options
+        const cats = Object.keys(industryMapping || {});
+        cats.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          if (selectedIndustryFilter === cat) option.selected = true;
+          select.appendChild(option);
+        });
+
+        filterContent.appendChild(select);
+
+        // Legend Grid
         const grid = document.createElement('div');
         grid.className = 'legend-grid';
-        const cats = Object.keys(industryMapping || {});
         cats.forEach(cat => {
           const item = document.createElement('div');
           item.className = 'legend-item';
@@ -419,16 +451,22 @@ class MapVis {
           item.appendChild(label);
           grid.appendChild(item);
         });
+
         panel.appendChild(headerRow);
+        panel.appendChild(filterContent);
         panel.appendChild(grid);
+
         if (collapsed) {
           panel.classList.add('collapsed');
         }
-        // Prevent clicks inside the panel from triggering global click handlers
-        panel.addEventListener('click', (ev) => {
-          ev.stopPropagation();
+
+        // Event Listeners
+        select.addEventListener('change', (ev) => {
+          selectedIndustryFilter = ev.target.value;
+          render(); // Re-render map
         });
-        // Allow clicking anywhere on the header (including collapsed state) to toggle the legend
+
+        panel.addEventListener('click', (ev) => ev.stopPropagation());
         headerRow.addEventListener('click', (ev) => {
           ev.stopPropagation();
           panel.classList.toggle('collapsed');
@@ -437,6 +475,7 @@ class MapVis {
           ev.stopPropagation();
           panel.classList.toggle('collapsed');
         });
+
         positionLegendPanel();
       } catch (e) { }
     }
@@ -763,7 +802,9 @@ class MapVis {
     function renderBuildings() {
       // Only US companies
       const usCompanies = companies.filter(c => (c.Country || "").trim().toLowerCase() === "united states");
-      const data = usCompanies.map(c => {
+
+      // CHANGE 'const' TO 'let' HERE:
+      let data = usCompanies.map(c => {
         let proj = null;
         if (isFinite(c.Longitude) && isFinite(c.Latitude)) {
           // Use constrained position to keep within state boundaries
@@ -775,6 +816,12 @@ class MapVis {
         const category = getIndustryCategory(industry);
         return { ...c, px: proj ? proj[0] : null, py: proj ? proj[1] : null, mc, category };
       }).filter(d => d.px != null && d.py != null && d.category != null);
+
+      // INSERT FILTER LOGIC HERE:
+      if (selectedIndustryFilter !== 'all') {
+        data = data.filter(d => d.category === selectedIndustryFilter);
+      }
+
       console.log(`US companies in dataset: ${usCompanies.length}, rendered: ${data.length}`);
 
       // Apply collision detection to spread out buildings

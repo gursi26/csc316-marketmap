@@ -1019,6 +1019,38 @@ button {
     margin-top: 4px
 }
 
+/* Industry Filter Dropdown in Legend */
+.legend-filter-content {
+    margin: 12px 0;
+    padding: 0 8px;
+}
+
+.industry-filter-select {
+    width: 100%;
+    padding: 8px 10px;
+    background: var(--bg);
+    border: 1px solid var(--grid);
+    border-radius: 6px;
+    color: var(--fg);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.industry-filter-select:hover {
+    border-color: var(--accent);
+}
+
+.industry-filter-select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(94, 168, 255, 0.2);
+}
+
+.legend-panel.collapsed .legend-filter-content {
+    display: none;
+}
+
 /* Company List */
 .company-list-section {
     margin-top: 20px
