@@ -1242,20 +1242,13 @@ class MapVis {
                 </div>
               </div>
             </div>
-            <div id="chart-filter-panel" class="chart-filter-panel collapsed">
-              <div class="chart-filter-header-row">
-                <div class="chart-filter-title">Sort By</div>
-                <button type="button" class="chart-filter-toggle">
-                  <span class="chart-filter-toggle-icon">▾</span>
-                </button>
-              </div>
-              <div class="chart-filter-content">
-                <select id="chart-sort-select" class="chart-filter-select">
-                  <option value="marketcap">Market Cap (High → Low)</option>
-                  <option value="employees">Employee Count (High → Low)</option>
-                  <option value="rating">Employee Rating (High → Low)</option>
-                </select>
-              </div>
+            <div id="chart-filter-panel" class="chart-filter-panel">
+              <div class="chart-filter-label">Sort By</div>
+              <select id="chart-sort-select" class="chart-filter-select">
+                <option value="marketcap" selected>Market Cap (High → Low)</option>
+                <option value="employees">Employee Count (High → Low)</option>
+                <option value="rating">Employee Rating (High → Low)</option>
+              </select>
             </div>
           </div>
         `;
@@ -1269,13 +1262,6 @@ class MapVis {
           legendPanel.classList.toggle('collapsed');
         });
 
-        // Add filter toggle functionality
-        const filterPanel = document.getElementById('chart-filter-panel');
-        const filterHeaderRow = filterPanel.querySelector('.chart-filter-header-row');
-        filterHeaderRow.addEventListener('click', (ev) => {
-          ev.stopPropagation();
-          filterPanel.classList.toggle('collapsed');
-        });
 
         // Add sort functionality
         const sortSelect = document.getElementById('chart-sort-select');

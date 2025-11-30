@@ -612,6 +612,15 @@ body {
     font-weight: 600;
 }
 
+.chart-filter-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
 .chart-filter-toggle {
     background: none;
     border: none;
@@ -1533,13 +1542,15 @@ button {
     border-radius: 999px;
     color: var(--fg);
     font-size: 11px;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
     z-index: 20;
     pointer-events: none;
 }
 
 @keyframes hintFade {
-    to { opacity: 0; }
+    to {
+        opacity: 0;
+    }
 }
 
 .tooltip-scatter {
@@ -1612,7 +1623,8 @@ button {
     max-width: 520px;
 }
 
-.interaction-card, .interaction-panel {
+.interaction-card,
+.interaction-panel {
     background: var(--panel);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 8px;

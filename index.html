@@ -1,35 +1,39 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>MarketMap 📡</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Rubik+80s+Fade&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="css/style.css">
-        <script src="https://unpkg.com/d3@7"></script>
-        <script src="https://unpkg.com/topojson-client@3"></script>
-    </head>
-    <body>
-        <!-- Page navigation dots -->
-        <nav class="page-dots">
-            <button class="dot active big-dot" data-section="0" aria-label="Go to landing page"></button>
-            <button class="dot active small-dot" data-section="0" aria-label="Go to landing page"></button>
-            <button class="dot big-dot" data-section="1" aria-label="Go to map visualization"></button>
-            <button class="dot small-dot" data-section="1" aria-label="Go to map visualization"></button>
-            <button class="dot big-dot" data-section="2" aria-label="Go to scatter chart"></button>
-            <button class="dot small-dot" data-section="2" aria-label="Go to scatter chart"></button>
-            <button class="dot big-dot" data-section="3" aria-label="Go to slope chart"></button>
-            <button class="dot small-dot" data-section="3" aria-label="Go to slope chart"></button>
-            <button class="dot big-dot" data-section="4" aria-label="Go to benefit explorer"></button></button>
-            <button class="dot small-dot" data-section="4" aria-label="Go to benefit explorer"></button></button>
-        </nav>
 
-        <div class="snap-container">
-            <div class="section section-one">
-                <!-- Popup windows -->
-                 <!-- <dialog id="sources-popup">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MarketMap 📡</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Rubik+80s+Fade&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/d3@7"></script>
+    <script src="https://unpkg.com/topojson-client@3"></script>
+</head>
+
+<body>
+    <!-- Page navigation dots -->
+    <nav class="page-dots">
+        <button class="dot active big-dot" data-section="0" aria-label="Go to landing page"></button>
+        <button class="dot active small-dot" data-section="0" aria-label="Go to landing page"></button>
+        <button class="dot big-dot" data-section="1" aria-label="Go to map visualization"></button>
+        <button class="dot small-dot" data-section="1" aria-label="Go to map visualization"></button>
+        <button class="dot big-dot" data-section="2" aria-label="Go to scatter chart"></button>
+        <button class="dot small-dot" data-section="2" aria-label="Go to scatter chart"></button>
+        <button class="dot big-dot" data-section="3" aria-label="Go to slope chart"></button>
+        <button class="dot small-dot" data-section="3" aria-label="Go to slope chart"></button>
+        <button class="dot big-dot" data-section="4" aria-label="Go to benefit explorer"></button></button>
+        <button class="dot small-dot" data-section="4" aria-label="Go to benefit explorer"></button></button>
+    </nav>
+
+    <div class="snap-container">
+        <div class="section section-one">
+            <!-- Popup windows -->
+            <!-- <dialog id="sources-popup">
                     <div class="popup-content-wrapper">
                         <button id="close-sources-popup" class="carousel-close">✕</button>
                         <div class="carousel-container">
@@ -49,7 +53,7 @@
                     </div>
                 </dialog> -->
 
-                <!-- <dialog id="company-detail-popup">
+            <!-- <dialog id="company-detail-popup">
                     <div class="popup-content-wrapper">
                         <div class="company-detail-container">
                             <img class="company-logo" id="company-logo" alt="Company Logo">
@@ -62,286 +66,314 @@
                     </div>
                 </dialog> -->
 
-                <h1 class="rubik">MarketMap</h1>
-                <h4 class="major-mono">a gps for your career path</h4>
-                <div class="button-holder">
-                    <!-- <button id="sourcesButton" class="work-sans-400">See Guide ⓘ</button> -->
-                    <button id="scrollDownButton" class="work-sans-400">Get Started ↓</button>
-                </div>
+            <h1 class="rubik">MarketMap</h1>
+            <h4 class="major-mono">a gps for your career path</h4>
+            <div class="button-holder">
+                <!-- <button id="sourcesButton" class="work-sans-400">See Guide ⓘ</button> -->
+                <button id="scrollDownButton" class="work-sans-400">Get Started ↓</button>
             </div>
-            <div class="section transition-page section-one-transition"><h3>First, let's figure out where in the world your career should start.</h3></div>
-            <div class="section section-two">
-                <div class="mapvis-wrapper">
-                    <div class="app-header">
-                        <div class="header-left">
-                            <h1>Company Atlas</h1>
-                            <p class="subtitle">Click a state to zoom in · Click a company icon to learn more</p>
-                        </div>
+        </div>
+        <div class="section transition-page section-one-transition">
+            <h3>First, let's figure out where in the world your career should start.</h3>
+        </div>
+        <div class="section section-two">
+            <div class="mapvis-wrapper">
+                <div class="app-header">
+                    <div class="header-left">
+                        <h1>Company Atlas</h1>
+                        <p class="subtitle">Click a state to zoom in · Click a company icon to learn more</p>
                     </div>
-                    <main class="layout">
-                        <section class="viz">
-                            <div id="legend-panel" class="legend-panel collapsed" aria-label="Industry legend"></div>
-                            <div id="state-label" class="state-label"></div>
-                            <div id="tooltip" class="tooltip" style="display:none"></div>
-                            <svg id="chart" viewBox="-100 -40 1170 720" preserveAspectRatio="xMidYMid meet"></svg>
-                        </section>
-                        <aside class="state-companies-panel">
-                            <div class="panel-header">
-                                <h3 id="state-panel-title">Select a State</h3>
-                                <p class="panel-subtitle">Bar height represents company market cap</p>
-                            </div>
-                            <div id="companies-bar-chart" class="companies-bar-chart"></div>
-                        </aside>
-                    </main>
-                    <script>
-                        window.APP_CONFIG = {
-                          dataDir: "data",
-                          files: {
+                </div>
+                <main class="layout">
+                    <section class="viz">
+                        <div id="legend-panel" class="legend-panel collapsed" aria-label="Industry legend"></div>
+                        <div id="state-label" class="state-label"></div>
+                        <div id="tooltip" class="tooltip" style="display:none"></div>
+                        <svg id="chart" viewBox="-100 -40 1170 720" preserveAspectRatio="xMidYMid meet"></svg>
+                    </section>
+                    <aside class="state-companies-panel">
+                        <div class="panel-header">
+                            <h3 id="state-panel-title">Select a State</h3>
+                        </div>
+                        <div id="companies-bar-chart" class="companies-bar-chart"></div>
+                    </aside>
+                </main>
+                <script>
+                    window.APP_CONFIG = {
+                        dataDir: "data",
+                        files: {
                             info: "Company-info.csv",
                             financials: "Company-financials.csv",
                             salary: "Company-salary.csv",
                             prices: "nasdaq100_yearly_prices.csv"
-                          }
-                        };
-                    </script>
-                    <script src="js/mapvis.js"></script>
-                </div>
+                        }
+                    };
+                </script>
+                <script src="js/mapvis.js"></script>
             </div>
-            <div class="section transition-page section-two-transition"><h3>Now that we've checked out some possible destinations, it's time to see what your benefits could look like.</h3></div>
-            <div class="section section-three">
+        </div>
+        <div class="section transition-page section-two-transition">
+            <h3>Now that we've checked out some possible destinations, it's time to see what your benefits could look
+                like.</h3>
+        </div>
+        <div class="section section-three">
 
-                <iframe 
-                    src="benefits vis/index.html" 
-                    style="
+            <iframe src="benefits vis/index.html" style="
                         width:100vw;
                         height:100vh;
                         border:none;
                         overflow:hidden;
-                    "
-                    scrolling="no"
-                ></iframe>
-              
-            </div>
-            <div class="section transition-page section-three-transition"><h3>Although benefits are important, one might argue that career growth is just as cruicial—let's explore pay progression!</h3></div>
-            <div class="section section-four">
-                <div class="slope-chart-wrapper">
-                    <!-- Ensure this navigates the top-level page (works even when the slope chart is shown inside an iframe) -->
-                    <!-- <a id="backToMap" class="back-to-map" href="../index.html" target="_top" rel="noopener">← Back to Map</a> -->
-                    <div id="controls">
-                        <div class="control-row">
-                            <label for="view-mode-select">Select By:</label>
-                            <select id="view-mode-select" size="1">
-                                <option value="company">Company</option>
-                                <option value="role">Role</option>
-                            </select>
-                        </div>
-                        <div class="control-row">
-                            <label for="item-select" id="item-label">Company:</label>
-                            <select id="item-select" size="1"></select>
-                            <img id="company-logo" class="dropdown-logo" alt="">
-                        </div>
-                    </div>
-                    <div id="tooltip-slope"></div>
-                    <div id="info-popup"></div>
-                    <svg id="canvas"></svg>
-                    <script src="https://d3js.org/d3.v7.min.js"></script>
-                    <script src="js/constants.js"></script>
-                    <script src="js/tooltipBarChart.js"></script>
-                    <script src="js/utils.js"></script>
-                    <script src="js/collisionDetection.js"></script>
-                    <script src="js/bubbleRenderer.js"></script>
-                    <script src="js/interactionHandler.js"></script>
-                    <script src="js/slopeChart.js"></script>
-                    <script src="js/main.js"></script>
-                    <!-- Back link is an anchor so it works without JS -->
-                </div>
-            </div>
-            <div class="section transition-page section-four-transition"><h3>Now it's time to zoom out a little, and see how different companies stack up against the competition!</h3></div>
-            <div class="section section-five">
-                <div class="container-scatter">
-                    <h2>Company Trade-offs Explorer</h2>
-                    <p class="subtitle-scatter">Mix and match axes, colours, and bubble size to see how sentiment, leadership, and company scale intersect.</p>
+                    " scrolling="no"></iframe>
 
-                    <div class="controls-and-legend">
-                        <div class="controls-scatter">
-                            <div class="controls-header">
-                                <span class="controls-title">Plot controls</span>
-                            </div>
-                            <div class="control-groups-row">
-                                <div class="control-group">
-                                    <label for="x-axis">X-Axis:</label>
-                                    <select id="x-axis">
-                                        <option value="ceo_approval">CEO Approval %</option>
-                                        <option value="employee_rating">Employee Rating</option>
-                                        <option value="sentiment">Sentiment Score</option>
-                                    </select>
-                                </div>
-                                <div class="control-group">
-                                    <label for="y-axis">Y-Axis:</label>
-                                    <select id="y-axis">
-                                        <option value="pe_ratio">P/E Ratio</option>
-                                        <option value="revenue">Revenue ($)</option>
-                                        <option value="market_cap">Market Cap ($)</option>
-                                        <option value="employee_count">Employee Count</option>
-                                    </select>
-                                </div>
-                                <div class="control-group">
-                                    <label for="color-by">Colour:</label>
-                                    <select id="color-by">
-                                        <option value="sentiment">Sentiment Score</option>
-                                        <option value="sector">Sector</option>
-                                        <option value="ceo_approval">CEO Approval</option>
-                                        <option value="employee_rating">Employee Rating</option>
-                                    </select>
-                                </div>
-                                <div class="control-group">
-                                    <label for="size-by">Bubble Size:</label>
-                                    <select id="size-by">
-                                        <option value="market_cap">Market Cap</option>
-                                        <option value="revenue">Revenue</option>
-                                        <option value="employee_count">Employee Count</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="legend-scatter">
-                            <div class="legend-top-row">
-                                <h4 class="legend-title">Legends</h4>
-                            </div>
-                            <div id="size-legend" class="size-legend"></div>
-                            <div class="color-legend" id="color-legend"></div>
-                        </div>
-                        <div class="interaction-panel">
-                            <div class="legend-top-row">
-                                <h4 class="legend-title">Interactions</h4>
-                            </div>
-                            <div class="interaction-row">👆 Hover bubbles for quick stats</div>
-                            <div class="interaction-row">🖱️ Click for the detailed card</div>
-                        </div>
+        </div>
+        <div class="section transition-page section-three-transition">
+            <h3>Although benefits are important, one might argue that career growth is just as cruicial—let's explore
+                pay progression!</h3>
+        </div>
+        <div class="section section-four">
+            <div class="slope-chart-wrapper">
+                <!-- Ensure this navigates the top-level page (works even when the slope chart is shown inside an iframe) -->
+                <!-- <a id="backToMap" class="back-to-map" href="../index.html" target="_top" rel="noopener">← Back to Map</a> -->
+                <div id="controls">
+                    <div class="control-row">
+                        <label for="view-mode-select">Select By:</label>
+                        <select id="view-mode-select" size="1">
+                            <option value="company">Company</option>
+                            <option value="role">Role</option>
+                        </select>
                     </div>
-                    <div class="chart-container-scatter">
-                        <div class="scatter-hint-badge">Hover for stats · Click for details</div>
-                        <div id="scatter-company-popup" class="company-popup hidden">
-                            <img id="scatter-company-logo" class="company-logo" alt="Company Logo">
-                        
-                            <div id="scatter-company-info" class="company-info">
-                                <div class="info-item"><span class="info-label">Company:</span> <span id="info-company-name">—</span></div>
-                                <div class="info-item"><span class="info-label">Ticker:</span> <span id="info-company-ticker">—</span></div>
-                                <div class="info-item"><span class="info-label">Sector:</span> <span id="info-company-sector">—</span></div>
-                                <div class="info-item"><span class="info-label">Industry:</span> <span id="info-company-industry">—</span></div>
-                                <div class="info-item"><span class="info-label">CEO Approval:</span> <span id="info-company-ceo">—</span></div>
-                                <div class="info-item"><span class="info-label">Employee Rating:</span> <span id="info-company-rating">—</span></div>
-                                <div class="info-item"><span class="info-label">Market Cap:</span> <span id="info-company-cap">—</span></div>
-                                <div class="info-item"><span class="info-label">Revenue:</span> <span id="info-company-revenue">—</span></div>
-                                <div class="info-item"><span class="info-label">P/E Ratio:</span> <span id="info-company-pe">—</span></div>
-                                <div class="info-item"><span class="info-label">Sentiment:</span> <span id="info-company-sent">—</span></div>
-                                <div class="info-item"><span class="info-label">Employees:</span> <span id="info-company-emp">—</span></div>
-                            </div>
-                        
-                            <button id="scatter-popup-close">Close</button>
-                        </div>
-                        
-                        <svg id="scatterplot"></svg>
-                        <div class="tooltip-scatter" id="tooltip-scatter"></div>
+                    <div class="control-row">
+                        <label for="item-select" id="item-label">Company:</label>
+                        <select id="item-select" size="1"></select>
+                        <img id="company-logo" class="dropdown-logo" alt="">
                     </div>
                 </div>
-
-                <script src="js/scatter.js"></script>
-            </div>
-            <div class="section transition-page section-five-transition">
-                <h3>We hope that you were able to better <em>map-out</em> your career with our visualizations.<br>Good luck, from the MarketMap team!</h3>
-                <div class="button-holder">
-                    <!-- <button id="sourcesButton" class="work-sans-400">See Guide ⓘ</button> -->
-                    <button id="sourcesButton" class="work-sans-400"><em>Sources</em></button>
-                    <dialog id="sources-popup">
-                        <div class="popup-content-wrapper">
-                            <div class="sources-container">
-                                <h4 class="sources-header">Image Credits</h4>
-                                <div class="links-row">
-                                    <div class="links-column">
-                                        <a href="https://unsplash.com/photos/a-view-of-the-earth-from-an-airplane-zVNU8WC1ino" class="credit">Dembee Tsogoo (Unsplash)<br></a>
-                                        <a href="https://unsplash.com/photos/brown-glass-bottle-beside-white-book-on-blue-and-white-textile-oj0zeY2Ltk4" class="credit">S'well (Unsplash)<br></a>
-                                        <a href="https://unsplash.com/photos/photo-of-outer-space-Q1p7bh3SHj8" class="credit">NASA (Unsplash)<br></a>
-                                    </div>
-                                    <div class="links-column">
-                                        <a href="https://unsplash.com/photos/high-angle-photography-of-black-high-rise-buildings-_jFDQJfCTyA" class="credit">CHUTTERSNAP (Unsplash)<br></a>
-                                        <a href="https://unsplash.com/photos/crowd-of-people-sitting-on-chairs-inside-room-F2KRf_QfCqw" class="credit">Headway (Unsplash)<br></a>
-                                        <a href="https://www.pexels.com/photo/high-rise-buildings-during-nighttime-2224789/" class="credit">Chait Goli (Pexels)<br></a>
-                                    </div>
-                                </div>
-                                <!-- <h3>MarketMap Sources</h3> -->
-                                
-                                
-                                <h4 class="sources-header">Data Sources</h4>
-                                <div class="links-row">
-                                    <div class="links-column">
-                                        <a href="https://pypi.org/project/yfinance/" class="credit">Yahoo Finance API</a>
-                                        <a href="https://www.levels.fyi/?tab=levels" class="credit">Levels.fyi</a>
-                                        <a href="https://www.marketaux.com/" class="credit">Marketaux API</a>
-                                        <a href="https://www.glassdoor.ca/Community/index.htm" class="credit">Glassdoor<br></a>
-                                    </div>
-                                    <!-- <div class="links-column">
-                                        
-                                    </div> -->
-                                </div>
-                                <a href="https://site.financialmodelingprep.com/developer/docs/historical-numer-of-employees-api" class="credit">FMP Historical Employee API<br></a>
-
-                            </div>
-                            <button id="close-sources-popup">Close</button>
-                        </div>
-                    </dialog>
-                </div>
+                <div id="tooltip-slope"></div>
+                <div id="info-popup"></div>
+                <svg id="canvas"></svg>
+                <script src="https://d3js.org/d3.v7.min.js"></script>
+                <script src="js/constants.js"></script>
+                <script src="js/tooltipBarChart.js"></script>
+                <script src="js/utils.js"></script>
+                <script src="js/collisionDetection.js"></script>
+                <script src="js/bubbleRenderer.js"></script>
+                <script src="js/interactionHandler.js"></script>
+                <script src="js/slopeChart.js"></script>
+                <script src="js/main.js"></script>
+                <!-- Back link is an anchor so it works without JS -->
             </div>
         </div>
+        <div class="section transition-page section-four-transition">
+            <h3>Now it's time to zoom out a little, and see how different companies stack up against the competition!
+            </h3>
+        </div>
+        <div class="section section-five">
+            <div class="container-scatter">
+                <h2>Company Trade-offs Explorer</h2>
+                <p class="subtitle-scatter">Mix and match axes, colours, and bubble size to see how sentiment,
+                    leadership, and company scale intersect.</p>
 
-        <script>
-            // Page navigation dots functionality
-            (function() {
-                const snapContainer = document.querySelector('.snap-container');
-                const sections = document.querySelectorAll('.section');
-                const dots = document.querySelectorAll('.page-dots .dot');
-                
-                // Update active dot based on scroll position
-                function updateActiveDot() {
-                    const scrollTop = snapContainer.scrollTop;
-                    const windowHeight = window.innerHeight;
-                    
-                    // Find which section is currently in view
-                    let currentSection = 0;
-                    sections.forEach((section, index) => {
-                        const sectionTop = section.offsetTop;
-                        const sectionBottom = sectionTop + section.offsetHeight;
-                        const scrollCenter = scrollTop + windowHeight / 2;
-                        
-                        if (scrollCenter >= sectionTop && scrollCenter < sectionBottom) {
-                            currentSection = index;
-                        }
-                    });
-                    
-                    // Update dot styles
-                    dots.forEach((dot, index) => {
-                        if (index === currentSection) {
-                            dot.classList.add('active');
-                        } else {
-                            dot.classList.remove('active');
-                        }
-                    });
-                }
-                
-                // Navigate to section when dot is clicked
-                dots.forEach((dot, index) => {
-                    dot.addEventListener('click', () => {
-                        sections[index].scrollIntoView({ behavior: 'smooth' });
-                    });
+                <div class="controls-and-legend">
+                    <div class="controls-scatter">
+                        <div class="controls-header">
+                            <span class="controls-title">Plot controls</span>
+                        </div>
+                        <div class="control-groups-row">
+                            <div class="control-group">
+                                <label for="x-axis">X-Axis:</label>
+                                <select id="x-axis">
+                                    <option value="ceo_approval">CEO Approval %</option>
+                                    <option value="employee_rating">Employee Rating</option>
+                                    <option value="sentiment">Sentiment Score</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="y-axis">Y-Axis:</label>
+                                <select id="y-axis">
+                                    <option value="pe_ratio">P/E Ratio</option>
+                                    <option value="revenue">Revenue ($)</option>
+                                    <option value="market_cap">Market Cap ($)</option>
+                                    <option value="employee_count">Employee Count</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="color-by">Colour:</label>
+                                <select id="color-by">
+                                    <option value="sentiment">Sentiment Score</option>
+                                    <option value="sector">Sector</option>
+                                    <option value="ceo_approval">CEO Approval</option>
+                                    <option value="employee_rating">Employee Rating</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="size-by">Bubble Size:</label>
+                                <select id="size-by">
+                                    <option value="market_cap">Market Cap</option>
+                                    <option value="revenue">Revenue</option>
+                                    <option value="employee_count">Employee Count</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="legend-scatter">
+                        <div class="legend-top-row">
+                            <h4 class="legend-title">Legends</h4>
+                        </div>
+                        <div id="size-legend" class="size-legend"></div>
+                        <div class="color-legend" id="color-legend"></div>
+                    </div>
+                    <div class="interaction-panel">
+                        <div class="legend-top-row">
+                            <h4 class="legend-title">Interactions</h4>
+                        </div>
+                        <div class="interaction-row">👆 Hover bubbles for quick stats</div>
+                        <div class="interaction-row">🖱️ Click for the detailed card</div>
+                    </div>
+                </div>
+                <div class="chart-container-scatter">
+                    <div class="scatter-hint-badge">Hover for stats · Click for details</div>
+                    <div id="scatter-company-popup" class="company-popup hidden">
+                        <img id="scatter-company-logo" class="company-logo" alt="Company Logo">
+
+                        <div id="scatter-company-info" class="company-info">
+                            <div class="info-item"><span class="info-label">Company:</span> <span
+                                    id="info-company-name">—</span></div>
+                            <div class="info-item"><span class="info-label">Ticker:</span> <span
+                                    id="info-company-ticker">—</span></div>
+                            <div class="info-item"><span class="info-label">Sector:</span> <span
+                                    id="info-company-sector">—</span></div>
+                            <div class="info-item"><span class="info-label">Industry:</span> <span
+                                    id="info-company-industry">—</span></div>
+                            <div class="info-item"><span class="info-label">CEO Approval:</span> <span
+                                    id="info-company-ceo">—</span></div>
+                            <div class="info-item"><span class="info-label">Employee Rating:</span> <span
+                                    id="info-company-rating">—</span></div>
+                            <div class="info-item"><span class="info-label">Market Cap:</span> <span
+                                    id="info-company-cap">—</span></div>
+                            <div class="info-item"><span class="info-label">Revenue:</span> <span
+                                    id="info-company-revenue">—</span></div>
+                            <div class="info-item"><span class="info-label">P/E Ratio:</span> <span
+                                    id="info-company-pe">—</span></div>
+                            <div class="info-item"><span class="info-label">Sentiment:</span> <span
+                                    id="info-company-sent">—</span></div>
+                            <div class="info-item"><span class="info-label">Employees:</span> <span
+                                    id="info-company-emp">—</span></div>
+                        </div>
+
+                        <button id="scatter-popup-close">Close</button>
+                    </div>
+
+                    <svg id="scatterplot"></svg>
+                    <div class="tooltip-scatter" id="tooltip-scatter"></div>
+                </div>
+            </div>
+
+            <script src="js/scatter.js"></script>
+        </div>
+        <div class="section transition-page section-five-transition">
+            <h3>We hope that you were able to better <em>map-out</em> your career with our visualizations.<br>Good luck,
+                from the MarketMap team!</h3>
+            <div class="button-holder">
+                <!-- <button id="sourcesButton" class="work-sans-400">See Guide ⓘ</button> -->
+                <button id="sourcesButton" class="work-sans-400"><em>Sources</em></button>
+                <dialog id="sources-popup">
+                    <div class="popup-content-wrapper">
+                        <div class="sources-container">
+                            <h4 class="sources-header">Image Credits</h4>
+                            <div class="links-row">
+                                <div class="links-column">
+                                    <a href="https://unsplash.com/photos/a-view-of-the-earth-from-an-airplane-zVNU8WC1ino"
+                                        class="credit">Dembee Tsogoo (Unsplash)<br></a>
+                                    <a href="https://unsplash.com/photos/brown-glass-bottle-beside-white-book-on-blue-and-white-textile-oj0zeY2Ltk4"
+                                        class="credit">S'well (Unsplash)<br></a>
+                                    <a href="https://unsplash.com/photos/photo-of-outer-space-Q1p7bh3SHj8"
+                                        class="credit">NASA (Unsplash)<br></a>
+                                </div>
+                                <div class="links-column">
+                                    <a href="https://unsplash.com/photos/high-angle-photography-of-black-high-rise-buildings-_jFDQJfCTyA"
+                                        class="credit">CHUTTERSNAP (Unsplash)<br></a>
+                                    <a href="https://unsplash.com/photos/crowd-of-people-sitting-on-chairs-inside-room-F2KRf_QfCqw"
+                                        class="credit">Headway (Unsplash)<br></a>
+                                    <a href="https://www.pexels.com/photo/high-rise-buildings-during-nighttime-2224789/"
+                                        class="credit">Chait Goli (Pexels)<br></a>
+                                </div>
+                            </div>
+                            <!-- <h3>MarketMap Sources</h3> -->
+
+
+                            <h4 class="sources-header">Data Sources</h4>
+                            <div class="links-row">
+                                <div class="links-column">
+                                    <a href="https://pypi.org/project/yfinance/" class="credit">Yahoo Finance API</a>
+                                    <a href="https://www.levels.fyi/?tab=levels" class="credit">Levels.fyi</a>
+                                    <a href="https://www.marketaux.com/" class="credit">Marketaux API</a>
+                                    <a href="https://www.glassdoor.ca/Community/index.htm"
+                                        class="credit">Glassdoor<br></a>
+                                </div>
+                                <!-- <div class="links-column">
+                                        
+                                    </div> -->
+                            </div>
+                            <a href="https://site.financialmodelingprep.com/developer/docs/historical-numer-of-employees-api"
+                                class="credit">FMP Historical Employee API<br></a>
+
+                        </div>
+                        <button id="close-sources-popup">Close</button>
+                    </div>
+                </dialog>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Page navigation dots functionality
+        (function () {
+            const snapContainer = document.querySelector('.snap-container');
+            const sections = document.querySelectorAll('.section');
+            const dots = document.querySelectorAll('.page-dots .dot');
+
+            // Update active dot based on scroll position
+            function updateActiveDot() {
+                const scrollTop = snapContainer.scrollTop;
+                const windowHeight = window.innerHeight;
+
+                // Find which section is currently in view
+                let currentSection = 0;
+                sections.forEach((section, index) => {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+                    const scrollCenter = scrollTop + windowHeight / 2;
+
+                    if (scrollCenter >= sectionTop && scrollCenter < sectionBottom) {
+                        currentSection = index;
+                    }
                 });
-                
-                // Listen for scroll events
-                snapContainer.addEventListener('scroll', updateActiveDot);
-                
-                // Initial update
-                updateActiveDot();
-            })();
-        </script>
 
-    </body>
+                // Update dot styles
+                dots.forEach((dot, index) => {
+                    if (index === currentSection) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+
+            // Navigate to section when dot is clicked
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    sections[index].scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+
+            // Listen for scroll events
+            snapContainer.addEventListener('scroll', updateActiveDot);
+
+            // Initial update
+            updateActiveDot();
+        })();
+    </script>
+
+</body>
+
 </html>
