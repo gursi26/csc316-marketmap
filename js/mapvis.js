@@ -518,6 +518,15 @@ class MapVis {
       }
     }
 
+    // Simple seeded random number generator for deterministic positioning
+    function seededRandom(seed) {
+      let value = seed;
+      return function() {
+        value = (value * 9301 + 49297) % 233280;
+        return value / 233280;
+      };
+    }
+
     // Collision detection and position adjustment with greedy sequential placement
     function resolveCollisions(data) {
       // Group by state for more efficient collision detection
@@ -626,7 +635,13 @@ class MapVis {
         });
 
         // Sort by market cap descending (place larger companies first)
-        companies.sort((a, b) => (b.mc || 0) - (a.mc || 0));
+        // Then by ticker for deterministic ordering
+        companies.sort((a, b) => {
+          const mcDiff = (b.mc || 0) - (a.mc || 0);
+          if (mcDiff !== 0) return mcDiff;
+          // Secondary sort by ticker for consistency
+          return (a.Ticker || '').localeCompare(b.Ticker || '');
+        });
 
         // GREEDY SEQUENTIAL PLACEMENT ALGORITHM
         const placedCompanies = [];
@@ -650,6 +665,10 @@ class MapVis {
           const padY = stateBounds.height * 0.12;
           let finalX = initX, finalY = initY;
           let positioned = false;
+          
+          // Create seeded random generator based on company ticker for deterministic results
+          const seed = company.Ticker.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+          const rng = seededRandom(seed);
 
           // Try initial position first
           if (isPointInState(initX, initY, stateGeom) && !hasOverlap(initX, initY, radius, placedCompanies)) {
@@ -658,11 +677,11 @@ class MapVis {
             positioned = true;
           }
 
-          // Random attempts with good coverage
+          // Deterministic random attempts with good coverage
           if (!positioned) {
             for (let i = 0; i < 250; i++) {
-              const testX = stateBounds.x0 + padX + Math.random() * (stateBounds.width - 2 * padX);
-              const testY = stateBounds.y0 + padY + Math.random() * (stateBounds.height - 2 * padY);
+              const testX = stateBounds.x0 + padX + rng() * (stateBounds.width - 2 * padX);
+              const testY = stateBounds.y0 + padY + rng() * (stateBounds.height - 2 * padY);
               if (isPointInState(testX, testY, stateGeom) && !hasOverlap(testX, testY, radius, placedCompanies)) {
                 finalX = testX;
                 finalY = testY;
@@ -695,11 +714,12 @@ class MapVis {
             }
           }
 
-          // Last resort: allow tighter spacing
+          // Last resort: allow tighter spacing with deterministic random
           if (!positioned) {
+            const rng2 = seededRandom(seed + 1000); // New seed for fallback attempts
             for (let i = 0; i < 150; i++) {
-              const testX = stateBounds.x0 + padX + Math.random() * (stateBounds.width - 2 * padX);
-              const testY = stateBounds.y0 + padY + Math.random() * (stateBounds.height - 2 * padY);
+              const testX = stateBounds.x0 + padX + rng2() * (stateBounds.width - 2 * padX);
+              const testY = stateBounds.y0 + padY + rng2() * (stateBounds.height - 2 * padY);
               if (isPointInState(testX, testY, stateGeom)) {
                 let minDist = Infinity;
                 for (const p of placedCompanies) {
