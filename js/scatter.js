@@ -352,8 +352,8 @@ function createSizeLegend(sizeScale, sizeMetric, sizeDomain, data) {
         .attr("class", "size-legend-title")
         .text(`Bubble size: ${getAxisLabel(sizeMetric)}`);
 
-    const svgWidth = 360;
-    const svgHeight = 100;
+    const svgWidth = 340;
+    const svgHeight = 88;
     const svg = legendContainer.append("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight);
@@ -364,8 +364,8 @@ function createSizeLegend(sizeScale, sizeMetric, sizeDomain, data) {
         { label: "Larger", value: maxVal }
     ];
 
-    const positions = [svgWidth * 0.2, svgWidth * 0.5, svgWidth * 0.8];
-    const baseline = 55;
+    const positions = [svgWidth * 0.22, svgWidth * 0.5, svgWidth * 0.78];
+    const baseline = 50;
 
     markers.forEach((marker, i) => {
         const radius = sizeScale(marker.value);

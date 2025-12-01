@@ -173,65 +173,71 @@
                 <p class="subtitle-scatter">Mix and match axes, colours, and bubble size to see how sentiment,
                     leadership, and company scale intersect.</p>
 
-                <div class="controls-and-legend">
-                    <div class="controls-scatter">
-                        <div class="controls-header">
-                            <span class="controls-title">Plot controls</span>
-                        </div>
-                        <div class="control-groups-row">
-                            <div class="control-group">
-                                <label for="x-axis">X-Axis:</label>
-                                <select id="x-axis">
-                                    <option value="ceo_approval">CEO Approval %</option>
-                                    <option value="employee_rating">Employee Rating</option>
-                                    <option value="sentiment">Sentiment Score</option>
-                                </select>
+                    <div class="controls-and-legend">
+                        <div class="controls-scatter">
+                            <div class="controls-header">
+                                <span class="controls-title">Plot controls</span>
                             </div>
-                            <div class="control-group">
-                                <label for="y-axis">Y-Axis:</label>
-                                <select id="y-axis">
-                                    <option value="pe_ratio">P/E Ratio</option>
-                                    <option value="revenue">Revenue ($)</option>
-                                    <option value="market_cap">Market Cap ($)</option>
-                                    <option value="employee_count">Employee Count</option>
-                                </select>
-                            </div>
-                            <div class="control-group">
-                                <label for="color-by">Colour:</label>
-                                <select id="color-by">
-                                    <option value="sentiment">Sentiment Score</option>
-                                    <option value="sector">Sector</option>
-                                    <option value="ceo_approval">CEO Approval</option>
-                                    <option value="employee_rating">Employee Rating</option>
-                                </select>
-                            </div>
-                            <div class="control-group">
-                                <label for="size-by">Bubble Size:</label>
-                                <select id="size-by">
-                                    <option value="market_cap">Market Cap</option>
-                                    <option value="revenue">Revenue</option>
-                                    <option value="employee_count">Employee Count</option>
-                                </select>
+                            <div class="panel-body">
+                                <div class="control-groups-row">
+                                    <div class="control-group">
+                                        <label for="x-axis">X-Axis:</label>
+                                        <select id="x-axis">
+                                            <option value="ceo_approval">CEO Approval %</option>
+                                            <option value="employee_rating">Employee Rating</option>
+                                            <option value="sentiment">Sentiment Score</option>
+                                        </select>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="y-axis">Y-Axis:</label>
+                                        <select id="y-axis">
+                                            <option value="pe_ratio">P/E Ratio</option>
+                                            <option value="revenue">Revenue ($)</option>
+                                            <option value="market_cap">Market Cap ($)</option>
+                                            <option value="employee_count">Employee Count</option>
+                                        </select>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="color-by">Colour:</label>
+                                        <select id="color-by">
+                                            <option value="sentiment">Sentiment Score</option>
+                                            <option value="sector">Sector</option>
+                                            <option value="ceo_approval">CEO Approval</option>
+                                            <option value="employee_rating">Employee Rating</option>
+                                        </select>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="size-by">Bubble Size:</label>
+                                        <select id="size-by">
+                                            <option value="market_cap">Market Cap</option>
+                                            <option value="revenue">Revenue</option>
+                                            <option value="employee_count">Employee Count</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="legend-scatter">
-                        <div class="legend-top-row">
-                            <h4 class="legend-title">Legends</h4>
+                        <div class="legend-scatter">
+                            <div class="legend-top-row">
+                                <h4 class="legend-title">Legends</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div id="size-legend" class="size-legend"></div>
+                                <div class="color-legend" id="color-legend"></div>
+                            </div>
                         </div>
-                        <div id="size-legend" class="size-legend"></div>
-                        <div class="color-legend" id="color-legend"></div>
-                    </div>
-                    <div class="interaction-panel">
-                        <div class="legend-top-row">
-                            <h4 class="legend-title">Interactions</h4>
+                        <div class="interaction-panel">
+                            <div class="legend-top-row">
+                                <h4 class="legend-title">Interactions</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="interaction-row">👆 Hover bubbles for quick stats</div>
+                                <div class="interaction-row">🖱️ Click for the detailed card</div>
+                            </div>
                         </div>
-                        <div class="interaction-row">👆 Hover bubbles for quick stats</div>
-                        <div class="interaction-row">🖱️ Click for the detailed card</div>
-                    </div>
                 </div>
                 <div class="chart-container-scatter">
-                    <div class="scatter-hint-badge">Hover for stats · Click for details</div>
+                    <!-- <div class="scatter-hint-badge">Hover for stats · Click for details</div> -->
                     <div id="scatter-company-popup" class="company-popup hidden">
                         <img id="scatter-company-logo" class="company-logo" alt="Company Logo">
 
