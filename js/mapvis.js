@@ -171,6 +171,10 @@ class MapVis {
     let industryMapping = {};
     let industryIcons = {}; // cache for loaded images
 
+    // Global rating scale for consistency across all states/countries
+    let globalRatingDomain = [0, 5];
+    let globalColorScale = null;
+
     // Zoom state
     let zoomTarget = null;   // {type:'state', id}
     let currentZoom = 1;     // scale factor applied to gRoot
@@ -208,6 +212,25 @@ class MapVis {
       financials = fin;
       prices = price;
       industryMapping = indMapping;
+
+      // Calculate global rating domain for consistent color scale
+      const allRatings = companies
+        .map(c => c.employee_rating)
+        .filter(r => r != null && isFinite(r));
+      if (allRatings.length > 0) {
+        globalRatingDomain = d3.extent(allRatings);
+        const midRating = (globalRatingDomain[0] + globalRatingDomain[1]) / 2;
+        globalColorScale = d3
+          .scaleLinear()
+          .domain([globalRatingDomain[0], midRating, globalRatingDomain[1]])
+          .range(["#ff7b00", "#f0d34a", "#36b37e"]);
+      } else {
+        globalRatingDomain = [0, 5];
+        globalColorScale = d3
+          .scaleLinear()
+          .domain([0, 2.5, 5])
+          .range(["#ff7b00", "#f0d34a", "#36b37e"]);
+      }
 
       // Preload building icons
       const categories = Object.keys(industryMapping);
@@ -803,23 +826,86 @@ class MapVis {
       // Only US companies
       const usCompanies = companies.filter(c => (c.Country || "").trim().toLowerCase() === "united states");
 
-      // CHANGE 'const' TO 'let' HERE:
+      // Map companies to render data, with fallback positioning for missing coordinates
       let data = usCompanies.map(c => {
         let proj = null;
+        const stateName = pick(c, ["State"]);
+        
         if (isFinite(c.Longitude) && isFinite(c.Latitude)) {
           // Use constrained position to keep within state boundaries
-          const stateName = pick(c, ["State"]);
           proj = constrainToState(c.Longitude, c.Latitude, stateName);
         }
+        
+        // If no valid projection but we have a state, generate a random position within the state
+        if (!proj && stateName) {
+          const stateGeom = stateGeometries.get(stateName) || stateGeometries.get(stateNameToAbbr[stateName]);
+          if (stateGeom) {
+            const bounds = path.bounds(stateGeom);
+            const [[x0, y0], [x1, y1]] = bounds;
+            const stateWidth = x1 - x0;
+            const stateHeight = y1 - y0;
+            const padX = stateWidth * 0.15;
+            const padY = stateHeight * 0.15;
+            
+            // Try to find a valid point within the state polygon
+            let attempts = 0;
+            while (attempts < 100 && !proj) {
+              const testX = x0 + padX + Math.random() * (stateWidth - 2 * padX);
+              const testY = y0 + padY + Math.random() * (stateHeight - 2 * padY);
+              if (isPointInState(testX, testY, stateGeom)) {
+                proj = [testX, testY];
+              }
+              attempts++;
+            }
+            
+            // If still no valid point, use centroid
+            if (!proj) {
+              const centroid = path.centroid(stateGeom);
+              if (centroid && isFinite(centroid[0]) && isFinite(centroid[1])) {
+                proj = centroid;
+              }
+            }
+          }
+        }
+        
         const mc = c.market_cap;
         const industry = pick(c, ["Industry"]);
         const category = getIndustryCategory(industry);
+        
+        // If no category found, assign to a default category or log warning
+        if (!category && proj) {
+          console.warn(`Company ${c.Ticker} (${c.Name}) has no matching industry category. Industry: "${industry}"`);
+        }
+        
         return { ...c, px: proj ? proj[0] : null, py: proj ? proj[1] : null, mc, category };
-      }).filter(d => d.px != null && d.py != null && d.category != null);
+      }).filter(d => {
+        // Filter out companies without valid position OR category
+        const isValid = d.px != null && d.py != null && d.category != null;
+        if (!isValid && d.px != null && d.py != null && !d.category) {
+          console.warn(`Filtering out ${d.Ticker} due to missing industry category`);
+        }
+        return isValid;
+      });
 
-      // INSERT FILTER LOGIC HERE:
+      // Apply industry filter
       if (selectedIndustryFilter !== 'all') {
         data = data.filter(d => d.category === selectedIndustryFilter);
+      }
+
+      // Debug: Log companies that were filtered out
+      const rendered = new Set(data.map(d => d.Ticker));
+      const notRendered = usCompanies.filter(c => !rendered.has(c.Ticker));
+      if (notRendered.length > 0) {
+        console.log(`Companies not rendered (${notRendered.length}):`, 
+          notRendered.map(c => ({
+            Ticker: c.Ticker, 
+            Name: c.Name, 
+            State: pick(c, ["State"]),
+            hasCoords: isFinite(c.Longitude) && isFinite(c.Latitude),
+            Industry: pick(c, ["Industry"]),
+            Category: getIndustryCategory(pick(c, ["Industry"]))
+          }))
+        );
       }
 
       console.log(`US companies in dataset: ${usCompanies.length}, rendered: ${data.length}`);
@@ -982,10 +1068,11 @@ class MapVis {
 
     // ---- Foreign (country circles + mini buildings) ----
     function renderForeign() {
-      // 1. Change 'const' to 'let' so we can filter it
+      // Filter foreign companies
       let foreign = companies.filter(c => (c.Country || "").trim().toLowerCase() !== "united states" && (c.Country || "").trim() != "");
 
-      // 2. Apply the Industry Filter
+      // Apply the Industry Filter
+      const foreignBeforeFilter = foreign.length;
       if (selectedIndustryFilter !== 'all') {
         foreign = foreign.filter(c => {
           const industry = pick(c, ["Industry"]);
@@ -993,6 +1080,9 @@ class MapVis {
           return category === selectedIndustryFilter;
         });
       }
+      
+      console.log(`Foreign companies: ${foreignBeforeFilter} total, ${foreign.length} after industry filter`);
+      
       const byCountry = d3.group(foreign, d => d.Country);
       const countries = Array.from(byCountry.keys()).sort();
       // 2-column grid layout for country circles
@@ -1350,6 +1440,7 @@ class MapVis {
       }
 
       // Attach market cap + employee count for this panel
+      const companiesBeforeFilter = stateCompanies.length;
       stateCompanies = stateCompanies
         .map(c => {
           const mc = getMarketCap(c.Ticker);
@@ -1366,6 +1457,8 @@ class MapVis {
           };
         })
         .filter(c => c.mc && c.mc > 0);
+      
+      console.log(`Panel for ${stateName}: ${companiesBeforeFilter} companies, ${stateCompanies.length} with valid market cap`);
 
       // Apply sort order based on filter selection
       const sortSelect = document.getElementById('chart-sort-select');
@@ -1421,12 +1514,9 @@ class MapVis {
         .domain([0, maxEmp])
         .range([0, 18]); // up to 18 windows (3 rows × 6 cols)
 
-      // Employee rating → color (red → yellow → green)
-      const ratingVals = stateCompanies
-        .map(d => d.employee_rating)
-        .filter(v => v != null && isFinite(v));
-      const ratingDomain = ratingVals.length ? d3.extent(ratingVals) : [0, 5];
-      const midRating = (ratingDomain[0] + ratingDomain[1]) / 2;
+      // Use global color scale for consistency across all states/countries
+      const colorScale = globalColorScale;
+      const ratingDomain = globalRatingDomain;
 
       const minRatingStr = d3.format(".1f")(ratingDomain[0]);
       const maxRatingStr = d3.format(".1f")(ratingDomain[1]);
@@ -1434,12 +1524,6 @@ class MapVis {
       if (labelEl) {
         labelEl.textContent = `Color = Employee Rating (${minRatingStr} - ${maxRatingStr})`;
       }
-
-      const colorScale = d3
-        .scaleLinear()
-        .domain([ratingDomain[0], midRating, ratingDomain[1]])
-        // Changed start color from Red (#d64d4d) to Orange (#ff7b00)
-        .range(["#ff7b00", "#f0d34a", "#36b37e"]);
 
       // Window grid constants
       const WINDOW_COLS_MAX = 5;     // max columns in grid
@@ -1518,17 +1602,7 @@ class MapVis {
           const base =
             r != null && isFinite(r)
               ? colorScale(r)
-              : colorScale(midRating);
-          // darker bottom for depth
-          const bottom = d3.interpolateRgb(base, "#0b2648")(0.7);
-          return `linear-gradient(180deg, ${base}, ${bottom})`;
-        })
-        .style("background", d => {
-          const r = d.employee_rating;
-          const base =
-            r != null && isFinite(r)
-              ? colorScale(r)
-              : colorScale(midRating);
+              : colorScale((globalRatingDomain[0] + globalRatingDomain[1]) / 2);
           // darker bottom for depth
           const bottom = d3.interpolateRgb(base, "#0b2648")(0.7);
           return `linear-gradient(180deg, ${base}, ${bottom})`;
