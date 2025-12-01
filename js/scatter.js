@@ -1,5 +1,5 @@
-// Set up dimensions and margins
-const margin = { top: 120, right: 120, bottom: 120, left: 120 };
+// Set up dimensions and margins (smaller margins to maximize plot area)
+const margin = { top: 60, right: 60, bottom: 60, left: 60 };
 
 const CIRCLE_SIZE_SCALE_FACTOR = 0.025;
 
@@ -21,7 +21,7 @@ function updateSVGDimensions() {
     calculateDimensions();
     svg.attr("width", width + margin.left + margin.right)
        .attr("height", height + margin.top + margin.bottom);
-    g.attr("transform", `translate(${margin.left},${margin.top - 60})`);
+    g.attr("transform", `translate(${margin.left},${margin.top})`);
 }
 
 const tooltip = d3.select("#tooltip-scatter");
@@ -167,7 +167,7 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
     g.append("text")
         .attr("class", "y-label axis-label")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left + 35)
+        .attr("y", 0 - margin.left - 20)
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
@@ -352,8 +352,8 @@ function createSizeLegend(sizeScale, sizeMetric, sizeDomain, data) {
         .attr("class", "size-legend-title")
         .text(`Bubble size: ${getAxisLabel(sizeMetric)}`);
 
-    const svgWidth = 340;
-    const svgHeight = 88;
+    const svgWidth = 300;
+    const svgHeight = 80;
     const svg = legendContainer.append("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight);
@@ -364,8 +364,8 @@ function createSizeLegend(sizeScale, sizeMetric, sizeDomain, data) {
         { label: "Larger", value: maxVal }
     ];
 
-    const positions = [svgWidth * 0.22, svgWidth * 0.5, svgWidth * 0.78];
-    const baseline = 50;
+    const positions = [svgWidth * 0.25, svgWidth * 0.5, svgWidth * 0.75];
+    const baseline = 42;
 
     markers.forEach((marker, i) => {
         const radius = sizeScale(marker.value);
