@@ -71,11 +71,30 @@
       <!-- SCREEN 5: BEESWARM (ALL COMPANIES) -->
       <section class="screen screen-5">
         <div class="beeswarm-box">
+
+          <!-- Beeswarm plot -->
           <svg id="beeswarmPlot" class="screen-svg"></svg>
 
+          <!-- Reset button -->
           <button id="resetToSelected" class="resetButton">
             Show Selected Company
           </button>
+
+          <!-- Metric selector (ONLY for beeswarm) -->
+          <div class="metricPicker beeMetricPicker">
+            <label for="metricSelect">Color Metric:</label>
+            <select id="metricSelect">
+              <option value="Employee Rating">Employee Rating</option>
+              <option value="CEO Approval Percentage">CEO Approval Percentage</option>
+            </select>
+          </div>
+
+          <!-- Dynamic gradient legend -->
+          <div id="colorLegendContainer">
+            <canvas id="colorLegend" width="260" height="20"></canvas>
+            <div id="legendTicks"></div>
+          </div>
+
         </div>
       </section>
 

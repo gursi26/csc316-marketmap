@@ -17,6 +17,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
 const track = document.querySelector(".track");
 
+// Color metric state
+let beeColorMetric = "Employee Rating";
+
+let beeColorScale = d3.scaleLinear()
+  .range(["#d65425ff", "#5eff5eff"]);   // purple → blue
+
+
 // Touch/swipe variables
 let touchStartX = 0;
 let touchEndX = 0;
@@ -806,7 +813,7 @@ function updateHighlighting() {
     if (!highlightedTicker) {
       // Unlocked mode
       glow.style("opacity", 0);
-      box.style("opacity", 0);
+      box.style("opacity", 1);
       g.style("opacity", 1)
        .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
     } else {
@@ -820,7 +827,7 @@ function updateHighlighting() {
         g.moveToFront();
       } else {
         glow.style("opacity", 0);
-        box.style("opacity", 0);
+        box.style("opacity", 1);
         g.style("opacity", 0.4)
          .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
       }
@@ -866,6 +873,65 @@ function handleLogoClick(ticker) {
   updateHighlighting();
   updateResetButtonVisibility();
 }
+
+function updateBeeColorScale() {
+  if (!beeswarmDataGlobal || !beeswarmNodes) return;
+
+  // Collect valid values for the current metric
+  const values = beeswarmDataGlobal
+    .map(d =>
+      beeColorMetric === "Employee Rating"
+        ? d.employeeRating
+        : d.ceoApproval
+    )
+    .filter(v => v != null && !isNaN(v));
+
+  if (!values.length) return;
+
+  const min = d3.min(values);   // ⭐ now min for BOTH metrics
+  const max = d3.max(values);
+
+  // Domain is always [min, max]
+  beeColorScale.domain([min, max]);
+
+  // Recolor squares: grey if missing value
+  beeswarmNodes.select(".beeBox")
+    .transition()
+    .duration(350)
+    .style("stroke", d => {
+      const val = beeColorMetric === "Employee Rating"
+        ? d.employeeRating
+        : d.ceoApproval;
+
+      if (val == null || isNaN(val)) {
+        return "#7a7f89";       // neutral grey for missing values
+      }
+      return beeColorScale(val);
+    });
+
+  drawLegend(min, max);
+}
+
+
+
+function drawLegend(min, max) {
+  const canvas = document.getElementById("colorLegend");
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width;
+  const h = canvas.height;
+
+  const gradient = ctx.createLinearGradient(0, 0, w, 0);
+  gradient.addColorStop(0, beeColorScale(min));
+  gradient.addColorStop(1, beeColorScale(max));
+
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, w, h);
+
+  document.getElementById("legendTicks").innerHTML =
+    `<span>${min.toFixed(1)}</span><span>${max.toFixed(1)}</span>`;
+}
+
 
 
 
@@ -949,9 +1015,20 @@ function renderBeeswarm(data) {
         .attr("width", logoSize)
         .attr("height", logoSize)
         .style("fill", "none")
-        .style("stroke", "#5ea8ff")
-        .style("stroke-width", 2)
-        .style("opacity", 0);
+        .style("stroke-width", 6)
+        .style("stroke", d => {
+          const val = beeColorMetric === "Employee Rating"
+            ? d.employeeRating
+            : d.ceoApproval;
+
+          if (val == null || isNaN(val)) {
+            return "#7a7f89"; // same grey as above
+          }
+          return beeColorScale(val);
+        })
+        .style("opacity", 1);
+
+
 
       // Logo image
       g.append("image")
@@ -1000,7 +1077,7 @@ function renderBeeswarm(data) {
           // Hovering other icons in locked mode:
           // enlarge ONLY, NO tooltip, NO glow
           glow.style("opacity", 0);
-          box.style("opacity", 0);
+          box.style("opacity", 1);
 
           g.transition().duration(120)
             .attr("transform", `translate(${d.x}, ${d.y}) scale(${BEE_ENLARGE})`);
@@ -1031,7 +1108,7 @@ function renderBeeswarm(data) {
       if (!highlightedTicker) {
         // UNLOCKED — normal revert
         glow.style("opacity", 0);
-        box.style("opacity", 0);
+        box.style("opacity", 1);
         g.transition().duration(120)
           .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
         hideTooltip();
@@ -1091,10 +1168,15 @@ function renderBeeswarm(data) {
     }
   });
 
+  updateBeeColorScale();
+
   
 }
 
-
+const tickerAlias = {
+  "GOOGL": "GOOG",
+  "GOOG": "GOOG"
+};
 
 /* ============================================================
    LOAD & CLASSIFY EACH COMPANY (with beeswarm)
@@ -1130,18 +1212,47 @@ Promise.all([
     benefitData[ticker] = classifyCompany(rows);
   });
 
+  document.getElementById("metricSelect").addEventListener("change", (e) => {
+    beeColorMetric = e.target.value;
+    updateBeeColorScale();
+  });
+
+
+  // Build beeswarm data: one point per company
   // Build beeswarm data: one point per company
   const beeswarmData = tickers.map(ticker => {
     const companyData = benefitData[ticker];
     const extra = companyData.uncategorized || [];
+
+    const alias = tickerAlias ? (tickerAlias[ticker] || ticker) : ticker;
+    const info = infoCSV.find(r => r.Ticker === alias);
+
+    let employeeRating = null;
+    let ceoApproval = null;
+
+    if (info) {
+      const erRaw = info["Employee Rating"];
+      const caRaw = info["CEO Approval Percentage"];
+
+      employeeRating =
+        erRaw === "" || erRaw == null ? null : +erRaw;
+
+      ceoApproval =
+        caRaw === "" || caRaw == null ? null : +caRaw;
+    }
+
     return {
       ticker,
       name: tickerToName[ticker] || ticker,
       logo: `../dataset/logos/images/${ticker}.png`,
       extra: extra.length,
-      desc: extra
+      desc: extra,
+      employeeRating,
+      ceoApproval
     };
   });
+
+
 
   // Render beeswarm once
   renderBeeswarm(beeswarmData);
