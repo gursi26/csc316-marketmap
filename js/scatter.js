@@ -9,18 +9,28 @@ let width, height;
 function calculateDimensions() {
     const container = document.querySelector('.chart-container-scatter');
     const containerRect = container.getBoundingClientRect();
-    width = Math.max(600, containerRect.width - margin.left - margin.right - 40);
-    height = Math.max(400, containerRect.height - margin.top - margin.bottom - 40);
+    const availWidth = Math.max(0, containerRect.width - margin.left - margin.right - 20);
+    const availHeight = Math.max(0, containerRect.height - margin.top - margin.bottom - 20);
+    // Clamp against viewport to avoid cumulative growth
+    width = Math.max(600, Math.min(availWidth, window.innerWidth - 80));
+    height = Math.max(400, Math.min(availHeight, window.innerHeight - 120));
     return { width, height };
 }
+
 
 const svg = d3.select("#scatterplot");
 let g = svg.append("g");
 
 function updateSVGDimensions() {
     calculateDimensions();
-    svg.attr("width", width + margin.left + margin.right)
-       .attr("height", height + margin.top + margin.bottom);
+    
+    const svgWidth = width + margin.left + margin.right;
+    const svgHeight = height + margin.top + margin.bottom;
+
+    svg.attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
+       .attr("width", svgWidth)
+       .attr("height", svgHeight);
+    
     g.attr("transform", `translate(${margin.left},${margin.top})`);
 }
 
