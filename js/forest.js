@@ -3,24 +3,25 @@
 // ---- CONFIG ----
 const FIN_DATA_PATH = "../dataset/cleaned/Company-financials-sentiment-weekly-snapshot.csv";
 const INFO_PATH = "../data/Company-info.csv";
-const LOGO_PATH = "../dataset/cleaned/logos/images/"; // + TICKER.png
+// Use root-level logos directory (matching scatter usage)
+const LOGO_PATH = "../dataset/logos/images/"; // + TICKER.png
 
 const START_YEAR = 2022;
 const END_YEAR = 2025;
 
-const svg = d3.select("#forest-viz");
-const margin = { top: 30, right: 80, bottom: 110, left: 80 };
-const width = parseInt(svg.style("width")) || 1200;
-const height = parseInt(svg.style("height")) || 700;
+const forestSvg = d3.select("#forest-viz");
+const forestMargin = { top: 30, right: 80, bottom: 110, left: 80 };
+const forestWidth = parseInt(forestSvg.style("width")) || 1200;
+const forestHeight = parseInt(forestSvg.style("height")) || 700;
 
-svg.attr("viewBox", `0 0 ${width} ${height}`);
+forestSvg.attr("viewBox", `0 0 ${forestWidth} ${forestHeight}`);
 
-const gRoot = svg.append("g")
+const gRoot = forestSvg.append("g")
   .attr("class", "forest-root")
-  .attr("transform", `translate(${margin.left},${margin.top})`);
+  .attr("transform", `translate(${forestMargin.left},${forestMargin.top})`);
 
-const innerWidth = width - margin.left - margin.right;
-const innerHeight = height - margin.top - margin.bottom;
+const innerWidth = forestWidth - forestMargin.left - forestMargin.right;
+const innerHeight = forestHeight - forestMargin.top - forestMargin.bottom;
 
 // globals
 let companyInfo = null;

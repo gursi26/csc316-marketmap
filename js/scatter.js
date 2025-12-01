@@ -703,6 +703,9 @@ function displayCompanyInfo(d) {
     document.getElementById("info-company-emp").textContent = formatLegendValue('employee_count', d.employee_count);
 }
 
-document.getElementById("scatter-popup-close").onclick = () => {
-    document.getElementById("scatter-company-popup").classList.add("hidden");
-};
+const scatterCloseBtn = document.getElementById("scatter-popup-close");
+if (scatterCloseBtn) {
+    scatterCloseBtn.onclick = () => {
+        document.getElementById("scatter-company-popup").classList.add("hidden");
+    };
+}
