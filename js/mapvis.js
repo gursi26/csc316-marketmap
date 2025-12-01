@@ -1211,7 +1211,9 @@ class MapVis {
         const n = d.items.length;
         const R = 26 + Math.sqrt(n) * 3;
         const bSel = g.selectAll("g.mini-building").data(d.items, dd => dd.Ticker);
-        const bEnter = bSel.enter().append("g").attr("class", "mini-building");
+        const bEnter = bSel.enter().append("g")
+          .attr("class", "mini-building")
+          .style("pointer-events", "none"); // Allow clicks to pass through to circle
         bEnter.append("image")
           .attr("class", "mini-marker")
           .attr("width", 24)
@@ -1236,6 +1238,7 @@ class MapVis {
             .style("filter", "")
             .style("stroke", "#fff")
             .style("stroke-width", "0px")
+            .style("pointer-events", "none") // Allow clicks to pass through to circle
             .on("mouseenter", function (event) {
               // Only show company details if zoomed into country
               if (zoomTarget && zoomTarget.id === `country:${d.name}`) {
