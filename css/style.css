@@ -2353,3 +2353,124 @@ dialog::backdrop {
     overflow-x: auto !important;
     overflow-y: hidden !important;
 }
+
+/* === FOREST VISUALIZATION === */
+
+.forest-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 18px 40px 24px;
+  box-sizing: border-box;
+  background: radial-gradient(circle at top, #192338 0%, #050814 65%, #02030a 100%);
+  color: #e5e7eb;
+  font-family: "Work Sans", system-ui, sans-serif;
+}
+
+.forest-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.forest-title-block {
+  max-width: 720px;
+}
+
+.forest-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.forest-subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.forest-select-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.forest-select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.forest-select-group label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9ca3af;
+}
+
+.forest-select-group select {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid #374151;
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  font-size: 13px;
+  outline: none;
+}
+
+.forest-select-group select:focus {
+  border-color: #60a5fa;
+}
+
+.forest-buttons {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.forest-buttons button {
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  background: #1d4ed8;
+  color: #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.7);
+  transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+}
+
+.forest-buttons button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.8);
+  background: #2563eb;
+}
+
+#forest-reset {
+  background: #374151;
+}
+
+#forest-reset:hover {
+  background: #4b5563;
+}
+
+#forest-viz {
+  flex: 1;
+  width: 100%;
+  border-radius: 18px;
+  background: radial-gradient(circle at top, #020617 0%, #020617 50%, #000 100%);
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+}
+
+/* Optional: little axis label hints */
+.forest-axis-label {
+  font-size: 11px;
+  fill: #9ca3af;
+}
+
+
