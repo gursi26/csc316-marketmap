@@ -167,7 +167,7 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
     g.append("text")
         .attr("class", "y-label axis-label")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left - 20)
+        .attr("y", 0 - margin.left - 30)
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
