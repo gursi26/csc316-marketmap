@@ -56,9 +56,9 @@
     padding: 20px 12px;
     background: rgba(16, 24, 51, 0.75);
     border-radius: 100px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--accent);
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(105, 105, 105, 0.3);
     color: var(--fg);
     font-size: 1em;
     font-weight: 500;
@@ -76,7 +76,7 @@
 
 #guide-btn:hover {
     border-width: 1px;
-    border-color: rgba(255, 255, 255, 0.18);
+    border-color: var(--accent);
 }
 
 #guide-image {
