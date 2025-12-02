@@ -1474,7 +1474,7 @@ class MapVis {
                 </div>
                 <div class="chart-legend-item">
                   <span class="chart-legend-icon">🪟</span>
-                  <span class="chart-legend-label">Windows = Number of Employees</span>
+                  <span id="window-legend-label" class="chart-legend-label">Windows = Employee Count</span>
                 </div>
                 <div class="chart-legend-item">
                   <div class="chart-legend-color-gradient"></div>
@@ -1600,12 +1600,23 @@ class MapVis {
         .domain([0, maxMc])
         .range([minBarHeight, availableHeight || minBarHeight + 40]);
 
-      // Employee → number of windows (square root compresses Amazon)
-      const maxEmp = d3.max(stateCompanies, d => d.employees || 0) || 1;
+      // CONSISTENT EMPLOYEE-TO-WINDOW RATIO ACROSS ALL STATES/COUNTRIES
+      // Find global minimum employees (excluding zero) to set the base ratio
+      const globalMinEmp = d3.min(companies, c => {
+        const emp = +pick(c, ["Employee Count", "employee count", "Employees", "employees"]) || 0;
+        return emp > 0 ? emp : Infinity;
+      }) || 1;
+      
+      // Set minimum company to have 1 window, everyone else scales proportionally
+      const EMPLOYEES_PER_WINDOW = Math.ceil(globalMinEmp); // Smallest company = 1 window
+      const maxWindows = 50; // 5 cols × 10 rows max
+      
+      // Employee → number of windows using consistent ratio
       const windowCountScale = d3
-        .scaleSqrt()
-        .domain([0, maxEmp])
-        .range([0, 18]); // up to 18 windows (3 rows × 6 cols)
+        .scaleLinear()
+        .domain([0, EMPLOYEES_PER_WINDOW * maxWindows])
+        .range([0, maxWindows])
+        .clamp(true);
 
       // Use global color scale for consistency across all states/countries
       const colorScale = globalColorScale;
@@ -1616,6 +1627,15 @@ class MapVis {
       const labelEl = document.getElementById('rating-legend-label');
       if (labelEl) {
         labelEl.textContent = `Color = Employee Rating (${minRatingStr} - ${maxRatingStr})`;
+      }
+      
+      // Update window legend with consistent metric
+      const windowLabelEl = document.getElementById('window-legend-label');
+      if (windowLabelEl) {
+        const formattedEmpPerWindow = EMPLOYEES_PER_WINDOW >= 1000 
+          ? `${(EMPLOYEES_PER_WINDOW / 1000).toFixed(1)}K` 
+          : EMPLOYEES_PER_WINDOW.toLocaleString();
+        windowLabelEl.textContent = `Windows = Employee Count (~${formattedEmpPerWindow} employees/window)`;
       }
 
       // Window grid constants
