@@ -100,8 +100,8 @@
 }
 
 .small-dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 
 .page-dots .dot:hover {
@@ -217,14 +217,20 @@ h1 {
 
 .transition-page {
     padding: 200px;
+    /* padding-left: 30vw; */
+    /* padding-right: 30vw; */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
     text-align: center;
     line-height: 1.6;
+}
+
+.takeaway {
+    font-size: 1.3rem;
 }
 
 .section-one-transition {
@@ -2678,4 +2684,3 @@ dialog::backdrop {
     font-size: 11px;
     fill: #9ca3af;
 }
-
