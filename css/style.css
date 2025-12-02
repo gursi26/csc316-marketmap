@@ -1138,8 +1138,9 @@ button {
 /* ===== Legend Panel (Map) ===== */
 .legend-panel {
     position: absolute;
-    top: 18px;
-    right: 24px;
+    top: 50px;
+    left: 80%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -1152,12 +1153,21 @@ button {
     /* above map and scroll indicator */
     pointer-events: auto;
     width: 320px;
+    transition: all 0.3s ease;
+}
+
+.legend-panel:hover {
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.65);
 }
 
 .legend-header-row {
     display: flex;
     align-items: center;
     gap: 6px;
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
 }
 
 .legend-panel-title {
@@ -1184,6 +1194,7 @@ button {
 
 .legend-toggle:hover {
     background: none;
+    color: rgba(255, 215, 0, 0.9);
 }
 
 .legend-toggle-icon {

@@ -401,10 +401,10 @@ class MapVis {
       svgEl.setAttribute('viewBox', `${vbBase.x} ${vbBase.y} ${newWidth} ${vbBase.height}`);
     }
     function positionLegendPanel() {
-      // Keep legend anchored to the top-right of the canvas; width fixed via CSS.
+      // Keep legend anchored to the top-center of the canvas (above foreign section); width fixed via CSS.
       const panel = document.getElementById('legend-panel');
       if (!panel) return;
-      panel.style.right = '24px';
+      // Position is now controlled by CSS with left: 50% and transform: translateX(-50%)
     }
     function renderLegend() {
       try {
@@ -1460,12 +1460,9 @@ class MapVis {
       if (panelHeaderEl && !document.getElementById('chart-controls-row')) {
         const controlsHTML = `
           <div id="chart-controls-row" class="chart-controls-row">
-            <div id="chart-legend-panel" class="chart-legend-panel collapsed">
+            <div id="chart-legend-panel" class="chart-legend-panel">
               <div class="chart-legend-header-row">
                 <div class="chart-legend-title">Visual Guide</div>
-                <button type="button" class="chart-legend-toggle">
-                  <span class="chart-legend-toggle-icon">▾</span>
-                </button>
               </div>
               <div class="chart-legend-content">
                 <div class="chart-legend-item">
@@ -1493,15 +1490,6 @@ class MapVis {
           </div>
         `;
         panelHeaderEl.insertAdjacentHTML('beforeend', controlsHTML);
-
-        // Add legend toggle functionality
-        const legendPanel = document.getElementById('chart-legend-panel');
-        const legendHeaderRow = legendPanel.querySelector('.chart-legend-header-row');
-        legendHeaderRow.addEventListener('click', (ev) => {
-          ev.stopPropagation();
-          legendPanel.classList.toggle('collapsed');
-        });
-
 
         // Add sort functionality
         const sortSelect = document.getElementById('chart-sort-select');
