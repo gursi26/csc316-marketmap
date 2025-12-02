@@ -23,14 +23,14 @@ let g = svg.append("g");
 
 function updateSVGDimensions() {
     calculateDimensions();
-    
+
     const svgWidth = width + margin.left + margin.right;
     const svgHeight = height + margin.top + margin.bottom;
 
     svg.attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
-       .attr("width", svgWidth)
-       .attr("height", svgHeight);
-    
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
     g.attr("transform", `translate(${margin.left},${margin.top})`);
 }
 
@@ -66,7 +66,7 @@ async function loadData() {
         const mergedData = companyInfo.map(info => {
             const financials = companyFinancials.find(f => f.Ticker === info.Ticker);
             const sentiment = latestSentiment[info.Ticker] || 0;
-            
+
             return {
                 ticker: info.Ticker,
                 name: info.Name,
@@ -135,7 +135,7 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
     // Custom formatters for different axes
     const xFormat = getAxisFormatter(xAxis);
     const yFormat = getAxisFormatter(yAxis);
-    
+
     const xAxisGenerator = d3.axisBottom(xScale)
         .tickFormat(xFormat)
         .tickSize(6)
@@ -168,7 +168,7 @@ function createAxes(xScale, yScale, xAxis, yAxis) {
     // Add axis labels
     g.append("text")
         .attr("class", "x-label axis-label")
-        .attr("transform", `translate(${width/2}, ${height + 60})`)
+        .attr("transform", `translate(${width / 2}, ${height + 60})`)
         .style("text-anchor", "middle")
         .style("font-size", "18px")
         .style("font-weight", "600")
@@ -272,7 +272,7 @@ function createColorLegend(data, colorBy) {
         const sectors = [...new Set(data.map(d => d.sector))].filter(Boolean).sort();
         const colorScale = colorScales.sector;
         colorScale.domain(sectors);
-        
+
         const sectorLegend = content.append("div")
             .attr("class", "sector-legend");
 
@@ -290,7 +290,7 @@ function createColorLegend(data, colorBy) {
         const colorScale = colorScales[colorBy];
         colorScale.domain(domain);
         const formatLabel = (value) => formatLegendValue(colorBy, value);
-        
+
         const colorScaleDiv = content.append("div")
             .attr("class", "color-scale");
 
@@ -409,10 +409,10 @@ function createSizeLegend(sizeScale, sizeMetric, sizeDomain, data) {
 function updateVisualization(data, xAxis, yAxis, colorBy, sizeMetric) {
     // Update dimensions first
     updateSVGDimensions();
-    
+
     const { xScale, yScale, sizeScale, sizeDomain } = createScales(data, xAxis, yAxis, sizeMetric);
     const colorFunction = createColorFunction(data, colorBy);
-    
+
     createAxes(xScale, yScale, xAxis, yAxis);
     createColorLegend(data, colorBy);
     createSizeLegend(sizeScale, sizeMetric, sizeDomain, data);
@@ -464,8 +464,8 @@ function updateAxisDropdownStates() {
     if (xMatch) xMatch.disabled = true;
 }
 
-function setupControls() {
-    d3.select("#x-axis").on("change", function() {
+function setupScatterControls() {
+    d3.select("#x-axis").on("change", function () {
         updateAxisDropdownStates();
         const xAxis = this.value;
         const yAxis = d3.select("#y-axis").property("value");
@@ -474,7 +474,7 @@ function setupControls() {
         updateVisualization(window.currentData, xAxis, yAxis, colorBy, sizeBy);
     });
 
-    d3.select("#y-axis").on("change", function() {
+    d3.select("#y-axis").on("change", function () {
         updateAxisDropdownStates();
         const xAxis = d3.select("#x-axis").property("value");
         const yAxis = this.value;
@@ -483,7 +483,7 @@ function setupControls() {
         updateVisualization(window.currentData, xAxis, yAxis, colorBy, sizeBy);
     });
 
-    d3.select("#color-by").on("change", function() {
+    d3.select("#color-by").on("change", function () {
         const xAxis = d3.select("#x-axis").property("value");
         const yAxis = d3.select("#y-axis").property("value");
         const colorBy = this.value;
@@ -491,7 +491,7 @@ function setupControls() {
         updateVisualization(window.currentData, xAxis, yAxis, colorBy, sizeBy);
     });
 
-    d3.select("#size-by").on("change", function() {
+    d3.select("#size-by").on("change", function () {
         const xAxis = d3.select("#x-axis").property("value");
         const yAxis = d3.select("#y-axis").property("value");
         const colorBy = d3.select("#color-by").property("value");
@@ -502,10 +502,10 @@ function setupControls() {
 
 // INFO PANEL CONTROLS
 // Initialize visualization
-async function init() {
+async function initScatter() {
     const data = await loadData();
     window.currentData = data;
-    
+
     if (data.length === 0) {
         console.error("No data loaded");
         return;
@@ -513,17 +513,17 @@ async function init() {
 
     // Initialize dimensions
     calculateDimensions();
-    
+
     // Set initial dropdown values
     d3.select("#x-axis").property("value", "sentiment");
     d3.select("#y-axis").property("value", "market_cap");
     d3.select("#color-by").property("value", "sentiment");
     d3.select("#size-by").property("value", "market_cap");
-    
-    setupControls();
+
+    setupScatterControls();
     updateAxisDropdownStates();
 
-    
+
     // Get current dropdown values and use them for initial visualization
     const xAxis = d3.select("#x-axis").property("value");
     const yAxis = d3.select("#y-axis").property("value");
@@ -537,12 +537,12 @@ async function init() {
     if (qTicker) {
         focusTicker(qTicker);
     }
-    
+
     // Add resize listener with debouncing
     let resizeTimeout;
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function() {
+        resizeTimeout = setTimeout(function () {
             const xAxis = d3.select("#x-axis").property("value");
             const yAxis = d3.select("#y-axis").property("value");
             const colorBy = d3.select("#color-by").property("value");
@@ -552,7 +552,7 @@ async function init() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', initScatter);
 
 // allow parent frame to ask the scatter plot to focus/highlight a company
 window.addEventListener('message', (ev) => {
@@ -560,7 +560,7 @@ window.addEventListener('message', (ev) => {
     if (!msg || msg.type !== 'focusCompany' || !msg.ticker) return;
     const ticker = (msg.ticker || '').toString().toUpperCase();
     // find circle by ticker
-    const sel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker||d.Ticker)||'').toString().toUpperCase() === ticker);
+    const sel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker || d.Ticker) || '').toString().toUpperCase() === ticker);
     if (sel.empty()) return;
     const d = sel.datum();
     // visually highlight
@@ -577,34 +577,34 @@ window.addEventListener('message', (ev) => {
     }, 3000);
 }, false);
 
-function focusTicker(ticker){
+function focusTicker(ticker) {
     if (!ticker) return;
-    const t = (ticker||'').toString().toUpperCase();
-    const sel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker||d.Ticker)||'').toString().toUpperCase() === t);
-    const nonSel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker||d.Ticker)||'').toString().toUpperCase() !== t);
+    const t = (ticker || '').toString().toUpperCase();
+    const sel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker || d.Ticker) || '').toString().toUpperCase() === t);
+    const nonSel = d3.selectAll('#scatterplot circle').filter(d => ((d.ticker || d.Ticker) || '').toString().toUpperCase() !== t);
     if (sel.empty()) return;
     const d = sel.datum();
     sel.raise().transition().delay(250).duration(1000).attr('stroke-width', 3).attr('opacity', 1);
     nonSel.transition().delay(250).duration(1000).attr('opacity', 0.1)
     disableMouseover()
     tooltip.style('opacity', 1).html(getTooltipHtml(d));
-    
+
     // Position tooltip near the bubble
     // Use a slight delay to ensure the scroll animation has settled
     setTimeout(() => {
         const circleNode = sel.node();
         if (circleNode) {
             const circleBBox = circleNode.getBoundingClientRect();
-            
+
             // Calculate page coordinates (similar to event.pageX/pageY)
             const pageX = circleBBox.left + window.pageXOffset + circleBBox.width / 2;
             const pageY = circleBBox.top + window.pageYOffset + circleBBox.height / 2;
-            
+
             // Use same offsets as mousemove handler
             tooltip.style('left', (pageX - 250) + 'px').style('top', (pageY - 200) + 'px');
         }
     }, 300);
-    
+
     setTimeout(() => {
         enableMouseover()
         sel.transition().duration(1000).attr('stroke-width', 1).attr('opacity', 0.7);
@@ -641,7 +641,7 @@ function getTooltipHtml(d) {
 
 function enableMouseover() {
     d3.selectAll('#scatterplot circle')
-        .on("mouseover", function(event, d) {
+        .on("mouseover", function (event, d) {
             d3.select(this)
                 .attr("opacity", 1)
                 .attr("stroke-width", 2);
@@ -650,10 +650,10 @@ function enableMouseover() {
                 .style("opacity", 1)
                 .html(getTooltipHtml(d));
         })
-        .on("mousemove", function(event) {
+        .on("mousemove", function (event) {
             const tooltipWidth = tooltip.node().offsetWidth;
             const tooltipHeight = tooltip.node().offsetHeight;
-        
+
             // Desired position near cursor
             let x = event.clientX + 12;
             let y = event.clientY - 30;
@@ -668,14 +668,14 @@ function enableMouseover() {
                 .style("top", y + "px");
 
         })
-        .on("mouseout", function() {
+        .on("mouseout", function () {
             d3.select(this)
                 .attr("opacity", 0.7)
                 .attr("stroke-width", 1);
 
             tooltip.style("opacity", 0);
         })
-        .on("click", function(event, d) {
+        .on("click", function (event, d) {
             // Navigate to company detail page
             displayCompanyInfo(d)
             popupCompany.showModal();

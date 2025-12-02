@@ -151,7 +151,7 @@ Promise.all([
     }
 
 
-    setupControls();
+    setupForestControls();
     drawInitial();
 }).catch(err => {
     console.error("Error loading forest data:", err);
@@ -161,7 +161,7 @@ Promise.all([
 // CONTROLS
 // ============================================================
 
-function setupControls() {
+function setupForestControls() {
     const selectIds = ["forest-company-1", "forest-company-2", "forest-company-3"];
 
     selectIds.forEach(id => {
@@ -425,7 +425,7 @@ function drawTrees(animated) {
             .attr("x2", x + slant)
             .attr("y2", grassY - h + 10)
             .attr("stroke", "#2e7d32")
-            .attr("stroke-width", 2 + Math.random()*0.8)
+            .attr("stroke-width", 2 + Math.random() * 0.8)
             .attr("stroke-linecap", "round")
             .attr("opacity", 0.9);
     }
@@ -554,8 +554,8 @@ function drawSingleTree(
 
         // Up-right, down-right, up-left, down-left
         const arms = [
-            { sx: 0, sy: 0, dx: len * Math.cos(angleRad),  dy: -SPLIT_OFFSET_Y },
-            { sx: 0, sy: 0, dx: len * Math.cos(angleRad),  dy: SPLIT_OFFSET_Y },
+            { sx: 0, sy: 0, dx: len * Math.cos(angleRad), dy: -SPLIT_OFFSET_Y },
+            { sx: 0, sy: 0, dx: len * Math.cos(angleRad), dy: SPLIT_OFFSET_Y },
             { sx: 0, sy: 0, dx: -len * Math.cos(angleRad), dy: -SPLIT_OFFSET_Y },
             { sx: 0, sy: 0, dx: -len * Math.cos(angleRad), dy: SPLIT_OFFSET_Y }
         ];
@@ -945,10 +945,10 @@ function drawLegend(
         .attr("transform", `translate(${trunkX}, ${splitLegendY})`);
 
     [
-        {dx:  xLen*Math.cos(angle), dy: -SPLIT_OFFSET_Y},
-        {dx:  xLen*Math.cos(angle), dy:  SPLIT_OFFSET_Y},
-        {dx: -xLen*Math.cos(angle), dy: -SPLIT_OFFSET_Y},
-        {dx: -xLen*Math.cos(angle), dy:  SPLIT_OFFSET_Y},
+        { dx: xLen * Math.cos(angle), dy: -SPLIT_OFFSET_Y },
+        { dx: xLen * Math.cos(angle), dy: SPLIT_OFFSET_Y },
+        { dx: -xLen * Math.cos(angle), dy: -SPLIT_OFFSET_Y },
+        { dx: -xLen * Math.cos(angle), dy: SPLIT_OFFSET_Y },
     ].forEach(arm => {
         splitG.append("line")
             .attr("x1", 0)
