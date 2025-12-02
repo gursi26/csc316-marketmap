@@ -40,6 +40,50 @@
     /* Starts after a 2-second delay */
 }
 
+#guide-btn {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    z-index: 10000;
+    /* min-width: 45px; */
+    height: 45px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px 12px;
+    background: rgba(16, 24, 51, 0.75);
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    color: var(--fg);
+    font-size: 1em;
+    font-weight: 500;
+
+    padding-left: 14px;
+    padding-right: 14px;
+
+    transition: transform 0.25s;
+}
+
+#guide-btn:after { content:' ⓘ '; }
+#guide-btn:hover:after {
+    content:' Info ⓘ ';
+}
+
+#guide-btn:hover {
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+#guide-image {
+    width: 60vw;
+    height: 60vh;
+}
+
 .page-dots .dot {
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.3);
@@ -144,7 +188,7 @@ h1 {
 
 .section {
     /* Set each section to full viewport height and width */
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
     /* Ensure the section snaps to the start of the viewport */
     scroll-snap-align: start;

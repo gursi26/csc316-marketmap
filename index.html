@@ -30,6 +30,17 @@
         <button class="dot small-dot" data-section="4" aria-label="Go to benefit explorer"></button></button>
     </nav>
 
+    <button id="guide-btn"></button>
+
+    <dialog id="guide-img-popup">
+        <div class="popup-content-wrapper">
+            <div class="guide-img-container">
+                <img id="guide-image" src="" alt="Guide image">
+            </div>
+            <button id="close-guide-img-popup">Close</button>
+        </div>
+    </dialog>
+
     <div class="snap-container">
         <div class="section section-one">
             <!-- Popup windows -->
@@ -340,6 +351,8 @@
             const snapContainer = document.querySelector('.snap-container');
             const sections = document.querySelectorAll('.section');
             const dots = document.querySelectorAll('.page-dots .dot');
+            const guideBtn = document.querySelector('#guide-btn');
+            const guideImg = document.querySelector('#guide-image');
 
             // Update active dot based on scroll position
             function updateActiveDot() {
@@ -355,6 +368,15 @@
 
                     if (scrollCenter >= sectionTop && scrollCenter < sectionBottom) {
                         currentSection = index;
+                        if (currentSection > 0 && (currentSection % 2 == 0)) {
+                            guideImg.src = "css/" + index.toString() + ".png";
+                            // guideBtn.textContent = index.toString();
+                            guideBtn.style.transform = `scale(1)`;
+                            guideBtn.style.transformOrigin = "center center";
+                        } else {
+                            guideBtn.style.transform = `scale(0)`;
+                            guideBtn.style.transformOrigin = "center center";
+                        }
                     }
                 });
 

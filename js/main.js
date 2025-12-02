@@ -1,4 +1,4 @@
-let viz, mapViz, sections, currentSectionIndex, popupCompany, closeCompany, popupGuide, closeGuide;
+let viz, mapViz, sections, currentSectionIndex, popupCompany, closeCompany, popupSrc, closeSrc, popupImgGuide, closeImgGuide;
 
 Promise.all([
     d3.csv("dataset/cleaned/Company-salary.csv"),
@@ -43,8 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     sections = document.querySelectorAll('.section');
     currentSectionIndex = 0;
     
-    popupGuide = document.getElementById('sources-popup');
-    closeGuide = document.getElementById('close-sources-popup');
+    popupSrc = document.getElementById('sources-popup');
+    closeSrc = document.getElementById('close-sources-popup');
+    popupImgGuide = document.getElementById('guide-img-popup');
+    closeImgGuide = document.getElementById('close-guide-img-popup');
     // popupCompany = document.getElementById('company-detail-popup');
     // closeCompany = document.getElementById('close-company-detail-popup');
 
@@ -228,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // document.getElementById('sourcesButton').addEventListener('click', function() {
     //     initCarousel();
-    //     popupGuide.showModal();
+    //     popupSrc.showModal();
     // });
 
     // // Play/Pause button handler
@@ -236,21 +238,21 @@ document.addEventListener('DOMContentLoaded', () => {
     //     togglePlayPause();
     // });
 
-    // closeGuide.addEventListener('click', () => {
+    // closeSrc.addEventListener('click', () => {
     //     stopAutoAdvance();
-    //     popupGuide.close();
+    //     popupSrc.close();
     // });
 
-    // popupGuide.addEventListener('click', (event) => {
+    // popupSrc.addEventListener('click', (event) => {
     //     // Check if the click target is the dialog element itself, not a child
-    //     if (event.target === popupGuide) {
+    //     if (event.target === popupSrc) {
     //         stopAutoAdvance();
-    //         popupGuide.close();
+    //         popupSrc.close();
     //     }
     // });
 
     // // Stop auto-advance when modal closes
-    // popupGuide.addEventListener('close', () => {
+    // popupSrc.addEventListener('close', () => {
     //     stopAutoAdvance();
     // });
 
@@ -278,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // This simplifies the interaction model and avoids conflicts
 
     // // Keyboard navigation
-    // popupGuide.addEventListener('keydown', (event) => {
+    // popupSrc.addEventListener('keydown', (event) => {
     //     if (event.key === 'ArrowLeft') {
     //         prevButton.click();
     //     } else if (event.key === 'ArrowRight') {
@@ -288,22 +290,37 @@ document.addEventListener('DOMContentLoaded', () => {
     //         togglePlayPause();
     //     } else if (event.key === 'Escape') {
     //         stopAutoAdvance();
-    //         popupGuide.close();
+    //         popupSrc.close();
     //     }
     // });
 
     document.getElementById('sourcesButton').addEventListener('click', function() {
-        popupGuide.showModal();
+        popupSrc.showModal();
     });
 
-    closeGuide.addEventListener('click', () => {
-        popupGuide.close();
+    closeSrc.addEventListener('click', () => {
+        popupSrc.close();
     });
 
-    popupGuide.addEventListener('click', (event) => {
+    popupSrc.addEventListener('click', (event) => {
         // Check if the click target is the dialog element itself, not a child
-        if (event.target === popupGuide) {
-            popupGuide.close();
+        if (event.target === popupSrc) {
+            popupSrc.close();
+        }
+    });
+
+    document.getElementById('guide-btn').addEventListener('click', function() {
+        popupImgGuide.showModal();
+    });
+
+    closeImgGuide.addEventListener('click', () => {
+        popupImgGuide.close();
+    });
+
+    popupImgGuide.addEventListener('click', (event) => {
+        // Check if the click target is the dialog element itself, not a child
+        if (event.target === popupImgGuide) {
+            popupImgGuide.close();
         }
     });
 
