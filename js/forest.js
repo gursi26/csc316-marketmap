@@ -2,9 +2,9 @@
 // CONFIG & CONSTANTS
 // ============================================================
 
-const FIN_DATA_PATH = "../dataset/cleaned/Company-financials-sentiment-weekly-snapshot.csv";
-const INFO_PATH = "../data/Company-info.csv";
-const LOGO_PATH = "../dataset/logos/images/"; // + TICKER.png
+const FIN_DATA_PATH = "dataset/cleaned/Company-financials-sentiment-weekly-snapshot.csv";
+const INFO_PATH = "dataset/cleaned/Company-info.csv";
+const LOGO_PATH = "dataset/logos/images/"; // + TICKER.png
 
 const START_YEAR = 2022;
 const END_YEAR = 2025;
