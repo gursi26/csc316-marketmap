@@ -28,8 +28,9 @@ const innerHeight = forestHeight - forestMargin.top - forestMargin.bottom;
 const TRUNK_MIN_WIDTH = 10;
 const TRUNK_MAX_WIDTH = 40;
 
-const BRANCH_MIN_LENGTH = 20;   // editable
-const BRANCH_MAX_LENGTH = 160;  // editable
+const BRANCH_MIN_LENGTH = 40;   // editable
+
+const BRANCH_MAX_LENGTH = 190;  // editable
 
 // leaves
 const LEAF_WIDTH = 48;          // overall leaf length (editable)
@@ -40,11 +41,13 @@ const LEAF_MIN_COUNT = 3;
 const LEAF_MAX_COUNT = 40;
 
 // stock split X
-const SPLIT_ANGLE_DEG = 15;     // very flat X
-const SPLIT_OFFSET_Y = 24;      // vertical span of X arms
+const SPLIT_ANGLE_DEG = 0;     // very flat X
+const SPLIT_OFFSET_Y = 12;      // vertical span of X arms
 
 // colours
 const TRUNK_COLOR = "#99612f";
+const TRUNK_GRAIN_COLOR = "#3b2413";
+
 const BRANCH_COLOR = "#633b1aff";
 
 // globals
@@ -127,12 +130,26 @@ Promise.all([
     });
 
     // compute global sentiment extent for colouring
-    const allSent = financials
-        .map(d => +d.sentiment_score)
-        .filter(v => !isNaN(v));
-    if (allSent.length > 0) {
-        globalSentimentExtent = d3.extent(allSent);
+    // ============================================================
+    // GLOBAL quarterly sentiment extent (ALL COMPANIES)
+    // ============================================================
+
+    let allQuarterlySent = [];
+
+    // Build quarterly data for *every* ticker
+    companyInfo.forEach(c => {
+        const quarters = buildQuarterDataForTicker(c.Ticker);
+        quarters.forEach(q => {
+            if (q.avgSentiment != null && !isNaN(q.avgSentiment)) {
+                allQuarterlySent.push(q.avgSentiment);
+            }
+        });
+    });
+
+    if (allQuarterlySent.length > 0) {
+        globalSentimentExtent = d3.extent(allQuarterlySent);
     }
+
 
     setupControls();
     drawInitial();
@@ -224,6 +241,19 @@ function buildQuarterDataForTicker(ticker) {
         }
     });
 
+    // Normalization: find 2022 Q1 close for this ticker
+    const base = quarterData.find(q => q.quarter === "2022-Q1" && q.avgClose != null)?.avgClose || null;
+
+    // Normalize prices relative to Q1 2022
+    quarterData.forEach(q => {
+        if (base && q.avgClose != null) {
+            q.normClose = q.avgClose / base;    // relative change
+        } else {
+            q.normClose = null;
+        }
+    });
+
+
     return quarterData;
 }
 
@@ -254,8 +284,10 @@ function drawTrees(animated) {
         t.quarters.map(q => q.avgMarketCap).filter(v => v != null && !isNaN(v))
     );
     const allClose = trees.flatMap(t =>
-        t.quarters.map(q => q.avgClose).filter(v => v != null && !isNaN(v))
+        t.quarters.map(q => q.normClose)
+            .filter(v => v != null && !isNaN(v))
     );
+
 
     // bail out if we have no valid financials at all
     if (!allCaps.length || !allClose.length) {
@@ -376,10 +408,34 @@ function drawTrees(animated) {
     );
 
     // ========================================================
+    // REALISTIC GRASS
+    // ========================================================
+    const grassY = innerHeight + 15;
+    const grassGroup = gRoot.append("g").attr("class", "grass-group");
+
+    const numBlades = 300; // more = denser
+    for (let i = 0; i < numBlades; i++) {
+        const x = (innerWidth / numBlades) * i;
+        const h = 10 + Math.random() * 18;       // varying height
+        const slant = (Math.random() - 0.5) * 6; // slight leaning
+
+        grassGroup.append("line")
+            .attr("x1", x + 5)
+            .attr("y1", grassY + 10)
+            .attr("x2", x + slant)
+            .attr("y2", grassY - h + 10)
+            .attr("stroke", "#2e7d32")
+            .attr("stroke-width", 2 + Math.random()*0.8)
+            .attr("stroke-linecap", "round")
+            .attr("opacity", 0.9);
+    }
+
+
+    // ========================================================
     // LOGOS UNDER TREES
     // ========================================================
 
-    const logoY = innerHeight + 60;
+    const logoY = innerHeight + 70;
 
     const logosG = gRoot.append("g").attr("class", "logos-group");
     trees.forEach(tree => {
@@ -457,10 +513,10 @@ function drawSingleTree(
         .attr("class", "branch branch-left")
         .attr("x1", 0)
         .attr("x2", d => {
-            if (!d.hasData || d.avgClose == null) {
+            if (!d.hasData || d.normClose == null) {
                 return -BRANCH_MIN_LENGTH;
             }
-            return -branchScale(d.avgClose);
+            return -branchScale(d.normClose);
         })
         .attr("y1", 0)
         .attr("y2", 0)
@@ -473,10 +529,10 @@ function drawSingleTree(
         .attr("class", "branch branch-right")
         .attr("x1", 0)
         .attr("x2", d => {
-            if (!d.hasData || d.avgClose == null) {
+            if (!d.hasData || d.normClose == null) {
                 return BRANCH_MIN_LENGTH;
             }
-            return branchScale(d.avgClose);
+            return branchScale(d.normClose);
         })
         .attr("y1", 0)
         .attr("y2", 0)
@@ -490,9 +546,9 @@ function drawSingleTree(
 
     split.each(function (d) {
         const gQ = d3.select(this);
-        const len = (!d.hasData || d.avgClose == null)
+        const len = (!d.hasData || d.normClose == null)
             ? BRANCH_MIN_LENGTH
-            : branchScale(d.avgClose);
+            : branchScale(d.normClose);
 
         const angleRad = (SPLIT_ANGLE_DEG * Math.PI) / 180;
 
@@ -546,9 +602,9 @@ function drawSingleTree(
         }
 
         const hasSplit = d.stockSplits && d.stockSplits > 0;
-        const baseLen = (!d.hasData || d.avgClose == null)
+        const baseLen = (!d.hasData || d.normClose == null)
             ? BRANCH_MIN_LENGTH
-            : branchScale(d.avgClose);
+            : branchScale(d.normClose);
 
         let leafCount = computeLeafCount(d.avgVolume);
         if (leafCount <= 0) {
@@ -734,7 +790,7 @@ function drawLegend(
     const branchY = trunkY + 60;
 
     legendG.append("line")
-        .attr("x1", trunkX - branchSampleLen / 2 + 35)
+        .attr("x1", trunkX - branchSampleLen / 2 + 50)
         .attr("x2", trunkX + branchSampleLen / 2 + 35)
         .attr("y1", branchY)
         .attr("y2", branchY)
@@ -877,6 +933,40 @@ function drawLegend(
         .attr("fill", "#e5e7eb")
         .attr("font-size", 11)
         .text(volText);
+
+    // --------------------------------------------------------
+    // STOCK SPLIT LEGEND (X-shaped branch)
+    // --------------------------------------------------------
+    const splitLegendY = leafLegendY + 40;
+    const xLen = 20;
+    const angle = SPLIT_ANGLE_DEG * Math.PI / 180;
+
+    const splitG = legendG.append("g")
+        .attr("transform", `translate(${trunkX}, ${splitLegendY})`);
+
+    [
+        {dx:  xLen*Math.cos(angle), dy: -SPLIT_OFFSET_Y},
+        {dx:  xLen*Math.cos(angle), dy:  SPLIT_OFFSET_Y},
+        {dx: -xLen*Math.cos(angle), dy: -SPLIT_OFFSET_Y},
+        {dx: -xLen*Math.cos(angle), dy:  SPLIT_OFFSET_Y},
+    ].forEach(arm => {
+        splitG.append("line")
+            .attr("x1", 0)
+            .attr("y1", 0)
+            .attr("x2", arm.dx)
+            .attr("y2", arm.dy)
+            .attr("stroke", BRANCH_COLOR)
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 7);
+    });
+
+    legendG.append("text")
+        .attr("x", trunkX + 40)
+        .attr("y", splitLegendY + 4)
+        .attr("fill", "#e5e7eb")
+        .attr("font-size", 11)
+        .text("Stock split (X-shaped branches)");
+
 }
 
 // ============================================================
