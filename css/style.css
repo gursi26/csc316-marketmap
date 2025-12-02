@@ -277,6 +277,16 @@ h1 {
     background-position: center center
 }
 
+.section-six-transition {
+    background:
+        /* top, transparent black, faked with gradient */
+        linear-gradient(rgba(0, 0, 2, 0.78),
+            rgba(0, 0, 2, 0.78)),
+        /* bottom, image */
+        url('forest-bg.webp');
+    background-position: center center
+}
+
 .section-two {
     background: linear-gradient(180deg, #0b1020 0%, #0c1225 100%);
 }
