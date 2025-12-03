@@ -1349,7 +1349,7 @@ button {
 
 #controls {
     position: relative;
-    top: 100px;
+    top: 80px;
     left: 50%;
     transform: translateX(-50%);
     background: transparent;
