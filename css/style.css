@@ -1936,7 +1936,7 @@ select option:disabled {
 .controls-scatter {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     gap: 6px;
     background: var(--panel);
@@ -2036,21 +2036,25 @@ select option:disabled {
 .control-group.inline {
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+    justify-content: center;
+    gap: 12px;
     width: 100%;
 }
 
 .control-group.inline label {
-    width: 130px;
+    width: 120px;
     text-align: right;
+}
+
+.control-group.inline select {
+    min-width: 200px;
 }
 
 .control-groups-row {
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
+    width: 100%;
     align-items: center;
 }
 
