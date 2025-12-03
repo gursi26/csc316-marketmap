@@ -270,115 +270,112 @@
 
             <script src="js/scatter.js"></script>
         </div>
-  
+    </div>
+    <!-- NEW TRANSITION BELOW SCATTER -->
+    <div class="section transition-page section-six-transition">
+        <p class="takeaway"><b>Key Insight: </b>There's often a gap between how companies are perceived externally and what employees actually experience, critical for new grads evaluating where to start their careers. Strong financials don't guarantee strong leadership. Tesla, despite its massive market cap, sits mid-range for CEO approval, likely reflecting Elon Musk's polarizing public presence and recent environmental controversies. Broadcom shows a similar disconnect. Meanwhile, Costco punches above its weight in leadership scores, and while giants like Nvidia and Apple predictably dominate in both revenue and sentiment, outliers like QUALCOMM score surprisingly high on employee sentiment despite lower market cap.</p>
+        <h3>Before we wrap up, let's explore how companies grow over time.</h3>
+    </div>
 
-        <!-- NEW TRANSITION BELOW SCATTER (your new one) -->
-        <div class="section transition-page section-six-transition">
-            <p class="takeaway"><b>Key Insight: </b>There's often a gap between how companies are perceived externally and what employees actually experience, critical for new grads evaluating where to start their careers. Strong financials don't guarantee strong leadership. Tesla, despite its massive market cap, sits mid-range for CEO approval, likely reflecting Elon Musk's polarizing public presence and recent environmental controversies. Broadcom shows a similar disconnect. Meanwhile, Costco punches above its weight in leadership scores, and while giants like Nvidia and Apple predictably dominate in both revenue and sentiment, outliers like QUALCOMM score surprisingly high on employee sentiment despite lower market cap.</p>
-            <h3>Before we wrap up, let's explore how companies grow over time.</h3>
-        </div>
+    <!-- === SECTION SIX — Forest Visualization === -->
+    <div class="section section-six">
+        <div class="forest-container">
 
-        <!-- === SECTION SIX — Forest Visualization === -->
-        <div class="section section-six">
-            <div class="forest-container">
+            <!-- Controls & Title -->
+            <div class="forest-controls">
 
-                <!-- Controls & Title -->
-                <div class="forest-controls">
+                <div class="forest-title-block">
+                    <h2 class="forest-title">Market Forest</h2>
+                    <p class="forest-subtitle">
+                        Watch three companies grow every quarter from 2022–2025.
+                    </p>
+                </div>
 
-                    <div class="forest-title-block">
-                        <h2 class="forest-title">Market Forest</h2>
-                        <p class="forest-subtitle">
-                            Watch three companies grow every quarter from 2022–2025.
-                        </p>
+                <!-- Dropdown Row -->
+                <div class="forest-select-row">
+
+                    <div class="forest-select-group">
+                        <label for="forest-company-1">Company 1</label>
+                        <select id="forest-company-1"></select>
                     </div>
 
-                    <!-- Dropdown Row -->
-                    <div class="forest-select-row">
-
-                        <div class="forest-select-group">
-                            <label for="forest-company-1">Company 1</label>
-                            <select id="forest-company-1"></select>
-                        </div>
-
-                        <div class="forest-select-group">
-                            <label for="forest-company-2">Company 2</label>
-                            <select id="forest-company-2"></select>
-                        </div>
-
-                        <div class="forest-select-group">
-                            <label for="forest-company-3">Company 3</label>
-                            <select id="forest-company-3"></select>
-                        </div>
-
-                        <!-- Buttons -->
-                        <div class="forest-buttons">
-                            <button id="forest-play">▶ Play growth</button>
-                            <button id="forest-reset">⟳ Reset</button>
-                        </div>
-
-                    </div> <!-- /.forest-select-row -->
-
-                </div> <!-- /.forest-controls -->
-
-                <!-- SVG Visualization -->
-                <svg id="forest-viz"></svg>
-
-            </div> <!-- /.forest-container -->
-
-            <script src="js/forest.js"></script>
-        </div> <!-- /.section-six -->
-
-
-        <!-- EXISTING FINAL TRANSITION — KEEP AS LAST -->
-        <div class="section transition-page section-five-transition">
-            <p class="takeaway"><b>Key Insight: </b>The Market Forest highlights two different types of companies: firms like PepsiCo show limited growth because they operate in mature, low-volatility industries with stable demand and cashflows. There’s less room for expansion, but performance is steady and reliable. In contrast, companies like NVIDIA show rapid, dramatic growth because they’re driven by high-innovation markets such as AI and semiconductors, where breakthroughs can rapidly boost revenue, valuation, and investor sentiment—though this also comes with higher risk.</p>
-            <h3>We hope that you were able to better <em>map-out</em> your career with our visualizations. Good luck,
-                from the MarketMap team!</h3>
-
-            <div class="button-holder">
-                <button id="sourcesButton" class="work-sans-400"><em>Sources</em></button>
-
-                <dialog id="sources-popup">
-                    <div class="popup-content-wrapper">
-                        <div class="sources-container">
-
-                            <h4 class="sources-header">Image Credits</h4>
-                            <div class="links-row">
-                                <div class="links-column">
-                                    <a href="https://unsplash.com/photos/a-view-of-the-earth-from-an-airplane-zVNU8WC1ino" class="credit">Dembee Tsogoo (Unsplash)<br></a>
-                                    <a href="https://unsplash.com/photos/brown-glass-bottle-beside-white-book-on-blue-and-white-textile-oj0zeY2Ltk4" class="credit">S'well (Unsplash)<br></a>
-                                    <a href="https://unsplash.com/photos/photo-of-outer-space-Q1p7bh3SHj8" class="credit">NASA (Unsplash)<br></a>
-                                </div>
-                                <div class="links-column">
-                                    <a href="https://unsplash.com/photos/high-angle-photography-of-black-high-rise-buildings-_jFDQJfCTyA" class="credit">CHUTTERSNAP (Unsplash)<br></a>
-                                    <a href="https://unsplash.com/photos/crowd-of-people-sitting-on-chairs-inside-room-F2KRf_QfCqw" class="credit">Headway (Unsplash)<br></a>
-                                    <a href="https://unsplash.com/photos/aerial-shot-of-road-surrounded-by-green-trees-qzgN45hseN0" class="credit">Geranimo (Unsplash)</a>
-                                </div>
-                            </div>
-
-                            <a href="https://www.pexels.com/photo/high-rise-buildings-during-nighttime-2224789/" class="credit">Chait Goli (Pexels)<br></a>
-
-
-                            <h4 class="sources-header">Data Sources</h4>
-                            <div class="links-row">
-                                <div class="links-column">
-                                    <a href="https://pypi.org/project/yfinance/" class="credit">Yahoo Finance API</a>
-                                    <a href="https://www.levels.fyi/?tab=levels" class="credit">Levels.fyi</a>
-                                    <a href="https://www.marketaux.com/" class="credit">Marketaux API</a>
-                                    <a href="https://www.glassdoor.ca/Community/index.htm" class="credit">Glassdoor</a>
-                                </div>
-                            </div>
-
-                            <a href="https://site.financialmodelingprep.com/developer/docs/historical-numer-of-employees-api" class="credit">FMP Historical Employee API</a>
-
-                        </div>
-
-                        <button id="close-sources-popup">Close</button>
+                    <div class="forest-select-group">
+                        <label for="forest-company-2">Company 2</label>
+                        <select id="forest-company-2"></select>
                     </div>
-                </dialog>
-            </div>
+
+                    <div class="forest-select-group">
+                        <label for="forest-company-3">Company 3</label>
+                        <select id="forest-company-3"></select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="forest-buttons">
+                        <button id="forest-play">▶ Play growth</button>
+                        <button id="forest-reset">⟳ Reset</button>
+                    </div>
+
+                </div> <!-- /.forest-select-row -->
+
+            </div> <!-- /.forest-controls -->
+
+            <!-- SVG Visualization -->
+            <svg id="forest-viz"></svg>
+
+        </div> <!-- /.forest-container -->
+
+        <script src="js/forest.js"></script>
+    </div> <!-- /.section-six -->
+
+
+    <!-- EXISTING FINAL TRANSITION — KEEP AS LAST -->
+    <div class="section transition-page section-five-transition">
+        <p class="takeaway"><b>Key Insight: </b>The Market Forest highlights two different types of companies: firms like PepsiCo show limited growth because they operate in mature, low-volatility industries with stable demand and cashflows. There’s less room for expansion, but performance is steady and reliable. In contrast, companies like NVIDIA show rapid, dramatic growth because they’re driven by high-innovation markets such as AI and semiconductors, where breakthroughs can rapidly boost revenue, valuation, and investor sentiment—though this also comes with higher risk.</p>
+        <h3>We hope that you were able to better <em>map-out</em> your career with our visualizations. Good luck,
+            from the MarketMap team!</h3>
+
+        <div class="button-holder">
+            <button id="sourcesButton" class="work-sans-400"><em>Sources</em></button>
+
+            <dialog id="sources-popup">
+                <div class="popup-content-wrapper">
+                    <div class="sources-container">
+
+                        <h4 class="sources-header">Image Credits</h4>
+                        <div class="links-row">
+                            <div class="links-column">
+                                <a href="https://unsplash.com/photos/a-view-of-the-earth-from-an-airplane-zVNU8WC1ino" class="credit">Dembee Tsogoo (Unsplash)<br></a>
+                                <a href="https://unsplash.com/photos/brown-glass-bottle-beside-white-book-on-blue-and-white-textile-oj0zeY2Ltk4" class="credit">S'well (Unsplash)<br></a>
+                                <a href="https://unsplash.com/photos/photo-of-outer-space-Q1p7bh3SHj8" class="credit">NASA (Unsplash)<br></a>
+                            </div>
+                            <div class="links-column">
+                                <a href="https://unsplash.com/photos/high-angle-photography-of-black-high-rise-buildings-_jFDQJfCTyA" class="credit">CHUTTERSNAP (Unsplash)<br></a>
+                                <a href="https://unsplash.com/photos/crowd-of-people-sitting-on-chairs-inside-room-F2KRf_QfCqw" class="credit">Headway (Unsplash)<br></a>
+                                <a href="https://unsplash.com/photos/aerial-shot-of-road-surrounded-by-green-trees-qzgN45hseN0" class="credit">Geranimo (Unsplash)</a>
+                            </div>
+                        </div>
+
+                        <a href="https://www.pexels.com/photo/high-rise-buildings-during-nighttime-2224789/" class="credit">Chait Goli (Pexels)<br></a>
+
+
+                        <h4 class="sources-header">Data Sources</h4>
+                        <div class="links-row">
+                            <div class="links-column">
+                                <a href="https://pypi.org/project/yfinance/" class="credit">Yahoo Finance API</a>
+                                <a href="https://www.levels.fyi/?tab=levels" class="credit">Levels.fyi</a>
+                                <a href="https://www.marketaux.com/" class="credit">Marketaux API</a>
+                                <a href="https://www.glassdoor.ca/Community/index.htm" class="credit">Glassdoor</a>
+                            </div>
+                        </div>
+
+                        <a href="https://site.financialmodelingprep.com/developer/docs/historical-numer-of-employees-api" class="credit">FMP Historical Employee API</a>
+
+                    </div>
+
+                    <button id="close-sources-popup">Close</button>
+                </div>
+            </dialog>
         </div>
-    
     </div>
 
     <!-- PAGE DOT LOGIC -->
