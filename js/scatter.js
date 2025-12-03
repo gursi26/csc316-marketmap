@@ -515,8 +515,8 @@ async function initScatter() {
     calculateDimensions();
 
     // Set initial dropdown values
-    d3.select("#x-axis").property("value", "sentiment");
-    d3.select("#y-axis").property("value", "market_cap");
+    d3.select("#x-axis").property("value", "pe_ratio");
+    d3.select("#y-axis").property("value", "ceo_approval");
     d3.select("#color-by").property("value", "sentiment");
     d3.select("#size-by").property("value", "market_cap");
 
