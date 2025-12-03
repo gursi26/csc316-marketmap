@@ -2738,7 +2738,52 @@ dialog::backdrop {
     align-items: center;     /* was flex-end */
 }
 
-/* Raise the buttons slightly */
+
+
+
+/* === Forest layout override (zoom-safe) === */
+
+.forest-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;   /* title on left, controls on right */
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.forest-select-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;                  /* allows wrapping when zoomed */
+    gap: 16px;
+}
+
+.forest-select-group {
+    display: flex;
+    flex-direction: row;              /* label + select inline */
+    align-items: center;
+    gap: 6px;
+}
+
+.forest-select-group label {
+    white-space: nowrap;              /* prevent label from wrapping */
+}
+
 .forest-buttons {
-    margin-top: -75px;        /* tweak -4 to -12 depending on your taste */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* no margin-top hacks */
+}
+
+#forest-viz {
+    flex: 1;
+    width: 100%;
+    margin-top: 0px;                 /* clean spacing below controls */
+    border-radius: 18px;
+    background: radial-gradient(circle at top, #020617 0%, #020617 50%, #000 100%);
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.8);
+    /* no negative margin-top */
 }

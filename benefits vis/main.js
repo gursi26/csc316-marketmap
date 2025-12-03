@@ -949,7 +949,7 @@ function renderBeeswarm(data) {
   const width = svg.node().clientWidth || 600;
   const height = svg.node().clientHeight || 400;
 
-  const margin = { top: 40, right: 40, bottom: 70, left: 60 };
+  const margin = { top: 40, right: 40, bottom: 40, left: 60 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
 
@@ -972,18 +972,18 @@ function renderBeeswarm(data) {
 
   svg.append("text")
     .attr("x", width / 2)
-    .attr("y", height - 30)
+    .attr("y", height)
     .attr("text-anchor", "middle")
     .attr("fill", "#e6eefc")
     .text("Number of Additional Benefits");
 
   // Reset button roughly above right end of axis (CSS mainly controls this)
-  const logoSize = 34;
+  const logoSize = 29;
 
   // Initialize each node at its fixed x position
   data.forEach(d => {
     d.x = beeswarmXScale(d.extra);
-    d.y = height / 2;
+    d.y = -1 + height / 2;
   });
 
   // Build nodes

@@ -750,7 +750,7 @@ function drawLegend(
         .attr("y", 0)
         .attr("fill", "#e5e7eb")
         .attr("font-weight", "600")
-        .attr("font-size", 12)
+        .attr("font-size", 15)
         .text("Legend");
 
     // sample values (midpoints)
@@ -776,14 +776,14 @@ function drawLegend(
         .attr("x", trunkX + 36)
         .attr("y", trunkY - 4)
         .attr("fill", "#e5e7eb")
-        .attr("font-size", 11)
+        .attr("font-size", 13)
         .text("Trunk width = market cap");
 
     legendG.append("text")
         .attr("x", trunkX + 36)
         .attr("y", trunkY + 12)
         .attr("fill", "#9ca3af")
-        .attr("font-size", 10)
+        .attr("font-size", 13)
         .text(`≈ $${(midCap / 1e9).toFixed(1)}B market capitalization`);
 
     // branch sample (horizontal)
@@ -802,14 +802,14 @@ function drawLegend(
         .attr("x", trunkX + branchSampleLen / 2 + 10)
         .attr("y", branchY - 4)
         .attr("fill", "#e5e7eb")
-        .attr("font-size", 12)
+        .attr("font-size", 13)
         .text("Branch length = stock price");
 
     legendG.append("text")
         .attr("x", trunkX + branchSampleLen / 2 + 10)
         .attr("y", branchY + 12)
         .attr("fill", "#9ca3af")
-        .attr("font-size", 11)
+        .attr("font-size", 13)
         .text("length is relative to 2022 Q1 (normalized)");
 
     // sentiment gradient
@@ -859,21 +859,21 @@ function drawLegend(
         .attr("x", trunkX + gradWidth + 10)
         .attr("y", gradY + gradHeight - 2)
         .attr("fill", "#e5e7eb")
-        .attr("font-size", 11)
+        .attr("font-size", 13)
         .text("Sentiment score");
 
     legendG.append("text")
         .attr("x", trunkX - 10)
         .attr("y", gradY + gradHeight + 13)
         .attr("fill", "#9ca3af")
-        .attr("font-size", 9)
+        .attr("font-size", 11)
         .text(globalSentimentExtent[0].toFixed(2));
 
     legendG.append("text")
         .attr("x", trunkX + gradWidth / 2 - 10)
         .attr("y", gradY + gradHeight + 13)
         .attr("fill", "#9ca3af")
-        .attr("font-size", 9)
+        .attr("font-size", 11)
         .attr("text-anchor", "middle")
         .text("0");
 
@@ -881,7 +881,7 @@ function drawLegend(
         .attr("x", trunkX + gradWidth - 10)
         .attr("y", gradY + gradHeight + 13)
         .attr("fill", "#9ca3af")
-        .attr("font-size", 9)
+        .attr("font-size", 11)
         .attr("text-anchor", "end")
         .text(globalSentimentExtent[1].toFixed(2));
 
@@ -931,7 +931,7 @@ function drawLegend(
         .attr("x", trunkX + 10 + LEAF_WIDTH * 1 - 20)
         .attr("y", leafLegendY + 4)
         .attr("fill", "#e5e7eb")
-        .attr("font-size", 11)
+        .attr("font-size", 13)
         .text(volText);
 
     // --------------------------------------------------------
@@ -964,7 +964,7 @@ function drawLegend(
         .attr("x", trunkX + 40)
         .attr("y", splitLegendY + 4)
         .attr("fill", "#e5e7eb")
-        .attr("font-size", 11)
+        .attr("font-size", 13)
         .text("Stock split (X-shaped branches)");
 
 }
