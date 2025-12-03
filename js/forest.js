@@ -22,7 +22,7 @@ const gRoot = forestSvg.append("g")
     .attr("transform", `translate(${forestMargin.left},${forestMargin.top})`);
 
 const innerWidth = forestWidth - forestMargin.left - forestMargin.right;
-const innerHeight = forestHeight - forestMargin.top - forestMargin.bottom;
+const innerHeight = forestHeight - forestMargin.top - forestMargin.bottom + 20;
 
 // trunk & branch scaling (editable)
 const TRUNK_MIN_WIDTH = 10;
@@ -30,7 +30,7 @@ const TRUNK_MAX_WIDTH = 40;
 
 const BRANCH_MIN_LENGTH = 40;   // editable
 
-const BRANCH_MAX_LENGTH = 190;  // editable
+const BRANCH_MAX_LENGTH = 160;  // editable
 
 // leaves
 const LEAF_WIDTH = 48;          // overall leaf length (editable)
@@ -275,7 +275,7 @@ function drawTrees(animated) {
             ticker,
             name: nameByTicker[ticker] || ticker,
             quarters: buildQuarterDataForTicker(ticker),
-            x: innerWidth * ((idx + 1) / 4) - innerWidth * 0.10
+            x: innerWidth * ((idx + 1) / 4) - innerWidth * 0.12
         };
     });
 
@@ -353,11 +353,11 @@ function drawTrees(animated) {
     // axis title
     gRoot.append("text")
         .attr("class", "forest-axis-label")
-        .attr("x", 0)
+        .attr("x", -70)
         .attr("y", -18)
         .attr("fill", "#d1d5db")
         .attr("font-size", 11)
-        .text("2022 → 2025 (quarters)");
+        .text("Year (quarters)");
 
     // quarter labels on left
     const axisG = gRoot.append("g")
@@ -435,7 +435,7 @@ function drawTrees(animated) {
     // LOGOS UNDER TREES
     // ========================================================
 
-    const logoY = innerHeight + 70;
+    const logoY = innerHeight + 53;
 
     const logosG = gRoot.append("g").attr("class", "logos-group");
     trees.forEach(tree => {
@@ -746,7 +746,7 @@ function drawLegend(
         .attr("transform", `translate(${innerWidth - 360}, 10)`);
 
     legendG.append("text")
-        .attr("x", 0)
+        .attr("x", 90)
         .attr("y", 0)
         .attr("fill", "#e5e7eb")
         .attr("font-weight", "600")
@@ -761,7 +761,7 @@ function drawLegend(
 
     // trunk sample (vertical)
     const trunkY = 50;
-    const trunkX = 25;
+    const trunkX = 100;
 
     legendG.append("line")
         .attr("x1", trunkX)
@@ -790,8 +790,8 @@ function drawLegend(
     const branchY = trunkY + 60;
 
     legendG.append("line")
-        .attr("x1", trunkX - branchSampleLen / 2 + 50)
-        .attr("x2", trunkX + branchSampleLen / 2 + 35)
+        .attr("x1", trunkX - branchSampleLen / 2 + 40)
+        .attr("x2", trunkX + branchSampleLen / 2 - 20)
         .attr("y1", branchY)
         .attr("y2", branchY)
         .attr("stroke", BRANCH_COLOR)
@@ -799,18 +799,18 @@ function drawLegend(
         .attr("stroke-width", 7);
 
     legendG.append("text")
-        .attr("x", trunkX + branchSampleLen / 2 + 51)
+        .attr("x", trunkX + branchSampleLen / 2 + 10)
         .attr("y", branchY - 4)
         .attr("fill", "#e5e7eb")
         .attr("font-size", 12)
         .text("Branch length = stock price");
 
     legendG.append("text")
-        .attr("x", trunkX + branchSampleLen / 2 + 51)
+        .attr("x", trunkX + branchSampleLen / 2 + 10)
         .attr("y", branchY + 12)
         .attr("fill", "#9ca3af")
         .attr("font-size", 11)
-        .text("length is relative to 2022 Q1 (company-normalized)");
+        .text("length is relative to 2022 Q1 (normalized)");
 
     // sentiment gradient
     const gradY = branchY + 32;
@@ -893,7 +893,7 @@ function drawLegend(
     const sampleColor = sentimentScale(0);
 
     // three sample leaves
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 1; i++) {
         const offsetX = i * (LEAF_WIDTH + 4);
 
         const leafG = leafSampleGroup.append("g")
@@ -928,7 +928,7 @@ function drawLegend(
     const volText = `Leaves ≈ trading volume (≈ ${(approxVolumePerLeaf / 1e6).toFixed(1)}M shares / leaf)`;
 
     legendG.append("text")
-        .attr("x", trunkX + 10 + LEAF_WIDTH * 2)
+        .attr("x", trunkX + 10 + LEAF_WIDTH * 1 - 20)
         .attr("y", leafLegendY + 4)
         .attr("fill", "#e5e7eb")
         .attr("font-size", 11)

@@ -2704,3 +2704,41 @@ dialog::backdrop {
     font-size: 11px;
     fill: #9ca3af;
 }
+
+/* === Forest layout update: labels beside dropdowns === */
+
+.forest-select-row {
+    display: flex;
+    align-items: center;      /* vertically center companies + buttons */
+    gap: 20px;
+    flex-wrap: wrap;          /* wrap nicely on smaller screens */
+}
+
+/* Label + dropdown inline */
+.forest-select-group {
+    display: flex;
+    flex-direction: row;      /* label left, select right */
+    align-items: center;
+    gap: 8px;
+}
+
+/* Remove vertical spacing since label is inline now */
+.forest-select-group label {
+    margin-bottom: 0;
+    white-space: nowrap;      /* prevent label wrapping */
+}
+
+
+#forest-viz {
+  margin-top: -20px;   /* pull the whole black rectangle upward */
+}
+
+/* Make dropdowns + buttons vertically aligned */
+.forest-select-row {
+    align-items: center;     /* was flex-end */
+}
+
+/* Raise the buttons slightly */
+.forest-buttons {
+    margin-top: -75px;        /* tweak -4 to -12 depending on your taste */
+}
