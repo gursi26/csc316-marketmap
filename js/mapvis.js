@@ -487,6 +487,11 @@ class MapVis {
         select.addEventListener('change', (ev) => {
           selectedIndustryFilter = ev.target.value;
           render(); // Re-render map
+          
+          // If a state/country is currently selected, update the panel dynamically
+          if (currentSelectedState) {
+            updateStateCompaniesPanel(currentSelectedState);
+          }
         });
 
         panel.addEventListener('click', (ev) => ev.stopPropagation());
@@ -1517,6 +1522,15 @@ class MapVis {
         stateCompanies = companies.filter(c => {
           const cCountry = pick(c, ["Country"]);
           return cCountry === stateName;
+        });
+      }
+
+      // Apply industry filter to panel companies
+      if (selectedIndustryFilter !== 'all') {
+        stateCompanies = stateCompanies.filter(c => {
+          const industry = pick(c, ["Industry"]);
+          const category = getIndustryCategory(industry);
+          return category === selectedIndustryFilter;
         });
       }
 
