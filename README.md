@@ -7,6 +7,9 @@ https://gursi26.github.io/csc316-marketmap/
 ## Screencast Video
 https://drive.google.com/file/d/1PzX60e4GdkLG1YLhDG06egEnU4EwVAl6/view
 
+## Process Book
+https://docs.google.com/document/d/1wzOtxwgA9TbiV40CNyiyiPM6C7itEJBKzctAigs1DiA/edit?usp=sharing
+
 ## File Structure
 
 ### **index.html**: Our main HTML file, defining the structure and layout of our website.
