@@ -777,14 +777,14 @@ function drawLegend(
         .attr("y", trunkY - 4)
         .attr("fill", "#e5e7eb")
         .attr("font-size", 11)
-        .text("Trunk width ≈ market cap");
+        .text("Trunk width = market cap");
 
     legendG.append("text")
         .attr("x", trunkX + 36)
         .attr("y", trunkY + 12)
         .attr("fill", "#9ca3af")
         .attr("font-size", 10)
-        .text(`≈ $${(midCap / 1e9).toFixed(1)}B market cap`);
+        .text(`≈ $${(midCap / 1e9).toFixed(1)}B market capitalization`);
 
     // branch sample (horizontal)
     const branchY = trunkY + 60;
@@ -802,15 +802,15 @@ function drawLegend(
         .attr("x", trunkX + branchSampleLen / 2 + 51)
         .attr("y", branchY - 4)
         .attr("fill", "#e5e7eb")
-        .attr("font-size", 11)
-        .text("Branch length ≈ stock price");
+        .attr("font-size", 12)
+        .text("Branch length = stock price");
 
     legendG.append("text")
         .attr("x", trunkX + branchSampleLen / 2 + 51)
         .attr("y", branchY + 12)
         .attr("fill", "#9ca3af")
-        .attr("font-size", 10)
-        .text(`≈ $${midPrice.toFixed(0)} per share`);
+        .attr("font-size", 11)
+        .text("length is relative to 2022 Q1 (company-normalized)");
 
     // sentiment gradient
     const gradY = branchY + 32;
