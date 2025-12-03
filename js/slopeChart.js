@@ -462,7 +462,8 @@ class SlopeChart {
         const titleTop = 22;
         const instructionalTextBottom = this.height - c.bottomMargin + 40 + c.instructionalTextLineSpacing + 5;
         const totalContentHeight = instructionalTextBottom - titleTop;
-        const verticalOffset = (this.height - totalContentHeight) / 2 - titleTop;
+        let verticalOffset = (this.height - totalContentHeight) / 2 - titleTop;
+        verticalOffset = Math.max(0, verticalOffset);
         
         // Calculate the width needed for the chart (30% wider)
         const chartWidth = this.width * 0.91; // 0.7 * 1.3 = 0.91
